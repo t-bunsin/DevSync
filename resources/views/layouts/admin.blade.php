@@ -242,18 +242,26 @@
                             <div class="collapse" id="collapsePages" data-bs-parent="#accordionSidenav">
                                 <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPagesMenu">
                                     <!-- Nested Sidenav Accordion (Pages -> Account)-->
-                                     <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAccount" aria-expanded="false" aria-controls="pagesCollapseAccount">
+                                    <a class="nav-link collapsed {{ setActive(['account-profile', 'account-billing', 'account-security', 'account-notifications']) }}" 
+                                       href="javascript:void(0);" 
+                                       data-bs-toggle="collapse" 
+                                       data-bs-target="#pagesCollapseAccount" 
+                                       aria-expanded="{{ request()->is('account-*') ? 'true' : 'false' }}" 
+                                       aria-controls="pagesCollapseAccount">
                                         Account
                                         <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                                     </a>
-                                    <div class="collapse" id="pagesCollapseAccount" data-bs-parent="#accordionSidenavPagesMenu">
+                                    <div class="collapse {{ request()->is('account-*') ? 'show' : '' }}" 
+                                         id="pagesCollapseAccount" 
+                                         data-bs-parent="#accordionSidenavPagesMenu">
                                         <nav class="sidenav-menu-nested nav">
-                                            <a class="nav-link" href="account-profile.html">Profile</a>
-                                            <a class="nav-link" href="account-billing.html">Billing</a>
-                                            <a class="nav-link" href="account-security.html">Security</a>
-                                            <a class="nav-link" href="account-notifications.html">Notifications</a>
+                                            <a class="nav-link {{ setActive('account-profile') }}" href="{{ url('account-profile') }}">Profile</a>
+                                            <a class="nav-link {{ setActive('account-billing') }}" href="{{ url('account-billing') }}">Billing</a>
+                                            <a class="nav-link {{ setActive('account-security') }}" href="{{ url('account-security') }}">Security</a>
+                                            <a class="nav-link {{ setActive('account-notifications') }}" href="{{ url('account-notifications') }}">Notifications</a>
                                         </nav>
                                     </div>
+                                
                                     <!-- Nested Sidenav Accordion (Pages -> Authentication)-->
                                     <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth">
                                         Authentication
@@ -309,40 +317,44 @@
                                 </nav>
                             </div>
                             <!-- Sidenav Accordion (Applications)-->
-                            <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseApps" aria-expanded="false" aria-controls="collapseApps">
-                                <div class="nav-link-icon"><i data-feather="globe"></i></div>
-                                Applications
-                                <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                            </a>
-                            <div class="collapse" id="collapseApps" data-bs-parent="#accordionSidenav">
-                                <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavAppsMenu">
-                                    <!-- Nested Sidenav Accordion (Apps -> Knowledge Base)-->
-                                    <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#appsCollapseKnowledgeBase" aria-expanded="false" aria-controls="appsCollapseKnowledgeBase">
-                                        Knowledge Base
-                                        <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                                    </a>
-                                    <div class="collapse" id="appsCollapseKnowledgeBase" data-bs-parent="#accordionSidenavAppsMenu">
-                                        <nav class="sidenav-menu-nested nav">
-                                            <a class="nav-link" href="knowledge-base-home-1.html">Home 1</a>
-                                            <a class="nav-link" href="knowledge-base-home-2.html">Home 2</a>
-                                            <a class="nav-link" href="knowledge-base-category.html">Category</a>
-                                            <a class="nav-link" href="knowledge-base-article.html">Article</a>
-                                        </nav>
-                                    </div>
-                                    <!-- Nested Sidenav Accordion (Apps -> User Management)-->
-                                    <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#appsCollapseUserManagement" aria-expanded="false" aria-controls="appsCollapseUserManagement">
-                                        User Management
-                                        <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                                    </a>
-                                    <div class="collapse" id="appsCollapseUserManagement" data-bs-parent="#accordionSidenavAppsMenu">
-                                        <nav class="sidenav-menu-nested nav">
-                                            <a class="nav-link" href="{{ route('users') }}">Users List</a>
-                                            <a class="nav-link" href="user-management-edit-user.html">Edit User</a>
-                                            <a class="nav-link" href="user-management-add-user.html">Add User</a>
-                                            <a class="nav-link" href="user-management-groups-list.html">Groups List</a>
-                                            <a class="nav-link" href="user-management-org-details.html">Organization Details</a>
-                                        </nav>
-                                    </div>
+                            <!-- Applications Menu -->
+<a class="nav-link collapsed {{ request()->is('applications/*') || request()->is('users') || request()->is('user-management-*') ? 'active' : '' }}" 
+    href="javascript:void(0);" 
+    data-bs-toggle="collapse" 
+    data-bs-target="#collapseApps" 
+    aria-expanded="{{ request()->is('applications/*') || request()->is('users') || request()->is('user-management-*') ? 'true' : 'false' }}" 
+    aria-controls="collapseApps">
+     <div class="nav-link-icon" style="{{ request()->is('applications/*') || request()->is('users') || request()->is('user-management-*') ? 'color: #0061f2;' : '' }}">
+         <i data-feather="globe"></i>
+     </div>
+     Applications
+     <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+ </a>
+ 
+            <div class="collapse {{ request()->is('applications/*') || request()->is('users') || request()->is('user-management-*') ? 'show' : '' }}" 
+                id="collapseApps" 
+                data-bs-parent="#accordionSidenav">
+                <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavAppsMenu">
+                    
+                    <!-- User Management Menu Inside Applications -->
+                    <a class="nav-link collapsed {{ request()->is('users') || request()->is('user-management-*') ? 'active fw-bold text-primary' : '' }}" 
+                        href="javascript:void(0);" 
+                        data-bs-toggle="collapse" 
+                        data-bs-target="#appsCollapseUserManagement" 
+                        aria-expanded="{{ request()->is('users') || request()->is('user-management-*') ? 'true' : 'false' }}" 
+                        aria-controls="appsCollapseUserManagement">
+                        User Management
+                        <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+            
+                    <div class="collapse {{ request()->is('users') || request()->is('user-management-*') ? 'show' : '' }}" 
+                        id="appsCollapseUserManagement" 
+                        data-bs-parent="#accordionSidenavAppsMenu">
+                        <nav class="sidenav-menu-nested nav">
+                            <a class="nav-link {{ request()->is('users') ? 'active fw-bold text-primary' : '' }}" href="{{ route('users') }}">Users List</a>
+                        </nav>
+                    </div>
+                         
                                     <!-- Nested Sidenav Accordion (Apps -> Posts Management)-->
                                     <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#appsCollapsePostsManagement" aria-expanded="false" aria-controls="appsCollapsePostsManagement">
                                         Posts Management
