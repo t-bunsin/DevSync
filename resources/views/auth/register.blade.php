@@ -1,7 +1,86 @@
 @extends('layouts.auth')
 
 @section('main-content')
-<div class="container">
+<div id="layoutAuthentication">
+    <div id="layoutAuthentication_content">
+        <main>
+            <div class="container-xl px-4">
+                <div class="row justify-content-center">
+                    <div class="col-lg-7">
+                        <!-- Basic registration form-->
+                        <div class="card shadow-lg border-0 rounded-lg mt-5">
+                            <div class="card-header justify-content-center"><h3 class="fw-light my-4">Create Account</h3></div>
+                            <div class="card-body">
+                                <!-- Registration form-->
+                                <form>
+                                    <!-- Form Row-->
+                                    <div class="row gx-3">
+                                        <div class="col-md-6">
+                                            <!-- Form Group (first name)-->
+                                            <div class="mb-3">
+                                                <label class="small mb-1" for="inputFirstName">First Name</label>
+                                                <input class="form-control" id="inputFirstName" type="text" placeholder="Enter first name" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <!-- Form Group (last name)-->
+                                            <div class="mb-3">
+                                                <label class="small mb-1" for="inputLastName">Last Name</label>
+                                                <input class="form-control" id="inputLastName" type="text" placeholder="Enter last name" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Form Group (email address)            -->
+                                    <div class="mb-3">
+                                        <label class="small mb-1" for="inputEmailAddress">Email</label>
+                                        <input class="form-control" id="inputEmailAddress" type="email" aria-describedby="emailHelp" placeholder="Enter email address" />
+                                    </div>
+                                    <!-- Form Row    -->
+                                    <div class="row gx-3">
+                                        <div class="col-md-6">
+                                            <!-- Form Group (password)-->
+                                            <div class="mb-3">
+                                                <label class="small mb-1" for="inputPassword">Password</label>
+                                                <input class="form-control" id="inputPassword" type="password" placeholder="Enter password" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <!-- Form Group (confirm password)-->
+                                            <div class="mb-3">
+                                                <label class="small mb-1" for="inputConfirmPassword">Confirm Password</label>
+                                                <input class="form-control" id="inputConfirmPassword" type="password" placeholder="Confirm password" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Form Group (create account submit)-->
+                                    <a class="btn btn-primary btn-block" href="auth-login-basic.html">Create Account</a>
+                                </form>
+                            </div>
+                            <div class="card-footer text-center">
+                                <div class="small"><a href="auth-login-basic.html">Have an account? Go to login</a></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <div id="layoutAuthentication_footer">
+        <footer class="footer-admin mt-auto footer-dark">
+            <div class="container-xl px-4">
+                <div class="row">
+                    <div class="col-md-6 small">Copyright © Your Website 2021</div>
+                    <div class="col-md-6 text-md-end small">
+                        <a href="#!">Privacy Policy</a>
+                        ·
+                        <a href="#!">Terms &amp; Conditions</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+</div>
+{{-- <div class="container">
     <div class="row justify-content-center">
         <div class="col-xl-10 col-lg-12 col-md-9">
             <div class="card o-hidden border-0 shadow-lg my-5">
@@ -68,5 +147,5 @@
             </div>
         </div>
     </div>
-</div>
+</div> --}}
 @endsection

@@ -2,8 +2,23 @@
 
 @section('main-content')
     <!-- Page Heading -->
-    <h1 class="h3 mb-4 text-gray-800">{{ __('Profile') }}</h1>
-
+    {{-- <h1 class="container-xl px-4 mt-4">{{ __('Profile') }}</h1>
+     --}}
+     <header class="page-header page-header-compact page-header-light border-bottom bg-white mb-4">
+        <div class="container-xl px-4">
+            <div class="page-header-content">
+                <div class="row align-items-center justify-content-between pt-3">
+                    <div class="col-auto mb-3">
+                        <h1 class="page-header-title">
+                            <div class="page-header-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>
+                            Account Settings - Profile
+                        </h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    
     @if (session('success'))
         <div class="alert alert-success border-left-success alert-dismissible fade show" role="alert">
             {{ session('success') }}
@@ -77,68 +92,58 @@
 
                 <div class="card-body">
 
-                    <form method="POST" action="{{ route('profile.update') }}" autocomplete="off">
-                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
-
-                        <input type="hidden" name="_method" value="PUT">
-
-                        <h6 class="heading-small text-muted mb-4">User information</h6>
-
-                        <div class="pl-lg-4">
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="form-group focused">
-                                        <label class="form-control-label" for="name">Name<span class="small text-danger">*</span></label>
-                                        <input type="text" id="name" class="form-control" name="name" placeholder="Name" value="{{ old('name', Auth::user()->name) }}">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="form-group focused">
-                                        <label class="form-control-label" for="last_name">Last name</label>
-                                        <input type="text" id="last_name" class="form-control" name="last_name" placeholder="Last name" value="{{ old('last_name', Auth::user()->last_name) }}">
-                                    </div>
-                                </div>
+                    <form>
+                        <!-- Form Group (username)-->
+                        <div class="mb-3">
+                            <label class="small mb-1" for="inputUsername">Username (how your name will appear to other users on the site)</label>
+                            <input class="form-control" id="inputUsername" type="text" placeholder="Enter your username" value="username">
+                        </div>
+                        <!-- Form Row-->
+                        <div class="row gx-3 mb-3">
+                            <!-- Form Group (first name)-->
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputFirstName">First name</label>
+                                <input class="form-control" id="inputFirstName" type="text" placeholder="Enter your first name" value="Valerie">
                             </div>
-
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <div class="form-group">
-                                        <label class="form-control-label" for="email">Email address<span class="small text-danger">*</span></label>
-                                        <input type="email" id="email" class="form-control" name="email" placeholder="example@example.com" value="{{ old('email', Auth::user()->email) }}">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-lg-4">
-                                    <div class="form-group focused">
-                                        <label class="form-control-label" for="current_password">Current password</label>
-                                        <input type="password" id="current_password" class="form-control" name="current_password" placeholder="Current password">
-                                    </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="form-group focused">
-                                        <label class="form-control-label" for="new_password">New password</label>
-                                        <input type="password" id="new_password" class="form-control" name="new_password" placeholder="New password">
-                                    </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="form-group focused">
-                                        <label class="form-control-label" for="confirm_password">Confirm password</label>
-                                        <input type="password" id="confirm_password" class="form-control" name="password_confirmation" placeholder="Confirm password">
-                                    </div>
-                                </div>
+                            <!-- Form Group (last name)-->
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputLastName">Last name</label>
+                                <input class="form-control" id="inputLastName" type="text" placeholder="Enter your last name" value="Luna">
                             </div>
                         </div>
-
-                        <!-- Button -->
-                        <div class="pl-lg-4">
-                            <div class="row">
-                                <div class="col text-center">
-                                    <button type="submit" class="btn btn-primary">Save Changes</button>
-                                </div>
+                        <!-- Form Row        -->
+                        <div class="row gx-3 mb-3">
+                            <!-- Form Group (organization name)-->
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputOrgName">Organization name</label>
+                                <input class="form-control" id="inputOrgName" type="text" placeholder="Enter your organization name" value="Start Bootstrap">
+                            </div>
+                            <!-- Form Group (location)-->
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputLocation">Location</label>
+                                <input class="form-control" id="inputLocation" type="text" placeholder="Enter your location" value="San Francisco, CA">
                             </div>
                         </div>
+                        <!-- Form Group (email address)-->
+                        <div class="mb-3">
+                            <label class="small mb-1" for="inputEmailAddress">Email address</label>
+                            <input class="form-control" id="inputEmailAddress" type="email" placeholder="Enter your email address" value="name@example.com">
+                        </div>
+                        <!-- Form Row-->
+                        <div class="row gx-3 mb-3">
+                            <!-- Form Group (phone number)-->
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputPhone">Phone number</label>
+                                <input class="form-control" id="inputPhone" type="tel" placeholder="Enter your phone number" value="555-123-4567">
+                            </div>
+                            <!-- Form Group (birthday)-->
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputBirthday">Birthday</label>
+                                <input class="form-control" id="inputBirthday" type="text" name="birthday" placeholder="Enter your birthday" value="06/10/1988">
+                            </div>
+                        </div>
+                        <!-- Save changes button-->
+                        <button class="btn btn-primary" type="button">Save changes</button>
                     </form>
 
                 </div>

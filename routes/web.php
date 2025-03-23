@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
 
 
 /*
@@ -28,6 +29,7 @@ Route::put('/profile', 'ProfileController@update')->name('profile.update');
 
 
 
+Route::get('/users', [UserController::class, 'index'])->name('users');
 
 Route::get('/about', function () {
     return view('about');
