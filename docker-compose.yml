@@ -52,7 +52,7 @@ services:
     restart: unless-stopped
     environment:
       - DB_HOST=mysql
-      - DB_DATABASE=root
+      - DB_DATABASE=db_vacancy
       - DB_USERNAME=root
       - DB_PASSWORD=root
     volumes:
