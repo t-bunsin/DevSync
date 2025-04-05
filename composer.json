@@ -29,9 +29,6 @@
     },
     "config": {
         "http-timeout": 300, 
-            "github-oauth": {
-                "github.com": "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"
-            },
         "preferred-install": "dist",
         "sort-packages": true
     },
