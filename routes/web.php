@@ -31,6 +31,8 @@ Route::put('/profile', 'ProfileController@update')->name('profile.update');
 
 Route::get('/users', [UserController::class, 'index'])->name('users');
 
+Route::resource('user', UserController::class);
+
 Route::get('/about', function () {
     return view('about');
 })->name('about');
