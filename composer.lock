@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1cf441be80bc24ccb070041604a1216c",
+    "content-hash": "163b79a351ecb53dc2b59cdf50ee383e",
     "packages": [
         {
             "name": "brick/math",
@@ -134,72 +134,6 @@
                 }
             ],
             "time": "2024-02-09T16:56:22+00:00"
-        },
-        {
-            "name": "devmarketer/easynav",
-            "version": "v1.0.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/DevMarketer/LaravelEasyNav.git",
-                "reference": "517a7d5a35f443574c0ce883d458849cae7b3330"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/DevMarketer/LaravelEasyNav/zipball/517a7d5a35f443574c0ce883d458849cae7b3330",
-                "reference": "517a7d5a35f443574c0ce883d458849cae7b3330",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.5.0"
-            },
-            "require-dev": {
-                "mockery/mockery": "0.9.*",
-                "phpunit/phpunit": "4.7.*"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "aliases": {
-                        "Nav": "DevMarketer\\EasyNav\\EasyNavFacade"
-                    },
-                    "providers": [
-                        "DevMarketer\\EasyNav\\EasyNavServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "files": [
-                    "src/DevMarketer/EasyNav/functions.php"
-                ],
-                "psr-0": {
-                    "DevMarketer\\EasyNav": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "J. Alexander Curtis",
-                    "email": "jalexandercurtis@gmail.com"
-                }
-            ],
-            "description": "Making managing navigation in Laravel easy.",
-            "homepage": "https://github.com/DevMarketer/LaravelEasyNav",
-            "keywords": [
-                "active",
-                "easy",
-                "easynav",
-                "helpers",
-                "laravel",
-                "nav"
-            ],
-            "support": {
-                "issues": "https://github.com/DevMarketer/LaravelEasyNav/issues",
-                "source": "https://github.com/DevMarketer/LaravelEasyNav"
-            },
-            "time": "2017-10-16T16:14:15+00:00"
         },
         {
             "name": "dflydev/dot-access-data",
