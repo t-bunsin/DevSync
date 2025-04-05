@@ -15,7 +15,7 @@ services:
     networks:
       - laravel_network
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-psoloapps"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
       interval: 20s
       timeout: 5s
       retries: 5
