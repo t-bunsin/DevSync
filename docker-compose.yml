@@ -57,6 +57,9 @@ services:
       - ./:/var/www/html
     networks:
       - laravel_network
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
     depends_on:
       mysql:
         condition: service_healthy
@@ -66,7 +69,6 @@ services:
       timeout: 5s
       retries: 5
       start_period: 120s
-
 volumes:
   mysql_data:
     driver: local
