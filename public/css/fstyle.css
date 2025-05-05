@@ -1,3 +1,4 @@
+
 body {
     font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     background: linear-gradient(135deg, #e9f1ff, #d6e2ff);
@@ -5,6 +6,11 @@ body {
     min-height: 100vh;
     margin: 0;
   }
+
+  main.container {
+    padding-top: 80px; /* Adjust based on navbar height */
+}
+
   
   
       /* Navbar */
@@ -407,3 +413,38 @@ body {
         }
       }
   
+
+      .job-search-container {
+        background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+        border: 1px solid rgba(0,0,0,0.1);
+    }
+    
+    .has-icon {
+        position: relative;
+    }
+    
+    .input-icon {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #6c757d;
+    }
+    
+    .form-floating>.form-control,
+    .form-floating>.form-select {
+        padding-left: 3rem;
+    }
+    
+    .advanced-search-toggle {
+        color: var(--bs-primary);
+        transition: all 0.3s ease;
+    }
+    
+    .advanced-search-toggle[aria-expanded="true"] {
+        font-weight: 500;
+    }
+    
+    .advanced-search-toggle:hover {
+        color: var(--bs-primary-dark);
+    }

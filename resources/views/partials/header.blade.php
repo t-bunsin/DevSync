@@ -1,54 +1,79 @@
-<!-- Header Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
-    <div class="container">
-        <a class="navbar-brand fw-bold" href="{{ url('/') }}">
-            <img src="https://www.simplyhired.com/next-assets/simplyhired-logo.svg" alt="Logo" style="height: 40px;">
-            <span class="ms-2">JobFinder</span>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top shadow">
+    <div class="container-fluid">
+        <!-- Logo -->
+        <a class="navbar-brand fw-bold text-warning" href="{{ url('/') }}">
+            Job Finder
         </a>
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+        <!-- Toggler -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown">
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <div class="collapse navbar-collapse" id="navbarContent">
-            <!-- Left Nav -->
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item"><a class="nav-link" href="#">Jobs</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Companies</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Career Advice</a></li>
-            </ul>
-
-            <!-- Right Nav -->
+        <!-- Menu Items -->
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav ms-auto align-items-center gap-3">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url('/jobs') }}"><i class="fas fa-briefcase me-1"></i> Jobs</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url('/companies') }}"><i class="fas fa-building me-1"></i> Companies</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                        <i class="fas fa-th-large me-1"></i> Pages
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="{{ url('/career') }}">Career Advice</a></li>
+                        <li><a class="dropdown-item" href="{{ url('/about') }}">About Us</a></li>
+                    </ul>
+                </li>
+
+                <!-- Language Selector -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="langDropdown" data-bs-toggle="dropdown">
+                        <i class="fas fa-language me-1"></i> {{ app()->getLocale() == 'kh' ? 'ខ្មែរ' : 'EN' }}
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="">English</a></li>
+                        <li><a class="dropdown-item" href="">ភាសាខ្មែរ</a></li>
+                    </ul>
+                </li>
+
+                <!-- Auth -->
                 @auth
-                    <li class="nav-item position-relative">
-                        <i class="fas fa-comment-alt text-white fs-5"></i>
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">3</span>
-                    </li>
-                    <li class="nav-item position-relative">
-                        <i class="fas fa-bell text-white fs-5"></i>
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-info">5</span>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
-                            <img src="https://randomuser.me/api/portraits/men/32.jpg" class="rounded-circle" style="height: 35px;" alt="Profile">
-                            <span class="ms-2">{{ Auth::user()->name }}</span>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="#">Dashboard</a></li>
-                            <li><a class="dropdown-item" href="#">Settings</a></li>
-                            <li>
-                                <form method="POST" action="{{ route('logout') }}">
-                                    @csrf
-                                    <button class="dropdown-item text-danger">Logout</button>
-                                </form>
-                            </li>
-                        </ul>
-                    </li>
-                @else
-                    <li class="nav-item"><a class="btn btn-outline-light" href="{{ route('login') }}">Login</a></li>
-                    <li class="nav-item"><a class="btn btn-light" href="{{ route('register') }}">Register</a></li>
-                @endauth
+                <li class="nav-item position-relative">
+                    <i class="fas fa-comment-alt text-white fs-5"></i>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">3</span>
+                </li>
+                <li class="nav-item position-relative">
+                    <i class="fas fa-bell text-white fs-5"></i>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-info">5</span>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" class="rounded-circle" style="height: 35px;" alt="Profile">
+                        <span class="ms-2">{{ Auth::user()->name }}</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i> Profile</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i> Settings</a></li>
+                        <li>
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <button class="dropdown-item text-danger"><i class="fas fa-sign-out-alt me-2"></i> Logout</button>
+                            </form>
+                        </li>
+                    </ul>
+                </li>
+            @else
+                <li class="nav-item">
+                    <a class="btn btn-outline-light" href="{{ route('login') }}"><i class="fas fa-sign-in-alt me-1"></i> Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="btn btn-light" href="{{ route('register') }}"><i class="fas fa-user-plus me-1"></i> Register</a>
+                </li>
+            @endauth
             </ul>
         </div>
     </div>

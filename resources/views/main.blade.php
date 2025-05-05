@@ -3,39 +3,107 @@
 
 <div class="container-fluid">
   <!-- Search Section -->
-  <div class="row search-section">
-    <div class="col-md-5 offset-md-1">
-      <div class="search-form-outline">
-        <i class="fas fa-briefcase"></i>
-        <input type="text" id="jobSearchTitle" class="form-control" placeholder="" required>
-        <label for="jobSearchTitle">Job Title, Skills, or Company</label>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="search-form-outline">
-        <i class="fas fa-map-marker-alt"></i>
-        <input type="text" id="jobSearchLocation" class="form-control" placeholder="" required>
-        <label for="jobSearchLocation">Location</label>
-      </div>
-    </div>
-    <div class="col-md-2 d-flex align-items-center">
-      <button type="submit" class="btn btn-primary btn-search w-100">Search</button>
-    </div>
-  </div>
-
-  <!-- Filter Section -->
-  <div class="row filter-section">
-    <div class="col-md-10 offset-md-1">
-      <button class="btn btn-outline-primary filter-btn active" data-filter="all">All</button>
-      <button class="btn btn-outline-primary filter-btn" data-filter="full-time">Full-time</button>
-      <button class="btn btn-outline-primary filter-btn" data-filter="part-time">Part-time</button>
-      <button class="btn btn-outline-primary filter-btn" data-filter="remote">Remote</button>
-    </div>
-  </div>
+  <div class="job-search-container bg-white rounded-3 shadow-sm p-4 mb-5">
+    <form action="" method="GET" class="row g-3 align-items-end">
+        @csrf
+        
+        <!-- Keyword Search -->
+        <div class="col-lg-5 col-md-6">
+            <div class="form-floating has-icon">
+                <input type="text" 
+                       id="search_query" 
+                       name="query"
+                       class="form-control" 
+                       placeholder="Job title, keywords, or company" 
+                       value=""
+                       aria-label="Search by job title, keywords, or company">
+                <label for="search_query">Job title, keywords, or company</label>
+                <span class="input-icon">
+                    <i class="fas fa-search"></i>
+                </span>
+            </div>
+        </div>
+        
+        <!-- Location Search -->
+        <div class="col-lg-4 col-md-6">
+            <div class="form-floating has-icon">
+                <input type="text" 
+                       id="search_location" 
+                       name="location"
+                       class="form-control" 
+                       placeholder="City, state, or remote" 
+                       value=""
+                       aria-label="Search by location">
+                <label for="search_location">City, state, or remote</label>
+                <span class="input-icon">
+                    <i class="fas fa-map-marker-alt"></i>
+                </span>
+            </div>
+        </div>
+        
+        <!-- Job Type Dropdown -->
+        <div class="col-lg-2 col-md-4">
+            <div class="form-floating">
+                <select class="form-select" 
+                        id="job_type" 
+                        name="type"
+                        aria-label="Filter by job type">
+                    <option value="">All Types</option>
+                </select>
+                <label for="job_type">Job Type</label>
+            </div>
+        </div>
+        
+        <!-- Search Button -->
+        <div class="col-lg-1 col-md-4 d-grid">
+            <button type="submit" 
+                    class="btn btn-primary btn-lg h-100 py-3" 
+                    aria-label="Search jobs">
+                <i class="fas fa-search"></i>
+                <span class="d-none d-lg-inline">Search</span>
+            </button>
+        </div>
+        
+        <!-- Advanced Search Toggle -->
+        <div class="col-12">
+            <a href="#advanced-search" 
+               class="text-decoration-none small advanced-search-toggle" 
+               data-bs-toggle="collapse" 
+               aria-expanded="false" 
+               aria-controls="advanced-search">
+                <i class="fas fa-sliders-h me-1"></i> Advanced Search
+            </a>
+        </div>
+        
+        <!-- Advanced Search Options -->
+        <div class="collapse mt-3" id="advanced-search">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label for="salary_range" class="form-label">Salary Range</label>
+                    <select class="form-select" id="salary_range" name="salary_range">
+                        <option value="">Any salary</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="experience_level" class="form-label">Experience Level</label>
+                    <select class="form-select" id="experience_level" name="experience_level">
+                        <option value="">Any experience</option>                    
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="date_posted" class="form-label">Date Posted</label>
+                    <select class="form-select" id="date_posted" name="date_posted">
+                        <option value="">Any time</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
 
   <!-- Job Listings -->
   <div class="row">
-    <div class="col-md-5 offset-md-1">
+    <div class="col-md-5">
       <div class="job-list-container">
         <!-- Job Card 1 -->
         <div class="job-card"
@@ -157,7 +225,7 @@
       </div>
     </div>
     <!-- Job Description Panel -->
-    <div class="col-md-6">
+    <div class="col-md-7">
       <div class="card job-details d-none" id="job-description">
         <div class="d-flex align-items-center justify-content-between mb-3">
           <div>

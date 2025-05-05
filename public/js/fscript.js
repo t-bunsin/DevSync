@@ -41,3 +41,26 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     });
   });
+
+  document.addEventListener('DOMContentLoaded', function() {
+    // Persist advanced search state
+    const advancedSearch = localStorage.getItem('advancedSearch');
+    if (advancedSearch === 'true') {
+        document.querySelector('.advanced-search-toggle').click();
+    }
+    
+    document.querySelector('.advanced-search-toggle').addEventListener('click', function() {
+        const isExpanded = this.getAttribute('aria-expanded') === 'true';
+        localStorage.setItem('advancedSearch', !isExpanded);
+    });
+    
+    // Add autocomplete for locations
+    if (document.getElementById('search_location')) {
+        new Autocomplete(document.getElementById('search_location'), {
+            threshold: 2,
+            maximumItems: 5,
+            onSelectItem: ({label, value}) => {
+                console.log("selected location:", label, value);
+            }
+        });
+    }
