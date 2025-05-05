@@ -12,8 +12,9 @@ class UserSeeder extends Seeder
         User::create([
             'name' => 'bunsin',
             'last_name' => 'toeng',
-            'email' => 'admin@example.com',
-            'password' => bcrypt('12345678'),
+            'email' => 'admin@gmail.com',
+            'password' => md5('12345678'), // Using md5 for password hashing
+            'phone_number' => '1234567890' // Added phone number field
         ]);
     }
 }
