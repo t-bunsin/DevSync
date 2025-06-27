@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Company;
 use Illuminate\Http\Request;
 
-class CompanyController extends Controller
+class CompaniesController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -13,6 +13,7 @@ class CompanyController extends Controller
     public function index()
     {
         //
+        return view('admin.companies.index');
     }
 
     /**
