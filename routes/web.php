@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\CompaniesController;
 
 
 /*
@@ -31,7 +32,6 @@ Route::put('/profile', 'ProfileController@update')->name('profile.update');
 
 Route::get('/users', [UserController::class, 'index'])->name('users');
 Route::get('/companies', [CompaniesController::class, 'index'])->name('companies');
-
 
 Route::resource('user', UserController::class);
 
