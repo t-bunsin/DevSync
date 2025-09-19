@@ -29,62 +29,50 @@
     <div class="container-fluid px-4">
         <div class="card">
             <div class="card-body">
-                <form>
+                <form method="POST" action="{{ route('users.store') }}">
+                    @csrf
                     <!-- Form Row-->
                     <div class="row gx-3 mb-3">
                         <!-- Form Group (first name)-->
                         <div class="col-md-6">
                             <label class="small mb-1" for="inputFirstName">First name</label>
-                            <input class="form-control" id="inputFirstName" type="text" placeholder="Enter your first name" value="">
+                            <input class="form-control" id="inputFirstName" name="first_name" type="text" placeholder="Enter your first name" required>
                         </div>
                         <!-- Form Group (last name)-->
                         <div class="col-md-6">
                             <label class="small mb-1" for="inputLastName">Last name</label>
-                            <input class="form-control" id="inputLastName" type="text" placeholder="Enter your last name" value="">
+                            <input class="form-control" id="inputLastName" name="last_name" type="text" placeholder="Enter your last name" required>
                         </div>
                     </div>
                     <!-- Form Group (email address)-->
                     <div class="mb-3">
                         <label class="small mb-1" for="inputEmailAddress">Email address</label>
-                        <input class="form-control" id="inputEmailAddress" type="email" placeholder="Enter your email address" value="">
-                    </div>
-                    <!-- Form Group (Group Selection Checkboxes)-->
-                    <div class="mb-3">
-                        <label class="small mb-1">Group(s)</label>
-                        <div class="form-check">
-                            <input class="form-check-input" id="groupSales" type="checkbox" value="">
-                            <label class="form-check-label" for="groupSales">Sales</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" id="groupDevs" type="checkbox" value="">
-                            <label class="form-check-label" for="groupDevs">Developers</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" id="groupMarketing" type="checkbox" value="">
-                            <label class="form-check-label" for="groupMarketing">Marketing</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" id="groupManagers" type="checkbox" value="">
-                            <label class="form-check-label" for="groupManagers">Managers</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" id="groupCustomer" type="checkbox" value="">
-                            <label class="form-check-label" for="groupCustomer">Customer</label>
-                        </div>
+                        <input class="form-control" id="inputEmailAddress" name="email" type="email" placeholder="Enter your email address" required>
                     </div>
                     <!-- Form Group (Roles)-->
                     <div class="mb-3">
                         <label class="small mb-1">Role</label>
-                        <select class="form-select" aria-label="Default select example">
-                            <option selected="" disabled="">Select a role:</option>
+                        <select class="form-select" name="role" required>
+                            <option selected disabled>Select a role:</option>
                             <option value="administrator">Administrator</option>
                             <option value="registered">Registered</option>
-                            <option value="edtior">Editor</option>
+                            <option value="editor">Editor</option>
                             <option value="guest">Guest</option>
                         </select>
                     </div>
+                    <!-- Form Group (Password)-->
+                    <div class="row gx-3 mb-3">
+                        <div class="col-md-6">
+                            <label class="small mb-1" for="inputPassword">Password</label>
+                            <input class="form-control" id="inputPassword" name="password" type="password" placeholder="Enter password" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="small mb-1" for="inputPasswordConfirm">Confirm Password</label>
+                            <input class="form-control" id="inputPasswordConfirm" name="password_confirmation" type="password" placeholder="Confirm password" required>
+                        </div>
+                    </div>
                     <!-- Submit button-->
-                    <button class="btn btn-primary" type="button">Add user</button>
+                    <button class="btn btn-primary pull-right" type="submit">Add user</button>
                 </form>
             </div>
         </div>
