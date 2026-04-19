@@ -5,7 +5,7 @@ return [
         'home' => 'Home',
         'jobs' => 'Jobs',
         'companies' => 'Companies',
-        'about' => 'About',
+        'about' => 'About Us',
     ],
     'actions' => [
         'sign_in' => 'Sign In',

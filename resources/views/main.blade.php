@@ -220,7 +220,7 @@
 
             <div class="jf-search" aria-label="Job search">
                 <div class="jf-search__panel">
-                    <div class="jf-search__panel-top">
+                    {{-- <div class="jf-search__panel-top">
                         <div>
                             <span class="jf-search__eyebrow">Smart Search</span>
                             <h2>Search jobs with better filters</h2>
@@ -229,7 +229,7 @@
                             <span><i class="fas fa-sparkles"></i> AI match</span>
                             <span><i class="fas fa-clock"></i> Updated hourly</span>
                         </div>
-                    </div>
+                    </div> --}}
 
                     <div class="jf-search__grid">
                         <label class="jf-search__field jf-search__field--wide">
@@ -267,7 +267,7 @@
                         </button>
                     </div>
 
-                    <div class="jf-search__filters">
+                    {{-- <div class="jf-search__filters">
                         <span class="jf-search__filters-title">Popular filters</span>
                         <div class="jf-search__chips">
                             <button class="jf-search-chip" type="button">Remote</button>
@@ -275,7 +275,7 @@
                             <button class="jf-search-chip" type="button">Entry Level</button>
                             <button class="jf-search-chip" type="button">Tech</button>
                         </div>
-                    </div>
+                    </div> --}}
 
                     <p class="jf-search__hint">
                         <a href="#">Upload or create a resume</a> to get better matches
