@@ -1,58 +1,479 @@
 @extends('layouts.auth')
 
+@section('title', 'Reset Password')
+@section('body-class', 'auth-body auth-body--password')
+
+@push('styles')
+    <style>
+        .auth-body {
+            min-height: 100vh;
+            margin: 0;
+            font-family: "Metropolis", "Segoe UI", sans-serif;
+            color: #000;
+            background:
+                radial-gradient(circle at top left, rgba(11, 70, 111, 0.15), transparent 28%),
+                radial-gradient(circle at bottom right, rgba(11, 70, 111, 0.12), transparent 24%),
+                linear-gradient(135deg, #f4f8fb 0%, #eef4f8 45%, #f9fbfd 100%);
+        }
+
+        .auth-flow {
+            position: relative;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .auth-flow__button {
+            border-radius: 0 !important;
+        }
+
+        .auth-flow__shape {
+            position: absolute;
+            border-radius: 999px;
+            filter: blur(10px);
+            pointer-events: none;
+            opacity: 0.55;
+        }
+
+        .auth-flow__shape--one {
+            top: 80px;
+            left: -70px;
+            width: 250px;
+            height: 250px;
+            background: linear-gradient(135deg, rgba(11, 70, 111, 0.18), rgba(11, 70, 111, 0.06));
+        }
+
+        .auth-flow__shape--two {
+            right: -50px;
+            bottom: 100px;
+            width: 220px;
+            height: 220px;
+            background: linear-gradient(135deg, rgba(11, 70, 111, 0.14), rgba(11, 70, 111, 0.05));
+        }
+
+        .auth-flow__container {
+            position: relative;
+            z-index: 1;
+            width: min(1180px, calc(100% - 32px));
+            margin: 0 auto;
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: minmax(310px, 0.98fr) minmax(360px, 0.82fr);
+            gap: 28px;
+            align-items: center;
+            padding: 36px 0;
+        }
+
+        .auth-flow__panel {
+            position: relative;
+            overflow: hidden;
+            padding: 44px;
+            color: #fff;
+            background:
+                linear-gradient(165deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02)),
+                linear-gradient(135deg, #0b466f, #0b466f);
+            border-radius: 34px;
+            box-shadow: 0 28px 56px rgba(11, 70, 111, 0.24);
+        }
+
+        .auth-flow__panel::before,
+        .auth-flow__panel::after {
+            content: "";
+            position: absolute;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .auth-flow__panel::before {
+            top: -80px;
+            right: -10px;
+            width: 220px;
+            height: 220px;
+        }
+
+        .auth-flow__panel::after {
+            left: -50px;
+            bottom: -100px;
+            width: 260px;
+            height: 260px;
+        }
+
+        .auth-flow__brand {
+            position: relative;
+            z-index: 1;
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 34px;
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: -0.04em;
+        }
+
+        .auth-flow__brand span span {
+            color: #d4ecff;
+        }
+
+        .auth-flow__brand-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 62px;
+            height: 62px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16);
+            font-size: 1.45rem;
+        }
+
+        .auth-flow__eyebrow {
+            position: relative;
+            z-index: 1;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 14px;
+            margin-bottom: 16px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.14);
+            font-size: 0.82rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        .auth-flow__title {
+            position: relative;
+            z-index: 1;
+            max-width: 11ch;
+            margin: 0 0 14px;
+            font-size: clamp(2.4rem, 4vw, 3.8rem);
+            line-height: 0.98;
+            letter-spacing: -0.05em;
+        }
+
+        .auth-flow__text {
+            position: relative;
+            z-index: 1;
+            max-width: 46ch;
+            margin: 0 0 28px;
+            color: rgba(255, 255, 255, 0.84);
+            line-height: 1.7;
+        }
+
+        .auth-flow__list {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            gap: 14px;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .auth-flow__list li {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 16px;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 20px;
+            backdrop-filter: blur(8px);
+        }
+
+        .auth-flow__list i {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.16);
+            font-size: 0.95rem;
+        }
+
+        .auth-flow__list strong {
+            display: block;
+            margin-bottom: 2px;
+            font-size: 0.96rem;
+        }
+
+        .auth-flow__list span {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.86rem;
+        }
+
+        .auth-flow__card {
+            padding: 36px;
+            background: rgba(255, 255, 255, 0.92);
+            border: 1px solid rgba(223, 228, 248, 0.94);
+            border-radius: 34px;
+            box-shadow: 0 24px 54px rgba(82, 94, 172, 0.12);
+            backdrop-filter: blur(16px);
+        }
+
+        .auth-flow__card-top {
+            margin-bottom: 24px;
+        }
+
+        .auth-flow__card-top h2 {
+            margin: 0 0 8px;
+            font-size: 2rem;
+            letter-spacing: -0.04em;
+        }
+
+        .auth-flow__card-top p {
+            margin: 0;
+            color: #5f6b88;
+            line-height: 1.7;
+        }
+
+        .auth-flow__alert {
+            margin-bottom: 18px;
+            padding: 14px 16px;
+            border-radius: 18px;
+            color: #9f2c3f;
+            background: #fff3f5;
+            border: 1px solid #ffd8de;
+        }
+
+        .auth-flow__alert ul {
+            margin: 0;
+            padding-left: 18px;
+        }
+
+        .auth-flow__form {
+            display: grid;
+            gap: 18px;
+        }
+
+        .auth-flow__field {
+            display: grid;
+            gap: 8px;
+        }
+
+        .auth-flow__field label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 0;
+            color: #000;
+            font-size: 0.84rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        .auth-flow__field label i {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 14px;
+            height: 14px;
+            color: #0b466f;
+            font-size: 0.82rem;
+        }
+
+        .auth-flow__input {
+            width: 100%;
+            min-height: 58px;
+            padding: 0 18px;
+            color: #000;
+            background: #fff;
+            border: 1px solid #dfe5f8;
+            border-radius: 18px;
+            box-shadow: 0 12px 24px rgba(94, 103, 177, 0.06);
+            outline: none;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .auth-flow__input:focus {
+            border-color: #0b466f;
+            box-shadow: 0 0 0 4px rgba(11, 70, 111, 0.08);
+        }
+
+        .auth-flow__input::placeholder {
+            color: #98a1bb;
+        }
+
+        .auth-flow__button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            min-height: 58px;
+            color: #fff;
+            background: #0b466f;
+            border: 0;
+            border-radius: 20px;
+            box-shadow: 0 20px 28px rgba(11, 70, 111, 0.22);
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .auth-flow__footer {
+            margin-top: 22px;
+            padding-top: 20px;
+            border-top: 1px solid #ebeffc;
+            text-align: center;
+            color: #6f7896;
+        }
+
+        .auth-flow__footer a {
+            color: #0b466f;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .auth-flow__footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 992px) {
+            .auth-flow__container {
+                grid-template-columns: 1fr;
+            }
+
+            .auth-flow__panel,
+            .auth-flow__card {
+                padding: 28px;
+            }
+
+            .auth-flow__title {
+                max-width: none;
+                font-size: 2.5rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .auth-flow__container {
+                width: min(100% - 20px, 1180px);
+                padding: 18px 0;
+            }
+
+            .auth-flow__brand {
+                font-size: 1.6rem;
+            }
+
+            .auth-flow__title,
+            .auth-flow__card-top h2 {
+                font-size: 1.8rem;
+            }
+
+            .auth-flow__panel,
+            .auth-flow__card {
+                padding: 22px;
+                border-radius: 26px;
+            }
+        }
+    </style>
+@endpush
+
 @section('main-content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-xl-10 col-lg-12 col-md-9">
-            <div class="card o-hidden border-0 shadow-lg my-5">
-                <div class="card-body p-0">
-                    <div class="row">
-                        <div class="col-lg-6 d-none d-lg-block bg-password-image"></div>
-                        <div class="col-lg-6">
-                            <div class="p-5">
-                                <div class="text-center">
-                                    <h1 class="h4 text-gray-900 mb-4">{{ __('Reset Password') }}</h1>
-                                </div>
+    <main class="auth-flow">
+        <div class="auth-flow__shape auth-flow__shape--one"></div>
+        <div class="auth-flow__shape auth-flow__shape--two"></div>
 
-                                @if ($errors->any())
-                                    <div class="alert alert-danger border-left-danger" role="alert">
-                                        <ul class="pl-4 my-2">
-                                            @foreach ($errors->all() as $error)
-                                                <li>{{ $error }}</li>
-                                            @endforeach
-                                        </ul>
-                                    </div>
-                                @endif
-
-                                <form method="POST" action="{{ route('password.update') }}" class="user">
-                                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
-
-                                    <input type="hidden" name="token" value="{{ $token }}">
-
-                                    <div class="form-group">
-                                        <input type="email" class="form-control form-control-user" name="email" placeholder="{{ __('E-Mail Address') }}" value="{{ $email ?? old('email') }}" required autofocus>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <input type="password" class="form-control form-control-user" name="password" placeholder="{{ __('Password') }}" required>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <input type="password" class="form-control form-control-user" name="password_confirmation" placeholder="{{ __('Confirm Password') }}" required>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <button type="submit" class="btn btn-primary btn-user btn-block">
-                                            {{ __('Reset Password') }}
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
+        <div class="auth-flow__container">
+            <section class="auth-flow__panel">
+                <div class="auth-flow__brand">
+                    <span class="auth-flow__brand-icon">
+                        <i class="fas fa-briefcase"></i>
+                    </span>
+                    <span>KH-<span>WORKS</span></span>
                 </div>
-            </div>
+
+                <span class="auth-flow__eyebrow">
+                    <i class="fas fa-lock"></i>
+                    New Password
+                </span>
+
+                <h1 class="auth-flow__title">Create a fresh password and secure your account</h1>
+                <p class="auth-flow__text">Use a strong new password to restore access to your account and continue managing your applications, saved jobs, and profile.</p>
+
+                <ul class="auth-flow__list">
+                    <li>
+                        <i class="fas fa-key"></i>
+                        <div>
+                            <strong>Choose a secure password</strong>
+                            <span>Use something unique and easy for you to remember.</span>
+                        </div>
+                    </li>
+                    <li>
+                        <i class="fas fa-shield-halved"></i>
+                        <div>
+                            <strong>Protected reset link</strong>
+                            <span>Your password update is tied to a verified token.</span>
+                        </div>
+                    </li>
+                    <li>
+                        <i class="fas fa-user-check"></i>
+                        <div>
+                            <strong>Back into your account</strong>
+                            <span>Sign in again and continue your career journey.</span>
+                        </div>
+                    </li>
+                </ul>
+            </section>
+
+            <section class="auth-flow__card">
+                <div class="auth-flow__card-top">
+                    <h2>Reset Password</h2>
+                    <p>Enter your account email and your new password below.</p>
+                </div>
+
+                @if ($errors->any())
+                    <div class="auth-flow__alert" role="alert">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
+                <form method="POST" action="{{ route('password.update') }}" class="auth-flow__form">
+                    @csrf
+
+                    <input type="hidden" name="token" value="{{ $token }}">
+
+                    <div class="auth-flow__field">
+                        <label for="email">
+                            <i class="fas fa-envelope"></i>
+                            <span>Email</span>
+                        </label>
+                        <input id="email" type="email" class="auth-flow__input" name="email" value="{{ $email ?? old('email') }}" placeholder="Enter your email address" required autofocus>
+                    </div>
+
+                    <div class="auth-flow__field">
+                        <label for="password">
+                            <i class="fas fa-lock"></i>
+                            <span>Password</span>
+                        </label>
+                        <input id="password" type="password" class="auth-flow__input" name="password" placeholder="Enter your new password" required>
+                    </div>
+
+                    <div class="auth-flow__field">
+                        <label for="password_confirmation">
+                            <i class="fas fa-check-double"></i>
+                            <span>Confirm Password</span>
+                        </label>
+                        <input id="password_confirmation" type="password" class="auth-flow__input" name="password_confirmation" placeholder="Confirm your new password" required>
+                    </div>
+
+                    <button type="submit" class="auth-flow__button">
+                        <i class="fas fa-rotate"></i>
+                        <span>Reset Password</span>
+                    </button>
+                </form>
+
+                <div class="auth-flow__footer">
+                    Remembered your password?
+                    <a href="{{ route('login') }}">Back to login</a>
+                </div>
+            </section>
         </div>
-    </div>
-</div>
+    </main>
 @endsection

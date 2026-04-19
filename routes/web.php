@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CompaniesController;
+use Illuminate\Http\Request;
 
 
 /*
@@ -20,6 +21,14 @@ use App\Http\Controllers\CompaniesController;
 Route::get('/', function () {
     return view('main');
 });
+
+Route::get('/language/{locale}', function (Request $request, string $locale) {
+    abort_unless(in_array($locale, ['en', 'kh'], true), 404);
+
+    session(['locale' => $locale]);
+
+    return redirect()->back();
+})->name('language.switch');
 
 Auth::routes();
 
