@@ -5,7 +5,9 @@
     */
 window.addEventListener('DOMContentLoaded', event => {
     // Activate feather
-    feather.replace();
+    if (window.feather && typeof window.feather.replace === 'function') {
+        window.feather.replace();
+    }
 
     // Enable tooltips globally
     var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
@@ -29,6 +31,10 @@ window.addEventListener('DOMContentLoaded', event => {
         sidebarToggle.addEventListener('click', event => {
             event.preventDefault();
             document.body.classList.toggle('sidenav-toggled');
+            sidebarToggle.setAttribute(
+                'aria-expanded',
+                String(!document.body.classList.contains('sidenav-toggled'))
+            );
             localStorage.setItem('sb|sidebar-toggle', document.body.classList.contains('sidenav-toggled'));
         });
     }

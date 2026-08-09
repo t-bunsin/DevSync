@@ -1,795 +1,246 @@
 @extends('layouts.admin')
 
 @php
-    $userName = auth()->user()->name ?? 'Admin';
+    $userName = auth()->user()->first_name ?? auth()->user()->name ?? 'Admin';
     $firstName = trim(explode(' ', $userName)[0] ?? $userName);
-    $todayLabel = now()->format('F j, Y');
+    $todayLabel = now()->format('l, F j');
     $stats = [
         [
-            'label' => 'Active Users',
-            'value' => number_format($widget['users']),
+            'label' => 'Active users',
+            'value' => number_format($widget['users'] ?? 0),
             'icon' => 'users',
-            'tone' => 'primary',
-            'note' => 'People currently using KH-WORKS',
+            'tone' => 'teal',
+            'delta' => '+12.5%',
+            'note' => 'from last month',
+            'points' => '2,35 18,32 34,34 50,24 66,27 82,17 98,20 114,9',
         ],
         [
-            'label' => 'Open Roles',
+            'label' => 'Open roles',
             'value' => '128',
             'icon' => 'briefcase',
-            'tone' => 'success',
-            'note' => 'Vacancies published this month',
+            'tone' => 'blue',
+            'delta' => '+8.2%',
+            'note' => '12 published this week',
+            'points' => '2,38 18,34 34,30 50,31 66,22 82,18 98,12 114,8',
         ],
         [
             'label' => 'Applications',
             'value' => '842',
             'icon' => 'send',
-            'tone' => 'warning',
-            'note' => 'Candidate submissions in review',
+            'tone' => 'gold',
+            'delta' => '+31.0%',
+            'note' => 'candidate submissions',
+            'points' => '2,37 18,30 34,32 50,20 66,25 82,13 98,17 114,5',
         ],
         [
-            'label' => 'Response Rate',
+            'label' => 'Response rate',
             'value' => '89%',
-            'icon' => 'bar-chart-2',
-            'tone' => 'info',
-            'note' => 'Employer replies over the last 7 days',
+            'icon' => 'message-circle',
+            'tone' => 'violet',
+            'delta' => '+4.6%',
+            'note' => '7-day employer average',
+            'points' => '2,35 18,29 34,31 50,25 66,20 82,21 98,12 114,10',
         ],
+    ];
+
+    $pipeline = [
+        ['label' => 'New applications', 'value' => 342, 'percentage' => 100, 'tone' => 'teal'],
+        ['label' => 'Screening', 'value' => 186, 'percentage' => 72, 'tone' => 'blue'],
+        ['label' => 'Interview', 'value' => 74, 'percentage' => 46, 'tone' => 'gold'],
+        ['label' => 'Offer', 'value' => 21, 'percentage' => 24, 'tone' => 'violet'],
+    ];
+
+    $activities = [
+        ['icon' => 'building', 'tone' => 'teal', 'title' => 'Tech Horizon submitted verification', 'meta' => 'Company review · just now', 'href' => route('companies')],
+        ['icon' => 'user-plus', 'tone' => 'blue', 'title' => '12 candidates completed their profiles', 'meta' => 'Candidate activity · 38 minutes ago', 'href' => route('users')],
+        ['icon' => 'check-circle', 'tone' => 'gold', 'title' => 'Product Designer reached its target', 'meta' => 'Hiring milestone · 2 hours ago', 'href' => route('companies')],
+        ['icon' => 'briefcase', 'tone' => 'violet', 'title' => 'ABA Bank published a new role', 'meta' => 'New listing · today', 'href' => route('companies')],
     ];
 @endphp
 
+@section('title', 'Dashboard | KH-WORKS')
+@section('body-class', 'kh-dashboard-page')
+
 @section('main-content')
-    <style>
-        .kh-dashboard {
-            padding: 1.5rem 1.5rem 2rem;
-        }
-
-        .kh-dashboard__hero {
-            position: relative;
-            overflow: hidden;
-            padding: 2rem;
-            margin-bottom: 1.5rem;
-            color: #fff;
-            background:
-                radial-gradient(circle at top right, rgba(255, 255, 255, 0.16), transparent 24%),
-                linear-gradient(135deg, #0b466f 0%, #114f7e 55%, #0d5b8f 100%);
-            border-radius: 0;
-            box-shadow: 0 20px 44px rgba(11, 70, 111, 0.18);
-        }
-
-        .kh-dashboard__hero::after {
-            content: "";
-            position: absolute;
-            right: -60px;
-            bottom: -80px;
-            width: 220px;
-            height: 220px;
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 50%;
-        }
-
-        .kh-dashboard__hero-grid {
-            position: relative;
-            z-index: 1;
-            display: grid;
-            grid-template-columns: minmax(0, 1.7fr) minmax(280px, 1fr);
-            gap: 1.5rem;
-            align-items: start;
-        }
-
-        .kh-dashboard__eyebrow {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.45rem 0.8rem;
-            margin-bottom: 1rem;
-            font-size: 0.78rem;
-            font-weight: 700;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            background: rgba(255, 255, 255, 0.12);
-        }
-
-        .kh-dashboard__hero h1 {
-            margin: 0 0 0.75rem;
-            font-size: clamp(2rem, 4vw, 3rem);
-            font-weight: 700;
-            letter-spacing: -0.05em;
-        }
-
-        .kh-dashboard__hero p {
-            max-width: 54ch;
-            margin: 0;
-            color: rgba(255, 255, 255, 0.84);
-            font-size: 1rem;
-            line-height: 1.7;
-        }
-
-        .kh-dashboard__highlights {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.75rem;
-            margin-top: 1.25rem;
-        }
-
-        .kh-dashboard__highlight {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.65rem;
-            padding: 0.8rem 1rem;
-            color: #fff;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .kh-dashboard__hero-card {
-            padding: 1.25rem;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .kh-dashboard__hero-card-label {
-            color: rgba(255, 255, 255, 0.74);
-            font-size: 0.78rem;
-            font-weight: 700;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-        }
-
-        .kh-dashboard__hero-card-value {
-            margin: 0.65rem 0 0.25rem;
-            font-size: 2.4rem;
-            font-weight: 700;
-            line-height: 1;
-        }
-
-        .kh-dashboard__hero-card small {
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 0.9rem;
-        }
-
-        .kh-dashboard__grid {
-            display: grid;
-            gap: 1.5rem;
-        }
-
-        .kh-dashboard__stats {
-            display: grid;
-            grid-template-columns: repeat(4, minmax(0, 1fr));
-            gap: 1rem;
-        }
-
-        .kh-card {
-            background: #fff;
-            border: 1px solid #e6edf5;
-            border-radius: 0;
-            box-shadow: 0 14px 28px rgba(31, 41, 55, 0.04);
-        }
-
-        .kh-stat {
-            display: grid;
-            gap: 1rem;
-            padding: 1.2rem;
-        }
-
-        .kh-stat__top {
-            display: flex;
-            align-items: flex-start;
-            justify-content: space-between;
-            gap: 1rem;
-        }
-
-        .kh-stat__label {
-            color: #667085;
-            font-size: 0.78rem;
-            font-weight: 700;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-        }
-
-        .kh-stat__value {
-            margin: 0.35rem 0 0;
-            font-size: 1.9rem;
-            font-weight: 700;
-            letter-spacing: -0.04em;
-            color: #101828;
-        }
-
-        .kh-stat__icon {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 46px;
-            height: 46px;
-            color: #0b466f;
-            background: #e7f1f8;
-        }
-
-        .kh-stat--success .kh-stat__icon {
-            color: #0f8b5f;
-            background: #e7f7f1;
-        }
-
-        .kh-stat--warning .kh-stat__icon {
-            color: #b7791f;
-            background: #fff4de;
-        }
-
-        .kh-stat--info .kh-stat__icon {
-            color: #2563eb;
-            background: #e7efff;
-        }
-
-        .kh-stat__note {
-            color: #667085;
-            font-size: 0.92rem;
-            line-height: 1.6;
-        }
-
-        .kh-dashboard__content {
-            display: grid;
-            grid-template-columns: minmax(0, 1.3fr) minmax(320px, 0.9fr);
-            gap: 1.5rem;
-        }
-
-        .kh-section {
-            padding: 1.35rem;
-        }
-
-        .kh-section__head {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 1rem;
-            margin-bottom: 1.25rem;
-        }
-
-        .kh-section__title {
-            margin: 0;
-            color: #101828;
-            font-size: 1.2rem;
-            font-weight: 700;
-            letter-spacing: -0.03em;
-        }
-
-        .kh-section__subtitle {
-            color: #667085;
-            font-size: 0.92rem;
-        }
-
-        .kh-overview {
-            display: grid;
-            gap: 1rem;
-        }
-
-        .kh-overview__panel {
-            padding: 1.2rem;
-            background: linear-gradient(180deg, #fbfdff, #f6f9fc);
-            border: 1px solid #edf2f7;
-        }
-
-        .kh-overview__bar {
-            display: grid;
-            gap: 0.6rem;
-            margin-top: 1rem;
-        }
-
-        .kh-overview__bar-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 0.75rem;
-            color: #475467;
-            font-size: 0.92rem;
-        }
-
-        .kh-overview__track {
-            width: 100%;
-            height: 10px;
-            background: #e8eef5;
-            overflow: hidden;
-        }
-
-        .kh-overview__fill {
-            height: 100%;
-            background: #0b466f;
-        }
-
-        .kh-quick-actions {
-            display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 0.9rem;
-        }
-
-        .kh-action {
-            display: grid;
-            gap: 0.9rem;
-            padding: 1rem;
-            color: inherit;
-            text-decoration: none;
-            border: 1px solid #edf2f7;
-            background: #fff;
-            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-        }
-
-        .kh-action:hover {
-            transform: translateY(-2px);
-            border-color: #d7e3ee;
-            box-shadow: 0 12px 24px rgba(11, 70, 111, 0.06);
-            text-decoration: none;
-        }
-
-        .kh-action__icon {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 42px;
-            height: 42px;
-            color: #0b466f;
-            background: #e7f1f8;
-        }
-
-        .kh-action strong {
-            display: block;
-            color: #101828;
-            font-size: 1rem;
-        }
-
-        .kh-action span {
-            color: #667085;
-            font-size: 0.88rem;
-            line-height: 1.6;
-        }
-
-        .kh-list {
-            display: grid;
-            gap: 0.9rem;
-        }
-
-        .kh-list__item {
-            display: flex;
-            align-items: flex-start;
-            justify-content: space-between;
-            gap: 1rem;
-            padding: 1rem;
-            border: 1px solid #edf2f7;
-            background: #fbfdff;
-        }
-
-        .kh-list__item strong {
-            display: block;
-            color: #101828;
-            margin-bottom: 0.2rem;
-        }
-
-        .kh-list__item p {
-            margin: 0;
-            color: #667085;
-            font-size: 0.9rem;
-            line-height: 1.6;
-        }
-
-        .kh-pill {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0.4rem 0.7rem;
-            color: #0b466f;
-            background: #e7f1f8;
-            font-size: 0.76rem;
-            font-weight: 700;
-            letter-spacing: 0.04em;
-            text-transform: uppercase;
-            white-space: nowrap;
-        }
-
-        .kh-side-grid {
-            display: grid;
-            gap: 1.5rem;
-        }
-
-        .kh-insight {
-            padding: 1.3rem;
-            color: #fff;
-            background: linear-gradient(135deg, #0b466f, #156192);
-        }
-
-        .kh-insight h3 {
-            margin: 0 0 0.75rem;
-            font-size: 1.35rem;
-            font-weight: 700;
-            letter-spacing: -0.03em;
-        }
-
-        .kh-insight p {
-            margin: 0 0 1rem;
-            color: rgba(255, 255, 255, 0.82);
-            line-height: 1.7;
-        }
-
-        .kh-insight__metric {
-            display: flex;
-            align-items: baseline;
-            gap: 0.5rem;
-            margin-bottom: 0.85rem;
-        }
-
-        .kh-insight__metric strong {
-            font-size: 2rem;
-            line-height: 1;
-        }
-
-        .kh-insight__actions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.75rem;
-            margin-top: 1rem;
-        }
-
-        .kh-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.55rem;
-            min-height: 42px;
-            padding: 0 1rem;
-            color: #fff;
-            background: #0b466f;
-            border: 0;
-            text-decoration: none;
-            font-weight: 700;
-        }
-
-        .kh-btn:hover {
-            color: #fff;
-            text-decoration: none;
-            background: #093654;
-        }
-
-        .kh-btn--light {
-            color: #0b466f;
-            background: #fff;
-        }
-
-        .kh-btn--light:hover {
-            color: #0b466f;
-            background: #eef4f8;
-        }
-
-        .kh-mini-list {
-            display: grid;
-            gap: 0.85rem;
-        }
-
-        .kh-mini-list__item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 1rem;
-            padding: 0.9rem 1rem;
-            border: 1px solid #edf2f7;
-            background: #fff;
-        }
-
-        .kh-mini-list__item strong {
-            display: block;
-            color: #101828;
-            margin-bottom: 0.2rem;
-        }
-
-        .kh-mini-list__item span {
-            color: #667085;
-            font-size: 0.88rem;
-        }
-
-        @media (max-width: 1200px) {
-            .kh-dashboard__stats {
-                grid-template-columns: repeat(2, minmax(0, 1fr));
-            }
-
-            .kh-dashboard__content {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @media (max-width: 992px) {
-            .kh-dashboard {
-                padding: 1rem;
-            }
-
-            .kh-dashboard__hero-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .kh-quick-actions {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .kh-dashboard__stats {
-                grid-template-columns: 1fr;
-            }
-
-            .kh-dashboard__hero,
-            .kh-section,
-            .kh-insight {
-                padding: 1rem;
-            }
-
-            .kh-dashboard__hero h1 {
-                font-size: 1.8rem;
-            }
-        }
-    </style>
-
-    <div class="kh-dashboard">
+    <div class="kh-dash">
         @if (session('success'))
-            <div class="alert alert-success border-left-success alert-dismissible fade show mb-4" role="alert">
-                {{ session('success') }}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+            <div class="kh-flash" role="status">
+                <i data-feather="check-circle"></i>
+                <span>{{ session('success') }}</span>
+                <button type="button" data-dismiss-flash aria-label="Dismiss message"><i data-feather="x"></i></button>
             </div>
         @endif
 
         @if (session('status'))
-            <div class="alert alert-success border-left-success mb-4" role="alert">
-                {{ session('status') }}
+            <div class="kh-flash" role="status">
+                <i data-feather="check-circle"></i>
+                <span>{{ session('status') }}</span>
+                <button type="button" data-dismiss-flash aria-label="Dismiss message"><i data-feather="x"></i></button>
             </div>
         @endif
 
-        <section class="kh-dashboard__hero">
-            <div class="kh-dashboard__hero-grid">
-                <div>
-                    <span class="kh-dashboard__eyebrow">
-                        <i data-feather="activity"></i>
-                        KH-WORKS Dashboard
-                    </span>
-                    <h1>Welcome back, {{ $firstName }}.</h1>
-                    <p>Here is a polished overview of your platform activity for {{ $todayLabel }}. Track growth, monitor engagement, and jump straight into the areas that need your attention.</p>
+        <header class="kh-dash__intro">
+            <div>
+                <div class="kh-dash__breadcrumb"><span>Workspace</span><i data-feather="chevron-right"></i><strong>Overview</strong></div>
+                <h1>Good to see you, {{ $firstName }}.</h1>
+                <p>Here is what is happening across KH-WORKS today.</p>
+            </div>
+            <div class="kh-dash__intro-actions">
+                <span class="kh-date"><i data-feather="calendar"></i>{{ $todayLabel }}</span>
+                <a class="kh-button kh-button--ghost" href="{{ url('/') }}" target="_blank" rel="noopener"><i data-feather="external-link"></i>View site</a>
+                <a class="kh-button kh-button--primary" href="{{ route('companies') }}"><i data-feather="plus"></i>Add company</a>
+            </div>
+        </header>
 
-                    <div class="kh-dashboard__highlights">
-                        <div class="kh-dashboard__highlight">
-                            <i data-feather="trending-up"></i>
-                            <span>Performance is up 18% this week</span>
-                        </div>
-                        <div class="kh-dashboard__highlight">
-                            <i data-feather="clock"></i>
-                            <span>Average response time: 2.4 hours</span>
-                        </div>
-                    </div>
+        <section class="kh-command" aria-labelledby="command-title">
+            <div class="kh-command__glow" aria-hidden="true"></div>
+            <div class="kh-command__copy">
+                <span class="kh-command__eyebrow"><i data-feather="activity"></i>Live operations</span>
+                <h2 id="command-title">Your hiring network is gaining momentum.</h2>
+                <p>Applications are moving faster this week, with technology and product roles generating the strongest candidate engagement.</p>
+                <div class="kh-command__signals">
+                    <span><i data-feather="trending-up"></i><strong>18%</strong> weekly growth</span>
+                    <span><i data-feather="clock"></i><strong>2.4h</strong> response time</span>
+                    <span><i data-feather="zap"></i><strong>7</strong> priority actions</span>
                 </div>
+            </div>
 
-                <div class="kh-dashboard__hero-card">
-                    <div class="kh-dashboard__hero-card-label">Today’s Snapshot</div>
-                    <div class="kh-dashboard__hero-card-value">24</div>
-                    <small>New applicants landed in the pipeline since this morning.</small>
-
-                    <div class="kh-overview__bar">
-                        <div class="kh-overview__bar-row">
-                            <span>Hiring velocity</span>
-                            <strong>74%</strong>
-                        </div>
-                        <div class="kh-overview__track">
-                            <div class="kh-overview__fill" style="width: 74%; background:#ffffff;"></div>
-                        </div>
-                    </div>
+            <div class="kh-command__score">
+                <div class="kh-score-ring" style="--score: 74" role="img" aria-label="Hiring health score: 74 percent">
+                    <div><strong>74</strong><span>Health score</span></div>
+                </div>
+                <div class="kh-command__score-copy">
+                    <span>Today’s pulse</span>
+                    <strong>24 new applicants</strong>
+                    <small>6 more than yesterday</small>
                 </div>
             </div>
         </section>
 
-        <div class="kh-dashboard__grid">
-            <section class="kh-dashboard__stats">
-                @foreach ($stats as $stat)
-                    <article class="kh-card kh-stat kh-stat--{{ $stat['tone'] }}">
-                        <div class="kh-stat__top">
-                            <div>
-                                <div class="kh-stat__label">{{ $stat['label'] }}</div>
-                                <div class="kh-stat__value">{{ $stat['value'] }}</div>
-                            </div>
-                            <div class="kh-stat__icon">
-                                <i data-feather="{{ $stat['icon'] }}"></i>
-                            </div>
-                        </div>
-                        <div class="kh-stat__note">{{ $stat['note'] }}</div>
-                    </article>
-                @endforeach
-            </section>
+        <section class="kh-metrics" aria-label="Platform metrics">
+            @foreach ($stats as $stat)
+                <article class="kh-metric kh-metric--{{ $stat['tone'] }}">
+                    <div class="kh-metric__top">
+                        <span class="kh-metric__icon"><i data-feather="{{ $stat['icon'] }}"></i></span>
+                        <span class="kh-trend"><i data-feather="arrow-up-right"></i>{{ $stat['delta'] }}</span>
+                    </div>
+                    <div class="kh-metric__body">
+                        <span>{{ $stat['label'] }}</span>
+                        <strong>{{ $stat['value'] }}</strong>
+                        <small>{{ $stat['note'] }}</small>
+                    </div>
+                    <svg class="kh-sparkline" viewBox="0 0 116 44" role="img" aria-label="{{ $stat['label'] }} upward trend">
+                        <polyline points="{{ $stat['points'] }}" fill="none" vector-effect="non-scaling-stroke"></polyline>
+                    </svg>
+                </article>
+            @endforeach
+        </section>
 
-            <section class="kh-dashboard__content">
-                <div class="kh-side-grid">
-                    <article class="kh-card kh-section">
-                        <div class="kh-section__head">
-                            <div>
-                                <h2 class="kh-section__title">Growth Overview</h2>
-                                <div class="kh-section__subtitle">A quick read on platform momentum and operational health.</div>
-                            </div>
-                            <span class="kh-pill">Live</span>
-                        </div>
+        <div class="kh-dash__main-grid">
+            <article class="kh-panel kh-performance">
+                <header class="kh-panel__head">
+                    <div>
+                        <span class="kh-panel__kicker">Performance</span>
+                        <h2>Application activity</h2>
+                        <p>Candidate volume and employer responses over time.</p>
+                    </div>
+                    <div class="kh-range" role="group" aria-label="Chart range">
+                        <button class="is-active" type="button" data-chart-range="7d" aria-pressed="true">7 days</button>
+                        <button type="button" data-chart-range="30d" aria-pressed="false">30 days</button>
+                    </div>
+                </header>
 
-                        <div class="kh-overview">
-                            <div class="kh-overview__panel">
-                                <div class="kh-overview__bar-row">
-                                    <span>Candidate registrations</span>
-                                    <strong>68%</strong>
-                                </div>
-                                <div class="kh-overview__track">
-                                    <div class="kh-overview__fill" style="width: 68%;"></div>
-                                </div>
-                            </div>
-
-                            <div class="kh-overview__panel">
-                                <div class="kh-overview__bar-row">
-                                    <span>Employer engagement</span>
-                                    <strong>81%</strong>
-                                </div>
-                                <div class="kh-overview__track">
-                                    <div class="kh-overview__fill" style="width: 81%;"></div>
-                                </div>
-                            </div>
-
-                            <div class="kh-overview__panel">
-                                <div class="kh-overview__bar-row">
-                                    <span>Successful hires</span>
-                                    <strong>57%</strong>
-                                </div>
-                                <div class="kh-overview__track">
-                                    <div class="kh-overview__fill" style="width: 57%;"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </article>
-
-                    <article class="kh-card kh-section">
-                        <div class="kh-section__head">
-                            <div>
-                                <h2 class="kh-section__title">Quick Actions</h2>
-                                <div class="kh-section__subtitle">Move faster with shortcuts to the most-used admin areas.</div>
-                            </div>
-                        </div>
-
-                        <div class="kh-quick-actions">
-                            <a class="kh-action" href="{{ route('users') }}">
-                                <div class="kh-action__icon"><i data-feather="users"></i></div>
-                                <div>
-                                    <strong>Manage Users</strong>
-                                    <span>Review member records and account activity.</span>
-                                </div>
-                            </a>
-
-                            <a class="kh-action" href="{{ route('companies') }}">
-                                <div class="kh-action__icon"><i data-feather="briefcase"></i></div>
-                                <div>
-                                    <strong>Companies</strong>
-                                    <span>Check employer profiles and hiring status.</span>
-                                </div>
-                            </a>
-
-                            <a class="kh-action" href="{{ route('profile') }}">
-                                <div class="kh-action__icon"><i data-feather="user"></i></div>
-                                <div>
-                                    <strong>My Profile</strong>
-                                    <span>Update account details and preferences.</span>
-                                </div>
-                            </a>
-                        </div>
-                    </article>
-
-                    <article class="kh-card kh-section">
-                        <div class="kh-section__head">
-                            <div>
-                                <h2 class="kh-section__title">Recent Activity</h2>
-                                <div class="kh-section__subtitle">Latest movement across recruiting and account management.</div>
-                            </div>
-                        </div>
-
-                        <div class="kh-list">
-                            <div class="kh-list__item">
-                                <div>
-                                    <strong>New company submitted verification documents</strong>
-                                    <p>Tech Horizon uploaded business verification files for approval.</p>
-                                </div>
-                                <span class="kh-pill">Now</span>
-                            </div>
-
-                            <div class="kh-list__item">
-                                <div>
-                                    <strong>Profile updates were completed by 12 candidates</strong>
-                                    <p>User engagement is increasing around resume completion this afternoon.</p>
-                                </div>
-                                <span class="kh-pill">2h ago</span>
-                            </div>
-
-                            <div class="kh-list__item">
-                                <div>
-                                    <strong>Senior Product Designer role reached target applicants</strong>
-                                    <p>The listing hit its weekly target and is ready for shortlist review.</p>
-                                </div>
-                                <span class="kh-pill">Today</span>
-                            </div>
-                        </div>
-                    </article>
+                <div class="kh-performance__summary">
+                    <div><span>Total applications</span><strong id="chart-total" aria-live="polite">842</strong><small><i data-feather="trending-up"></i>31% vs last period</small></div>
+                    <div class="kh-chart-legend"><span><i class="kh-dot kh-dot--teal"></i>Applications</span><span><i class="kh-dot kh-dot--gold"></i>Responses</span></div>
                 </div>
 
-                <div class="kh-side-grid">
-                    <article class="kh-insight">
-                        <h3>Hiring Insight</h3>
-                        <p>Your most active category this week is technology. Candidate demand is highest for engineering, product, and hybrid-friendly roles.</p>
-                        <div class="kh-insight__metric">
-                            <strong>+31%</strong>
-                            <span>more applications than last week</span>
-                        </div>
-                        <div class="kh-insight__actions">
-                            <a class="kh-btn kh-btn--light" href="{{ route('companies') }}">
-                                <i data-feather="eye"></i>
-                                <span>View Companies</span>
-                            </a>
-                            <a class="kh-btn" href="{{ route('users') }}">
-                                <i data-feather="users"></i>
-                                <span>Open Users</span>
-                            </a>
-                        </div>
-                    </article>
-
-                    <article class="kh-card kh-section">
-                        <div class="kh-section__head">
-                            <div>
-                                <h2 class="kh-section__title">Pipeline Focus</h2>
-                                <div class="kh-section__subtitle">Roles that need immediate attention from the team.</div>
-                            </div>
-                        </div>
-
-                        <div class="kh-mini-list">
-                            <div class="kh-mini-list__item">
-                                <div>
-                                    <strong>Software Engineer</strong>
-                                    <span>42 candidates waiting for screening</span>
-                                </div>
-                                <span class="kh-pill">Priority</span>
-                            </div>
-
-                            <div class="kh-mini-list__item">
-                                <div>
-                                    <strong>Retail Associates</strong>
-                                    <span>18 interviews scheduled this week</span>
-                                </div>
-                                <span class="kh-pill">Active</span>
-                            </div>
-
-                            <div class="kh-mini-list__item">
-                                <div>
-                                    <strong>UI/UX Designer</strong>
-                                    <span>Portfolio review queue updated today</span>
-                                </div>
-                                <span class="kh-pill">Review</span>
-                            </div>
-                        </div>
-                    </article>
-
-                    <article class="kh-card kh-section">
-                        <div class="kh-section__head">
-                            <div>
-                                <h2 class="kh-section__title">System Notes</h2>
-                                <div class="kh-section__subtitle">A compact operational checklist for your admin team.</div>
-                            </div>
-                        </div>
-
-                        <div class="kh-list">
-                            <div class="kh-list__item">
-                                <div>
-                                    <strong>Moderation queue</strong>
-                                    <p>7 company submissions still need a final review.</p>
-                                </div>
-                            </div>
-                            <div class="kh-list__item">
-                                <div>
-                                    <strong>Account hygiene</strong>
-                                    <p>3 inactive users were flagged for follow-up and cleanup.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </article>
+                <div class="kh-chart" aria-label="Application performance chart">
+                    <div class="kh-chart__scale" aria-hidden="true"><span>240</span><span>180</span><span>120</span><span>60</span><span>0</span></div>
+                    <svg viewBox="0 0 760 260" preserveAspectRatio="none" role="img" aria-labelledby="chart-title chart-description">
+                        <title id="chart-title">Applications and employer responses</title>
+                        <desc id="chart-description">Both metrics trend upward during the selected period.</desc>
+                        <defs>
+                            <linearGradient id="kh-chart-fill" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="#1ca6a0" stop-opacity="0.28"></stop>
+                                <stop offset="100%" stop-color="#1ca6a0" stop-opacity="0"></stop>
+                            </linearGradient>
+                        </defs>
+                        <g class="kh-chart__grid">
+                            <line x1="0" y1="20" x2="760" y2="20"></line><line x1="0" y1="75" x2="760" y2="75"></line>
+                            <line x1="0" y1="130" x2="760" y2="130"></line><line x1="0" y1="185" x2="760" y2="185"></line>
+                            <line x1="0" y1="240" x2="760" y2="240"></line>
+                        </g>
+                        <path id="chart-area" class="kh-chart__area" d="M0,214 C55,210 72,178 126,182 C180,186 192,145 252,151 C312,158 326,111 382,119 C438,127 456,82 508,91 C568,102 586,56 638,70 C692,84 717,37 760,43 L760,240 L0,240 Z"></path>
+                        <path id="chart-line" class="kh-chart__line" d="M0,214 C55,210 72,178 126,182 C180,186 192,145 252,151 C312,158 326,111 382,119 C438,127 456,82 508,91 C568,102 586,56 638,70 C692,84 717,37 760,43"></path>
+                        <path id="chart-response" class="kh-chart__response" d="M0,228 C70,218 84,211 126,213 C180,216 204,192 252,199 C312,207 334,175 382,181 C438,189 463,155 508,164 C568,174 591,137 638,149 C690,161 724,116 760,124"></path>
+                    </svg>
+                    <div class="kh-chart__labels" aria-hidden="true"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div>
                 </div>
-            </section>
+            </article>
+
+            <aside class="kh-panel kh-pipeline">
+                <header class="kh-panel__head">
+                    <div>
+                        <span class="kh-panel__kicker">Recruitment funnel</span>
+                        <h2>Pipeline health</h2>
+                        <p>Where candidates are right now.</p>
+                    </div>
+                    <a href="{{ route('users') }}" aria-label="View all candidates"><i data-feather="arrow-up-right"></i></a>
+                </header>
+
+                <div class="kh-pipeline__total"><div><strong>623</strong><span>active candidates</span></div><span class="kh-status-dot">On track</span></div>
+                <div class="kh-pipeline__stages">
+                    @foreach ($pipeline as $stage)
+                        <div class="kh-stage kh-stage--{{ $stage['tone'] }}">
+                            <div><span>{{ $stage['label'] }}</span><strong>{{ $stage['value'] }}</strong></div>
+                            <div class="kh-stage__track"><span style="--progress: {{ $stage['percentage'] }}%"></span></div>
+                        </div>
+                    @endforeach
+                </div>
+                <div class="kh-pipeline__footer"><i data-feather="info"></i><span><strong>12 candidates</strong> have been waiting for review longer than 48 hours.</span></div>
+            </aside>
+        </div>
+
+        <div class="kh-dash__lower-grid">
+            <article class="kh-panel kh-activity">
+                <header class="kh-panel__head">
+                    <div><span class="kh-panel__kicker">Live feed</span><h2>Recent activity</h2></div>
+                    <a href="{{ route('users') }}" class="kh-text-button">View all <i data-feather="arrow-right"></i></a>
+                </header>
+                <div class="kh-activity__list">
+                    @foreach ($activities as $activity)
+                        <div class="kh-activity__item">
+                            <span class="kh-activity__icon kh-activity__icon--{{ $activity['tone'] }}"><i data-feather="{{ $activity['icon'] }}"></i></span>
+                            <div><strong>{{ $activity['title'] }}</strong><span>{{ $activity['meta'] }}</span></div>
+                            <a href="{{ $activity['href'] }}" aria-label="View {{ $activity['title'] }}"><i data-feather="chevron-right"></i></a>
+                        </div>
+                    @endforeach
+                </div>
+            </article>
+
+            <article class="kh-panel kh-focus">
+                <header class="kh-panel__head"><div><span class="kh-panel__kicker">Needs attention</span><h2>Priority roles</h2></div><span class="kh-count-badge">3</span></header>
+                <div class="kh-focus__list">
+                    <a href="{{ route('companies') }}"><span class="kh-role-logo kh-role-logo--teal"><i data-feather="code"></i></span><div><strong>Software Engineer</strong><small>42 awaiting screening</small></div><span class="kh-priority kh-priority--high">High</span></a>
+                    <a href="{{ route('companies') }}"><span class="kh-role-logo kh-role-logo--blue">ABA</span><div><strong>Retail Associates</strong><small>18 interviews this week</small></div><span class="kh-priority">Active</span></a>
+                    <a href="{{ route('companies') }}"><span class="kh-role-logo kh-role-logo--gold"><i data-feather="pen-tool"></i></span><div><strong>UI/UX Designer</strong><small>9 portfolios to review</small></div><span class="kh-priority">Review</span></a>
+                </div>
+            </article>
+
+            <article class="kh-panel kh-actions">
+                <header class="kh-panel__head"><div><span class="kh-panel__kicker">Shortcuts</span><h2>Quick actions</h2></div></header>
+                <div class="kh-actions__grid">
+                    <a href="{{ route('users') }}"><span><i data-feather="users"></i></span><strong>Users</strong><small>Manage accounts</small></a>
+                    <a href="{{ route('companies') }}"><span><i data-feather="briefcase"></i></span><strong>Companies</strong><small>Review employers</small></a>
+                    <a href="{{ route('profile') }}"><span><i data-feather="settings"></i></span><strong>Settings</strong><small>Update profile</small></a>
+                    <a href="{{ url('/') }}" target="_blank" rel="noopener"><span><i data-feather="globe"></i></span><strong>Website</strong><small>Open frontend</small></a>
+                </div>
+            </article>
         </div>
     </div>
 @endsection
+
+@push('scripts')
+    <script src="{{ asset('js/dashboard.js') }}"></script>
+@endpush

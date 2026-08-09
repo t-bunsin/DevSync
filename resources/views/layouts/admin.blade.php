@@ -1,33 +1,62 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="description" content="" />
-    <meta name="author" content="" />
-    <title>Overview - SB Admin Pro</title>
+    <meta name="description" content="KH-WORKS administration workspace" />
+    <meta name="author" content="KH-WORKS" />
+    <meta name="theme-color" id="admin-theme-color" content="#ffffff" />
+    <script>
+        (() => {
+            try {
+                const savedTheme = localStorage.getItem('khworks:theme');
+                const theme = savedTheme === 'dark' || savedTheme === 'light' ? savedTheme : 'light';
+                document.documentElement.dataset.adminTheme = theme;
+                document.documentElement.style.colorScheme = theme;
+                document.getElementById('admin-theme-color')?.setAttribute('content', theme === 'dark' ? '#071015' : '#ffffff');
+            } catch (error) {
+                document.documentElement.dataset.adminTheme = 'light';
+                document.documentElement.style.colorScheme = 'light';
+                document.getElementById('admin-theme-color')?.setAttribute('content', '#ffffff');
+            }
+        })();
+    </script>
+    <title>@yield('title', 'KH-WORKS Admin')</title>
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
     <link href="{{ asset('css/style.css') }}" rel="stylesheet" />
-    <link rel="icon" type="image/x-icon" href="https://sb-admin-pro.startbootstrap.com/assets/img/favicon.png" />
-    <script data-search-pseudo-elements="" defer=""
-        src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/js/all.min.js" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js" crossorigin="anonymous">
+    <link href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" />
+    <link href="{{ asset('css/dashboard.css') }}" rel="stylesheet" />
+    <link href="{{ asset('css/admin-theme.css') }}" rel="stylesheet" />
+    <link rel="icon" type="image/x-icon" href="{{ asset('img/favicon.png') }}" />
+    @stack('styles')
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js" crossorigin="anonymous">
     </script>
 </head>
 
-<body class="nav-fixed">
+<body class="nav-fixed @yield('body-class')">
+    @php
+        $adminUser = auth()->user();
+        $adminFirstName = $adminUser?->first_name ?? $adminUser?->name ?? 'Administrator';
+        $adminLastName = $adminUser?->last_name ?? '';
+        $adminFullName = trim($adminFirstName . ' ' . $adminLastName);
+        $adminInitial = strtoupper(substr($adminFirstName, 0, 1));
+    @endphp
     <nav class="topnav navbar navbar-expand shadow justify-content-between justify-content-sm-start navbar-light bg-white"
         id="sidenavAccordion">
         <!-- Sidenav Toggle Button-->
-        <button class="btn btn-icon btn-transparent-dark order-1 order-lg-0 me-2 ms-lg-2 me-lg-0" id="sidebarToggle"><i
+        <button class="btn btn-icon btn-transparent-dark order-0 me-1 ms-1 ms-lg-2 me-lg-0" id="sidebarToggle"
+            type="button" aria-label="Toggle navigation" aria-controls="layoutSidenav" aria-expanded="true"><i
                 data-feather="menu"></i></button>
         <!-- Navbar Brand-->
         <!-- * * Tip * * You can use text or an image for your navbar brand.-->
         <!-- * * * * * * When using an image, we recommend the SVG format.-->
         <!-- * * * * * * Dimensions: Maximum height: 32px, maximum width: 240px-->
-        <a class="navbar-brand pe-3 ps-4 ps-lg-2" href="index.html">ZinFx5 - Pro</a>
+        <a class="navbar-brand kh-admin-brand pe-3 ps-4 ps-lg-2" href="{{ route('home') }}">
+            <span class="kh-admin-brand__mark"><i class="fas fa-briefcase"></i></span>
+            <span>KH-<strong>WORKS</strong></span>
+        </a>
         <!-- Navbar Search Input-->
         <!-- * * Note: * * Visible only on and above the lg breakpoint-->
         {{-- <form class="form-inline me-auto d-none d-lg-block me-3">
@@ -38,47 +67,28 @@
             </form> --}}
         <!-- Navbar Items-->
         <ul class="navbar-nav align-items-center ms-auto">
-            <!-- Documentation Dropdown-->
-            <li class="nav-item dropdown no-caret d-none d-md-block me-3">
-                <a class="nav-link dropdown-toggle" id="navbarDropdownDocs" href="javascript:void(0);" role="button"
-                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <div class="fw-500">Documentation</div>
-                    <i class="fas fa-chevron-right dropdown-arrow"></i>
+            <li class="nav-item me-2 me-sm-3 kh-admin-theme-item">
+                <button class="kh-admin-theme-toggle" type="button" aria-label="Switch to dark theme"
+                    aria-pressed="false" title="Switch to dark theme">
+                    <span class="kh-admin-theme-toggle__track" aria-hidden="true">
+                        <i class="fas fa-sun kh-admin-theme-toggle__sun"></i>
+                        <i class="fas fa-moon kh-admin-theme-toggle__moon"></i>
+                        <span class="kh-admin-theme-toggle__thumb"></span>
+                    </span>
+                </button>
+            </li>
+            <li class="nav-item d-none d-md-block me-3">
+                <a class="nav-link kh-view-site" href="{{ url('/') }}" target="_blank" rel="noopener">
+                    <i data-feather="external-link"></i>
+                    <span>View website</span>
                 </a>
-                <div class="dropdown-menu dropdown-menu-end py-0 me-sm-n15 me-lg-0 o-hidden animated--fade-in-up"
-                    aria-labelledby="navbarDropdownDocs">
-                    <a class="dropdown-item py-3" href="https://docs.startbootstrap.com/sb-admin-pro" target="_blank">
-                        <div class="icon-stack bg-primary-soft text-primary me-4"><i data-feather="book"></i></div>
-                        <div>
-                            <div class="small text-gray-500">Documentation</div>
-                            Usage instructions and reference
-                        </div>
-                    </a>
-                    <div class="dropdown-divider m-0"></div>
-                    <a class="dropdown-item py-3" href="https://docs.startbootstrap.com/sb-admin-pro/components"
-                        target="_blank">
-                        <div class="icon-stack bg-primary-soft text-primary me-4"><i data-feather="code"></i></div>
-                        <div>
-                            <div class="small text-gray-500">Components</div>
-                            Code snippets and reference
-                        </div>
-                    </a>
-                    <div class="dropdown-divider m-0"></div>
-                    <a class="dropdown-item py-3" href="https://docs.startbootstrap.com/sb-admin-pro/changelog"
-                        target="_blank">
-                        <div class="icon-stack bg-primary-soft text-primary me-4"><i data-feather="file-text"></i></div>
-                        <div>
-                            <div class="small text-gray-500">Changelog</div>
-                            Updates and changes
-                        </div>
-                    </a>
-                </div>
             </li>
             <!-- Navbar Search Dropdown-->
             <!-- * * Note: * * Visible only below the lg breakpoint-->
-            <li class="nav-item dropdown no-caret me-3 d-lg-none">
+            <li class="nav-item dropdown no-caret me-3 d-lg-none kh-admin-search-item">
                 <a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="searchDropdown" href="#"
-                    role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i
+                    role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                    aria-label="Open search"><i
                         data-feather="search"></i></a>
                 <!-- Dropdown - Search-->
                 <div class="dropdown-menu dropdown-menu-end p-3 shadow animated--fade-in-up"
@@ -96,150 +106,109 @@
             <li class="nav-item dropdown no-caret d-none d-sm-block me-3 dropdown-notifications">
                 <a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownAlerts"
                     href="javascript:void(0);" role="button" data-bs-toggle="dropdown" aria-haspopup="true"
-                    aria-expanded="false"><i data-feather="bell"></i></a>
+                    aria-expanded="false" aria-label="Open notifications"><i data-feather="bell"></i></a>
                 <div class="dropdown-menu dropdown-menu-end border-0 shadow animated--fade-in-up"
                     aria-labelledby="navbarDropdownAlerts">
                     <h6 class="dropdown-header dropdown-notifications-header">
                         <i class="me-2" data-feather="bell"></i>
-                        Alerts Center
+                        Activity center
                     </h6>
-                    <!-- Example Alert 1-->
-                    <a class="dropdown-item dropdown-notifications-item" href="#!">
+                    <a class="dropdown-item dropdown-notifications-item" href="{{ route('companies') }}">
                         <div class="dropdown-notifications-item-icon bg-warning"><i data-feather="activity"></i></div>
                         <div class="dropdown-notifications-item-content">
-                            <div class="dropdown-notifications-item-content-details">December 29, 2021</div>
-                            <div class="dropdown-notifications-item-content-text">This is an alert message. It's nothing
-                                serious, but it requires your attention.</div>
+                            <div class="dropdown-notifications-item-content-details">Just now</div>
+                            <div class="dropdown-notifications-item-content-text">Tech Horizon submitted its company verification.</div>
                         </div>
                     </a>
-                    <!-- Example Alert 2-->
-                    <a class="dropdown-item dropdown-notifications-item" href="#!">
+                    <a class="dropdown-item dropdown-notifications-item" href="{{ route('users') }}">
                         <div class="dropdown-notifications-item-icon bg-info"><i data-feather="bar-chart"></i></div>
                         <div class="dropdown-notifications-item-content">
-                            <div class="dropdown-notifications-item-content-details">December 22, 2021</div>
-                            <div class="dropdown-notifications-item-content-text">A new monthly report is ready. Click
-                                here to view!</div>
+                            <div class="dropdown-notifications-item-content-details">38 minutes ago</div>
+                            <div class="dropdown-notifications-item-content-text">12 candidates completed their profiles.</div>
                         </div>
                     </a>
-                    <!-- Example Alert 3-->
-                    <a class="dropdown-item dropdown-notifications-item" href="#!">
+                    <a class="dropdown-item dropdown-notifications-item" href="{{ route('companies') }}">
                         <div class="dropdown-notifications-item-icon bg-danger"><i
                                 class="fas fa-exclamation-triangle"></i></div>
                         <div class="dropdown-notifications-item-content">
-                            <div class="dropdown-notifications-item-content-details">December 8, 2021</div>
-                            <div class="dropdown-notifications-item-content-text">Critical system failure, systems
-                                shutting down.</div>
+                            <div class="dropdown-notifications-item-content-details">2 hours ago</div>
+                            <div class="dropdown-notifications-item-content-text">12 candidate reviews have been waiting over 48 hours.</div>
                         </div>
                     </a>
-                    <!-- Example Alert 4-->
-                    <a class="dropdown-item dropdown-notifications-item" href="#!">
+                    <a class="dropdown-item dropdown-notifications-item" href="{{ route('companies') }}">
                         <div class="dropdown-notifications-item-icon bg-success"><i data-feather="user-plus"></i>
                         </div>
                         <div class="dropdown-notifications-item-content">
-                            <div class="dropdown-notifications-item-content-details">December 2, 2021</div>
-                            <div class="dropdown-notifications-item-content-text">New user request. Woody has requested
-                                access to the organization.</div>
+                            <div class="dropdown-notifications-item-content-details">Today</div>
+                            <div class="dropdown-notifications-item-content-text">ABA Bank published a new retail role.</div>
                         </div>
                     </a>
-                    <a class="dropdown-item dropdown-notifications-footer" href="#!">View All Alerts</a>
+                    <a class="dropdown-item dropdown-notifications-footer" href="{{ route('home') }}">Open dashboard</a>
                 </div>
             </li>
             <!-- Messages Dropdown-->
             <li class="nav-item dropdown no-caret d-none d-sm-block me-3 dropdown-notifications">
                 <a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownMessages"
                     href="javascript:void(0);" role="button" data-bs-toggle="dropdown" aria-haspopup="true"
-                    aria-expanded="false"><i data-feather="mail"></i></a>
+                    aria-expanded="false" aria-label="Open messages"><i data-feather="mail"></i></a>
                 <div class="dropdown-menu dropdown-menu-end border-0 shadow animated--fade-in-up"
                     aria-labelledby="navbarDropdownMessages">
                     <h6 class="dropdown-header dropdown-notifications-header">
                         <i class="me-2" data-feather="mail"></i>
-                        Message Center
+                        Team messages
                     </h6>
-                    <!-- Example Message 1  -->
-                    <a class="dropdown-item dropdown-notifications-item" href="#!">
-                        <img class="dropdown-notifications-item-img"
-                            src="assets/img/illustrations/profiles/profile-2.png" />
+                    <a class="dropdown-item dropdown-notifications-item" href="{{ route('companies') }}">
+                        <span class="dropdown-notifications-item-img kh-message-avatar">TH</span>
                         <div class="dropdown-notifications-item-content">
-                            <div class="dropdown-notifications-item-content-text">Lorem ipsum dolor sit amet,
-                                consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
-                                aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                                aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-                                velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                                proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
-                            <div class="dropdown-notifications-item-content-details">Thomas Wilcox · 58m</div>
+                            <div class="dropdown-notifications-item-content-text">Could you review our employer verification today?</div>
+                            <div class="dropdown-notifications-item-content-details">Tech Horizon · 12m</div>
                         </div>
                     </a>
-                    <!-- Example Message 2-->
-                    <a class="dropdown-item dropdown-notifications-item" href="#!">
-                        <img class="dropdown-notifications-item-img"
-                            src="assets/img/illustrations/profiles/profile-3.png" />
+                    <a class="dropdown-item dropdown-notifications-item" href="{{ route('companies') }}">
+                        <span class="dropdown-notifications-item-img kh-message-avatar kh-message-avatar--blue">ABA</span>
                         <div class="dropdown-notifications-item-content">
-                            <div class="dropdown-notifications-item-content-text">Lorem ipsum dolor sit amet,
-                                consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
-                                aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                                aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-                                velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                                proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
-                            <div class="dropdown-notifications-item-content-details">Emily Fowler · 2d</div>
+                            <div class="dropdown-notifications-item-content-text">Our new retail role is ready for candidate matching.</div>
+                            <div class="dropdown-notifications-item-content-details">ABA Bank · 1h</div>
                         </div>
                     </a>
-                    <!-- Example Message 3-->
-                    <a class="dropdown-item dropdown-notifications-item" href="#!">
-                        <img class="dropdown-notifications-item-img"
-                            src="assets/img/illustrations/profiles/profile-4.png" />
+                    <a class="dropdown-item dropdown-notifications-item" href="{{ route('users') }}">
+                        <span class="dropdown-notifications-item-img kh-message-avatar kh-message-avatar--gold">AC</span>
                         <div class="dropdown-notifications-item-content">
-                            <div class="dropdown-notifications-item-content-text">Lorem ipsum dolor sit amet,
-                                consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
-                                aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                                aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-                                velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                                proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
-                            <div class="dropdown-notifications-item-content-details">Marshall Rosencrantz · 3d</div>
+                            <div class="dropdown-notifications-item-content-text">The design portfolio shortlist has been updated.</div>
+                            <div class="dropdown-notifications-item-content-details">Angkor Creative · 3h</div>
                         </div>
                     </a>
-                    <!-- Example Message 4-->
-                    <a class="dropdown-item dropdown-notifications-item" href="#!">
-                        <img class="dropdown-notifications-item-img"
-                            src="assets/img/illustrations/profiles/profile-5.png" />
+                    <a class="dropdown-item dropdown-notifications-item" href="{{ route('users') }}">
+                        <span class="dropdown-notifications-item-img kh-message-avatar kh-message-avatar--violet">ML</span>
                         <div class="dropdown-notifications-item-content">
-                            <div class="dropdown-notifications-item-content-text">Lorem ipsum dolor sit amet,
-                                consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
-                                aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                                aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-                                velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                                proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
-                            <div class="dropdown-notifications-item-content-details">Colby Newton · 3d</div>
+                            <div class="dropdown-notifications-item-content-text">Seven new candidates are available for screening.</div>
+                            <div class="dropdown-notifications-item-content-details">Matching team · Today</div>
                         </div>
                     </a>
-                    <!-- Footer Link-->
-                    <a class="dropdown-item dropdown-notifications-footer" href="#!">Read All Messages</a>
+                    <a class="dropdown-item dropdown-notifications-footer" href="{{ route('users') }}">View candidates</a>
                 </div>
             </li>
             <!-- User Dropdown-->
             <li class="nav-item dropdown no-caret dropdown-user me-3 me-lg-4">
-                <a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownUserImage"
+                <a class="btn btn-icon btn-transparent-dark dropdown-toggle kh-user-avatar" id="navbarDropdownUserImage"
                     href="javascript:void(0);" role="button" data-bs-toggle="dropdown" aria-haspopup="true"
-                    aria-expanded="false"><img class="img-fluid"
-                        src="https://sb-admin-pro.startbootstrap.com/assets/img/illustrations/profiles/profile-1.png" /></a>
+                    aria-expanded="false" aria-label="Open account menu">{{ $adminInitial }}</a>
                 <div class="dropdown-menu dropdown-menu-end border-0 shadow animated--fade-in-up"
                     aria-labelledby="navbarDropdownUserImage">
                     <h6 class="dropdown-header d-flex align-items-center">
-                        <img class="dropdown-user-img"
-                            src="https://sb-admin-pro.startbootstrap.com/assets/img/illustrations/profiles/profile-1.png" />
+                        <span class="dropdown-user-img kh-user-avatar kh-user-avatar--large">{{ $adminInitial }}</span>
                         <div class="dropdown-user-details">
-                            <div class="dropdown-user-details-name">Devsec - OPS</div>
-                            <div class="dropdown-user-details-email"><a href="/cdn-cgi/l/email-protection"
-                                    class="__cf_email__"
-                                    data-cfemail="ceb8a2bba0af8eafa1a2e0ada1a3">[email&#160;protected]</a></div>
+                            <div class="dropdown-user-details-name">{{ $adminFullName }}</div>
+                            <div class="dropdown-user-details-email">{{ $adminUser?->email ?? 'admin@khworks.com' }}</div>
                         </div>
                     </h6>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#!">
+                    <a class="dropdown-item" href="{{ route('profile') }}">
                         <div class="dropdown-item-icon"><i data-feather="settings"></i></div>
                         Account
                     </a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                    <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#logoutModal">
                         <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                         &nbsp{{ __('Logout') }}
                     </a>
@@ -252,6 +221,44 @@
             <nav class="sidenav shadow-right sidenav-light">
                 <div class="sidenav-menu">
                     <div class="nav accordion" id="accordionSidenav">
+                        @if (request()->routeIs('home'))
+                            <div class="kh-app-menu">
+                                <div class="sidenav-menu-heading">Workspace</div>
+                                <a class="nav-link active" href="{{ route('home') }}" aria-current="page">
+                                    <div class="nav-link-icon"><i data-feather="grid"></i></div>
+                                    Overview
+                                    <span class="kh-nav-live"><i></i>Live</span>
+                                </a>
+
+                                <div class="sidenav-menu-heading">Management</div>
+                                <a class="nav-link" href="{{ route('users') }}">
+                                    <div class="nav-link-icon"><i data-feather="users"></i></div>
+                                    Candidates
+                                    <span class="kh-nav-count">{{ number_format($widget['users'] ?? 0) }}</span>
+                                </a>
+                                <a class="nav-link" href="{{ route('companies') }}">
+                                    <div class="nav-link-icon"><i data-feather="briefcase"></i></div>
+                                    Companies
+                                </a>
+                                <a class="nav-link" href="{{ route('profile') }}">
+                                    <div class="nav-link-icon"><i data-feather="settings"></i></div>
+                                    Account settings
+                                </a>
+
+                                <div class="sidenav-menu-heading">Public site</div>
+                                <a class="nav-link" href="{{ url('/') }}" target="_blank" rel="noopener">
+                                    <div class="nav-link-icon"><i data-feather="globe"></i></div>
+                                    Open website
+                                    <i class="kh-nav-external" data-feather="external-link"></i>
+                                </a>
+
+                                <div class="kh-sidebar-pulse">
+                                    <span><i data-feather="zap"></i>Platform pulse</span>
+                                    <strong>Everything looks healthy</strong>
+                                    <div><i></i><small>All systems operational</small></div>
+                                </div>
+                            </div>
+                        @endif
                         <!-- Sidenav Menu Heading (Account)-->
                         <!-- * * Note: * * Visible only on and above the sm breakpoint-->
                         <div class="sidenav-menu-heading d-sm-none">Account</div>
@@ -395,37 +402,38 @@
                         </div>
                         <!-- Sidenav Accordion (Applications)-->
                         <!-- Applications Menu -->
-                        <a class="nav-link collapsed {{ request()->is('applications/*') || request()->is('users') || request()->is('user-management-*') ? 'active' : '' }}"
+                        <a class="nav-link collapsed {{ request()->is('applications/*') || request()->routeIs('users', 'user.*') || request()->is('user-management-*') ? 'kh-nav-parent-active' : '' }}"
                             href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseApps"
-                            aria-expanded="{{ request()->is('applications/*') || request()->is('users') || request()->is('user-management-*') ? 'true' : 'false' }}"
+                            aria-expanded="{{ request()->is('applications/*') || request()->routeIs('users', 'user.*') || request()->is('user-management-*') ? 'true' : 'false' }}"
                             aria-controls="collapseApps">
-                            <div class="nav-link-icon"
-                                style="{{ request()->is('applications/*') || request()->is('users') || request()->is('user-management-*') ? 'color: #0061f2;' : '' }}">
+                            <div class="nav-link-icon">
                                 <i data-feather="globe"></i>
                             </div>
                             Applications
                             <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
 
-                        <div class="collapse {{ request()->is('applications/*') || request()->is('users') || request()->is('user-management-*') ? 'show' : '' }}"
+                        <div class="collapse {{ request()->is('applications/*') || request()->routeIs('users', 'user.*') || request()->is('user-management-*') ? 'show' : '' }}"
                             id="collapseApps" data-bs-parent="#accordionSidenav">
                             <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavAppsMenu">
 
                                 <!-- User Management Menu Inside Applications -->
-                                <a class="nav-link collapsed {{ request()->is('users') || request()->is('user-management-*') ? 'active fw-bold text-primary' : '' }}"
+                                <a class="nav-link collapsed {{ request()->routeIs('users', 'user.*') || request()->is('user-management-*') ? 'kh-nav-parent-active fw-bold' : '' }}"
                                     href="javascript:void(0);" data-bs-toggle="collapse"
                                     data-bs-target="#appsCollapseUserManagement"
-                                    aria-expanded="{{ request()->is('users') || request()->is('user-management-*') ? 'true' : 'false' }}"
+                                    aria-expanded="{{ request()->routeIs('users', 'user.*') || request()->is('user-management-*') ? 'true' : 'false' }}"
                                     aria-controls="appsCollapseUserManagement">
                                     User Management
                                     <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                                 </a>
 
-                                <div class="collapse {{ request()->is('users') || request()->is('user-management-*') ? 'show' : '' }}"
+                                <div class="collapse {{ request()->routeIs('users', 'user.*') || request()->is('user-management-*') ? 'show' : '' }}"
                                     id="appsCollapseUserManagement" data-bs-parent="#accordionSidenavAppsMenu">
                                     <nav class="sidenav-menu-nested nav">
-                                        <a class="nav-link {{ request()->is('users') ? 'active fw-bold text-primary' : '' }}"
+                                        <a class="nav-link {{ request()->is('users') ? 'active fw-bold' : '' }}"
                                             href="{{ route('users') }}">Users List</a>
+                                        <a class="nav-link {{ request()->routeIs('user.create') ? 'active fw-bold' : '' }}"
+                                            href="{{ route('user.create') }}">Add New User</a>
                                     </nav>
                                 </div>
 
@@ -601,7 +609,7 @@
                 <div class="sidenav-footer">
                     <div class="sidenav-footer-content">
                         <div class="sidenav-footer-subtitle">Logged in as:</div>
-                        <div class="sidenav-footer-title">Valerie Luna</div>
+                        <div class="sidenav-footer-title">{{ $adminFullName }}</div>
                     </div>
                 </div>
             </nav>
@@ -616,24 +624,28 @@
                 {{-- </div> --}}
             </main>
             <footer class="footer-admin mt-auto footer-light">
-                <div class="container-xl px-4">
-                    <div class="row">
-                        <div class="col-md-6 small">Copyright © Your Website 2021</div>
-                        <div class="col-md-6 text-md-end small">
-                            <a href="#!">Privacy Policy</a>
-                            ·
-                            <a href="#!">Terms &amp; Conditions</a>
+                <div class="kh-admin-footer">
+                    <div class="kh-admin-footer__brand">
+                        <span class="kh-admin-footer__mark" aria-hidden="true">
+                            <i data-feather="briefcase"></i>
+                        </span>
+                        <div>
+                            <strong>KH-WORKS</strong>
+                            <small>&copy; {{ date('Y') }}. All rights reserved.</small>
                         </div>
                     </div>
+
+                    <nav class="kh-admin-footer__links" aria-label="Footer navigation">
+                        <a href="{{ route('about') }}">About</a>
+                        <a href="{{ url('/') }}" target="_blank" rel="noopener">
+                            <span>View website</span>
+                            <i data-feather="external-link" aria-hidden="true"></i>
+                        </a>
+                    </nav>
                 </div>
             </footer>
         </div>
     </div>
-    <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded" href="#page-top">
-        <i class="fas fa-angle-up"></i>
-    </a>
-
     <!-- Logout Modal-->
     <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
@@ -641,13 +653,11 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">{{ __('Ready to Leave?') }}</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
+                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
-                    <button class="btn btn-link" type="button" data-dismiss="modal">{{ __('Cancel') }}</button>
+                    <button class="btn btn-link" type="button" data-bs-dismiss="modal">{{ __('Cancel') }}</button>
                     <a class="btn btn-danger" href="{{ route('logout') }}"
                         onclick="event.preventDefault(); document.getElementById('logout-form').submit();">{{ __('Logout') }}</a>
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
@@ -657,33 +667,14 @@
             </div>
         </div>
     </div>
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous">
     </script>
+    <script src="{{ asset('js/admin-theme.js') }}"></script>
     <script src="{{ asset('js/script.js') }}"></script>
-    <script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>
-    <script src="{{ asset('vendor/bootstrap/js/bootstrap.min.js') }}"></script>
-    <script src="{{ asset('vendor/jquery-easing/jquery.easing.min.js') }}"></script>
-    <script src="{{ asset('js/sb-admin-2.min.js') }}"></script>
-    <script src="{{ asset('js/sb-customizer.js') }}"></script>
-    <script src="{{ asset('js/sb-admin-2.min.js') }}"></script>
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous">
-    </script>
-
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous">
-    </script>
-    <script src="{{ asset('js/scripts.js') }}"></script>
-    <script src="{{ asset('js/app.js')}}"></script>
-
-    {{-- <script src="https://assets.startbootstrap.com/js/sb-customizer.js"></script> --}}
-
-    {{-- <sb-customizer project="sb-admin-pro"></sb-customizer> --}}
-    <script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015"
-        integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ=="
-        data-cf-beacon='{"rayId":"92446a23da0633b6","serverTiming":{"name":{"cfExtPri":true,"cfL4":true,"cfSpeedBrain":true,"cfCacheStatus":true}},"version":"2025.3.0","token":"6e2c2575ac8f44ed824cef7899ba8463"}'
-        crossorigin="anonymous"></script>
+    @if (request()->routeIs('companies'))
+        <script src="{{ asset('js/app.js') }}"></script>
+    @endif
+    @stack('scripts')
 </body>
 
 </html>

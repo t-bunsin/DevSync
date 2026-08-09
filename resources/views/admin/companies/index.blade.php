@@ -26,7 +26,7 @@
     </div>
 </header>
     <!-- Main page content-->
-    <div class="panel-body table-responsive">
+    <div class="panel-body table-responsive" id="app">
 
         <router-view name="companiesIndex"></router-view>
         <router-view></router-view>

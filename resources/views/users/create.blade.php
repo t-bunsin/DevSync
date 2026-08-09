@@ -1,594 +1,343 @@
 @extends('layouts.admin')
 
+@section('title', 'Add New User | KH-WORKS Admin')
+@section('body-class', 'kh-user-create-page')
+
+@push('styles')
+    <link href="{{ asset('css/users-create.css') }}" rel="stylesheet" />
+@endpush
+
 @section('main-content')
-    <style>
-        .kh-user-create {
-            padding: 1.5rem 1.5rem 2rem;
-        }
-
-        .kh-user-create__hero {
-            position: relative;
-            overflow: hidden;
-            padding: 1.9rem;
-            margin-bottom: 1.5rem;
-            color: #fff;
-            background:
-                radial-gradient(circle at top right, rgba(255, 255, 255, 0.14), transparent 24%),
-                linear-gradient(135deg, #0b466f 0%, #11517f 55%, #156799 100%);
-            border-radius: 0;
-            box-shadow: 0 20px 42px rgba(11, 70, 111, 0.18);
-        }
-
-        .kh-user-create__hero::after {
-            content: "";
-            position: absolute;
-            right: -70px;
-            bottom: -90px;
-            width: 220px;
-            height: 220px;
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 50%;
-        }
-
-        .kh-user-create__hero-grid {
-            position: relative;
-            z-index: 1;
-            display: grid;
-            grid-template-columns: minmax(0, 1.6fr) minmax(300px, 1fr);
-            gap: 1.5rem;
-            align-items: start;
-        }
-
-        .kh-user-create__eyebrow {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.55rem;
-            padding: 0.45rem 0.85rem;
-            margin-bottom: 1rem;
-            font-size: 0.78rem;
-            font-weight: 700;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            background: rgba(255, 255, 255, 0.12);
-        }
-
-        .kh-user-create__hero h1 {
-            margin: 0 0 0.75rem;
-            font-size: clamp(2rem, 4vw, 3rem);
-            font-weight: 700;
-            letter-spacing: -0.05em;
-        }
-
-        .kh-user-create__hero p {
-            max-width: 56ch;
-            margin: 0;
-            color: rgba(255, 255, 255, 0.84);
-            line-height: 1.7;
-        }
-
-        .kh-user-create__hero-highlights {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.75rem;
-            margin-top: 1.2rem;
-        }
-
-        .kh-user-create__hero-highlights span {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.6rem;
-            padding: 0.8rem 1rem;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-        }
-
-        .kh-user-create__hero-side {
-            padding: 1.2rem;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-        }
-
-        .kh-user-create__hero-side strong {
-            display: block;
-            margin-bottom: 0.35rem;
-            font-size: 2rem;
-            line-height: 1;
-        }
-
-        .kh-user-create__hero-side p {
-            margin: 0;
-            color: rgba(255, 255, 255, 0.82);
-            font-size: 0.92rem;
-        }
-
-        .kh-user-create__content {
-            display: grid;
-            grid-template-columns: minmax(0, 1.45fr) minmax(280px, 0.8fr);
-            gap: 1.5rem;
-        }
-
-        .kh-user-create__card {
-            background: #fff;
-            border: 1px solid #e6edf5;
-            border-radius: 0;
-            box-shadow: 0 16px 30px rgba(17, 24, 39, 0.05);
-        }
-
-        .kh-user-create__form-card {
-            padding: 1.5rem;
-        }
-
-        .kh-user-create__section-head {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 1rem;
-            margin-bottom: 1.4rem;
-        }
-
-        .kh-user-create__section-head h2 {
-            margin: 0 0 0.3rem;
-            color: #101828;
-            font-size: 1.3rem;
-            font-weight: 700;
-            letter-spacing: -0.03em;
-        }
-
-        .kh-user-create__section-head p {
-            margin: 0;
-            color: #667085;
-            font-size: 0.92rem;
-        }
-
-        .kh-user-create__badge {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0.45rem 0.8rem;
-            color: #0b466f;
-            background: #e7f1f8;
-            font-size: 0.76rem;
-            font-weight: 700;
-            letter-spacing: 0.06em;
-            text-transform: uppercase;
-        }
-
-        .kh-user-create__alert {
-            margin-bottom: 1rem;
-            padding: 0.95rem 1rem;
-            border-radius: 0;
-        }
-
-        .kh-user-create__alert ul {
-            margin: 0;
-            padding-left: 1.1rem;
-        }
-
-        .kh-user-create__form {
-            display: grid;
-            gap: 1.1rem;
-        }
-
-        .kh-user-create__grid {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 1rem;
-        }
-
-        .kh-user-create__field {
-            display: grid;
-            gap: 0.55rem;
-        }
-
-        .kh-user-create__label {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.55rem;
-            margin: 0;
-            color: #344054;
-            font-size: 0.82rem;
-            font-weight: 700;
-            letter-spacing: 0.06em;
-            text-transform: uppercase;
-        }
-
-        .kh-user-create__label i {
-            color: #0b466f;
-        }
-
-        .kh-user-create__control {
-            width: 100%;
-            min-height: 58px;
-            padding: 0 1rem;
-            color: #101828;
-            background: #fff;
-            border: 1px solid #d7e1ec;
-            border-radius: 0;
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
-            outline: none;
-            transition: border-color 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        .kh-user-create__control:focus {
-            border-color: #0b466f;
-            box-shadow: 0 0 0 4px rgba(11, 70, 111, 0.08);
-        }
-
-        .kh-user-create__control::placeholder {
-            color: #98a1bb;
-        }
-
-        .kh-user-create__actions {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 1rem;
-            flex-wrap: wrap;
-            margin-top: 0.4rem;
-        }
-
-        .kh-user-create__helper {
-            color: #667085;
-            font-size: 0.9rem;
-        }
-
-        .kh-user-create__button-row {
-            display: flex;
-            gap: 0.75rem;
-            flex-wrap: wrap;
-        }
-
-        .kh-user-create__btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.55rem;
-            min-height: 46px;
-            padding: 0 1rem;
-            border: 0;
-            border-radius: 0;
-            text-decoration: none;
-            font-weight: 700;
-            cursor: pointer;
-        }
-
-        .kh-user-create__btn:hover {
-            text-decoration: none;
-        }
-
-        .kh-user-create__btn--primary {
-            color: #fff;
-            background: #0b466f;
-            box-shadow: 0 14px 24px rgba(11, 70, 111, 0.16);
-        }
-
-        .kh-user-create__btn--primary:hover {
-            color: #fff;
-            background: #093654;
-        }
-
-        .kh-user-create__btn--ghost {
-            color: #0b466f;
-            background: #eef4f8;
-        }
-
-        .kh-user-create__btn--ghost:hover {
-            color: #0b466f;
-            background: #e1edf4;
-        }
-
-        .kh-user-create__side {
-            display: grid;
-            gap: 1.5rem;
-        }
-
-        .kh-user-create__panel {
-            padding: 1.3rem;
-        }
-
-        .kh-user-create__panel h3 {
-            margin: 0 0 0.75rem;
-            color: #101828;
-            font-size: 1.15rem;
-            font-weight: 700;
-            letter-spacing: -0.03em;
-        }
-
-        .kh-user-create__panel p {
-            margin: 0;
-            color: #667085;
-            line-height: 1.7;
-            font-size: 0.92rem;
-        }
-
-        .kh-user-create__tips {
-            display: grid;
-            gap: 0.9rem;
-            margin-top: 1rem;
-        }
-
-        .kh-user-create__tip {
-            display: flex;
-            gap: 0.8rem;
-            align-items: flex-start;
-            padding: 0.95rem 1rem;
-            background: #fbfdff;
-            border: 1px solid #edf2f7;
-        }
-
-        .kh-user-create__tip-icon {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 38px;
-            height: 38px;
-            min-width: 38px;
-            color: #0b466f;
-            background: #e7f1f8;
-        }
-
-        .kh-user-create__tip strong {
-            display: block;
-            color: #101828;
-            margin-bottom: 0.2rem;
-        }
-
-        .kh-user-create__tip span {
-            color: #667085;
-            font-size: 0.88rem;
-            line-height: 1.6;
-        }
-
-        .kh-user-create__stats {
-            display: grid;
-            gap: 0.9rem;
-            margin-top: 1rem;
-        }
-
-        .kh-user-create__stat {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 1rem;
-            padding: 0.9rem 1rem;
-            background: #fbfdff;
-            border: 1px solid #edf2f7;
-        }
-
-        .kh-user-create__stat strong {
-            display: block;
-            color: #101828;
-        }
-
-        .kh-user-create__stat span {
-            color: #667085;
-            font-size: 0.88rem;
-        }
-
-        .kh-user-create__stat-badge {
-            color: #0b466f;
-            font-weight: 700;
-        }
-
-        @media (max-width: 1200px) {
-            .kh-user-create__content {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @media (max-width: 992px) {
-            .kh-user-create {
-                padding: 1rem;
-            }
-
-            .kh-user-create__hero-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .kh-user-create__grid {
-                grid-template-columns: 1fr;
-            }
-
-            .kh-user-create__hero,
-            .kh-user-create__form-card,
-            .kh-user-create__panel {
-                padding: 1rem;
-            }
-
-            .kh-user-create__actions {
-                align-items: stretch;
-            }
-        }
-    </style>
+    @php
+        $errorTargets = [
+            'first_name' => 'inputFirstName',
+            'last_name' => 'inputLastName',
+            'email' => 'inputEmailAddress',
+            'phone_number' => 'inputPhone',
+            'role' => 'inputRole',
+            'password' => 'inputPassword',
+        ];
+    @endphp
 
     <div class="kh-user-create">
-        <section class="kh-user-create__hero">
-            <div class="kh-user-create__hero-grid">
-                <div>
-                    <span class="kh-user-create__eyebrow">
+        <div class="kh-user-create__shell">
+            <header class="kh-user-create__page-head">
+                <div class="kh-user-create__heading">
+                    <a class="kh-user-create__back" href="{{ route('users') }}" aria-label="Back to users list">
+                        <i data-feather="arrow-left" aria-hidden="true"></i>
+                    </a>
+
+                    <span class="kh-user-create__heading-icon" aria-hidden="true">
                         <i data-feather="user-plus"></i>
-                        User Management
                     </span>
-                    <h1>Create a polished new user profile</h1>
-                    <p>Add team members with the right access level, keep your directory organized, and bring new users into KH-WORKS with a cleaner admin workflow.</p>
 
-                    <div class="kh-user-create__hero-highlights">
-                        <span><i data-feather="shield"></i> Role-based access control</span>
-                        <span><i data-feather="check-circle"></i> Clean onboarding flow</span>
-                    </div>
-                </div>
-
-                <div class="kh-user-create__hero-side">
-                    <div class="kh-user-create__badge">Quick Note</div>
-                    <strong>Ready</strong>
-                    <p>Create internal accounts for administrators, editors, guests, or registered members from one focused workspace.</p>
-                </div>
-            </div>
-        </section>
-
-        <div class="kh-user-create__content">
-            <section class="kh-user-create__card kh-user-create__form-card">
-                <div class="kh-user-create__section-head">
                     <div>
-                        <h2>Users List</h2>
-                        <p>Fill in the user information below to create a fresh account.</p>
+                        <span class="kh-user-create__eyebrow">User management</span>
+                        <h1>Add a new user</h1>
+                        <p>Create an account, choose the right access level, and keep your team directory organized.</p>
                     </div>
-                    <span class="kh-user-create__badge">Admin Form</span>
                 </div>
 
-                @if ($errors->any())
-                    <div class="alert alert-danger kh-user-create__alert" role="alert">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
+                <div class="kh-user-create__theme-note">
+                    <span class="kh-user-create__theme-note-icon" aria-hidden="true">
+                        <i data-feather="sun"></i>
+                    </span>
+                    <span>
+                        <strong>Light mode by default</strong>
+                        <small>Use the switch in the top menu anytime.</small>
+                    </span>
+                </div>
+            </header>
 
-                <form method="POST" action="{{ route('users.store') }}" class="kh-user-create__form">
-                    @csrf
-
-                    <div class="kh-user-create__grid">
-                        <div class="kh-user-create__field">
-                            <label class="kh-user-create__label" for="inputFirstName">
-                                <i data-feather="user"></i>
-                                <span>First Name</span>
-                            </label>
-                            <input class="kh-user-create__control" id="inputFirstName" name="first_name" type="text" value="{{ old('first_name') }}" placeholder="Enter your first name" required>
+            <div class="kh-user-create__layout">
+                <section class="kh-user-create__card kh-user-create__form-card" aria-labelledby="create-user-title">
+                    <div class="kh-user-create__card-head">
+                        <div>
+                            <span class="kh-user-create__card-kicker">New account</span>
+                            <h2 id="create-user-title">User details</h2>
+                            <p>Enter the information this person will use to access KH-WORKS.</p>
                         </div>
-
-                        <div class="kh-user-create__field">
-                            <label class="kh-user-create__label" for="inputLastName">
-                                <i data-feather="user-check"></i>
-                                <span>Last Name</span>
-                            </label>
-                            <input class="kh-user-create__control" id="inputLastName" name="last_name" type="text" value="{{ old('last_name') }}" placeholder="Enter your last name" required>
-                        </div>
+                        <span class="kh-user-create__required-note"><b aria-hidden="true">*</b> Required fields</span>
                     </div>
 
-                    <div class="kh-user-create__field">
-                        <label class="kh-user-create__label" for="inputEmailAddress">
-                            <i data-feather="mail"></i>
-                            <span>Email Address</span>
-                        </label>
-                        <input class="kh-user-create__control" id="inputEmailAddress" name="email" type="email" value="{{ old('email') }}" placeholder="Enter your email address" required>
-                    </div>
-
-                    <div class="kh-user-create__field">
-                        <label class="kh-user-create__label" for="inputRole">
-                            <i data-feather="briefcase"></i>
-                            <span>Role</span>
-                        </label>
-                        <select class="kh-user-create__control" id="inputRole" name="role" required>
-                            <option value="" disabled {{ old('role') ? '' : 'selected' }}>Select a role:</option>
-                            <option value="administrator" {{ old('role') === 'administrator' ? 'selected' : '' }}>Administrator</option>
-                            <option value="registered" {{ old('role') === 'registered' ? 'selected' : '' }}>Registered</option>
-                            <option value="editor" {{ old('role') === 'editor' ? 'selected' : '' }}>Editor</option>
-                            <option value="guest" {{ old('role') === 'guest' ? 'selected' : '' }}>Guest</option>
-                        </select>
-                    </div>
-
-                    <div class="kh-user-create__grid">
-                        <div class="kh-user-create__field">
-                            <label class="kh-user-create__label" for="inputPassword">
-                                <i data-feather="lock"></i>
-                                <span>Password</span>
-                            </label>
-                            <input class="kh-user-create__control" id="inputPassword" name="password" type="password" placeholder="Enter password" required>
-                        </div>
-
-                        <div class="kh-user-create__field">
-                            <label class="kh-user-create__label" for="inputPasswordConfirm">
-                                <i data-feather="shield"></i>
-                                <span>Confirm Password</span>
-                            </label>
-                            <input class="kh-user-create__control" id="inputPasswordConfirm" name="password_confirmation" type="password" placeholder="Confirm password" required>
-                        </div>
-                    </div>
-
-                    <div class="kh-user-create__actions">
-                        <div class="kh-user-create__helper">Use strong credentials and assign the correct role before saving this account.</div>
-
-                        <div class="kh-user-create__button-row">
-                            <a class="kh-user-create__btn kh-user-create__btn--ghost" href="{{ route('users') }}">
-                                <i data-feather="arrow-left"></i>
-                                <span>Back to Users</span>
-                            </a>
-                            <button class="kh-user-create__btn kh-user-create__btn--primary" type="submit">
-                                <i data-feather="user-plus"></i>
-                                <span>Add User</span>
-                            </button>
-                        </div>
-                    </div>
-                </form>
-            </section>
-
-            <aside class="kh-user-create__side">
-                <section class="kh-user-create__card kh-user-create__panel">
-                    <h3>Admin Tips</h3>
-                    <p>Keep user creation clean and intentional with a structured setup flow designed for admin teams.</p>
-
-                    <div class="kh-user-create__tips">
-                        <div class="kh-user-create__tip">
-                            <div class="kh-user-create__tip-icon"><i data-feather="layers"></i></div>
+                    @if ($errors->any())
+                        <div class="kh-user-create__error-summary" role="alert" aria-live="polite" tabindex="-1">
+                            <span class="kh-user-create__error-icon" aria-hidden="true">
+                                <i data-feather="alert-circle"></i>
+                            </span>
                             <div>
-                                <strong>Choose the right role</strong>
-                                <span>Use administrator only for trusted internal staff with broad permissions.</span>
+                                <strong>Please check the highlighted fields.</strong>
+                                <ul>
+                                    @foreach ($errors->messages() as $field => $messages)
+                                        @foreach ($messages as $message)
+                                            <li>
+                                                <a href="#{{ $errorTargets[$field] ?? 'createUserForm' }}">{{ $message }}</a>
+                                            </li>
+                                        @endforeach
+                                    @endforeach
+                                </ul>
                             </div>
                         </div>
+                    @endif
 
-                        <div class="kh-user-create__tip">
-                            <div class="kh-user-create__tip-icon"><i data-feather="mail"></i></div>
-                            <div>
-                                <strong>Verify email accuracy</strong>
-                                <span>Incorrect email addresses can block onboarding and password recovery.</span>
+                    <form id="createUserForm" method="POST" action="{{ route('users.store') }}" class="kh-user-create__form">
+                        @csrf
+
+                        <fieldset class="kh-user-create__form-section">
+                            <legend class="kh-user-create__legend">Personal information</legend>
+                            <div class="kh-user-create__section-head">
+                                <span class="kh-user-create__step" aria-hidden="true">01</span>
+                                <span>
+                                    <strong>Personal information</strong>
+                                    <small>Basic contact details for the new team member.</small>
+                                </span>
+                            </div>
+
+                            <div class="kh-user-create__grid">
+                                <div class="kh-user-create__field">
+                                    <label class="kh-user-create__label" for="inputFirstName">
+                                        First name <span class="kh-required" aria-hidden="true">*</span>
+                                    </label>
+                                    <div class="kh-user-create__input-wrap">
+                                        <i data-feather="user" aria-hidden="true"></i>
+                                        <input @class(['kh-user-create__control', 'is-invalid' => $errors->has('first_name')])
+                                            id="inputFirstName" name="first_name" type="text"
+                                            value="{{ old('first_name') }}" placeholder="e.g. Dara" autocomplete="given-name"
+                                            aria-invalid="{{ $errors->has('first_name') ? 'true' : 'false' }}"
+                                            @if ($errors->has('first_name')) aria-describedby="inputFirstNameError" @endif
+                                            autofocus required>
+                                    </div>
+                                    @error('first_name')
+                                        <p class="kh-user-create__field-error" id="inputFirstNameError">
+                                            <i data-feather="alert-circle" aria-hidden="true"></i>{{ $message }}
+                                        </p>
+                                    @enderror
+                                </div>
+
+                                <div class="kh-user-create__field">
+                                    <label class="kh-user-create__label" for="inputLastName">
+                                        Last name <span class="kh-required" aria-hidden="true">*</span>
+                                    </label>
+                                    <div class="kh-user-create__input-wrap">
+                                        <i data-feather="user-check" aria-hidden="true"></i>
+                                        <input @class(['kh-user-create__control', 'is-invalid' => $errors->has('last_name')])
+                                            id="inputLastName" name="last_name" type="text"
+                                            value="{{ old('last_name') }}" placeholder="e.g. Sok"
+                                            autocomplete="family-name"
+                                            aria-invalid="{{ $errors->has('last_name') ? 'true' : 'false' }}"
+                                            @if ($errors->has('last_name')) aria-describedby="inputLastNameError" @endif
+                                            required>
+                                    </div>
+                                    @error('last_name')
+                                        <p class="kh-user-create__field-error" id="inputLastNameError">
+                                            <i data-feather="alert-circle" aria-hidden="true"></i>{{ $message }}
+                                        </p>
+                                    @enderror
+                                </div>
+
+                                <div class="kh-user-create__field">
+                                    <label class="kh-user-create__label" for="inputEmailAddress">
+                                        Email address <span class="kh-required" aria-hidden="true">*</span>
+                                    </label>
+                                    <div class="kh-user-create__input-wrap">
+                                        <i data-feather="mail" aria-hidden="true"></i>
+                                        <input @class(['kh-user-create__control', 'is-invalid' => $errors->has('email')])
+                                            id="inputEmailAddress" name="email" type="email"
+                                            value="{{ old('email') }}" placeholder="name@company.com" autocomplete="email"
+                                            spellcheck="false" inputmode="email"
+                                            aria-invalid="{{ $errors->has('email') ? 'true' : 'false' }}"
+                                            @if ($errors->has('email')) aria-describedby="inputEmailAddressError" @endif
+                                            required>
+                                    </div>
+                                    @error('email')
+                                        <p class="kh-user-create__field-error" id="inputEmailAddressError">
+                                            <i data-feather="alert-circle" aria-hidden="true"></i>{{ $message }}
+                                        </p>
+                                    @enderror
+                                </div>
+
+                                <div class="kh-user-create__field">
+                                    <label class="kh-user-create__label" for="inputPhone">
+                                        Phone number <span class="kh-required" aria-hidden="true">*</span>
+                                    </label>
+                                    <div class="kh-user-create__input-wrap">
+                                        <i data-feather="phone" aria-hidden="true"></i>
+                                        <input @class(['kh-user-create__control', 'is-invalid' => $errors->has('phone_number')])
+                                            id="inputPhone" name="phone_number" type="tel"
+                                            value="{{ old('phone_number') }}" placeholder="e.g. +855 12 345 678"
+                                            autocomplete="tel" inputmode="tel"
+                                            aria-invalid="{{ $errors->has('phone_number') ? 'true' : 'false' }}"
+                                            @if ($errors->has('phone_number')) aria-describedby="inputPhoneError" @endif
+                                            required>
+                                    </div>
+                                    @error('phone_number')
+                                        <p class="kh-user-create__field-error" id="inputPhoneError">
+                                            <i data-feather="alert-circle" aria-hidden="true"></i>{{ $message }}
+                                        </p>
+                                    @enderror
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <fieldset class="kh-user-create__form-section">
+                            <legend class="kh-user-create__legend">Access and security</legend>
+                            <div class="kh-user-create__section-head">
+                                <span class="kh-user-create__step" aria-hidden="true">02</span>
+                                <span>
+                                    <strong>Access and security</strong>
+                                    <small>Set permissions and secure the account.</small>
+                                </span>
+                            </div>
+
+                            <div class="kh-user-create__field kh-user-create__field--wide">
+                                <label class="kh-user-create__label" for="inputRole">
+                                    Account role <span class="kh-required" aria-hidden="true">*</span>
+                                </label>
+                                <div class="kh-user-create__input-wrap kh-user-create__input-wrap--select">
+                                    <i data-feather="briefcase" aria-hidden="true"></i>
+                                    <select @class(['kh-user-create__control', 'is-invalid' => $errors->has('role')])
+                                        id="inputRole" name="role"
+                                        aria-invalid="{{ $errors->has('role') ? 'true' : 'false' }}"
+                                        aria-describedby="inputRoleHint{{ $errors->has('role') ? ' inputRoleError' : '' }}" required>
+                                        <option value="" disabled {{ old('role') ? '' : 'selected' }}>Choose an access level</option>
+                                        <option value="Administrator" {{ old('role') === 'Administrator' ? 'selected' : '' }}>Administrator — full platform access</option>
+                                        <option value="Manager" {{ old('role') === 'Manager' ? 'selected' : '' }}>Manager — manage operational content</option>
+                                        <option value="User" {{ old('role') === 'User' ? 'selected' : '' }}>User — standard account access</option>
+                                    </select>
+                                </div>
+                                <p class="kh-user-create__field-hint" id="inputRoleHint">Choose the lowest access level this person needs.</p>
+                                @error('role')
+                                    <p class="kh-user-create__field-error" id="inputRoleError">
+                                        <i data-feather="alert-circle" aria-hidden="true"></i>{{ $message }}
+                                    </p>
+                                @enderror
+                            </div>
+
+                            <div class="kh-user-create__grid kh-user-create__grid--passwords">
+                                <div class="kh-user-create__field">
+                                    <label class="kh-user-create__label" for="inputPassword">
+                                        Password <span class="kh-required" aria-hidden="true">*</span>
+                                    </label>
+                                    <div class="kh-user-create__input-wrap kh-user-create__input-wrap--password">
+                                        <i data-feather="lock" aria-hidden="true"></i>
+                                        <input @class(['kh-user-create__control', 'is-invalid' => $errors->has('password')])
+                                            id="inputPassword" name="password" type="password"
+                                            placeholder="Create a secure password" autocomplete="new-password"
+                                            minlength="8"
+                                            aria-invalid="{{ $errors->has('password') ? 'true' : 'false' }}"
+                                            aria-describedby="inputPasswordHint{{ $errors->has('password') ? ' inputPasswordError' : '' }}" required>
+                                        <button class="kh-user-create__password-toggle" type="button"
+                                            data-password-toggle="inputPassword" aria-label="Show password"
+                                            aria-pressed="false">
+                                            <i class="far fa-eye" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+                                    <p class="kh-user-create__field-hint" id="inputPasswordHint">Use at least 8 characters.</p>
+                                    @error('password')
+                                        <p class="kh-user-create__field-error" id="inputPasswordError">
+                                            <i data-feather="alert-circle" aria-hidden="true"></i>{{ $message }}
+                                        </p>
+                                    @enderror
+                                </div>
+
+                                <div class="kh-user-create__field">
+                                    <label class="kh-user-create__label" for="inputPasswordConfirm">
+                                        Confirm password <span class="kh-required" aria-hidden="true">*</span>
+                                    </label>
+                                    <div class="kh-user-create__input-wrap kh-user-create__input-wrap--password">
+                                        <i data-feather="shield" aria-hidden="true"></i>
+                                        <input class="kh-user-create__control" id="inputPasswordConfirm"
+                                            name="password_confirmation" type="password" placeholder="Repeat the password"
+                                            autocomplete="new-password" minlength="8" required>
+                                        <button class="kh-user-create__password-toggle" type="button"
+                                            data-password-toggle="inputPasswordConfirm" aria-label="Show password confirmation"
+                                            aria-pressed="false">
+                                            <i class="far fa-eye" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <div class="kh-user-create__actions">
+                            <p>
+                                <i data-feather="shield" aria-hidden="true"></i>
+                                Passwords are securely hashed before storage.
+                            </p>
+                            <div class="kh-user-create__button-row">
+                                <a class="kh-user-create__btn kh-user-create__btn--ghost" href="{{ route('users') }}">
+                                    Cancel
+                                </a>
+                                <button class="kh-user-create__btn kh-user-create__btn--primary" type="submit">
+                                    <i data-feather="user-plus" aria-hidden="true"></i>
+                                    <span>Create user</span>
+                                </button>
                             </div>
                         </div>
-
-                        <div class="kh-user-create__tip">
-                            <div class="kh-user-create__tip-icon"><i data-feather="lock"></i></div>
-                            <div>
-                                <strong>Use secure credentials</strong>
-                                <span>Encourage users to update their password after first login if needed.</span>
-                            </div>
-                        </div>
-                    </div>
+                    </form>
                 </section>
 
-                <section class="kh-user-create__card kh-user-create__panel">
-                    <h3>Directory Snapshot</h3>
-                    <p>A quick read on the current makeup of your user base.</p>
+                <aside class="kh-user-create__side" aria-label="User creation guidance">
+                    <section class="kh-user-create__card kh-user-create__guide-card">
+                        <span class="kh-user-create__card-kicker">Before you save</span>
+                        <h2>Account checklist</h2>
+                        <p>A quick review keeps access safe and onboarding smooth.</p>
 
-                    <div class="kh-user-create__stats">
-                        <div class="kh-user-create__stat">
+                        <ol class="kh-user-create__checklist">
+                            <li>
+                                <span aria-hidden="true"><i data-feather="mail"></i></span>
+                                <div>
+                                    <strong>Confirm the email</strong>
+                                    <small>It will be used for sign-in and recovery.</small>
+                                </div>
+                            </li>
+                            <li>
+                                <span aria-hidden="true"><i data-feather="key"></i></span>
+                                <div>
+                                    <strong>Limit permissions</strong>
+                                    <small>Only grant the access required for the role.</small>
+                                </div>
+                            </li>
+                            <li>
+                                <span aria-hidden="true"><i data-feather="send"></i></span>
+                                <div>
+                                    <strong>Share credentials safely</strong>
+                                    <small>Use a trusted channel after creating the account.</small>
+                                </div>
+                            </li>
+                        </ol>
+                    </section>
+
+                    <section class="kh-user-create__card kh-user-create__role-card">
+                        <div class="kh-user-create__role-head">
+                            <span aria-hidden="true"><i data-feather="shield"></i></span>
                             <div>
-                                <strong>Administrators</strong>
-                                <span>Core management access</span>
+                                <span class="kh-user-create__card-kicker">Access guide</span>
+                                <h2>Choose the right role</h2>
                             </div>
-                            <div class="kh-user-create__stat-badge">08</div>
                         </div>
 
-                        <div class="kh-user-create__stat">
+                        <dl class="kh-user-create__role-list">
                             <div>
-                                <strong>Editors</strong>
-                                <span>Content and moderation support</span>
+                                <dt><span class="kh-user-create__role-dot kh-user-create__role-dot--admin"></span>Administrator</dt>
+                                <dd>Full configuration and team access.</dd>
                             </div>
-                            <div class="kh-user-create__stat-badge">16</div>
-                        </div>
-
-                        <div class="kh-user-create__stat">
                             <div>
-                                <strong>Registered Users</strong>
-                                <span>Standard platform accounts</span>
+                                <dt><span class="kh-user-create__role-dot kh-user-create__role-dot--manager"></span>Manager</dt>
+                                <dd>Operational and content management.</dd>
                             </div>
-                            <div class="kh-user-create__stat-badge">214</div>
-                        </div>
-                    </div>
-                </section>
-            </aside>
+                            <div>
+                                <dt><span class="kh-user-create__role-dot kh-user-create__role-dot--user"></span>User</dt>
+                                <dd>Standard platform access.</dd>
+                            </div>
+                        </dl>
+                    </section>
+                </aside>
+            </div>
         </div>
     </div>
 @endsection
+
+@push('scripts')
+    <script src="{{ asset('js/users-create.js') }}"></script>
+@endpush

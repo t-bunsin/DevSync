@@ -1,34 +1,690 @@
 @extends('layouts.admin')
 
 @section('main-content')
-<header class="page-header page-header-compact page-header-light border-bottom bg-white mb-4">
-    <div class="container-fluid px-4">
-        <div class="page-header-content">
-            <div class="row align-items-center justify-content-between pt-3">
-                <div class="col-auto mb-3">
-                    <h1 class="page-header-title">
-                        <div class="page-header-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>
-                        Users List
-                    </h1>
-                </div>
-                <div class="col-12 col-xl-auto mb-3">
-                    <a class="btn btn-sm btn-light text-primary" href="user-management-groups-list.html">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users me-1"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-                        Manage Groups
-                    </a>
-                    <a class="btn btn-sm btn-light text-primary" href="{{ route('user.create') }}">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user-plus me-1"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
-                        Add New User
-                    </a>
+    @php
+        $totalUsers = $users->count();
+        $administratorCount = $users->filter(fn ($user) => str_contains(strtolower($user->role ?? ''), 'admin'))->count();
+        $addedThisMonth = $users->filter(fn ($user) => $user->created_at && $user->created_at->gte(now()->startOfMonth()))->count();
+    @endphp
+
+    <style>
+        .kh-users {
+            --kh-blue: #2563eb;
+            --kh-blue-dark: #1d4ed8;
+            --kh-ink: #0f172a;
+            --kh-muted: #64748b;
+            --kh-line: #dbe5f1;
+            padding: 1.5rem 1.5rem 2rem;
+            background: #f8fafc;
+        }
+
+        .kh-users__hero {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1.5rem;
+            overflow: hidden;
+            padding: 2rem 2rem 2rem 2rem;
+            margin-bottom: 1.5rem;
+            color: #fff;
+            background:
+                radial-gradient(circle at 95% 10%, rgba(255, 255, 255, 0.28), transparent 18%),
+                radial-gradient(circle at 7% 75%, rgba(255, 255, 255, 0.18), transparent 18%),
+                linear-gradient(135deg, #1e3a8a 0%, var(--kh-blue) 52%, #60a5fa 100%);
+            border-radius: 26px;
+            box-shadow: 0 22px 44px rgba(37, 99, 235, 0.18);
+        }
+
+        .kh-users__hero::before {
+            content: "";
+            position: absolute;
+            top: 14%;
+            left: -4%;
+            width: 180px;
+            height: 180px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            filter: blur(8px);
+        }
+
+        .kh-users__hero::after {
+            content: "";
+            position: absolute;
+            right: 10%;
+            bottom: -40px;
+            width: 220px;
+            height: 220px;
+            border: 24px solid rgba(255, 255, 255, 0.08);
+            border-radius: 50%;
+        }
+
+        .kh-users__heading,
+        .kh-users__hero-actions {
+            position: relative;
+            z-index: 1;
+        }
+
+        .kh-users__heading {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .kh-users__heading-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 56px;
+            height: 56px;
+            min-width: 56px;
+            color: #fff;
+            background: rgba(255, 255, 255, 0.16);
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            border-radius: 18px;
+        }
+
+        .kh-users__heading-icon svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .kh-users__eyebrow {
+            display: block;
+            margin-bottom: 0.25rem;
+            color: #c7d8ff;
+            font-size: 0.75rem;
+            font-weight: 800;
+            letter-spacing: 0.11em;
+            text-transform: uppercase;
+        }
+
+        .kh-users__hero h1 {
+            margin: 0 0 0.35rem;
+            color: #fff;
+            font-size: clamp(1.75rem, 2.75vw, 2.4rem);
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            line-height: 1.05;
+        }
+
+        .kh-users__hero p {
+            margin: 0;
+            max-width: 600px;
+            color: rgba(255, 255, 255, 0.88);
+            font-size: 0.95rem;
+            line-height: 1.65;
+        }
+
+        .kh-users__hero-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+            flex-wrap: wrap;
+        }
+
+        .kh-users__button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.55rem;
+            min-height: 44px;
+            padding: 0 1rem;
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            text-decoration: none;
+            font-size: 0.92rem;
+            font-weight: 700;
+            transition: transform 0.18s ease, background-color 0.18s ease, box-shadow 0.18s ease;
+            border-radius: 12px;
+        }
+
+        .kh-users__button:hover {
+            color: #fff;
+            text-decoration: none;
+            transform: translateY(-1px);
+        }
+
+        .kh-users__button--secondary {
+            background: rgba(255, 255, 255, 0.14);
+        }
+
+        .kh-users__button--secondary:hover {
+            background: rgba(255, 255, 255, 0.22);
+        }
+
+        .kh-users__button--primary {
+            color: var(--kh-blue-dark);
+            background: #fff;
+            border-color: #fff;
+            box-shadow: 0 10px 24px rgba(30, 58, 138, 0.22);
+        }
+
+        .kh-users__button--primary:hover {
+            color: var(--kh-blue-dark);
+            background: #eff6ff;
+        }
+
+        .kh-users__stats {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .kh-users__stat {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            min-width: 0;
+            padding: 1.15rem 1.2rem;
+            border-radius: 22px;
+            background: #fff;
+            border: 1px solid rgba(209, 230, 255, 0.9);
+            box-shadow: 0 14px 28px rgba(15, 23, 42, 0.06);
+        }
+
+        .kh-users__stat-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            min-width: 44px;
+            color: var(--kh-blue);
+            background: #eff6ff;
+            border-radius: 14px;
+        }
+
+        .kh-users__stat-icon--green {
+            color: #059669;
+            background: #ecfdf5;
+        }
+
+        .kh-users__stat-icon--violet {
+            color: #7c3aed;
+            background: #f5f3ff;
+        }
+
+        .kh-users__stat-icon svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .kh-users__stat strong {
+            display: block;
+            margin-bottom: 0.06rem;
+            color: var(--kh-ink);
+            font-size: 1.3rem;
+            line-height: 1.15;
+        }
+
+        .kh-users__stat span {
+            display: block;
+            color: var(--kh-muted);
+            font-size: 0.82rem;
+        }
+
+        .kh-users__card {
+            background: #fff;
+            border: 1px solid rgba(222, 231, 255, 0.9);
+            border-radius: 24px;
+            box-shadow: 0 18px 36px rgba(15, 23, 42, 0.05);
+            overflow: hidden;
+        }
+
+        .kh-users__card-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            padding: 1.4rem 1.55rem;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.9);
+            background: #f8fbff;
+        }
+
+        .kh-users__card-head h2 {
+            margin: 0 0 0.2rem;
+            color: var(--kh-ink);
+            font-size: 1.1rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+
+        .kh-users__card-head p {
+            margin: 0;
+            color: var(--kh-muted);
+            font-size: 0.86rem;
+        }
+
+        .kh-users__count {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.5rem 0.85rem;
+            color: var(--kh-blue-dark);
+            background: #eff6ff;
+            font-size: 0.78rem;
+            font-weight: 800;
+            border-radius: 999px;
+            white-space: nowrap;
+        }
+
+        .kh-users__table-area {
+            padding: 1.35rem 1.4rem 1.5rem;
+        }
+
+        .kh-users .datatable-top,
+        .kh-users .datatable-bottom {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .kh-users .datatable-top {
+            padding: 0 0 1rem;
+        }
+
+        .kh-users .datatable-dropdown label {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            margin: 0;
+            color: var(--kh-muted);
+            font-size: 0.82rem;
+        }
+
+        .kh-users .datatable-search {
+            margin-left: auto;
+        }
+
+        .kh-users .datatable-selector,
+        .kh-users .datatable-input {
+            min-height: 44px;
+            color: #334155;
+            background-color: #fff;
+            border: 1px solid #cbd5e1;
+            border-radius: 12px;
+            box-shadow: none;
+            font-size: 0.9rem;
+        }
+
+        .kh-users .datatable-selector {
+            min-width: 92px;
+            margin-right: 0.4rem;
+            padding: 0 0.85rem;
+        }
+
+        .kh-users .datatable-input {
+            width: min(340px, 40vw);
+            padding: 0 0.95rem;
+        }
+
+        .kh-users .datatable-selector:focus,
+        .kh-users .datatable-input:focus {
+            border-color: var(--kh-blue);
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+            outline: none;
+        }
+
+        .kh-users .datatable-container {
+            overflow-x: auto;
+            border: 1px solid rgba(229, 234, 255, 0.9);
+            border-radius: 18px;
+        }
+
+        .kh-users .datatable-table {
+            min-width: 980px;
+            margin: 0;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        .kh-users .datatable-table > thead > tr > th {
+            padding: 1rem 1rem;
+            color: #475569;
+            background: #f8fafc;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.9);
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .kh-users .datatable-table > tbody > tr > td {
+            padding: 1rem 1rem;
+            color: #475569;
+            background: #fff;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.9);
+            font-size: 0.88rem;
+        }
+
+        .kh-users .datatable-table > tbody > tr:last-child > td {
+            border-bottom: 0;
+        }
+
+        .kh-users .datatable-table > tbody > tr:hover > td {
+            background: #f2f7ff;
+        }
+
+        .kh-users__identity {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            min-width: 170px;
+        }
+
+        .kh-users__avatar {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 38px;
+            height: 38px;
+            min-width: 38px;
+            color: #fff;
+            background: linear-gradient(135deg, var(--kh-blue-dark), #60a5fa);
+            font-size: 0.75rem;
+            font-weight: 800;
+            letter-spacing: 0.04em;
+            box-shadow: 0 6px 14px rgba(37, 99, 235, 0.18);
+            border-radius: 14px;
+        }
+
+        .kh-users__name {
+            display: block;
+            margin-bottom: 0.06rem;
+            color: var(--kh-ink);
+            font-weight: 700;
+        }
+
+        .kh-users__id {
+            display: block;
+            color: #94a3b8;
+            font-size: 0.72rem;
+        }
+
+        .kh-users__email {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            color: var(--kh-blue-dark);
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .kh-users__email:hover {
+            color: #1e40af;
+            text-decoration: underline;
+        }
+
+        .kh-users__email svg {
+            width: 15px;
+            height: 15px;
+        }
+
+        .kh-users__role {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.38rem 0.62rem;
+            color: #1d4ed8;
+            background: #dbeafe;
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: capitalize;
+            white-space: nowrap;
+            border-radius: 999px;
+        }
+
+        .kh-users__role::before {
+            content: "";
+            width: 6px;
+            height: 6px;
+            background: currentColor;
+            border-radius: 50%;
+        }
+
+        .kh-users__role--administrator {
+            color: #7c3aed;
+            background: #ede9fe;
+        }
+
+        .kh-users__role--manager,
+        .kh-users__role--editor {
+            color: #b45309;
+            background: #fef3c7;
+        }
+
+        .kh-users__role--guest {
+            color: #64748b;
+            background: #f1f5f9;
+        }
+
+        .kh-users__groups {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            flex-wrap: wrap;
+            min-width: 260px;
+        }
+
+        .kh-users__group {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.35rem 0.6rem;
+            color: #047857;
+            background: #d1fae5;
+            font-size: 0.72rem;
+            font-weight: 700;
+            border-radius: 999px;
+        }
+
+        .kh-users__group--blue {
+            color: #1d4ed8;
+            background: #dbeafe;
+        }
+
+        .kh-users__group--purple {
+            color: #7c3aed;
+            background: #ede9fe;
+        }
+
+        .kh-users__group-more {
+            color: #64748b;
+            background: #f1f5f9;
+        }
+
+        .kh-users__date strong,
+        .kh-users__date span {
+            display: block;
+            white-space: nowrap;
+        }
+
+        .kh-users__date strong {
+            margin-bottom: 0.1rem;
+            color: #334155;
+            font-size: 0.82rem;
+            font-weight: 700;
+        }
+
+        .kh-users__date span {
+            color: #94a3b8;
+            font-size: 0.72rem;
+        }
+
+        .kh-users__actions {
+            display: flex;
+            align-items: center;
+            gap: 0.45rem;
+        }
+
+        .kh-users__action {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 38px;
+            height: 38px;
+            padding: 0;
+            color: var(--kh-blue-dark);
+            background: #eff6ff;
+            border: 0;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.18s ease, color 0.18s ease, transform 0.18s ease;
+            border-radius: 12px;
+        }
+
+        .kh-users__action:hover {
+            color: #fff;
+            background: var(--kh-blue);
+            transform: translateY(-1px);
+        }
+
+        .kh-users__action--danger {
+            color: #dc2626;
+            background: #fef2f2;
+        }
+
+        .kh-users__action--danger:hover {
+            color: #fff;
+            background: #dc2626;
+        }
+
+        .kh-users__action svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .kh-users .datatable-info {
+            margin: 0;
+            color: var(--kh-muted);
+            font-size: 0.8rem;
+        }
+
+        .kh-users .datatable-pagination a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 34px;
+            min-height: 34px;
+            padding: 0.35rem 0.55rem;
+            border-radius: 0;
+            font-size: 0.78rem;
+        }
+
+        .kh-users__empty {
+            padding: 2.5rem 1rem !important;
+            color: var(--kh-muted) !important;
+            text-align: center;
+        }
+
+        @media (max-width: 992px) {
+            .kh-users {
+                padding: 1rem;
+            }
+
+            .kh-users__hero {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .kh-users__stats {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .kh-users__hero,
+            .kh-users__card-head,
+            .kh-users__table-area {
+                padding: 1rem;
+            }
+
+            .kh-users__hero-actions,
+            .kh-users__button {
+                width: 100%;
+            }
+
+            .kh-users .datatable-top,
+            .kh-users .datatable-bottom {
+                align-items: stretch;
+                flex-direction: column;
+            }
+
+            .kh-users .datatable-search,
+            .kh-users .datatable-input {
+                width: 100%;
+            }
+
+            .kh-users .datatable-search {
+                margin-left: 0;
+            }
+        }
+    </style>
+
+    <main class="kh-users">
+        <section class="kh-users__hero">
+            <div class="kh-users__heading">
+                <span class="kh-users__heading-icon"><i data-feather="users"></i></span>
+                <div>
+                    <span class="kh-users__eyebrow">User Management</span>
+                    <h1>Users List</h1>
+                    <p>Manage account access, roles, and team membership from one place.</p>
                 </div>
             </div>
-        </div>
-    </div>
-</header>
-    <!-- Main page content-->
-    <div class="container-fluid px-4">
-        <div class="card">
-            <div class="card-body">
+
+            <div class="kh-users__hero-actions">
+                <a class="kh-users__button kh-users__button--secondary" href="user-management-groups-list.html">
+                    <i data-feather="users"></i>
+                    <span>Manage Groups</span>
+                </a>
+                <a class="kh-users__button kh-users__button--primary" href="{{ route('user.create') }}">
+                    <i data-feather="user-plus"></i>
+                    <span>Add New User</span>
+                </a>
+            </div>
+        </section>
+
+        <section class="kh-users__stats" aria-label="User summary">
+            <article class="kh-users__stat">
+                <span class="kh-users__stat-icon"><i data-feather="users"></i></span>
+                <div>
+                    <strong>{{ number_format($totalUsers) }}</strong>
+                    <span>Total users</span>
+                </div>
+            </article>
+            <article class="kh-users__stat">
+                <span class="kh-users__stat-icon kh-users__stat-icon--violet"><i data-feather="shield"></i></span>
+                <div>
+                    <strong>{{ number_format($administratorCount) }}</strong>
+                    <span>Administrators</span>
+                </div>
+            </article>
+            <article class="kh-users__stat">
+                <span class="kh-users__stat-icon kh-users__stat-icon--green"><i data-feather="user-plus"></i></span>
+                <div>
+                    <strong>{{ number_format($addedThisMonth) }}</strong>
+                    <span>Added this month</span>
+                </div>
+            </article>
+        </section>
+
+        <section class="kh-users__card">
+            <div class="kh-users__card-head">
+                <div>
+                    <h2>User Directory</h2>
+                    <p>Search, review, and manage every registered account.</p>
+                </div>
+                <span class="kh-users__count">{{ $totalUsers }} {{ \Illuminate\Support\Str::plural('record', $totalUsers) }}</span>
+            </div>
+
+            <div class="kh-users__table-area">
+                @if (session('success'))
+                    <div class="alert alert-success" role="alert">{{ session('success') }}</div>
+                @endif
+
                 <table id="datatablesSimple">
                     <thead>
                         <tr>
@@ -40,48 +696,72 @@
                             <th>Actions</th>
                         </tr>
                     </thead>
-                    <tfoot>
-                        <tr>
-                            <th>User</th>
-                            <th>Email</th>
-                            <th>Role</th>
-                            <th>Groups</th>
-                            <th>Joined Date</th>
-                            <th>Actions</th>
-                        </tr>
-                    </tfoot>
                     <tbody>
-                        @foreach($users as $user)
+                        @forelse ($users as $user)
+                            @php
+                                $displayName = trim(($user->first_name ?? $user->name ?? '') . ' ' . ($user->last_name ?? '')) ?: 'Unnamed User';
+                                $initials = mb_strtoupper(mb_substr($user->first_name ?: ($user->name ?: 'U'), 0, 1) . mb_substr($user->last_name ?: '', 0, 1));
+                                $roleKey = strtolower($user->role ?: 'user');
+                                $roleClass = match ($roleKey) {
+                                    'administrator', 'admin' => 'kh-users__role--administrator',
+                                    'manager', 'editor' => 'kh-users__role--manager',
+                                    'guest' => 'kh-users__role--guest',
+                                    default => '',
+                                };
+                            @endphp
                             <tr>
                                 <td>
-                                    <div class="d-flex align-items-center">
-                                        <div class="avatar me-2"><img class="avatar-img img-fluid" src="https://sb-admin-pro.startbootstrap.com/assets/img/illustrations/profiles/profile-5.png" /></div>
-                                        {{ $user->name }}
+                                    <div class="kh-users__identity">
+                                        <span class="kh-users__avatar" aria-hidden="true">{{ $initials }}</span>
+                                        <div>
+                                            <span class="kh-users__name">{{ $displayName }}</span>
+                                            <span class="kh-users__id">User #{{ str_pad((string) $user->id, 4, '0', STR_PAD_LEFT) }}</span>
+                                        </div>
                                     </div>
                                 </td>
-                                <td><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c1b5a8a6a4b381a4aca0a8adefa2aeac">
-                                    {{ $user->email }}
-                                </a></td>
-                                <td>test</td>
                                 <td>
-                                    <span class="badge bg-green-soft text-green">Sales</span>
-                                    <span class="badge bg-blue-soft text-blue">Developers</span>
-                                    <span class="badge bg-red-soft text-red">Marketing</span>
-                                    <span class="badge bg-purple-soft text-purple">Managers</span>
-                                    <span class="badge bg-yellow-soft text-yellow">Customer</span>
+                                    <a class="kh-users__email" href="mailto:{{ $user->email }}">
+                                        <i data-feather="mail"></i>
+                                        <span>{{ $user->email }}</span>
+                                    </a>
                                 </td>
-                                <td>{{ $user->created_at }}</td>
+                                <td><span class="kh-users__role {{ $roleClass }}">{{ $user->role ?: 'User' }}</span></td>
                                 <td>
-                                    <a class="btn btn-datatable btn-icon btn-transparent-dark me-2" href="user-management-edit-user.html"><i data-feather="edit"></i></a>
-                                    <a class="btn btn-datatable btn-icon btn-transparent-dark" href="#!"><i data-feather="trash-2"></i></a>
+                                    <div class="kh-users__groups">
+                                        <span class="kh-users__group">Sales</span>
+                                        <span class="kh-users__group kh-users__group--blue">Developers</span>
+                                        <span class="kh-users__group kh-users__group--purple">Managers</span>
+                                        <span class="kh-users__group kh-users__group-more">+2 more</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="kh-users__date">
+                                        <strong>{{ $user->created_at?->format('M d, Y') ?? 'Not available' }}</strong>
+                                        <span>{{ $user->created_at?->format('h:i A') ?? '' }}</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="kh-users__actions">
+                                        <a class="kh-users__action" href="user-management-edit-user.html" aria-label="Edit {{ $displayName }}" title="Edit user">
+                                            <i data-feather="edit-2"></i>
+                                        </a>
+                                        <button class="kh-users__action kh-users__action--danger" type="button" aria-label="Delete {{ $displayName }}" title="Delete user">
+                                            <i data-feather="trash-2"></i>
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
-                        @endforeach
+                        @empty
+                            <tr>
+                                <td class="kh-users__empty" colspan="6">No users have been added yet.</td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
-        </div>
-    </div>
+        </section>
+    </main>
+
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js"></script>
     <script src="https://sb-admin-pro.startbootstrap.com/js/datatables/datatables-simple-demo.js"></script>
 @endsection

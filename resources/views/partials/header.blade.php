@@ -13,50 +13,79 @@
             <span class="jf-brand__text">KH-<span>WORKS</span></span>
         </a>
 
-        <nav class="jf-nav" aria-label="Main navigation">
-            <a href="{{ url('/') }}">{{ __('ui.nav.home') }}</a>
-            <a href="{{ url('/') }}#jobs">{{ __('ui.nav.jobs') }}</a>
-            <a href="{{ url('/') }}#companies">{{ __('ui.nav.companies') }}</a>
-            <a href="{{ route('about') }}">{{ __('ui.nav.about') }}</a>
-        </nav>
+        <div class="jf-header__menu" id="jf-header-menu">
+            <nav class="jf-nav" aria-label="Main navigation">
+                <a class="{{ request()->is('/') ? 'is-active' : '' }}" href="{{ url('/') }}">
+                    <i class="fas fa-house" aria-hidden="true"></i>
+                    <span>{{ __('ui.nav.home') }}</span>
+                </a>
+                <a href="{{ url('/') }}#jobs">
+                    <i class="fas fa-briefcase" aria-hidden="true"></i>
+                    <span>{{ __('ui.nav.jobs') }}</span>
+                </a>
+                <a href="{{ url('/') }}#companies">
+                    <i class="fas fa-building" aria-hidden="true"></i>
+                    <span>{{ __('ui.nav.companies') }}</span>
+                </a>
+                <a class="{{ request()->routeIs('about') ? 'is-active' : '' }}" href="{{ route('about') }}">
+                    <i class="fas fa-circle-info" aria-hidden="true"></i>
+                    <span>{{ __('ui.nav.about') }}</span>
+                </a>
+            </nav>
 
-        <div class="jf-header__actions">
-            <div class="jf-language">
-                <button class="jf-language__toggle" type="button" aria-label="{{ __('ui.language.switch') }}">
-                    <i class="fas fa-globe"></i>
-                    <span>{{ $currentLocale === 'kh' ? __('ui.language.kh') : __('ui.language.en') }}</span>
-                    <i class="fas fa-angle-down"></i>
-                </button>
+            <div class="jf-header__actions">
+                <div class="jf-language">
+                    <button class="jf-language__toggle" type="button" aria-label="{{ __('ui.language.switch') }}">
+                        <i class="fas fa-globe"></i>
+                        <span>{{ $currentLocale === 'kh' ? __('ui.language.kh') : __('ui.language.en') }}</span>
+                        <i class="fas fa-angle-down"></i>
+                    </button>
 
-                <div class="jf-language__menu">
-                    <a class="jf-language__option{{ $currentLocale === 'en' ? ' is-active' : '' }}" href="{{ route('language.switch', 'en') }}">
-                        {{ __('ui.language.english') }}
-                    </a>
-                    <a class="jf-language__option{{ $currentLocale === 'kh' ? ' is-active' : '' }}" href="{{ route('language.switch', 'kh') }}">
-                        {{ __('ui.language.khmer') }}
-                    </a>
+                    <div class="jf-language__menu">
+                        <a class="jf-language__option{{ $currentLocale === 'en' ? ' is-active' : '' }}" href="{{ route('language.switch', 'en') }}">
+                            {{ __('ui.language.english') }}
+                        </a>
+                        <a class="jf-language__option{{ $currentLocale === 'kh' ? ' is-active' : '' }}" href="{{ route('language.switch', 'kh') }}">
+                            {{ __('ui.language.khmer') }}
+                        </a>
+                    </div>
                 </div>
-            </div>
 
-            @auth
-                <a class="jf-btn jf-btn--ghost" href="{{ route('home') }}">
-                    <i class="fas fa-chart-line"></i>
-                    <span>{{ __('ui.actions.dashboard') }}</span>
-                </a>
-                <a class="jf-btn jf-btn--primary" href="{{ route('profile') }}">
-                    <i class="fas fa-user"></i>
-                    <span>{{ __('ui.actions.profile') }}</span>
-                </a>
-            @else
-                <a class="jf-btn jf-btn--ghost" href="{{ route('login') }}">
-                    <i class="fas fa-arrow-right-to-bracket"></i>
-                    <span>{{ __('ui.actions.sign_in') }}</span>
-                </a>
-                <a class="jf-btn jf-btn--primary" href="{{ route('register') }}">
-                    <i class="fas fa-plus"></i>
-                    <span>{{ __('ui.actions.post_job') }}</span>
-                </a>
-            @endauth
+                @auth
+                    <a class="jf-btn jf-btn--ghost" href="{{ route('home') }}">
+                        <i class="fas fa-chart-line"></i>
+                        <span>{{ __('ui.actions.dashboard') }}</span>
+                    </a>
+                    <a class="jf-btn jf-btn--primary" href="{{ route('profile') }}">
+                        <i class="fas fa-user"></i>
+                        <span>{{ __('ui.actions.profile') }}</span>
+                    </a>
+                @else
+                    <a class="jf-btn jf-btn--ghost" href="{{ route('login') }}">
+                        <i class="fas fa-arrow-right-to-bracket"></i>
+                        <span>{{ __('ui.actions.sign_in') }}</span>
+                    </a>
+                    <a class="jf-btn jf-btn--primary" href="{{ route('register') }}">
+                        <i class="fas fa-plus"></i>
+                        <span>{{ __('ui.actions.post_job') }}</span>
+                    </a>
+                @endauth
+            </div>
+        </div>
+
+        <div class="jf-header__utilities">
+            <button class="jf-theme-toggle" type="button" aria-label="Switch to dark theme" aria-pressed="false" title="Switch to dark theme">
+                <span class="jf-theme-toggle__track" aria-hidden="true">
+                    <i class="fas fa-sun jf-theme-toggle__sun"></i>
+                    <i class="fas fa-moon jf-theme-toggle__moon"></i>
+                    <span class="jf-theme-toggle__thumb"></span>
+                </span>
+            </button>
+
+            <button class="jf-menu-toggle" type="button" aria-expanded="false" aria-controls="jf-header-menu">
+                <span class="visually-hidden">Open navigation</span>
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
         </div>
     </div>
 </header>

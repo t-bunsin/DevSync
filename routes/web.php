@@ -39,10 +39,13 @@ Route::put('/profile', 'ProfileController@update')->name('profile.update');
 
 
 
-Route::get('/users', [UserController::class, 'index'])->name('users');
 Route::get('/companies', [CompaniesController::class, 'index'])->name('companies');
 
-Route::resource('user', UserController::class);
+Route::middleware('auth')->group(function () {
+    Route::get('/users', [UserController::class, 'index'])->name('users');
+    Route::post('/users', [UserController::class, 'store'])->name('users.store');
+    Route::resource('user', UserController::class);
+});
 
 Route::get('/about', function () {
     return view('about');
@@ -54,6 +57,3 @@ Route::get('/about', function () {
 Route::get('/login', [App\Http\Controllers\Auth\LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [App\Http\Controllers\Auth\LoginController::class, 'login']);
 Route::post('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');
-
-Route::post('/users/register', [UserController::class, 'register'])->name('users.register');
-Route::post('/users', [UserController::class, 'store'])->name('users.store');

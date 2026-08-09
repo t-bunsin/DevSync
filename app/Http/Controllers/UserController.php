@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
@@ -30,19 +31,21 @@ class UserController extends Controller
             'first_name' => 'required|string|max:255',
             'last_name'  => 'required|string|max:255',
             'email'      => 'required|email|unique:users,email',
-            'role'       => 'required|string',
-            'password'   => 'required|string|confirmed|min:6',
+            'phone_number' => 'required|string|max:30',
+            'role'       => ['required', Rule::in(['Administrator', 'Manager', 'User'])],
+            'password'   => 'required|string|confirmed|min:8',
         ]);
 
         $user = new \App\Models\User();
         $user->first_name = $validated['first_name'];
         $user->last_name = $validated['last_name'];
         $user->email = $validated['email'];
+        $user->phone_number = $validated['phone_number'];
         $user->role = $validated['role'];
         $user->password = Hash::make($validated['password']);
         $user->save();
 
-        return redirect()->route('users.index')->with('success', 'User created successfully!');
+        return redirect()->route('users')->with('success', 'User created successfully!');
     }
 
     public function show(User $user)
@@ -77,5 +80,4 @@ class UserController extends Controller
         return redirect()->route('users.index')->with('success', 'User deleted successfully.');
     }
 }
-
 
