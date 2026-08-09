@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CompaniesController;
+use App\Http\Controllers\JobController;
 use Illuminate\Http\Request;
 
 
@@ -18,9 +19,12 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::get('/', function () {
-    return view('main');
-});
+Route::get('/', [JobController::class, 'landing'])->name('landing');
+
+Route::get('/jobs', [JobController::class, 'index'])->name('jobs.index');
+Route::get('/jobs/{job}', [JobController::class, 'show'])
+    ->where('job', '[a-z0-9-]+')
+    ->name('jobs.show');
 
 Route::get('/language/{locale}', function (Request $request, string $locale) {
     abort_unless(in_array($locale, ['en', 'kh'], true), 404);

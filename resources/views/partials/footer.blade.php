@@ -8,13 +8,17 @@
         <div class="jf-footer__links">
             <div>
                 <strong>Explore</strong>
-                <a href="{{ url('/') }}#jobs">{{ __('ui.footer.browse_jobs') }}</a>
+                <a href="{{ route('jobs.index') }}">{{ __('ui.footer.browse_jobs') }}</a>
                 <a href="{{ url('/') }}#companies">{{ __('ui.nav.companies') }}</a>
             </div>
             <div>
                 <strong>KH-WORKS</strong>
                 <a href="{{ route('about') }}">{{ __('ui.nav.about') }}</a>
-                <a href="{{ route('login') }}">{{ __('ui.actions.sign_in') }}</a>
+                @auth
+                    <a href="{{ route('home') }}">{{ __('ui.actions.dashboard') }}</a>
+                @else
+                    <a href="{{ route('login') }}">{{ __('ui.actions.sign_in') }}</a>
+                @endauth
             </div>
         </div>
     </div>

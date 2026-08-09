@@ -32,6 +32,51 @@ document.addEventListener('DOMContentLoaded', () => {
         setTheme(root.dataset.theme === 'dark' ? 'light' : 'dark', true);
     });
 
+    const scrollControls = document.querySelector('[data-scroll-controls]');
+    const scrollTopButton = scrollControls?.querySelector('[data-scroll-to="top"]');
+    const scrollBottomButton = scrollControls?.querySelector('[data-scroll-to="bottom"]');
+
+    if (scrollControls && scrollTopButton && scrollBottomButton) {
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+        let scrollFrame;
+
+        const getMaximumScroll = () => Math.max(
+            document.documentElement.scrollHeight,
+            document.body.scrollHeight
+        ) - window.innerHeight;
+
+        const updateScrollControls = () => {
+            const maximumScroll = Math.max(0, getMaximumScroll());
+            const currentScroll = Math.max(0, window.scrollY);
+            const pageCanScroll = maximumScroll > 8;
+
+            scrollControls.classList.toggle('is-hidden', !pageCanScroll);
+            scrollTopButton.disabled = !pageCanScroll || currentScroll <= 8;
+            scrollBottomButton.disabled = !pageCanScroll || currentScroll >= maximumScroll - 8;
+            scrollFrame = undefined;
+        };
+
+        const queueScrollUpdate = () => {
+            if (!scrollFrame) {
+                scrollFrame = window.requestAnimationFrame(updateScrollControls);
+            }
+        };
+
+        const scrollToPosition = (top) => {
+            window.scrollTo({
+                top,
+                behavior: prefersReducedMotion.matches ? 'auto' : 'smooth',
+            });
+        };
+
+        scrollTopButton.addEventListener('click', () => scrollToPosition(0));
+        scrollBottomButton.addEventListener('click', () => scrollToPosition(getMaximumScroll()));
+        window.addEventListener('scroll', queueScrollUpdate, { passive: true });
+        window.addEventListener('resize', queueScrollUpdate);
+        window.addEventListener('load', updateScrollControls, { once: true });
+        updateScrollControls();
+    }
+
     const header = document.querySelector('.jf-header');
     const toggle = document.querySelector('.jf-menu-toggle');
     const menu = document.getElementById('jf-header-menu');

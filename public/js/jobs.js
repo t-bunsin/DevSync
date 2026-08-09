@@ -1,52 +1,102 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const dataElement = document.getElementById('jobs-data');
+    const explorer = document.querySelector('[data-jobs-explorer]');
+    const dataElement = explorer?.querySelector('#jobs-data');
 
-    if (!dataElement) {
+    if (!explorer || !dataElement) {
         return;
     }
 
-    const jobs = JSON.parse(dataElement.textContent);
+    let jobs = [];
+
+    try {
+        jobs = JSON.parse(dataElement.textContent);
+    } catch (error) {
+        return;
+    }
+
+    if (!Array.isArray(jobs) || jobs.length === 0) {
+        return;
+    }
+
     const jobsById = Object.fromEntries(jobs.map((job) => [job.id, job]));
-    const list = document.getElementById('job-card-list');
-    const cards = Array.from(list.querySelectorAll('.jf-job-card'));
-    const detail = document.querySelector('.jf-detail');
-    const detailPanel = document.getElementById('detail-panel-content');
-    const tabs = Array.from(document.querySelectorAll('.jf-tab'));
-    const filterChips = Array.from(document.querySelectorAll('.jf-search-chip'));
-    const jobCount = document.getElementById('job-count');
-    const noResults = document.getElementById('jf-no-results');
-    const titleInput = document.getElementById('job-search-input');
-    const locationInput = document.getElementById('job-location-input');
-    const categorySelect = document.getElementById('job-category-select');
-    const sortSelect = document.getElementById('job-sort-select');
-    const searchButton = document.getElementById('job-search-button');
-    const detailSaveButton = document.getElementById('detail-save-button');
-    const detailApplyButton = document.getElementById('detail-apply-button');
-    const applyDialog = document.getElementById('apply-dialog');
-    const applyForm = document.getElementById('apply-form');
-    const applySuccess = document.getElementById('apply-success');
+    const list = explorer.querySelector('#job-card-list');
+    const cards = Array.from(explorer.querySelectorAll('.jf-job-card'));
+    const previewButtons = Array.from(explorer.querySelectorAll('[data-preview-job]'));
+    const boardGrid = explorer.querySelector('.jf-board__grid');
+    const detail = explorer.querySelector('.jf-detail');
+    const detailPanel = explorer.querySelector('#detail-panel-content');
+    const tabs = Array.from(explorer.querySelectorAll('.jf-tab'));
+    const filterChips = Array.from(explorer.querySelectorAll('.jf-search-chip'));
+    const jobCount = explorer.querySelector('#job-count');
+    const noResults = explorer.querySelector('#jf-no-results');
+    const titleInput = explorer.querySelector('#job-search-input');
+    const locationInput = explorer.querySelector('#job-location-input');
+    const categorySelect = explorer.querySelector('#job-category-select');
+    const modeSelect = explorer.querySelector('#job-mode-select');
+    const sortSelect = explorer.querySelector('#job-sort-select');
+    const searchButton = explorer.querySelector('#job-search-button');
+    const detailSaveButton = explorer.querySelector('#detail-save-button');
+    const detailApplyButton = explorer.querySelector('#detail-apply-button');
+    const detailPageLink = explorer.querySelector('#detail-page-link');
+    const applyDialog = explorer.querySelector('#apply-dialog');
+    const applyForm = explorer.querySelector('#apply-form');
+    const applySuccess = explorer.querySelector('#apply-success');
+    const applyJobTitle = explorer.querySelector('#apply-job-title');
+    const closeDialogButton = explorer.querySelector('[data-close-dialog]');
+    const jobsSection = explorer.querySelector('#jobs');
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const animationTimers = new WeakMap();
 
     const detailFields = {
-        badge: document.getElementById('detail-badge'),
-        title: document.getElementById('detail-title'),
-        company: document.getElementById('detail-company'),
-        location: document.getElementById('detail-location'),
-        salary: document.getElementById('detail-salary'),
-        posted: document.getElementById('detail-posted'),
-        applicants: document.getElementById('detail-applicants'),
-        sectionTitle: document.getElementById('detail-section-title'),
-        sectionBody: document.getElementById('detail-section-body'),
-        listTitle: document.getElementById('detail-list-title'),
-        list: document.getElementById('detail-list'),
-        facts: document.getElementById('detail-facts'),
-        quickApply: document.getElementById('detail-quick-apply'),
-        quickTitle: document.getElementById('detail-quick-title'),
-        quickText: document.getElementById('detail-quick-text'),
+        badge: explorer.querySelector('#detail-badge'),
+        title: explorer.querySelector('#detail-title'),
+        company: explorer.querySelector('#detail-company'),
+        location: explorer.querySelector('#detail-location'),
+        salary: explorer.querySelector('#detail-salary'),
+        posted: explorer.querySelector('#detail-posted'),
+        applicants: explorer.querySelector('#detail-applicants'),
+        sectionTitle: explorer.querySelector('#detail-section-title'),
+        sectionBody: explorer.querySelector('#detail-section-body'),
+        listTitle: explorer.querySelector('#detail-list-title'),
+        list: explorer.querySelector('#detail-list'),
+        facts: explorer.querySelector('#detail-facts'),
+        quickApply: explorer.querySelector('#detail-quick-apply'),
+        quickTitle: explorer.querySelector('#detail-quick-title'),
+        quickText: explorer.querySelector('#detail-quick-text'),
     };
 
-    let activeJobId = detailApplyButton.dataset.jobId;
+    const requiredElements = [
+        list,
+        boardGrid,
+        detail,
+        detailPanel,
+        jobCount,
+        noResults,
+        titleInput,
+        locationInput,
+        categorySelect,
+        sortSelect,
+        searchButton,
+        detailSaveButton,
+        detailApplyButton,
+        detailPageLink,
+        applyDialog,
+        applyForm,
+        applySuccess,
+        applyJobTitle,
+        closeDialogButton,
+        jobsSection,
+        ...Object.values(detailFields),
+    ];
+
+    if (cards.length === 0 || previewButtons.length !== cards.length || tabs.length === 0
+        || requiredElements.some((element) => !element)) {
+        return;
+    }
+
+    let activeJobId = jobsById[detailApplyButton.dataset.jobId]
+        ? detailApplyButton.dataset.jobId
+        : jobs[0].id;
     let activeTab = 'description';
     let filterTimer;
     let savedJobs = new Set();
@@ -99,7 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const syncSavedControls = () => {
-        document.querySelectorAll('.jf-bookmark[data-job-id]').forEach((button) => {
+        explorer.querySelectorAll('.jf-bookmark[data-job-id]').forEach((button) => {
             updateSaveControl(button, button.dataset.jobId);
         });
         updateSaveControl(detailSaveButton, activeJobId);
@@ -139,6 +189,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    const positionDetail = (jobId) => {
+        const selectedCard = cards.find((card) => card.dataset.jobId === jobId);
+
+        if (window.innerWidth <= 960 && selectedCard && !selectedCard.hidden) {
+            selectedCard.insertAdjacentElement('afterend', detail);
+        } else if (detail.parentElement !== boardGrid) {
+            boardGrid.appendChild(detail);
+        }
+    };
+
     const renderJob = (jobId, options = {}) => {
         const job = jobsById[jobId];
 
@@ -152,7 +212,7 @@ document.addEventListener('DOMContentLoaded', () => {
         cards.forEach((card) => {
             const isActive = card.dataset.jobId === jobId;
             card.classList.toggle('is-active', isActive);
-            card.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+            card.querySelector('[data-preview-job]')?.setAttribute('aria-pressed', isActive ? 'true' : 'false');
         });
 
         detailFields.badge.textContent = job.featured ? 'Featured role' : 'Open role';
@@ -165,6 +225,8 @@ document.addEventListener('DOMContentLoaded', () => {
         detailFields.quickTitle.textContent = job.quick_apply.title;
         detailFields.quickText.textContent = job.quick_apply.text;
         detailApplyButton.dataset.jobId = jobId;
+        detailPageLink.href = detailPageLink.dataset.urlTemplate.replace('__JOB__', encodeURIComponent(jobId));
+        positionDetail(jobId);
 
         renderFacts(job);
         renderTab(job, false);
@@ -211,6 +273,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const titleQuery = normalize(titleInput.value);
         const locationQuery = normalize(locationInput.value);
         const categoryQuery = normalize(categorySelect.value);
+        const modeQuery = normalize(modeSelect?.value || 'all');
         const quickFilters = activeQuickFilters();
 
         cards.forEach((card) => {
@@ -219,16 +282,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 || normalize(card.dataset.company).includes(titleQuery);
             const matchesLocation = !locationQuery || normalize(card.dataset.location).includes(locationQuery);
             const matchesCategory = categoryQuery === 'all' || normalize(card.dataset.department).includes(categoryQuery);
+            const matchesMode = modeQuery === 'all' || normalize(card.dataset.mode).includes(modeQuery);
             const matchesQuickFilters = quickFilters.every((filter) => filterRules[filter]?.(card) ?? true);
 
-            card.hidden = !(matchesTitle && matchesLocation && matchesCategory && matchesQuickFilters);
+            card.hidden = !(matchesTitle && matchesLocation && matchesCategory && matchesMode && matchesQuickFilters);
         });
 
         updateResultState();
         animateVisibleCards();
 
         if (scroll) {
-            document.getElementById('jobs').scrollIntoView({
+            jobsSection.scrollIntoView({
                 behavior: prefersReducedMotion ? 'auto' : 'smooth',
                 block: 'start',
             });
@@ -247,6 +311,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         sortedCards.forEach((card) => list.appendChild(card));
+        positionDetail(activeJobId);
         if (animate) {
             animateVisibleCards();
         }
@@ -256,6 +321,9 @@ document.addEventListener('DOMContentLoaded', () => {
         titleInput.value = '';
         locationInput.value = '';
         categorySelect.value = 'all';
+        if (modeSelect) {
+            modeSelect.value = 'all';
+        }
         filterChips.forEach((chip) => {
             chip.classList.remove('is-active');
             chip.setAttribute('aria-pressed', 'false');
@@ -270,7 +338,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const openApplyDialog = (jobId) => {
         const job = jobsById[jobId] || jobsById[activeJobId];
 
-        document.getElementById('apply-job-title').textContent = job.title;
+        applyJobTitle.textContent = job.title;
         applyForm.hidden = false;
         applySuccess.hidden = true;
         applyForm.reset();
@@ -280,18 +348,18 @@ document.addEventListener('DOMContentLoaded', () => {
     cards.forEach((card) => {
         card.addEventListener('click', (event) => {
             if (!event.target.closest('button, a')) {
-                renderJob(card.dataset.jobId);
-            }
-        });
-        card.addEventListener('keydown', (event) => {
-            if (event.target === card && (event.key === 'Enter' || event.key === ' ')) {
-                event.preventDefault();
                 renderJob(card.dataset.jobId, { scroll: window.innerWidth <= 960 });
             }
         });
     });
 
-    document.querySelectorAll('.jf-bookmark[data-job-id]').forEach((button) => {
+    previewButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+            renderJob(button.dataset.previewJob, { scroll: window.innerWidth <= 960 });
+        });
+    });
+
+    explorer.querySelectorAll('.jf-bookmark[data-job-id]').forEach((button) => {
         button.addEventListener('keydown', (event) => event.stopPropagation());
         button.addEventListener('click', (event) => {
             event.stopPropagation();
@@ -301,15 +369,41 @@ document.addEventListener('DOMContentLoaded', () => {
 
     detailSaveButton.addEventListener('click', () => toggleSavedJob(activeJobId));
 
-    tabs.forEach((tab) => {
-        tab.addEventListener('click', () => {
-            activeTab = tab.dataset.tab;
-            tabs.forEach((button) => {
-                const isActive = button === tab;
-                button.classList.toggle('is-active', isActive);
-                button.setAttribute('aria-selected', isActive ? 'true' : 'false');
-            });
-            renderTab(jobsById[activeJobId]);
+    const activateTab = (tab, { focus = false } = {}) => {
+        activeTab = tab.dataset.tab;
+        tabs.forEach((button) => {
+            const isActive = button === tab;
+            button.classList.toggle('is-active', isActive);
+            button.setAttribute('aria-selected', isActive ? 'true' : 'false');
+            button.setAttribute('tabindex', isActive ? '0' : '-1');
+        });
+        detailPanel.setAttribute('aria-labelledby', tab.id);
+        renderTab(jobsById[activeJobId]);
+
+        if (focus) {
+            tab.focus();
+        }
+    };
+
+    tabs.forEach((tab, index) => {
+        tab.addEventListener('click', () => activateTab(tab));
+        tab.addEventListener('keydown', (event) => {
+            let nextIndex = null;
+
+            if (event.key === 'ArrowRight') {
+                nextIndex = (index + 1) % tabs.length;
+            } else if (event.key === 'ArrowLeft') {
+                nextIndex = (index - 1 + tabs.length) % tabs.length;
+            } else if (event.key === 'Home') {
+                nextIndex = 0;
+            } else if (event.key === 'End') {
+                nextIndex = tabs.length - 1;
+            }
+
+            if (nextIndex !== null) {
+                event.preventDefault();
+                activateTab(tabs[nextIndex], { focus: true });
+            }
         });
     });
 
@@ -335,9 +429,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     categorySelect.addEventListener('change', () => filterJobs());
+    modeSelect?.addEventListener('change', () => filterJobs());
     sortSelect.addEventListener('change', () => sortJobs());
     searchButton.addEventListener('click', () => filterJobs({ scroll: true }));
-    document.querySelectorAll('#jf-reset-search, [data-reset-search]').forEach((button) => {
+    explorer.querySelectorAll('#jf-reset-search, [data-reset-search]').forEach((button) => {
         button.addEventListener('click', resetSearch);
     });
 
@@ -345,11 +440,11 @@ document.addEventListener('DOMContentLoaded', () => {
         link.addEventListener('click', () => renderJob(link.dataset.viewJob));
     });
 
-    document.querySelectorAll('.js-apply-job').forEach((button) => {
+    explorer.querySelectorAll('.js-apply-job').forEach((button) => {
         button.addEventListener('click', () => openApplyDialog(button.dataset.jobId));
     });
 
-    document.querySelector('[data-close-dialog]').addEventListener('click', () => applyDialog.close());
+    closeDialogButton.addEventListener('click', () => applyDialog.close());
     applyDialog.addEventListener('click', (event) => {
         const bounds = applyDialog.getBoundingClientRect();
         const isOutside = event.clientX < bounds.left || event.clientX > bounds.right
@@ -363,6 +458,12 @@ document.addEventListener('DOMContentLoaded', () => {
         event.preventDefault();
         applyForm.hidden = true;
         applySuccess.hidden = false;
+    });
+
+    let resizeFrame;
+    window.addEventListener('resize', () => {
+        window.cancelAnimationFrame(resizeFrame);
+        resizeFrame = window.requestAnimationFrame(() => positionDetail(activeJobId));
     });
 
     syncSavedControls();

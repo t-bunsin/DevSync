@@ -1,0 +1,330 @@
+/* Dedicated job directory — clean search-first layout */
+.jf-directory-heading {
+  padding: clamp(40px, 5.5vw, 70px) 0 clamp(34px, 4vw, 48px);
+  background:
+    radial-gradient(circle at 88% 18%, rgba(28, 166, 160, 0.07), transparent 26rem),
+    #fff;
+  border-bottom: 1px solid #e6ecee;
+}
+
+.jf-directory-heading__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #d87b17;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.jf-directory-heading__eyebrow::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  background: #f59e2f;
+  border-radius: 50%;
+  box-shadow: 0 0 0 5px rgba(245, 158, 47, 0.12);
+}
+
+.jf-directory-heading h1 {
+  margin: 13px 0 10px;
+  color: var(--jf-ink);
+  font-size: clamp(2.5rem, 4.8vw, 4rem);
+  font-weight: 650;
+  letter-spacing: -0.055em;
+  line-height: 1.02;
+}
+
+.jf-directory-heading p {
+  max-width: 68ch;
+  margin: 0;
+  color: #60758a;
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
+.jf-search--directory {
+  width: 100%;
+  margin: 0;
+  padding: 18px 0;
+  background: #fff;
+  border-bottom: 1px solid #dfe7ea;
+  box-shadow: 0 8px 24px rgba(11, 38, 56, 0.055);
+}
+
+.jf-search--directory .jf-search__panel {
+  padding: 0;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  animation: none;
+}
+
+.jf-search--directory .jf-search__grid {
+  grid-template-columns: minmax(320px, 1.8fr) repeat(3, minmax(160px, 0.72fr)) 120px;
+  gap: 13px;
+  align-items: center;
+}
+
+.jf-search--directory .jf-search__field {
+  gap: 0;
+  min-width: 0;
+}
+
+.jf-search--directory .jf-search__control,
+.jf-search__directory-actions {
+  min-height: 58px;
+}
+
+.jf-search--directory .jf-search__control input,
+.jf-search--directory .jf-search__control select {
+  width: 100%;
+  min-height: 58px;
+  padding-right: 38px;
+  color: #203147;
+  background: #fff;
+  border: 1px solid #d6dfe4;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(11, 38, 56, 0.06);
+  font-size: 0.86rem;
+  font-weight: 500;
+  transition: border-color 180ms ease, box-shadow 180ms ease, background 180ms ease;
+}
+
+.jf-search--directory .jf-search__control input {
+  padding-left: 46px;
+}
+
+.jf-search--directory .jf-search__control > i:first-child {
+  left: 18px;
+  color: #7d91a1;
+  font-size: 0.9rem;
+}
+
+.jf-search--directory .jf-search__control input::placeholder {
+  color: #8192a1;
+  opacity: 1;
+}
+
+.jf-search--directory .jf-search__control input:hover,
+.jf-search--directory .jf-search__control select:hover {
+  border-color: #b9c8cf;
+}
+
+.jf-search--directory .jf-search__control input:focus,
+.jf-search--directory .jf-search__control select:focus {
+  background: #fff;
+  border-color: var(--jf-teal);
+  box-shadow: 0 0 0 4px rgba(28, 166, 160, 0.11);
+}
+
+.jf-search--directory .jf-search__chevron {
+  right: 17px;
+  color: #80929f !important;
+}
+
+.jf-search__directory-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid #d6dfe4;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(11, 38, 56, 0.06);
+}
+
+.jf-search__directory-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  min-height: 56px;
+  padding: 0;
+  color: #607586;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  transition: color 180ms ease, background 180ms ease;
+}
+
+.jf-search__directory-action + .jf-search__directory-action {
+  border-left: 1px solid #d6dfe4;
+}
+
+.jf-search__directory-action:hover {
+  color: var(--jf-ocean);
+  background: #f1f6f5;
+}
+
+.jf-search__directory-action.is-primary {
+  color: #14283b;
+  background: #ff9b2f;
+}
+
+.jf-search__directory-action.is-primary:hover {
+  color: #102a43;
+  background: #f6aa4f;
+}
+
+.jf-search__directory-action:focus-visible {
+  position: relative;
+  z-index: 1;
+  outline: 3px solid rgba(28, 166, 160, 0.34);
+  outline-offset: -4px;
+}
+
+.jf-jobs-explorer--directory .jf-board {
+  padding-top: 48px;
+}
+
+html[data-theme="dark"] .jf-directory-heading {
+  background:
+    radial-gradient(circle at 88% 18%, rgba(70, 190, 180, 0.06), transparent 26rem),
+    #071015;
+  border-bottom-color: #1e3037;
+}
+
+html[data-theme="dark"] .jf-directory-heading__eyebrow {
+  color: #f6b862;
+}
+
+html[data-theme="dark"] .jf-directory-heading h1 {
+  color: #eef6f8;
+}
+
+html[data-theme="dark"] .jf-directory-heading p {
+  color: #9eb2ba;
+}
+
+html[data-theme="dark"] .jf-search--directory {
+  background: #0a151a;
+  border-bottom-color: #263940;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.22);
+}
+
+html[data-theme="dark"] .jf-search--directory .jf-search__panel {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+html[data-theme="dark"] .jf-search--directory .jf-search__control input,
+html[data-theme="dark"] .jf-search--directory .jf-search__control select,
+html[data-theme="dark"] .jf-search__directory-actions {
+  color: #dce8eb;
+  background: #101f25;
+  border-color: #30434a;
+  box-shadow: none;
+}
+
+html[data-theme="dark"] .jf-search--directory .jf-search__control input::placeholder {
+  color: #91a6ae;
+}
+
+html[data-theme="dark"] .jf-search--directory .jf-search__control > i:first-child {
+  color: #83c9c5;
+}
+
+html[data-theme="dark"] .jf-search--directory .jf-search__control input:hover,
+html[data-theme="dark"] .jf-search--directory .jf-search__control select:hover {
+  border-color: #486068;
+}
+
+html[data-theme="dark"] .jf-search--directory .jf-search__control input:focus,
+html[data-theme="dark"] .jf-search--directory .jf-search__control select:focus {
+  background: #101f25;
+  border-color: #49b8b1;
+}
+
+html[data-theme="dark"] .jf-search__directory-action {
+  color: #a9bec5;
+}
+
+html[data-theme="dark"] .jf-search__directory-action + .jf-search__directory-action {
+  border-left-color: #30434a;
+}
+
+html[data-theme="dark"] .jf-search__directory-action:hover {
+  color: #e7f1f3;
+  background: #182a31;
+}
+
+html[data-theme="dark"] .jf-search__directory-action.is-primary {
+  color: #14283b;
+  background: #f4a340;
+}
+
+@media (max-width: 1050px) {
+  .jf-search--directory .jf-search__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .jf-search--directory .jf-search__field--wide {
+    grid-column: 1 / -1;
+  }
+
+  .jf-search__directory-actions {
+    width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .jf-directory-heading {
+    padding: 32px 0 29px;
+  }
+
+  .jf-directory-heading h1 {
+    margin-top: 10px;
+    font-size: clamp(2.25rem, 12vw, 3rem);
+  }
+
+  .jf-directory-heading p {
+    font-size: 0.85rem;
+    line-height: 1.65;
+  }
+
+  .jf-search--directory {
+    padding: 14px 0;
+  }
+
+  .jf-search--directory .jf-search__grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .jf-search--directory .jf-search__field--wide {
+    grid-column: auto;
+  }
+
+  .jf-search__directory-actions {
+    min-height: 54px;
+  }
+
+  .jf-search__directory-action {
+    min-height: 52px;
+  }
+
+  .jf-jobs-explorer--directory .jf-board {
+    padding-top: 38px;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .jf-directory-heading__eyebrow,
+  .jf-directory-heading h1,
+  .jf-directory-heading p,
+  .jf-search--directory .jf-search__directory-shell {
+    animation: jf-directory-enter 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .jf-directory-heading h1 { animation-delay: 45ms; }
+  .jf-directory-heading p { animation-delay: 85ms; }
+  .jf-search--directory .jf-search__directory-shell { animation-delay: 110ms; }
+}
+
+@keyframes jf-directory-enter {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}

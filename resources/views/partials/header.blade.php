@@ -19,7 +19,7 @@
                     <i class="fas fa-house" aria-hidden="true"></i>
                     <span>{{ __('ui.nav.home') }}</span>
                 </a>
-                <a href="{{ url('/') }}#jobs">
+                <a class="{{ request()->routeIs('jobs.*') ? 'is-active' : '' }}" href="{{ route('jobs.index') }}">
                     <i class="fas fa-briefcase" aria-hidden="true"></i>
                     <span>{{ __('ui.nav.jobs') }}</span>
                 </a>

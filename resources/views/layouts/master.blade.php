@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="KH-WORKS connects job seekers with trusted employers across Cambodia and remote-first teams.">
+    <meta name="description" content="@yield('meta-description', 'KH-WORKS connects job seekers with trusted employers across Cambodia and remote-first teams.')">
     <meta name="theme-color" id="theme-color" content="#ffffff">
     <script>
         (() => {
@@ -34,6 +34,16 @@
     </main>
 
     @include('partials.footer')
+
+    <div class="jf-scroll-controls" data-scroll-controls role="group" aria-label="Page navigation">
+        <button type="button" data-scroll-to="top" aria-label="Scroll to top" title="Scroll to top">
+            <i class="fas fa-arrow-up" aria-hidden="true"></i>
+        </button>
+        <span class="jf-scroll-controls__divider" aria-hidden="true"></span>
+        <button type="button" data-scroll-to="bottom" aria-label="Scroll to bottom" title="Scroll to bottom">
+            <i class="fas fa-arrow-down" aria-hidden="true"></i>
+        </button>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{{ asset('js/site.js') }}"></script>

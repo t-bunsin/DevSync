@@ -1388,3 +1388,101 @@ select {
     padding-bottom: 24px;
   }
 }
+
+/* Frontend page up/down controls */
+.jf-scroll-controls {
+  position: fixed;
+  right: max(18px, env(safe-area-inset-right));
+  bottom: max(18px, env(safe-area-inset-bottom));
+  z-index: 1040;
+  display: grid;
+  grid-template-rows: 42px 1px 42px;
+  width: 48px;
+  padding: 3px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(199, 213, 216, 0.92);
+  border-radius: 18px;
+  box-shadow: 0 14px 34px rgba(11, 38, 56, 0.16);
+  backdrop-filter: blur(14px);
+  transition: opacity 180ms ease, transform 180ms ease;
+}
+
+.jf-scroll-controls.is-hidden {
+  opacity: 0;
+  transform: translateY(8px);
+  pointer-events: none;
+}
+
+.jf-scroll-controls button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 42px;
+  padding: 0;
+  color: #315666;
+  background: transparent;
+  border: 0;
+  border-radius: 14px;
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: color 170ms ease, background 170ms ease, opacity 170ms ease;
+}
+
+.jf-scroll-controls button:hover:not(:disabled) {
+  color: #fff;
+  background: #0f5f73;
+}
+
+.jf-scroll-controls button:focus-visible {
+  outline: 3px solid rgba(28, 166, 160, 0.3);
+  outline-offset: -2px;
+}
+
+.jf-scroll-controls button:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.jf-scroll-controls__divider {
+  display: block;
+  width: 24px;
+  height: 1px;
+  margin: 0 auto;
+  background: #dce5e7;
+}
+
+html[data-theme="dark"] .jf-scroll-controls {
+  background: rgba(9, 21, 26, 0.92);
+  border-color: #2b4048;
+  box-shadow: 0 16px 38px rgba(0, 0, 0, 0.38);
+}
+
+html[data-theme="dark"] .jf-scroll-controls button {
+  color: #a9c3c9;
+}
+
+html[data-theme="dark"] .jf-scroll-controls button:hover:not(:disabled) {
+  color: #061014;
+  background: #83ded8;
+}
+
+html[data-theme="dark"] .jf-scroll-controls__divider {
+  background: #2b4048;
+}
+
+@media (max-width: 560px) {
+  .jf-scroll-controls {
+    right: max(11px, env(safe-area-inset-right));
+    bottom: max(11px, env(safe-area-inset-bottom));
+    grid-template-rows: 38px 1px 38px;
+    width: 44px;
+    border-radius: 16px;
+  }
+
+  .jf-scroll-controls button {
+    height: 38px;
+    border-radius: 12px;
+  }
+}
