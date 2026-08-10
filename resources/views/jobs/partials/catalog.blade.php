@@ -1,9 +1,19 @@
+@php
+    // Must use the block form here. This file has another block further down,
+    // and Blade's block matcher swallows the single-line form into it.
+    $showHeading = $showHeading ?? true;
+@endphp
+
 <section class="jf-board" id="jobs" aria-labelledby="jobs-title">
     <div class="jf-shell">
         <div class="jf-board__heading">
             <div>
-                <span class="jf-kicker">Fresh opportunities</span>
-                <h2 id="jobs-title">Jobs picked for you</h2>
+                {{-- When the page already carries an <h1>, the id moves here so
+                     the section keeps an accessible name. --}}
+                <span class="jf-kicker" @unless ($showHeading) id="jobs-title" @endunless>Fresh opportunities</span>
+                @if ($showHeading)
+                    <h2 id="jobs-title">Jobs picked for you</h2>
+                @endif
                 <p>Review the latest openings, preview each role, or open its full job page.</p>
             </div>
 
@@ -24,6 +34,17 @@
             <div class="jf-results">
                 <div id="job-card-list" class="jf-results__list">
                     @foreach ($jobs as $job)
+                        @php
+                            $searchIndex = array_merge([
+                                $job['title'], $job['company'], $job['location'], $job['department'],
+                                $job['type'], $job['mode'], $job['experience'], $job['summary'],
+                            ], $job['badges']);
+
+                            foreach ($job['tabs'] as $tab) {
+                                $searchIndex[] = $tab['body'];
+                                $searchIndex = array_merge($searchIndex, $tab['list']);
+                            }
+                        @endphp
                         <article
                             class="jf-job-card{{ $job['featured'] ? ' is-featured' : '' }}{{ $job['highlighted'] ? ' is-active' : '' }}"
                             data-job-id="{{ $job['id'] }}"
@@ -37,6 +58,7 @@
                             data-posted-days="{{ $job['posted_days'] }}"
                             data-featured="{{ $job['featured'] ? 1 : 0 }}"
                             data-salary-rank="{{ preg_replace('/[^0-9]/', '', $job['salary']) }}"
+                            data-search="{{ strtolower(implode(' ', $searchIndex)) }}"
                         >
                             <div class="jf-job-card__topline">
                                 <div class="jf-logo jf-logo--{{ $job['logo'] }}">

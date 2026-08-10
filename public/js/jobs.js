@@ -32,9 +32,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const titleInput = explorer.querySelector('#job-search-input');
     const locationInput = explorer.querySelector('#job-location-input');
     const categorySelect = explorer.querySelector('#job-category-select');
-    const modeSelect = explorer.querySelector('#job-mode-select');
+    const typeSelect = explorer.querySelector('#job-mode-select, #job-type-select');
     const sortSelect = explorer.querySelector('#job-sort-select');
     const searchButton = explorer.querySelector('#job-search-button');
+    const viewButtons = Array.from(explorer.querySelectorAll('[data-job-view]'));
     const detailSaveButton = explorer.querySelector('#detail-save-button');
     const detailApplyButton = explorer.querySelector('#detail-apply-button');
     const detailPageLink = explorer.querySelector('#detail-page-link');
@@ -74,9 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
         noResults,
         titleInput,
         locationInput,
-        categorySelect,
         sortSelect,
-        searchButton,
         detailSaveButton,
         detailApplyButton,
         detailPageLink,
@@ -112,6 +111,54 @@ document.addEventListener('DOMContentLoaded', () => {
         .replace(/[^a-z0-9\s+-]/g, ' ')
         .replace(/\s+/g, ' ')
         .trim();
+
+    const urlFilterControls = () => [
+        ['q', titleInput],
+        ['type', typeSelect],
+        ['location', locationInput],
+        ['department', categorySelect],
+    ];
+
+    const setSelectValue = (select, value) => {
+        if (!select || !value) {
+            return;
+        }
+
+        // Ignore hand-edited URLs so a stray value cannot blank the select.
+        if (Array.from(select.options).some((option) => option.value === value)) {
+            select.value = value;
+        }
+    };
+
+    const applyStateFromUrl = () => {
+        const params = new URLSearchParams(window.location.search);
+        const query = params.get('q');
+
+        if (query) {
+            titleInput.value = query;
+        }
+
+        setSelectValue(typeSelect, params.get('type'));
+        setSelectValue(locationInput, params.get('location'));
+        setSelectValue(categorySelect, params.get('department'));
+    };
+
+    const syncUrl = () => {
+        const params = new URLSearchParams();
+
+        urlFilterControls().forEach(([key, control]) => {
+            const value = control?.value.trim();
+
+            if (value && value !== 'all') {
+                params.set(key, value);
+            }
+        });
+
+        const query = params.toString();
+        window.history.replaceState(null, '', query
+            ? `${window.location.pathname}?${query}`
+            : window.location.pathname);
+    };
 
     const replayAnimation = (element, className = 'is-refreshing', duration = 460) => {
         if (!element || prefersReducedMotion) {
@@ -272,24 +319,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const filterJobs = ({ scroll = false } = {}) => {
         const titleQuery = normalize(titleInput.value);
         const locationQuery = normalize(locationInput.value);
-        const categoryQuery = normalize(categorySelect.value);
-        const modeQuery = normalize(modeSelect?.value || 'all');
+        const categoryQuery = normalize(categorySelect?.value || 'all');
+        const typeQuery = normalize(typeSelect?.value || 'all');
         const quickFilters = activeQuickFilters();
 
         cards.forEach((card) => {
-            const matchesTitle = !titleQuery
-                || normalize(card.dataset.title).includes(titleQuery)
-                || normalize(card.dataset.company).includes(titleQuery);
-            const matchesLocation = !locationQuery || normalize(card.dataset.location).includes(locationQuery);
+            const matchesTitle = !titleQuery || normalize(card.dataset.search).includes(titleQuery);
+            const matchesLocation = locationQuery === 'all' || !locationQuery
+                || normalize(card.dataset.location).includes(locationQuery);
             const matchesCategory = categoryQuery === 'all' || normalize(card.dataset.department).includes(categoryQuery);
-            const matchesMode = modeQuery === 'all' || normalize(card.dataset.mode).includes(modeQuery);
+            const matchesType = typeQuery === 'all' || normalize(card.dataset.type).includes(typeQuery);
             const matchesQuickFilters = quickFilters.every((filter) => filterRules[filter]?.(card) ?? true);
 
-            card.hidden = !(matchesTitle && matchesLocation && matchesCategory && matchesMode && matchesQuickFilters);
+            card.hidden = !(matchesTitle && matchesLocation && matchesCategory && matchesType && matchesQuickFilters);
         });
 
         updateResultState();
         animateVisibleCards();
+        syncUrl();
 
         if (scroll) {
             jobsSection.scrollIntoView({
@@ -319,10 +366,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const resetSearch = () => {
         titleInput.value = '';
-        locationInput.value = '';
-        categorySelect.value = 'all';
-        if (modeSelect) {
-            modeSelect.value = 'all';
+        locationInput.value = 'all';
+        if (categorySelect) {
+            categorySelect.value = 'all';
+        }
+        if (typeSelect) {
+            typeSelect.value = 'all';
         }
         filterChips.forEach((chip) => {
             chip.classList.remove('is-active');
@@ -333,6 +382,7 @@ document.addEventListener('DOMContentLoaded', () => {
         sortJobs(false);
         updateResultState();
         animateVisibleCards();
+        syncUrl();
     };
 
     const openApplyDialog = (jobId) => {
@@ -415,7 +465,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    [titleInput, locationInput].forEach((input) => {
+    [titleInput].forEach((input) => {
         input.addEventListener('input', () => {
             window.clearTimeout(filterTimer);
             filterTimer = window.setTimeout(() => filterJobs(), 180);
@@ -428,11 +478,23 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    categorySelect.addEventListener('change', () => filterJobs());
-    modeSelect?.addEventListener('change', () => filterJobs());
+    categorySelect?.addEventListener('change', () => filterJobs());
+    locationInput.addEventListener('change', () => filterJobs());
+    typeSelect?.addEventListener('change', () => filterJobs());
     sortSelect.addEventListener('change', () => sortJobs());
-    searchButton.addEventListener('click', () => filterJobs({ scroll: true }));
-    explorer.querySelectorAll('#jf-reset-search, [data-reset-search]').forEach((button) => {
+    searchButton?.addEventListener('click', () => filterJobs({ scroll: true }));
+    viewButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+            const isListView = button.dataset.jobView === 'list';
+            explorer.classList.toggle('is-list-view', isListView);
+            viewButtons.forEach((control) => {
+                const isActive = control === button;
+                control.classList.toggle('is-primary', isActive);
+                control.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+            });
+        });
+    });
+    explorer.querySelectorAll('[data-reset-search]').forEach((button) => {
         button.addEventListener('click', resetSearch);
     });
 
@@ -469,5 +531,6 @@ document.addEventListener('DOMContentLoaded', () => {
     syncSavedControls();
     renderJob(activeJobId, { animate: false });
     sortJobs(false);
-    updateResultState();
+    applyStateFromUrl();
+    filterJobs();
 });

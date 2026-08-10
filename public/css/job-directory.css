@@ -1,9 +1,7 @@
 /* Dedicated job directory — clean search-first layout */
 .jf-directory-heading {
-  padding: clamp(40px, 5.5vw, 70px) 0 clamp(34px, 4vw, 48px);
-  background:
-    radial-gradient(circle at 88% 18%, rgba(28, 166, 160, 0.07), transparent 26rem),
-    #fff;
+  padding: clamp(28px, 4vw, 48px) 0 clamp(26px, 3vw, 36px);
+  background: #fff;
   border-bottom: 1px solid #e6ecee;
 }
 
@@ -11,26 +9,17 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  color: #d87b17;
-  font-size: 0.75rem;
+  color: #d99337;
+  font-size: 0.65rem;
   font-weight: 800;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
 }
 
-.jf-directory-heading__eyebrow::before {
-  content: "";
-  width: 7px;
-  height: 7px;
-  background: #f59e2f;
-  border-radius: 50%;
-  box-shadow: 0 0 0 5px rgba(245, 158, 47, 0.12);
-}
-
 .jf-directory-heading h1 {
-  margin: 13px 0 10px;
+  margin: 8px 0 7px;
   color: var(--jf-ink);
-  font-size: clamp(2.5rem, 4.8vw, 4rem);
+  font-size: clamp(2rem, 3.8vw, 3rem);
   font-weight: 650;
   letter-spacing: -0.055em;
   line-height: 1.02;
@@ -40,14 +29,14 @@
   max-width: 68ch;
   margin: 0;
   color: #60758a;
-  font-size: 0.95rem;
-  line-height: 1.7;
+  font-size: 0.78rem;
+  line-height: 1.55;
 }
 
 .jf-search--directory {
   width: 100%;
   margin: 0;
-  padding: 18px 0;
+  padding: 10px 0;
   background: #fff;
   border-bottom: 1px solid #dfe7ea;
   box-shadow: 0 8px 24px rgba(11, 38, 56, 0.055);
@@ -59,13 +48,45 @@
   border: 0;
   border-radius: 0;
   box-shadow: none;
+  /* Cancelling the animation strands the panel at the opacity: 0 that fstyle.css
+     sets as its starting frame, so restore it explicitly. */
   animation: none;
+  opacity: 1;
 }
 
 .jf-search--directory .jf-search__grid {
-  grid-template-columns: minmax(320px, 1.8fr) repeat(3, minmax(160px, 0.72fr)) 120px;
-  gap: 13px;
+  grid-template-columns: minmax(260px, 1.6fr) repeat(3, minmax(115px, 0.65fr)) auto auto;
+  gap: 10px;
   align-items: center;
+}
+
+.jf-search__directory-search {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 20px;
+  color: #14283b;
+  font-size: 0.72rem;
+  font-weight: 700;
+  white-space: nowrap;
+  background: #ff9b2f;
+  border: 1px solid #ff9b2f;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 180ms ease, border-color 180ms ease;
+}
+
+.jf-search__directory-search:hover {
+  color: #102a43;
+  background: #f6aa4f;
+  border-color: #f6aa4f;
+}
+
+.jf-search__directory-search:focus-visible {
+  outline: 3px solid rgba(28, 166, 160, 0.34);
+  outline-offset: 2px;
 }
 
 .jf-search--directory .jf-search__field {
@@ -75,32 +96,29 @@
 
 .jf-search--directory .jf-search__control,
 .jf-search__directory-actions {
-  min-height: 58px;
+  min-height: 44px;
 }
 
 .jf-search--directory .jf-search__control input,
 .jf-search--directory .jf-search__control select {
   width: 100%;
-  min-height: 58px;
+  min-height: 44px;
+  padding-left: 38px;
   padding-right: 38px;
   color: #203147;
   background: #fff;
   border: 1px solid #d6dfe4;
-  border-radius: 12px;
+  border-radius: 999px;
   box-shadow: 0 1px 3px rgba(11, 38, 56, 0.06);
-  font-size: 0.86rem;
+  font-size: 0.72rem;
   font-weight: 500;
   transition: border-color 180ms ease, box-shadow 180ms ease, background 180ms ease;
 }
 
-.jf-search--directory .jf-search__control input {
-  padding-left: 46px;
-}
-
 .jf-search--directory .jf-search__control > i:first-child {
-  left: 18px;
+  left: 16px;
   color: #7d91a1;
-  font-size: 0.9rem;
+  font-size: 0.72rem;
 }
 
 .jf-search--directory .jf-search__control input::placeholder {
@@ -121,62 +139,101 @@
 }
 
 .jf-search--directory .jf-search__chevron {
-  right: 17px;
+  right: 14px;
   color: #80929f !important;
 }
 
 .jf-search__directory-actions {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  overflow: hidden;
-  background: #fff;
-  border: 1px solid #d6dfe4;
-  border-radius: 12px;
-  box-shadow: 0 1px 3px rgba(11, 38, 56, 0.06);
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .jf-search__directory-action {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 0;
-  min-height: 56px;
+  width: 44px;
+  min-width: 44px;
+  min-height: 44px;
   padding: 0;
   color: #607586;
-  background: transparent;
-  border: 0;
+  background: #fff;
+  border: 1px solid #d6dfe4;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(11, 38, 56, 0.06);
   cursor: pointer;
-  transition: color 180ms ease, background 180ms ease;
-}
-
-.jf-search__directory-action + .jf-search__directory-action {
-  border-left: 1px solid #d6dfe4;
+  transition: color 180ms ease, background 180ms ease, border-color 180ms ease;
 }
 
 .jf-search__directory-action:hover {
   color: var(--jf-ocean);
   background: #f1f6f5;
+  border-color: #b9c8cf;
 }
 
 .jf-search__directory-action.is-primary {
   color: #14283b;
   background: #ff9b2f;
+  border-color: #ff9b2f;
 }
 
 .jf-search__directory-action.is-primary:hover {
   color: #102a43;
   background: #f6aa4f;
+  border-color: #f6aa4f;
 }
 
 .jf-search__directory-action:focus-visible {
   position: relative;
   z-index: 1;
   outline: 3px solid rgba(28, 166, 160, 0.34);
-  outline-offset: -4px;
+  outline-offset: 2px;
 }
 
 .jf-jobs-explorer--directory .jf-board {
   padding-top: 48px;
+}
+
+.jf-jobs-explorer--directory.is-list-view .jf-results__list {
+  grid-template-columns: 1fr;
+}
+
+.jf-jobs-explorer--directory.is-list-view .jf-job-card {
+  display: grid;
+  grid-template-columns: 62px minmax(0, 1fr) auto;
+  gap: 0 18px;
+  align-items: center;
+}
+
+.jf-jobs-explorer--directory.is-list-view .jf-job-card__topline {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+}
+
+.jf-jobs-explorer--directory.is-list-view .jf-job-card__status {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+}
+
+.jf-jobs-explorer--directory.is-list-view .jf-job-card__content {
+  grid-column: 2;
+  margin-top: 0;
+}
+
+.jf-jobs-explorer--directory.is-list-view .jf-job-card__chips {
+  grid-column: 2;
+  margin-top: 12px;
+}
+
+.jf-jobs-explorer--directory.is-list-view .jf-job-card__footer {
+  grid-column: 3;
+  grid-row: 1 / span 2;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border: 0;
 }
 
 html[data-theme="dark"] .jf-directory-heading {
@@ -212,7 +269,7 @@ html[data-theme="dark"] .jf-search--directory .jf-search__panel {
 
 html[data-theme="dark"] .jf-search--directory .jf-search__control input,
 html[data-theme="dark"] .jf-search--directory .jf-search__control select,
-html[data-theme="dark"] .jf-search__directory-actions {
+html[data-theme="dark"] .jf-search__directory-action {
   color: #dce8eb;
   background: #101f25;
   border-color: #30434a;
@@ -242,18 +299,28 @@ html[data-theme="dark"] .jf-search__directory-action {
   color: #a9bec5;
 }
 
-html[data-theme="dark"] .jf-search__directory-action + .jf-search__directory-action {
-  border-left-color: #30434a;
-}
-
 html[data-theme="dark"] .jf-search__directory-action:hover {
   color: #e7f1f3;
   background: #182a31;
+  border-color: #486068;
 }
 
 html[data-theme="dark"] .jf-search__directory-action.is-primary {
   color: #14283b;
   background: #f4a340;
+  border-color: #f4a340;
+}
+
+html[data-theme="dark"] .jf-search__directory-search {
+  color: #14283b;
+  background: #f4a340;
+  border-color: #f4a340;
+}
+
+html[data-theme="dark"] .jf-search__directory-search:hover {
+  color: #102a43;
+  background: #f6b862;
+  border-color: #f6b862;
 }
 
 @media (max-width: 1050px) {
@@ -267,6 +334,11 @@ html[data-theme="dark"] .jf-search__directory-action.is-primary {
 
   .jf-search__directory-actions {
     width: 100%;
+  }
+
+  .jf-search__directory-action {
+    flex: 1;
+    width: auto;
   }
 }
 
@@ -299,15 +371,47 @@ html[data-theme="dark"] .jf-search__directory-action.is-primary {
   }
 
   .jf-search__directory-actions {
-    min-height: 54px;
+    min-height: 44px;
   }
 
   .jf-search__directory-action {
-    min-height: 52px;
+    flex: 1;
+    width: auto;
+    min-height: 44px;
   }
 
   .jf-jobs-explorer--directory .jf-board {
     padding-top: 38px;
+  }
+
+  .jf-jobs-explorer--directory.is-list-view .jf-job-card {
+    display: block;
+  }
+
+  .jf-jobs-explorer--directory.is-list-view .jf-job-card__topline,
+  .jf-jobs-explorer--directory.is-list-view .jf-job-card__footer {
+    display: flex;
+  }
+
+  .jf-jobs-explorer--directory.is-list-view .jf-job-card__content,
+  .jf-jobs-explorer--directory.is-list-view .jf-job-card__chips {
+    display: block;
+  }
+
+  .jf-jobs-explorer--directory.is-list-view .jf-job-card__status {
+    position: static;
+  }
+
+  .jf-jobs-explorer--directory.is-list-view .jf-job-card__footer {
+    margin: 18px -20px -20px;
+    padding: 15px 20px;
+    background: #f8faf9;
+    border-top: 1px solid #edf1f1;
+  }
+
+  html[data-theme="dark"] .jf-jobs-explorer--directory.is-list-view .jf-job-card__footer {
+    background: #101f25;
+    border-top-color: #263940;
   }
 }
 
@@ -327,4 +431,164 @@ html[data-theme="dark"] .jf-search__directory-action.is-primary {
 @keyframes jf-directory-enter {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+/* ==========================================================================
+   Compact search bar (/jobs)
+   A single flat row: one wide search field plus plain selects. No card,
+   no heading, no chips, no submit button — filtering is live.
+   Scoped to .jf-search--compact so the landing page panel is untouched.
+   ========================================================================== */
+.jf-directory-heading {
+  padding: clamp(16px, 2vw, 24px) 0 clamp(10px, 1.2vw, 14px);
+  border-bottom: 0;
+}
+
+.jf-directory-heading h1 {
+  margin: 4px 0 3px;
+  font-size: clamp(1.75rem, 3vw, 2.4rem);
+}
+
+.jf-directory-heading p {
+  font-size: 0.8rem;
+}
+
+.jf-search--compact {
+  margin-top: 0;
+  padding-bottom: clamp(12px, 1.4vw, 16px);
+}
+
+/* The results band carried 72px/86px of padding from jobs.css. */
+.jf-jobs-explorer--directory .jf-board {
+  padding-top: 24px;
+  padding-bottom: 56px;
+}
+
+.jf-jobs-explorer--directory .jf-board__heading {
+  margin-bottom: 20px;
+}
+
+.jf-search--compact .jf-search__panel {
+  margin-top: 15px;
+  padding: 9px;
+  background: #fff;
+  border: 1px solid #e2eaec;
+  border-radius: 13px;
+  box-shadow: 0 6px 18px -14px rgba(12, 58, 64, 0.28);
+}
+
+.jf-search--compact .jf-search__grid,
+.jf-search--compact .jf-search__grid--with-department {
+  grid-template-columns: 2.6fr 1fr 1.05fr 1.1fr;
+  gap: 9px;
+  align-items: center;
+}
+
+.jf-search--compact .jf-search__field {
+  gap: 0;
+  min-width: 0;
+}
+
+.jf-search--compact .jf-search__control {
+  min-height: 40px;
+}
+
+/* Tinted against the white card so each control still reads as a field. */
+.jf-search--compact .jf-search__control input,
+.jf-search--compact .jf-search__control select {
+  width: 100%;
+  min-height: 40px;
+  padding: 0 13px;
+  background: #f6fafa;
+  border: 1px solid #e5edee;
+  border-radius: 10px;
+  font-size: 0.78rem;
+  transition: border-color 160ms ease, box-shadow 160ms ease, background 160ms ease;
+}
+
+/* Only the search field keeps a leading icon, as in the reference. */
+.jf-search--compact .jf-search__control input {
+  padding-left: 38px;
+}
+
+.jf-search--compact .jf-search__control > i:first-child {
+  left: 14px;
+  color: #90a4ae;
+  font-size: 0.8rem;
+}
+
+.jf-search--compact .jf-search__control--select > i:first-child {
+  display: none;
+}
+
+.jf-search--compact .jf-search__control select {
+  padding-right: 32px;
+}
+
+.jf-search--compact .jf-search__control input::placeholder {
+  color: #93a5ad;
+  opacity: 1;
+}
+
+.jf-search--compact .jf-search__control input:hover,
+.jf-search--compact .jf-search__control select:hover {
+  border-color: #cbdadd;
+}
+
+.jf-search--compact .jf-search__control input:focus,
+.jf-search--compact .jf-search__control select:focus {
+  border-color: var(--jf-teal);
+  box-shadow: 0 0 0 4px rgba(28, 166, 160, 0.1);
+}
+
+.jf-search--compact .jf-search__chevron {
+  right: 13px;
+  font-size: 0.72rem;
+  color: #90a4ae !important;
+}
+
+/* ---- Dark theme ---- */
+html[data-theme="dark"] .jf-search--compact .jf-search__panel {
+  background: #0a151a;
+  border-color: #21343b;
+  box-shadow: 0 8px 22px -14px rgba(0, 0, 0, 0.7);
+}
+
+html[data-theme="dark"] .jf-search--compact .jf-search__control input,
+html[data-theme="dark"] .jf-search--compact .jf-search__control select {
+  color: #dce8eb;
+  background: #101f25;
+  border-color: #30434a;
+}
+
+html[data-theme="dark"] .jf-search--compact .jf-search__control input::placeholder {
+  color: #8ba0a8;
+}
+
+html[data-theme="dark"] .jf-search--compact .jf-search__control input:hover,
+html[data-theme="dark"] .jf-search--compact .jf-search__control select:hover {
+  border-color: #486068;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 960px) {
+  .jf-search--compact .jf-search__grid,
+  .jf-search--compact .jf-search__grid--with-department {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .jf-search--compact .jf-search__field--wide {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 600px) {
+  .jf-search--compact .jf-search__grid,
+  .jf-search--compact .jf-search__grid--with-department {
+    grid-template-columns: 1fr;
+  }
+
+  .jf-search--compact .jf-search__field--wide {
+    grid-column: auto;
+  }
 }

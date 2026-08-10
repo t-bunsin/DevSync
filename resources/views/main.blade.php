@@ -3,7 +3,7 @@
 @section('title', 'KH-WORKS | Find Your Next Opportunity')
 
 @push('styles')
-    <link rel="stylesheet" href="{{ asset('css/jobs.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/jobs.css') }}?v={{ filemtime(public_path('css/jobs.css')) }}">
 @endpush
 
 @section('content')
@@ -107,5 +107,5 @@
 @endsection
 
 @push('scripts')
-    <script src="{{ asset('js/jobs.js') }}"></script>
+    <script src="{{ asset('js/jobs.js') }}?v={{ filemtime(public_path('js/jobs.js')) }}"></script>
 @endpush

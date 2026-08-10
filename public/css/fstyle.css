@@ -1389,6 +1389,76 @@ select {
   }
 }
 
+/* Floating "Chat with us" button (bottom-left; scroll controls own bottom-right) */
+.jf-chat {
+  position: fixed;
+  left: max(18px, env(safe-area-inset-left));
+  bottom: max(18px, env(safe-area-inset-bottom));
+  z-index: 1040;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 5px 18px 5px 5px;
+  color: #fff;
+  text-decoration: none;
+  background: linear-gradient(100deg, #29a3e8 0%, #1e51cf 58%, #1a2a9c 100%);
+  border-radius: 999px;
+  box-shadow: 0 8px 18px rgba(26, 42, 156, 0.3);
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.jf-chat:hover,
+.jf-chat:focus-visible {
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px rgba(26, 42, 156, 0.42);
+}
+
+.jf-chat__icon {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  font-size: 16px;
+  color: #2196e3;
+  background: #fff;
+  border-radius: 50%;
+}
+
+.jf-chat__label {
+  font-size: 13.5px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  /* Collapse to the icon so the button never covers page content. */
+  .jf-chat {
+    padding: 5px;
+  }
+
+  .jf-chat__label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .jf-chat {
+    transition: none;
+  }
+
+  .jf-chat:hover,
+  .jf-chat:focus-visible {
+    transform: none;
+  }
+}
+
 /* Frontend page up/down controls */
 .jf-scroll-controls {
   position: fixed;

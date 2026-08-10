@@ -5,7 +5,7 @@ return [
         'home' => 'Home',
         'jobs' => 'Jobs',
         'companies' => 'Companies',
-        'about' => 'About Us',
+        'about' => 'About Uss',
     ],
     'actions' => [
         'sign_in' => 'Sign In',
@@ -31,5 +31,9 @@ return [
     'footer' => [
         'copy' => 'Connecting talent with modern teams across Cambodia and remote-first companies.',
         'browse_jobs' => 'Browse Jobs',
+    ],
+    'chat' => [
+        'label' => 'Chat with us',
+        'aria' => 'Chat with us on Telegram (opens in a new tab)',
     ],
 ];

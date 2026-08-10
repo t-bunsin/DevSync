@@ -23,7 +23,7 @@
     <title>@yield('title', 'KH-WORKS')</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/fstyle.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/fstyle.css') }}?v={{ filemtime(public_path('css/fstyle.css')) }}">
     @stack('styles')
 </head>
 <body class="jf-body">
@@ -34,6 +34,8 @@
     </main>
 
     @include('partials.footer')
+
+    @include('partials.chat-button')
 
     <div class="jf-scroll-controls" data-scroll-controls role="group" aria-label="Page navigation">
         <button type="button" data-scroll-to="top" aria-label="Scroll to top" title="Scroll to top">

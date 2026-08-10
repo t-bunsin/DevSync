@@ -752,6 +752,10 @@ body.jf-body::selection {
   align-items: end;
 }
 
+.jf-search__grid--with-department {
+  grid-template-columns: 1.25fr 0.92fr 0.92fr 0.92fr 160px;
+}
+
 .jf-search__field {
   display: grid;
   gap: 8px;
