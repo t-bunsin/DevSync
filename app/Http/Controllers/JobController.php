@@ -42,6 +42,22 @@ class JobController extends Controller
         return collect(config('jobs_demo', []));
     }
 
+    /**
+     * The three roles shown in the hero slideshow: featured first, then the
+     * most recently posted.
+     */
+    private function spotlightJobs(Collection $jobs): array
+    {
+        return $jobs
+            ->sortBy([
+                fn (array $a, array $b) => (int) $b['featured'] <=> (int) $a['featured'],
+                fn (array $a, array $b) => $a['posted_days'] <=> $b['posted_days'],
+            ])
+            ->take(3)
+            ->values()
+            ->all();
+    }
+
     private function explorerData(): array
     {
         $jobs = $this->catalog();
@@ -52,6 +68,7 @@ class JobController extends Controller
         return [
             'jobs' => $jobs->values()->all(),
             'selectedJob' => $selectedJob,
+            'spotlightJobs' => $this->spotlightJobs($jobs),
         ];
     }
 }

@@ -14,6 +14,7 @@
             <div>
                 <strong>KH-WORKS</strong>
                 <a href="{{ route('about') }}">{{ __('ui.nav.about') }}</a>
+                <a href="{{ route('contact') }}">{{ __('ui.nav.contact') }}</a>
                 @auth
                     <a href="{{ route('home') }}">{{ __('ui.actions.dashboard') }}</a>
                 @else

@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CompaniesController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\JobController;
 use Illuminate\Http\Request;
 
@@ -54,6 +55,9 @@ Route::middleware('auth')->group(function () {
 Route::get('/about', function () {
     return view('about');
 })->name('about');
+
+Route::get('/contact', [ContactController::class, 'index'])->name('contact');
+Route::post('/contact', [ContactController::class, 'send'])->name('contact.send');
 
 
 // use App\Http\Controllers\AuthController;

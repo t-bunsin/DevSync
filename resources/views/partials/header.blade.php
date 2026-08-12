@@ -31,6 +31,10 @@
                     <i class="fas fa-circle-info" aria-hidden="true"></i>
                     <span>{{ __('ui.nav.about') }}</span>
                 </a>
+                <a class="{{ request()->routeIs('contact') ? 'is-active' : '' }}" href="{{ route('contact') }}">
+                    <i class="fas fa-envelope" aria-hidden="true"></i>
+                    <span>{{ __('ui.nav.contact') }}</span>
+                </a>
             </nav>
 
             <div class="jf-header__actions">

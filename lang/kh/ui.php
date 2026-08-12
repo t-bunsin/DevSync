@@ -6,6 +6,7 @@ return [
         'jobs' => 'ការងារ',
         'companies' => 'ក្រុមហ៊ុន',
         'about' => 'អំពីយើង',
+        'contact' => 'ទំនាក់ទំនង',
     ],
     'actions' => [
         'sign_in' => 'ចូលគណនី',

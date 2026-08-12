@@ -73,8 +73,6 @@ document.addEventListener('DOMContentLoaded', () => {
         detailPanel,
         jobCount,
         noResults,
-        titleInput,
-        locationInput,
         sortSelect,
         detailSaveButton,
         detailApplyButton,
@@ -134,7 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const params = new URLSearchParams(window.location.search);
         const query = params.get('q');
 
-        if (query) {
+        if (query && titleInput) {
             titleInput.value = query;
         }
 
@@ -317,8 +315,8 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const filterJobs = ({ scroll = false } = {}) => {
-        const titleQuery = normalize(titleInput.value);
-        const locationQuery = normalize(locationInput.value);
+        const titleQuery = normalize(titleInput?.value);
+        const locationQuery = normalize(locationInput?.value || 'all');
         const categoryQuery = normalize(categorySelect?.value || 'all');
         const typeQuery = normalize(typeSelect?.value || 'all');
         const quickFilters = activeQuickFilters();
@@ -365,8 +363,12 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const resetSearch = () => {
-        titleInput.value = '';
-        locationInput.value = 'all';
+        if (titleInput) {
+            titleInput.value = '';
+        }
+        if (locationInput) {
+            locationInput.value = 'all';
+        }
         if (categorySelect) {
             categorySelect.value = 'all';
         }
@@ -465,7 +467,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    [titleInput].forEach((input) => {
+    [titleInput].filter(Boolean).forEach((input) => {
         input.addEventListener('input', () => {
             window.clearTimeout(filterTimer);
             filterTimer = window.setTimeout(() => filterJobs(), 180);
@@ -479,7 +481,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     categorySelect?.addEventListener('change', () => filterJobs());
-    locationInput.addEventListener('change', () => filterJobs());
+    locationInput?.addEventListener('change', () => filterJobs());
     typeSelect?.addEventListener('change', () => filterJobs());
     sortSelect.addEventListener('change', () => sortJobs());
     searchButton?.addEventListener('click', () => filterJobs({ scroll: true }));
@@ -533,4 +535,88 @@ document.addEventListener('DOMContentLoaded', () => {
     sortJobs(false);
     applyStateFromUrl();
     filterJobs();
+});
+
+/* Hero spotlight slideshow (top 3 roles) */
+document.addEventListener('DOMContentLoaded', () => {
+    const spotlight = document.querySelector('[data-spotlight]');
+
+    if (!spotlight) {
+        return;
+    }
+
+    const slides = Array.from(spotlight.querySelectorAll('[data-spotlight-slide]'));
+    const dots = Array.from(spotlight.querySelectorAll('[data-spotlight-dot]'));
+    const controls = spotlight.querySelector('.jf-spotlight__controls');
+
+    if (slides.length < 2) {
+        controls?.remove();
+        return;
+    }
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const interval = 6000;
+    let current = slides.findIndex((slide) => slide.classList.contains('is-active'));
+    let timer;
+
+    if (current < 0) {
+        current = 0;
+    }
+
+    const showSlide = (index) => {
+        current = (index + slides.length) % slides.length;
+
+        slides.forEach((slide, position) => {
+            const isActive = position === current;
+            slide.classList.toggle('is-active', isActive);
+            slide.toggleAttribute('aria-hidden', !isActive);
+        });
+
+        dots.forEach((dot, position) => {
+            const isActive = position === current;
+            dot.classList.toggle('is-active', isActive);
+            dot.setAttribute('aria-selected', isActive ? 'true' : 'false');
+        });
+    };
+
+    const stopAutoplay = () => window.clearInterval(timer);
+
+    const startAutoplay = () => {
+        stopAutoplay();
+
+        if (prefersReducedMotion) {
+            return;
+        }
+
+        timer = window.setInterval(() => showSlide(current + 1), interval);
+    };
+
+    const goTo = (index) => {
+        showSlide(index);
+        startAutoplay();
+    };
+
+    spotlight.querySelector('[data-spotlight-prev]')?.addEventListener('click', () => goTo(current - 1));
+    spotlight.querySelector('[data-spotlight-next]')?.addEventListener('click', () => goTo(current + 1));
+    dots.forEach((dot, position) => dot.addEventListener('click', () => goTo(position)));
+
+    spotlight.addEventListener('mouseenter', stopAutoplay);
+    spotlight.addEventListener('mouseleave', startAutoplay);
+    spotlight.addEventListener('focusin', stopAutoplay);
+    spotlight.addEventListener('focusout', (event) => {
+        if (!spotlight.contains(event.relatedTarget)) {
+            startAutoplay();
+        }
+    });
+
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+            stopAutoplay();
+        } else {
+            startAutoplay();
+        }
+    });
+
+    showSlide(current);
+    startAutoplay();
 });

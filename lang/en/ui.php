@@ -6,6 +6,7 @@ return [
         'jobs' => 'Jobs',
         'companies' => 'Companies',
         'about' => 'About Uss',
+        'contact' => 'Contact',
     ],
     'actions' => [
         'sign_in' => 'Sign In',

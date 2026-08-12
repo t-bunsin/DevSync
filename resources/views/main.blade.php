@@ -21,7 +21,7 @@
                 <p>Explore verified opportunities from trusted teams in Cambodia and remote-first companies across Southeast Asia.</p>
 
                 <div class="jf-hero__actions">
-                    <a class="jf-btn jf-btn--accent" href="#job-search">
+                    <a class="jf-btn jf-btn--accent" href="#jobs">
                         Explore jobs
                         <i class="fas fa-arrow-down" aria-hidden="true"></i>
                     </a>
@@ -38,29 +38,73 @@
                 </dl>
             </div>
 
-            <aside class="jf-spotlight" aria-label="Featured opportunity">
+            <aside class="jf-spotlight" aria-label="Featured opportunities" aria-roledescription="carousel" data-spotlight>
                 <div class="jf-spotlight__topline">
                     <span><i class="fas fa-bolt" aria-hidden="true"></i> Featured this week</span>
                     <span class="jf-spotlight__status">Actively hiring</span>
                 </div>
 
-                <div class="jf-spotlight__company">
-                    <div class="jf-logo jf-logo--tech"><i class="fas fa-wifi" aria-hidden="true"></i></div>
-                    <div>
-                        <span>Tech Corp</span>
-                        <strong>Software Engineer</strong>
+                <div class="jf-spotlight__slides">
+                    @foreach ($spotlightJobs as $index => $spotlightJob)
+                        <article
+                            class="jf-spotlight__slide{{ $index === 0 ? ' is-active' : '' }}"
+                            data-spotlight-slide
+                            role="group"
+                            aria-roledescription="slide"
+                            aria-label="{{ $index + 1 }} of {{ count($spotlightJobs) }}"
+                            @unless ($index === 0) aria-hidden="true" @endunless
+                        >
+                            <div class="jf-spotlight__company">
+                                <div class="jf-logo jf-logo--{{ $spotlightJob['logo'] }}">
+                                    @if ($spotlightJob['logo'] === 'aba')
+                                        <span>ABA</span><small>BANK</small>
+                                    @elseif ($spotlightJob['logo'] === 'tech')
+                                        <i class="fas fa-wifi" aria-hidden="true"></i>
+                                    @else
+                                        <span>D</span>
+                                    @endif
+                                </div>
+                                <div>
+                                    <span>{{ $spotlightJob['company'] }}</span>
+                                    <strong>{{ $spotlightJob['title'] }}</strong>
+                                </div>
+                            </div>
+
+                            <div class="jf-spotlight__meta">
+                                <span><i class="fas fa-location-dot" aria-hidden="true"></i> {{ $spotlightJob['mode'] }}</span>
+                                <span><i class="fas fa-clock" aria-hidden="true"></i> {{ $spotlightJob['type'] }}</span>
+                                <span><i class="fas fa-code" aria-hidden="true"></i> {{ $spotlightJob['department'] }}</span>
+                            </div>
+
+                            <div class="jf-spotlight__footer">
+                                <div><small>Salary range</small><strong>{{ $spotlightJob['short_salary'] }}</strong></div>
+                                <a href="#jobs" data-view-job="{{ $spotlightJob['id'] }}">View role <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                            </div>
+                        </article>
+                    @endforeach
+                </div>
+
+                <div class="jf-spotlight__controls">
+                    <button class="jf-spotlight__arrow" type="button" data-spotlight-prev aria-label="Previous featured role">
+                        <i class="fas fa-arrow-left" aria-hidden="true"></i>
+                    </button>
+
+                    <div class="jf-spotlight__dots" role="tablist" aria-label="Choose a featured role">
+                        @foreach ($spotlightJobs as $index => $spotlightJob)
+                            <button
+                                class="jf-spotlight__dot{{ $index === 0 ? ' is-active' : '' }}"
+                                type="button"
+                                role="tab"
+                                data-spotlight-dot="{{ $index }}"
+                                aria-selected="{{ $index === 0 ? 'true' : 'false' }}"
+                                aria-label="{{ $spotlightJob['title'] }} at {{ $spotlightJob['company'] }}"
+                            ></button>
+                        @endforeach
                     </div>
-                </div>
 
-                <div class="jf-spotlight__meta">
-                    <span><i class="fas fa-location-dot" aria-hidden="true"></i> Remote</span>
-                    <span><i class="fas fa-clock" aria-hidden="true"></i> Full-time</span>
-                    <span><i class="fas fa-code" aria-hidden="true"></i> Engineering</span>
-                </div>
-
-                <div class="jf-spotlight__footer">
-                    <div><small>Salary range</small><strong>$80k–$120k</strong></div>
-                    <a href="#jobs" data-view-job="software-engineer">View role <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                    <button class="jf-spotlight__arrow" type="button" data-spotlight-next aria-label="Next featured role">
+                        <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                    </button>
                 </div>
             </aside>
         </div>
@@ -86,9 +130,64 @@
         </div>
     </section>
 
-    <div data-jobs-explorer>
-        @include('jobs.partials.search')
+    @php
+        $howItWorks = [
+            [
+                'title' => 'Quick profile',
+                'body' => 'Fill six fields about your background — it takes under two minutes.',
+                'icon' => 'fa-user-pen',
+                'note' => '2 min',
+            ],
+            [
+                'title' => 'See matched jobs',
+                'body' => 'We surface the roles that fit your experience, skills, and location.',
+                'icon' => 'fa-wand-magic-sparkles',
+                'note' => 'Instant',
+            ],
+            [
+                'title' => 'Create account',
+                'body' => 'Only needed once you are ready to apply — browse the board freely first.',
+                'icon' => 'fa-user-plus',
+                'note' => 'Optional',
+            ],
+            [
+                'title' => 'Apply & get hired',
+                'body' => 'Complete your profile once, then apply to any role in seconds.',
+                'icon' => 'fa-paper-plane',
+                'note' => 'One click',
+            ],
+        ];
+    @endphp
 
+    <section class="jf-steps" id="how-it-works" aria-labelledby="steps-title">
+        <div class="jf-shell">
+            <div class="jf-steps__heading">
+                <div>
+                    <span class="jf-kicker">How it works</span>
+                    <h2 id="steps-title">Find your dream job in {{ count($howItWorks) }} steps</h2>
+                </div>
+                <p>From a two-minute profile to a sent application — no account required until you apply.</p>
+            </div>
+
+            <ol class="jf-steps__list">
+                @foreach ($howItWorks as $index => $step)
+                    <li class="jf-step">
+                        <div class="jf-step__top">
+                            <span class="jf-step__number" aria-hidden="true">{{ $index + 1 }}</span>
+                            <span class="jf-step__rail" aria-hidden="true"></span>
+                            <span class="jf-step__icon" aria-hidden="true"><i class="fas {{ $step['icon'] }}"></i></span>
+                        </div>
+
+                        <h3>{{ $step['title'] }}</h3>
+                        <p>{{ $step['body'] }}</p>
+                        <span class="jf-step__note">{{ $step['note'] }}</span>
+                    </li>
+                @endforeach
+            </ol>
+        </div>
+    </section>
+
+    <div data-jobs-explorer>
         <section class="jf-trusted" id="companies" aria-labelledby="companies-title">
             <div class="jf-shell jf-trusted__inner">
                 <p id="companies-title">Opportunities from teams shaping Cambodia</p>
