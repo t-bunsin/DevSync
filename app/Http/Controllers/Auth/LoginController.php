@@ -51,21 +51,25 @@ class LoginController extends Controller
     // Check if user exists first
     $user = \App\Models\User::where('email', $credentials['email'])->first();
     if (!$user) {
-        return back()->withErrors([
-            'email' => 'No account found for this email.',
-        ]);
+        return back()
+            ->withInput($request->only('email', 'remember'))
+            ->withErrors([
+                'email' => 'No account found for this email.',
+            ]);
     }
 
-    // Attempt login
-    if (Auth::attempt($credentials)) {
+    // Attempt login, honouring the "remember me" checkbox
+    if (Auth::attempt($credentials, $request->boolean('remember'))) {
         $request->session()->regenerate();
         return redirect()->intended('/user');
     }
 
     // If user exists but password wrong
-    return back()->withErrors([
-        'password' => 'Incorrect password.',
-    ]);
+    return back()
+        ->withInput($request->only('email', 'remember'))
+        ->withErrors([
+            'password' => 'Incorrect password.',
+        ]);
 }
 
 

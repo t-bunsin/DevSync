@@ -1,509 +1,212 @@
 @extends('layouts.auth')
 
-@section('title', 'Create Account')
-@section('body-class', 'auth-body auth-body--register')
+@section('title', 'Create Account | KH-WORKS')
+@section('body-class', 'jf-auth-body')
 
 @push('styles')
-    <style>
-        .auth-body {
-            min-height: 100vh;
-            margin: 0;
-            font-family: "Metropolis", "Segoe UI", sans-serif;
-            color: #000;
-            background:
-                radial-gradient(circle at top left, rgba(11, 70, 111, 0.15), transparent 28%),
-                radial-gradient(circle at bottom right, rgba(11, 70, 111, 0.12), transparent 24%),
-                linear-gradient(135deg, #f4f8fb 0%, #eef4f8 45%, #f9fbfd 100%);
-        }
-
-        .auth-register {
-            position: relative;
-            min-height: 100vh;
-            overflow: hidden;
-        }
-
-        .auth-register__button {
-            border-radius: 0 !important;
-        }
-
-        .auth-register__shape {
-            position: absolute;
-            border-radius: 999px;
-            filter: blur(10px);
-            pointer-events: none;
-            opacity: 0.55;
-        }
-
-        .auth-register__shape--one {
-            top: 70px;
-            left: -80px;
-            width: 260px;
-            height: 260px;
-            background: linear-gradient(135deg, rgba(11, 70, 111, 0.18), rgba(11, 70, 111, 0.06));
-        }
-
-        .auth-register__shape--two {
-            right: -40px;
-            bottom: 90px;
-            width: 230px;
-            height: 230px;
-            background: linear-gradient(135deg, rgba(11, 70, 111, 0.14), rgba(11, 70, 111, 0.05));
-        }
-
-        .auth-register__container {
-            position: relative;
-            z-index: 1;
-            width: min(1220px, calc(100% - 32px));
-            margin: 0 auto;
-            min-height: 100vh;
-            display: grid;
-            grid-template-columns: minmax(320px, 0.98fr) minmax(380px, 0.9fr);
-            gap: 28px;
-            align-items: center;
-            padding: 36px 0;
-        }
-
-        .auth-register__panel {
-            position: relative;
-            overflow: hidden;
-            padding: 44px;
-            color: #fff;
-            background:
-                linear-gradient(165deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02)),
-                linear-gradient(135deg, #0b466f, #0b466f);
-            border-radius: 34px;
-            box-shadow: 0 28px 56px rgba(11, 70, 111, 0.24);
-        }
-
-        .auth-register__panel::before,
-        .auth-register__panel::after {
-            content: "";
-            position: absolute;
-            border-radius: 999px;
-            background: rgba(255, 255, 255, 0.08);
-        }
-
-        .auth-register__panel::before {
-            top: -80px;
-            right: -10px;
-            width: 220px;
-            height: 220px;
-        }
-
-        .auth-register__panel::after {
-            left: -40px;
-            bottom: -100px;
-            width: 260px;
-            height: 260px;
-        }
-
-        .auth-register__brand {
-            position: relative;
-            z-index: 1;
-            display: inline-flex;
-            align-items: center;
-            gap: 14px;
-            margin-bottom: 34px;
-            font-size: 2rem;
-            font-weight: 700;
-            letter-spacing: -0.04em;
-        }
-
-        .auth-register__brand span span {
-            color: #d4ecff;
-        }
-
-        .auth-register__brand-icon {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 62px;
-            height: 62px;
-            border-radius: 20px;
-            background: rgba(255, 255, 255, 0.15);
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16);
-            font-size: 1.45rem;
-        }
-
-        .auth-register__eyebrow {
-            position: relative;
-            z-index: 1;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 14px;
-            margin-bottom: 16px;
-            border-radius: 999px;
-            background: rgba(255, 255, 255, 0.14);
-            font-size: 0.82rem;
-            font-weight: 700;
-            letter-spacing: 0.04em;
-            text-transform: uppercase;
-        }
-
-        .auth-register__title {
-            position: relative;
-            z-index: 1;
-            max-width: 10ch;
-            margin: 0 0 14px;
-            font-size: clamp(2.4rem, 4vw, 3.8rem);
-            line-height: 0.98;
-            letter-spacing: -0.05em;
-        }
-
-        .auth-register__text {
-            position: relative;
-            z-index: 1;
-            max-width: 46ch;
-            margin: 0 0 28px;
-            color: rgba(255, 255, 255, 0.84);
-            line-height: 1.7;
-        }
-
-        .auth-register__list {
-            position: relative;
-            z-index: 1;
-            display: grid;
-            gap: 14px;
-            margin: 0;
-            padding: 0;
-            list-style: none;
-        }
-
-        .auth-register__list li {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            padding: 14px 16px;
-            background: rgba(255, 255, 255, 0.12);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            border-radius: 20px;
-            backdrop-filter: blur(8px);
-        }
-
-        .auth-register__list i {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            border-radius: 14px;
-            background: rgba(255, 255, 255, 0.16);
-            font-size: 0.95rem;
-        }
-
-        .auth-register__list strong {
-            display: block;
-            margin-bottom: 2px;
-            font-size: 0.96rem;
-        }
-
-        .auth-register__list span {
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 0.86rem;
-        }
-
-        .auth-register__card {
-            padding: 36px;
-            background: rgba(255, 255, 255, 0.92);
-            border: 1px solid rgba(223, 228, 248, 0.94);
-            border-radius: 34px;
-            box-shadow: 0 24px 54px rgba(82, 94, 172, 0.12);
-            backdrop-filter: blur(16px);
-        }
-
-        .auth-register__card-top {
-            margin-bottom: 24px;
-        }
-
-        .auth-register__card-top h2 {
-            margin: 0 0 8px;
-            font-size: 2rem;
-            letter-spacing: -0.04em;
-        }
-
-        .auth-register__card-top p {
-            margin: 0;
-            color: #5f6b88;
-            line-height: 1.7;
-        }
-
-        .auth-register__alert {
-            margin-bottom: 18px;
-            padding: 14px 16px;
-            color: #9f2c3f;
-            background: #fff3f5;
-            border: 1px solid #ffd8de;
-            border-radius: 18px;
-        }
-
-        .auth-register__alert ul {
-            margin: 0;
-            padding-left: 18px;
-        }
-
-        .auth-register__form {
-            display: grid;
-            gap: 18px;
-        }
-
-        .auth-register__grid {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 16px;
-        }
-
-        .auth-register__field {
-            display: grid;
-            gap: 8px;
-        }
-
-        .auth-register__field label {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            margin: 0;
-            color: #000;
-            font-size: 0.84rem;
-            font-weight: 700;
-            letter-spacing: 0.04em;
-            text-transform: uppercase;
-        }
-
-        .auth-register__field label i {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 14px;
-            height: 14px;
-            color: #0b466f;
-            font-size: 0.82rem;
-        }
-
-        .auth-register__input {
-            width: 100%;
-            min-height: 58px;
-            padding: 0 18px;
-            color: #000;
-            background: #fff;
-            border: 1px solid #dfe5f8;
-            border-radius: 18px;
-            box-shadow: 0 12px 24px rgba(94, 103, 177, 0.06);
-            outline: none;
-            transition: border-color 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        .auth-register__input:focus {
-            border-color: #0b466f;
-            box-shadow: 0 0 0 4px rgba(11, 70, 111, 0.08);
-        }
-
-        .auth-register__input::placeholder {
-            color: #98a1bb;
-        }
-
-        .auth-register__button {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            width: 100%;
-            min-height: 58px;
-            color: #fff;
-            background: #0b466f;
-            border: 0;
-            border-radius: 20px;
-            box-shadow: 0 20px 28px rgba(11, 70, 111, 0.22);
-            font-weight: 700;
-            cursor: pointer;
-        }
-
-        .auth-register__footer {
-            margin-top: 22px;
-            padding-top: 20px;
-            border-top: 1px solid #ebeffc;
-            text-align: center;
-            color: #6f7896;
-        }
-
-        .auth-register__footer a {
-            color: #0b466f;
-            font-weight: 700;
-            text-decoration: none;
-        }
-
-        .auth-register__footer a:hover {
-            text-decoration: underline;
-        }
-
-        @media (max-width: 992px) {
-            .auth-register__container {
-                grid-template-columns: 1fr;
-            }
-
-            .auth-register__panel,
-            .auth-register__card {
-                padding: 28px;
-            }
-
-            .auth-register__title {
-                max-width: none;
-                font-size: 2.5rem;
-            }
-        }
-
-        @media (max-width: 640px) {
-            .auth-register__grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @media (max-width: 576px) {
-            .auth-register__container {
-                width: min(100% - 20px, 1220px);
-                padding: 18px 0;
-            }
-
-            .auth-register__brand {
-                font-size: 1.6rem;
-            }
-
-            .auth-register__title,
-            .auth-register__card-top h2 {
-                font-size: 1.8rem;
-            }
-
-            .auth-register__panel,
-            .auth-register__card {
-                padding: 22px;
-                border-radius: 26px;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="{{ asset('css/auth.css') }}?v={{ filemtime(public_path('css/auth.css')) }}">
 @endpush
 
 @section('main-content')
-    <main class="auth-register">
-        <div class="auth-register__shape auth-register__shape--one"></div>
-        <div class="auth-register__shape auth-register__shape--two"></div>
+    @php
+        $accountType = old('account_type', 'employee');
 
-        <div class="auth-register__container">
-            <section class="auth-register__panel">
-                <div class="auth-register__brand">
-                    <span class="auth-register__brand-icon">
-                        <i class="fas fa-briefcase"></i>
-                    </span>
+        $panels = [
+            'employee' => [
+                'eyebrow' => 'Job seeker account',
+                'title' => 'Create your account and start applying.',
+                'text' => 'Save roles, track every application, and get matched with teams hiring across Cambodia.',
+                'points' => [
+                    ['icon' => 'fa-id-badge', 'title' => 'Build your profile', 'body' => 'A strong candidate presence in minutes.'],
+                    ['icon' => 'fa-bookmark', 'title' => 'Save jobs you love', 'body' => 'Keep your favourite roles in one place.'],
+                    ['icon' => 'fa-paper-plane', 'title' => 'Apply with confidence', 'body' => 'Track next steps from your dashboard.'],
+                ],
+            ],
+            'employer' => [
+                'eyebrow' => 'Employer account',
+                'title' => 'Post roles and meet Cambodia’s talent.',
+                'text' => 'Publish openings, manage applicants, and keep your hiring pipeline moving from one workspace.',
+                'points' => [
+                    ['icon' => 'fa-bullhorn', 'title' => 'Publish openings', 'body' => 'Get roles in front of active candidates.'],
+                    ['icon' => 'fa-users', 'title' => 'Manage applicants', 'body' => 'Review, shortlist, and respond in one place.'],
+                    ['icon' => 'fa-chart-line', 'title' => 'Track your pipeline', 'body' => 'See what is working across every role.'],
+                ],
+            ],
+        ];
+    @endphp
+
+    <main class="jf-auth">
+        <div class="jf-auth__glow jf-auth__glow--one" aria-hidden="true"></div>
+        <div class="jf-auth__glow jf-auth__glow--two" aria-hidden="true"></div>
+
+        <div class="jf-auth__container">
+            <section class="jf-auth__panel" data-auth-panel>
+                <a class="jf-auth__brand" href="{{ url('/') }}">
+                    <span class="jf-auth__brand-mark"><i class="fas fa-briefcase"></i></span>
                     <span>KH-<span>WORKS</span></span>
-                </div>
+                </a>
 
-                <span class="auth-register__eyebrow">
-                    <i class="fas fa-user-plus"></i>
-                    New Account
-                </span>
+                @foreach ($panels as $type => $panel)
+                    <div class="jf-auth__panel-copy{{ $accountType === $type ? ' is-active' : '' }}" data-panel-for="{{ $type }}">
+                        <span class="jf-auth__eyebrow">
+                            <i class="fas {{ $type === 'employer' ? 'fa-building' : 'fa-user-plus' }}" aria-hidden="true"></i>
+                            {{ $panel['eyebrow'] }}
+                        </span>
 
-                <h1 class="auth-register__title">Create your account and start applying</h1>
-                <p class="auth-register__text">Set up your KH-WORKS profile to save jobs, track applications, and discover opportunities tailored to your career goals.</p>
+                        <h1>{{ $panel['title'] }}</h1>
+                        <p>{{ $panel['text'] }}</p>
 
-                <ul class="auth-register__list">
-                    <li>
-                        <i class="fas fa-id-badge"></i>
-                        <div>
-                            <strong>Build your profile</strong>
-                            <span>Create a strong candidate presence in minutes.</span>
-                        </div>
-                    </li>
-                    <li>
-                        <i class="fas fa-bookmark"></i>
-                        <div>
-                            <strong>Save jobs you love</strong>
-                            <span>Keep your favorite roles in one organized place.</span>
-                        </div>
-                    </li>
-                    <li>
-                        <i class="fas fa-paper-plane"></i>
-                        <div>
-                            <strong>Apply with confidence</strong>
-                            <span>Track your next steps from a polished dashboard.</span>
-                        </div>
-                    </li>
-                </ul>
-            </section>
-
-            <section class="auth-register__card">
-                <div class="auth-register__card-top">
-                    <h2>Create Account</h2>
-                    <p>Enter your details below to create your KH-WORKS account.</p>
-                </div>
-
-                @if ($errors->any())
-                    <div class="auth-register__alert" role="alert">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
+                        <ul class="jf-auth__points">
+                            @foreach ($panel['points'] as $point)
+                                <li>
+                                    <span aria-hidden="true"><i class="fas {{ $point['icon'] }}"></i></span>
+                                    <div>
+                                        <strong>{{ $point['title'] }}</strong>
+                                        <span>{{ $point['body'] }}</span>
+                                    </div>
+                                </li>
                             @endforeach
                         </ul>
                     </div>
+                @endforeach
+
+                <p class="jf-auth__panel-foot">
+                    <i class="fas fa-shield-halved" aria-hidden="true"></i>
+                    Free to join. Your details are never shared without your consent.
+                </p>
+            </section>
+
+            <section class="jf-auth__card">
+                <header class="jf-auth__card-head">
+                    <h2>Create account</h2>
+                    <p>Choose how you want to use KH-WORKS, then fill in your details.</p>
+                </header>
+
+                @if ($errors->any())
+                    <div class="jf-auth__alert" role="alert">
+                        <i class="fas fa-circle-exclamation" aria-hidden="true"></i>
+                        <div>
+                            <strong>We could not create your account.</strong>
+                            <span>{{ $errors->first() }}</span>
+                        </div>
+                    </div>
                 @endif
 
-                <form method="POST" action="{{ route('register') }}" class="auth-register__form">
+                <form method="POST" action="{{ route('register') }}" class="jf-auth__form" data-auth-form novalidate>
                     @csrf
 
-                    <div class="auth-register__grid">
-                        <div class="auth-register__field">
-                            <label for="name">
-                                <i class="fas fa-user"></i>
-                                <span>First Name</span>
-                            </label>
-                            <input id="name" type="text" class="auth-register__input" name="name" value="{{ old('name') }}" placeholder="Enter your first name" required autofocus>
-                        </div>
+                    <fieldset class="jf-auth__roles">
+                        <legend>I want to</legend>
 
-                        <div class="auth-register__field">
-                            <label for="last_name">
-                                <i class="fas fa-user-tag"></i>
-                                <span>Last Name</span>
-                            </label>
-                            <input id="last_name" type="text" class="auth-register__input" name="last_name" value="{{ old('last_name') }}" placeholder="Enter your last name" required>
-                        </div>
-                    </div>
-
-                    <div class="auth-register__field">
-                        <label for="email">
-                            <i class="fas fa-envelope"></i>
-                            <span>Email</span>
+                        <div class="jf-auth__roles-grid">
+                        <label class="jf-role">
+                            <input type="radio" name="account_type" value="employee" @checked($accountType === 'employee')>
+                            <span class="jf-role__box">
+                                <span class="jf-role__icon"><i class="fas fa-user-tie" aria-hidden="true"></i></span>
+                                <span class="jf-role__text">
+                                    <strong>Find a job</strong>
+                                    <small>Apply and track applications</small>
+                                </span>
+                                <i class="fas fa-circle-check jf-role__tick" aria-hidden="true"></i>
+                            </span>
                         </label>
-                        <input id="email" type="email" class="auth-register__input" name="email" value="{{ old('email') }}" placeholder="Enter your email address" required>
-                    </div>
 
-                    <div class="auth-register__grid">
-                        <div class="auth-register__field">
-                            <label for="password">
-                                <i class="fas fa-lock"></i>
-                                <span>Password</span>
-                            </label>
-                            <input id="password" type="password" class="auth-register__input" name="password" placeholder="Enter your password" required>
+                        <label class="jf-role">
+                            <input type="radio" name="account_type" value="employer" @checked($accountType === 'employer')>
+                            <span class="jf-role__box">
+                                <span class="jf-role__icon"><i class="fas fa-building" aria-hidden="true"></i></span>
+                                <span class="jf-role__text">
+                                    <strong>Hire talent</strong>
+                                    <small>Post roles and review candidates</small>
+                                </span>
+                                <i class="fas fa-circle-check jf-role__tick" aria-hidden="true"></i>
+                            </span>
+                        </label>
+                        </div>
+                    </fieldset>
+
+                    <div class="jf-auth__grid">
+                        <div class="jf-auth__field">
+                            <label for="first_name">First name</label>
+                            <input id="first_name" name="first_name" type="text" value="{{ old('first_name') }}"
+                                placeholder="Sokha" autocomplete="given-name" required autofocus
+                                @error('first_name') aria-invalid="true" @enderror>
+                            @error('first_name')<small class="jf-auth__error">{{ $message }}</small>@enderror
                         </div>
 
-                        <div class="auth-register__field">
-                            <label for="password_confirmation">
-                                <i class="fas fa-check-double"></i>
-                                <span>Confirm Password</span>
-                            </label>
-                            <input id="password_confirmation" type="password" class="auth-register__input" name="password_confirmation" placeholder="Confirm your password" required>
+                        <div class="jf-auth__field">
+                            <label for="last_name">Last name</label>
+                            <input id="last_name" name="last_name" type="text" value="{{ old('last_name') }}"
+                                placeholder="Chan" autocomplete="family-name" required
+                                @error('last_name') aria-invalid="true" @enderror>
+                            @error('last_name')<small class="jf-auth__error">{{ $message }}</small>@enderror
                         </div>
                     </div>
 
-                    <button type="submit" class="auth-register__button">
-                        <i class="fas fa-user-plus"></i>
-                        <span>Create Account</span>
+                    <div class="jf-auth__field jf-auth__field--company" data-company-field>
+                        <label for="company_name">Company name</label>
+                        <input id="company_name" name="company_name" type="text" value="{{ old('company_name') }}"
+                            placeholder="e.g. ABA Bank" autocomplete="organization"
+                            @error('company_name') aria-invalid="true" @enderror>
+                        @error('company_name')
+                            <small class="jf-auth__error">{{ $message }}</small>
+                        @else
+                            <small class="jf-auth__hint">Shown on the roles you post.</small>
+                        @enderror
+                    </div>
+
+                    <div class="jf-auth__field">
+                        <label for="email">Email</label>
+                        <input id="email" name="email" type="email" value="{{ old('email') }}"
+                            placeholder="you@example.com" autocomplete="email" required
+                            @error('email') aria-invalid="true" @enderror>
+                        @error('email')<small class="jf-auth__error">{{ $message }}</small>@enderror
+                    </div>
+
+                    <div class="jf-auth__grid">
+                        <div class="jf-auth__field">
+                            <label for="password">Password</label>
+                            <span class="jf-auth__control">
+                                <input id="password" name="password" type="password" placeholder="At least 8 characters"
+                                    autocomplete="new-password" required @error('password') aria-invalid="true" @enderror>
+                                <button type="button" data-toggle-password="password" aria-label="Show password">
+                                    <i class="fas fa-eye" aria-hidden="true"></i>
+                                </button>
+                            </span>
+                            @error('password')
+                                <small class="jf-auth__error">{{ $message }}</small>
+                            @else
+                                <small class="jf-auth__hint">Minimum 8 characters.</small>
+                            @enderror
+                        </div>
+
+                        <div class="jf-auth__field">
+                            <label for="password_confirmation">Confirm password</label>
+                            <span class="jf-auth__control">
+                                <input id="password_confirmation" name="password_confirmation" type="password"
+                                    placeholder="Repeat your password" autocomplete="new-password" required>
+                                <button type="button" data-toggle-password="password_confirmation" aria-label="Show password">
+                                    <i class="fas fa-eye" aria-hidden="true"></i>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+
+                    <button class="jf-auth__submit" type="submit">
+                        <i class="fas fa-user-plus" aria-hidden="true"></i>
+                        <span data-submit-label>Create account</span>
                     </button>
                 </form>
 
-                <div class="auth-register__footer">
-                    Already have an account?
-                    <a href="{{ route('login') }}">Sign in</a>
-                </div>
+                <footer class="jf-auth__card-foot">
+                    <span>Already have an account? <a href="{{ route('login') }}">Sign in</a></span>
+                    <a class="jf-auth__back" href="{{ url('/') }}"><i class="fas fa-arrow-left" aria-hidden="true"></i> Back to jobs</a>
+                </footer>
             </section>
         </div>
     </main>
 @endsection
+
+@push('scripts')
+    <script src="{{ asset('js/auth.js') }}?v={{ filemtime(public_path('js/auth.js')) }}"></script>
+@endpush

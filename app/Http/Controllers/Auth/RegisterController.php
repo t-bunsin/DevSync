@@ -50,10 +50,14 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
+            'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'account_type' => ['required', 'in:employee,employer'],
+            'company_name' => ['nullable', 'required_if:account_type,employer', 'string', 'max:255'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ], [
+            'company_name.required_if' => 'Please tell us which company you are hiring for.',
         ]);
     }
 
@@ -65,10 +69,14 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        $isEmployer = ($data['account_type'] ?? 'employee') === 'employer';
+
         return User::create([
-            'name' => $data['name'],
+            'first_name' => $data['first_name'],
             'last_name' => $data['last_name'],
             'email' => $data['email'],
+            'account_type' => $isEmployer ? 'employer' : 'employee',
+            'company_name' => $isEmployer ? $data['company_name'] : null,
             'password' => Hash::make($data['password']),
         ]);
     }

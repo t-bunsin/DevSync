@@ -1,0 +1,681 @@
+/* Auth pages (register / sign in) — standalone, mirrors the frontend design system */
+
+:root {
+  --jf-auth-ink: #102a43;
+  --jf-auth-ink-soft: #486581;
+  --jf-auth-navy: #0b2638;
+  --jf-auth-ocean: #0f5f73;
+  --jf-auth-teal: #1ca6a0;
+  --jf-auth-teal-dark: #127d7a;
+  --jf-auth-gold: #f3bd65;
+  --jf-auth-paper: #ffffff;
+  --jf-auth-line: #dce5e7;
+  --jf-auth-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+body.jf-auth-body {
+  min-height: 100vh;
+  margin: 0;
+  color: var(--jf-auth-ink);
+  font-family: "Metropolis", "Segoe UI", sans-serif;
+  background:
+    radial-gradient(circle at 8% 6%, rgba(28, 166, 160, 0.12), transparent 34%),
+    radial-gradient(circle at 92% 90%, rgba(15, 95, 115, 0.14), transparent 32%),
+    linear-gradient(140deg, #f3f7f6 0%, #eef4f4 48%, #f8fbfa 100%);
+}
+
+.jf-auth {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.jf-auth__glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(6px);
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.jf-auth__glow--one {
+  top: -140px;
+  left: -110px;
+  width: 340px;
+  height: 340px;
+  background: radial-gradient(circle, rgba(28, 166, 160, 0.28), transparent 68%);
+}
+
+.jf-auth__glow--two {
+  right: -120px;
+  bottom: -160px;
+  width: 380px;
+  height: 380px;
+  background: radial-gradient(circle, rgba(243, 189, 101, 0.22), transparent 68%);
+}
+
+.jf-auth__container {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(320px, 0.92fr) minmax(420px, 1.02fr);
+  align-items: stretch;
+  gap: 24px;
+  width: min(1180px, calc(100% - 40px));
+  min-height: 100vh;
+  margin-inline: auto;
+  padding: 40px 0;
+}
+
+/* Left panel */
+.jf-auth__panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 38px 36px 32px;
+  color: #fff;
+  background:
+    linear-gradient(150deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.01)),
+    linear-gradient(140deg, #082232, #0d5261);
+  border-radius: 32px;
+  box-shadow: 0 34px 70px rgba(8, 34, 50, 0.28);
+}
+
+.jf-auth__panel::before,
+.jf-auth__panel::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.jf-auth__panel::before {
+  top: -90px;
+  right: -70px;
+  width: 260px;
+  height: 260px;
+  background: radial-gradient(circle, rgba(28, 166, 160, 0.34), transparent 70%);
+}
+
+.jf-auth__panel::after {
+  bottom: -120px;
+  left: -80px;
+  width: 280px;
+  height: 280px;
+  background: radial-gradient(circle, rgba(243, 189, 101, 0.16), transparent 70%);
+}
+
+.jf-auth__brand {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  color: #fff;
+  font-size: 1.42rem;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  text-decoration: none;
+}
+
+.jf-auth__brand span span {
+  color: #8ad9d3;
+}
+
+.jf-auth__brand-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 15px;
+  font-size: 1rem;
+}
+
+.jf-auth__panel-copy {
+  position: relative;
+  z-index: 1;
+  display: none;
+  margin-top: 34px;
+}
+
+.jf-auth__panel-copy.is-active {
+  display: block;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .jf-auth__panel-copy.is-active {
+    animation: jf-auth-in 420ms var(--jf-auth-ease) both;
+  }
+}
+
+@keyframes jf-auth-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.jf-auth__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  color: #9fe3de;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.jf-auth__panel-copy h1 {
+  /* style.css sets a dark colour on every heading, and inheritance loses to it. */
+  margin: 18px 0 0;
+  color: #fff;
+  font-size: clamp(1.9rem, 3.2vw, 2.6rem);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.05em;
+}
+
+.jf-auth__panel-copy > p {
+  max-width: 420px;
+  margin: 14px 0 0;
+  color: rgba(238, 248, 248, 0.76);
+  font-size: 0.92rem;
+  line-height: 1.6;
+}
+
+.jf-auth__points {
+  display: grid;
+  gap: 10px;
+  margin: 26px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.jf-auth__points li {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 13px 15px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 18px;
+}
+
+.jf-auth__points li > span:first-child {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  color: #8ad9d3;
+  background: rgba(28, 166, 160, 0.18);
+  border-radius: 12px;
+  font-size: 0.82rem;
+}
+
+.jf-auth__points div {
+  display: grid;
+  gap: 2px;
+}
+
+.jf-auth__points strong {
+  font-size: 0.92rem;
+}
+
+.jf-auth__points div span {
+  color: rgba(238, 248, 248, 0.68);
+  font-size: 0.78rem;
+}
+
+.jf-auth__panel-foot {
+  position: relative;
+  z-index: 1;
+  margin: auto 0 0;
+  padding-top: 26px;
+  color: rgba(238, 248, 248, 0.6);
+  font-size: 0.76rem;
+}
+
+.jf-auth__panel-foot i {
+  margin-right: 7px;
+  color: #8ad9d3;
+}
+
+/* Right card */
+.jf-auth__card {
+  align-self: center;
+  padding: 34px 34px 28px;
+  background: var(--jf-auth-paper);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 32px;
+  box-shadow: 0 30px 68px rgba(11, 38, 56, 0.14);
+}
+
+.jf-auth__card-head h2 {
+  margin: 0;
+  color: var(--jf-auth-ink);
+  font-size: 1.8rem;
+  font-weight: 700;
+  letter-spacing: -0.045em;
+}
+
+.jf-auth__card-head p {
+  margin: 7px 0 0;
+  color: var(--jf-auth-ink-soft);
+  font-size: 0.88rem;
+}
+
+.jf-auth__alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  margin-top: 20px;
+  padding: 13px 15px;
+  color: #9a3131;
+  background: #fdecec;
+  border: 1px solid rgba(154, 49, 49, 0.22);
+  border-radius: 16px;
+  font-size: 0.83rem;
+}
+
+.jf-auth__alert div {
+  display: grid;
+  gap: 2px;
+}
+
+.jf-auth__alert--success {
+  color: #0f6b4f;
+  background: #e6f5ef;
+  border-color: rgba(19, 138, 98, 0.24);
+}
+
+/* Remember me / forgot password row */
+.jf-auth__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: -2px;
+}
+
+.jf-auth__remember {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0;
+  color: var(--jf-auth-ink);
+  font-size: 0.83rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.jf-auth__remember input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.jf-auth__checkbox {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  color: transparent;
+  background: #f7faf9;
+  border: 1.5px solid var(--jf-auth-line);
+  border-radius: 7px;
+  font-size: 0.6rem;
+  transition: background 160ms ease, border-color 160ms ease, color 160ms ease;
+}
+
+.jf-auth__remember input:checked + .jf-auth__checkbox {
+  color: #fff;
+  background: var(--jf-auth-teal);
+  border-color: var(--jf-auth-teal);
+}
+
+.jf-auth__remember input:focus-visible + .jf-auth__checkbox {
+  outline: 2px solid var(--jf-auth-ocean);
+  outline-offset: 2px;
+}
+
+.jf-auth__row-link {
+  color: var(--jf-auth-ocean);
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.jf-auth__row-link:hover {
+  color: var(--jf-auth-teal-dark);
+  text-decoration: underline;
+}
+
+.jf-auth__form {
+  display: grid;
+  gap: 15px;
+  margin-top: 22px;
+}
+
+/* Account type picker */
+.jf-auth__roles {
+  display: block;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.jf-auth__roles legend {
+  float: none;
+  width: auto;
+  margin-bottom: 9px;
+  padding: 0;
+  color: var(--jf-auth-ink);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.jf-auth__roles-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.jf-role {
+  display: block;
+  cursor: pointer;
+}
+
+.jf-role input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.jf-role__box {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 100%;
+  padding: 14px 14px;
+  background: #f7faf9;
+  border: 1.5px solid var(--jf-auth-line);
+  border-radius: 18px;
+  transition: border-color 180ms ease, background 180ms ease, box-shadow 180ms ease, transform 180ms var(--jf-auth-ease);
+}
+
+.jf-role:hover .jf-role__box {
+  border-color: rgba(28, 166, 160, 0.4);
+  transform: translateY(-1px);
+}
+
+.jf-role input:checked + .jf-role__box {
+  background: rgba(28, 166, 160, 0.08);
+  border-color: var(--jf-auth-teal);
+  box-shadow: 0 0 0 4px rgba(28, 166, 160, 0.12);
+}
+
+.jf-role input:focus-visible + .jf-role__box {
+  outline: 2px solid var(--jf-auth-ocean);
+  outline-offset: 2px;
+}
+
+.jf-role__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  color: var(--jf-auth-teal-dark);
+  background: rgba(28, 166, 160, 0.12);
+  border-radius: 13px;
+  font-size: 0.88rem;
+}
+
+.jf-role input:checked + .jf-role__box .jf-role__icon {
+  color: #fff;
+  background: var(--jf-auth-teal);
+}
+
+.jf-role__text {
+  display: grid;
+  gap: 2px;
+}
+
+.jf-role__text strong {
+  font-size: 0.92rem;
+}
+
+.jf-role__text small {
+  color: var(--jf-auth-ink-soft);
+  font-size: 0.72rem;
+  line-height: 1.35;
+}
+
+.jf-role__tick {
+  position: absolute;
+  top: 11px;
+  right: 12px;
+  color: var(--jf-auth-teal);
+  font-size: 0.8rem;
+  opacity: 0;
+  transform: scale(0.6);
+  transition: opacity 180ms ease, transform 180ms var(--jf-auth-ease);
+}
+
+.jf-role input:checked + .jf-role__box .jf-role__tick {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Fields */
+.jf-auth__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.jf-auth__field {
+  display: grid;
+  gap: 6px;
+  align-content: start;
+}
+
+.jf-auth__field label {
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.jf-auth__field input {
+  width: 100%;
+  padding: 13px 15px;
+  color: var(--jf-auth-ink);
+  background: #f7faf9;
+  border: 1px solid var(--jf-auth-line);
+  border-radius: 14px;
+  font: inherit;
+  font-size: 0.88rem;
+  transition: border-color 180ms ease, background 180ms ease, box-shadow 180ms ease;
+}
+
+.jf-auth__field input::placeholder {
+  color: #93a8ae;
+}
+
+.jf-auth__field input:focus {
+  outline: none;
+  background: var(--jf-auth-paper);
+  border-color: rgba(28, 166, 160, 0.55);
+  box-shadow: 0 0 0 4px rgba(28, 166, 160, 0.13);
+}
+
+.jf-auth__field input[aria-invalid="true"] {
+  background: #fdf6f6;
+  border-color: rgba(154, 49, 49, 0.5);
+}
+
+.jf-auth__control {
+  position: relative;
+  display: block;
+}
+
+.jf-auth__control input {
+  padding-right: 46px;
+}
+
+.jf-auth__control button {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  color: var(--jf-auth-ink-soft);
+  background: transparent;
+  border: 0;
+  border-radius: 10px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transform: translateY(-50%);
+}
+
+.jf-auth__control button:hover {
+  color: var(--jf-auth-teal-dark);
+  background: rgba(28, 166, 160, 0.1);
+}
+
+.jf-auth__hint {
+  color: var(--jf-auth-ink-soft);
+  font-size: 0.72rem;
+}
+
+.jf-auth__error {
+  color: #9a3131;
+  font-size: 0.73rem;
+  font-weight: 600;
+}
+
+/* The company field only belongs to employer sign-ups. CSS keeps it in sync
+   even before auth.js runs (or if it fails to load). */
+.jf-auth__field--company {
+  display: none;
+}
+
+.jf-auth__form:has(input[value="employer"]:checked) .jf-auth__field--company,
+.jf-auth__form.is-employer .jf-auth__field--company {
+  display: grid;
+}
+
+.jf-auth__submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 54px;
+  margin-top: 4px;
+  color: #fff;
+  background: linear-gradient(135deg, var(--jf-auth-ocean), var(--jf-auth-teal-dark));
+  border: 0;
+  border-radius: 999px;
+  box-shadow: 0 18px 34px rgba(15, 95, 115, 0.22);
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 180ms var(--jf-auth-ease), box-shadow 180ms ease, filter 180ms ease;
+}
+
+.jf-auth__submit:hover {
+  filter: brightness(1.06);
+  transform: translateY(-1px);
+  box-shadow: 0 22px 40px rgba(15, 95, 115, 0.28);
+}
+
+.jf-auth__submit:active {
+  transform: translateY(0) scale(0.99);
+}
+
+.jf-auth__card-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid #eef2f3;
+  color: var(--jf-auth-ink-soft);
+  font-size: 0.84rem;
+}
+
+.jf-auth__card-foot a {
+  color: var(--jf-auth-ocean);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.jf-auth__card-foot a:hover {
+  color: var(--jf-auth-teal-dark);
+  text-decoration: underline;
+}
+
+.jf-auth__back i {
+  margin-right: 5px;
+  font-size: 0.72rem;
+}
+
+/* Responsive */
+@media (max-width: 1000px) {
+  .jf-auth__container {
+    grid-template-columns: 1fr;
+    min-height: 0;
+    padding: 26px 0 34px;
+  }
+
+  .jf-auth__panel {
+    padding: 30px 26px 26px;
+  }
+
+  .jf-auth__panel-foot {
+    margin-top: 24px;
+  }
+}
+
+@media (max-width: 620px) {
+  .jf-auth__container {
+    width: min(100% - 24px, 1180px);
+  }
+
+  .jf-auth__card {
+    padding: 26px 20px 22px;
+  }
+
+  .jf-auth__roles,
+  .jf-auth__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .jf-auth__card-foot {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+  }
+}
