@@ -10,13 +10,17 @@
 @section('main-content')
     @php
         $errorTargets = [
-            'first_name' => 'inputFirstName',
-            'last_name' => 'inputLastName',
+            'display_name' => 'inputDisplayName',
             'email' => 'inputEmailAddress',
-            'phone_number' => 'inputPhone',
+            'phone' => 'inputPhone',
             'role' => 'inputRole',
+            'status' => 'inputStatus',
+            'preferred_locale' => 'inputLocale',
+            'company_name' => 'inputCompanyName',
             'password' => 'inputPassword',
         ];
+
+        $currentRole = old('role', 'employee');
     @endphp
 
     <div class="kh-user-create">
@@ -93,48 +97,29 @@
                                 </span>
                             </div>
 
+                            <div class="kh-user-create__field kh-user-create__field--wide">
+                                <label class="kh-user-create__label" for="inputDisplayName">
+                                    Display name <span class="kh-required" aria-hidden="true">*</span>
+                                </label>
+                                <div class="kh-user-create__input-wrap">
+                                    <i data-feather="user" aria-hidden="true"></i>
+                                    <input @class(['kh-user-create__control', 'is-invalid' => $errors->has('display_name')])
+                                        id="inputDisplayName" name="display_name" type="text"
+                                        value="{{ old('display_name') }}" placeholder="e.g. Dara Sok" autocomplete="name"
+                                        maxlength="160"
+                                        aria-invalid="{{ $errors->has('display_name') ? 'true' : 'false' }}"
+                                        aria-describedby="inputDisplayNameHint{{ $errors->has('display_name') ? ' inputDisplayNameError' : '' }}"
+                                        autofocus required>
+                                </div>
+                                <p class="kh-user-create__field-hint" id="inputDisplayNameHint">The full name shown across the platform.</p>
+                                @error('display_name')
+                                    <p class="kh-user-create__field-error" id="inputDisplayNameError">
+                                        <i data-feather="alert-circle" aria-hidden="true"></i>{{ $message }}
+                                    </p>
+                                @enderror
+                            </div>
+
                             <div class="kh-user-create__grid">
-                                <div class="kh-user-create__field">
-                                    <label class="kh-user-create__label" for="inputFirstName">
-                                        First name <span class="kh-required" aria-hidden="true">*</span>
-                                    </label>
-                                    <div class="kh-user-create__input-wrap">
-                                        <i data-feather="user" aria-hidden="true"></i>
-                                        <input @class(['kh-user-create__control', 'is-invalid' => $errors->has('first_name')])
-                                            id="inputFirstName" name="first_name" type="text"
-                                            value="{{ old('first_name') }}" placeholder="e.g. Dara" autocomplete="given-name"
-                                            aria-invalid="{{ $errors->has('first_name') ? 'true' : 'false' }}"
-                                            @if ($errors->has('first_name')) aria-describedby="inputFirstNameError" @endif
-                                            autofocus required>
-                                    </div>
-                                    @error('first_name')
-                                        <p class="kh-user-create__field-error" id="inputFirstNameError">
-                                            <i data-feather="alert-circle" aria-hidden="true"></i>{{ $message }}
-                                        </p>
-                                    @enderror
-                                </div>
-
-                                <div class="kh-user-create__field">
-                                    <label class="kh-user-create__label" for="inputLastName">
-                                        Last name <span class="kh-required" aria-hidden="true">*</span>
-                                    </label>
-                                    <div class="kh-user-create__input-wrap">
-                                        <i data-feather="user-check" aria-hidden="true"></i>
-                                        <input @class(['kh-user-create__control', 'is-invalid' => $errors->has('last_name')])
-                                            id="inputLastName" name="last_name" type="text"
-                                            value="{{ old('last_name') }}" placeholder="e.g. Sok"
-                                            autocomplete="family-name"
-                                            aria-invalid="{{ $errors->has('last_name') ? 'true' : 'false' }}"
-                                            @if ($errors->has('last_name')) aria-describedby="inputLastNameError" @endif
-                                            required>
-                                    </div>
-                                    @error('last_name')
-                                        <p class="kh-user-create__field-error" id="inputLastNameError">
-                                            <i data-feather="alert-circle" aria-hidden="true"></i>{{ $message }}
-                                        </p>
-                                    @enderror
-                                </div>
-
                                 <div class="kh-user-create__field">
                                     <label class="kh-user-create__label" for="inputEmailAddress">
                                         Email address <span class="kh-required" aria-hidden="true">*</span>
@@ -157,21 +142,58 @@
                                 </div>
 
                                 <div class="kh-user-create__field">
-                                    <label class="kh-user-create__label" for="inputPhone">
-                                        Phone number <span class="kh-required" aria-hidden="true">*</span>
-                                    </label>
+                                    <label class="kh-user-create__label" for="inputPhone">Phone number</label>
                                     <div class="kh-user-create__input-wrap">
                                         <i data-feather="phone" aria-hidden="true"></i>
-                                        <input @class(['kh-user-create__control', 'is-invalid' => $errors->has('phone_number')])
-                                            id="inputPhone" name="phone_number" type="tel"
-                                            value="{{ old('phone_number') }}" placeholder="e.g. +855 12 345 678"
-                                            autocomplete="tel" inputmode="tel"
-                                            aria-invalid="{{ $errors->has('phone_number') ? 'true' : 'false' }}"
-                                            @if ($errors->has('phone_number')) aria-describedby="inputPhoneError" @endif
-                                            required>
+                                        <input @class(['kh-user-create__control', 'is-invalid' => $errors->has('phone')])
+                                            id="inputPhone" name="phone" type="tel"
+                                            value="{{ old('phone') }}" placeholder="e.g. +855 12 345 678"
+                                            autocomplete="tel" inputmode="tel" maxlength="30"
+                                            aria-invalid="{{ $errors->has('phone') ? 'true' : 'false' }}"
+                                            aria-describedby="inputPhoneHint{{ $errors->has('phone') ? ' inputPhoneError' : '' }}">
                                     </div>
-                                    @error('phone_number')
+                                    <p class="kh-user-create__field-hint" id="inputPhoneHint">Optional, but must be unique if given.</p>
+                                    @error('phone')
                                         <p class="kh-user-create__field-error" id="inputPhoneError">
+                                            <i data-feather="alert-circle" aria-hidden="true"></i>{{ $message }}
+                                        </p>
+                                    @enderror
+                                </div>
+
+                                <div class="kh-user-create__field">
+                                    <label class="kh-user-create__label" for="inputStatus">
+                                        Account status <span class="kh-required" aria-hidden="true">*</span>
+                                    </label>
+                                    <div class="kh-user-create__input-wrap kh-user-create__input-wrap--select">
+                                        <i data-feather="activity" aria-hidden="true"></i>
+                                        <select @class(['kh-user-create__control', 'is-invalid' => $errors->has('status')])
+                                            id="inputStatus" name="status" required>
+                                            @foreach (['active' => 'Active — can sign in', 'pending' => 'Pending — awaiting verification', 'suspended' => 'Suspended — temporarily blocked', 'banned' => 'Banned — permanently blocked'] as $value => $label)
+                                                <option value="{{ $value }}" {{ old('status', 'active') === $value ? 'selected' : '' }}>{{ $label }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    @error('status')
+                                        <p class="kh-user-create__field-error" id="inputStatusError">
+                                            <i data-feather="alert-circle" aria-hidden="true"></i>{{ $message }}
+                                        </p>
+                                    @enderror
+                                </div>
+
+                                <div class="kh-user-create__field">
+                                    <label class="kh-user-create__label" for="inputLocale">
+                                        Preferred language <span class="kh-required" aria-hidden="true">*</span>
+                                    </label>
+                                    <div class="kh-user-create__input-wrap kh-user-create__input-wrap--select">
+                                        <i data-feather="globe" aria-hidden="true"></i>
+                                        <select @class(['kh-user-create__control', 'is-invalid' => $errors->has('preferred_locale')])
+                                            id="inputLocale" name="preferred_locale" required>
+                                            <option value="en" {{ old('preferred_locale', 'en') === 'en' ? 'selected' : '' }}>English</option>
+                                            <option value="km" {{ old('preferred_locale') === 'km' ? 'selected' : '' }}>ភាសាខ្មែរ (Khmer)</option>
+                                        </select>
+                                    </div>
+                                    @error('preferred_locale')
+                                        <p class="kh-user-create__field-error" id="inputLocaleError">
                                             <i data-feather="alert-circle" aria-hidden="true"></i>{{ $message }}
                                         </p>
                                     @enderror
@@ -196,18 +218,40 @@
                                 <div class="kh-user-create__input-wrap kh-user-create__input-wrap--select">
                                     <i data-feather="briefcase" aria-hidden="true"></i>
                                     <select @class(['kh-user-create__control', 'is-invalid' => $errors->has('role')])
-                                        id="inputRole" name="role"
+                                        id="inputRole" name="role" data-role-select
                                         aria-invalid="{{ $errors->has('role') ? 'true' : 'false' }}"
                                         aria-describedby="inputRoleHint{{ $errors->has('role') ? ' inputRoleError' : '' }}" required>
-                                        <option value="" disabled {{ old('role') ? '' : 'selected' }}>Choose an access level</option>
-                                        <option value="Administrator" {{ old('role') === 'Administrator' ? 'selected' : '' }}>Administrator — full platform access</option>
-                                        <option value="Manager" {{ old('role') === 'Manager' ? 'selected' : '' }}>Manager — manage operational content</option>
-                                        <option value="User" {{ old('role') === 'User' ? 'selected' : '' }}>User — standard account access</option>
+                                        @foreach ($roles as $role)
+                                            <option value="{{ $role->code }}" {{ $currentRole === $role->code ? 'selected' : '' }}>
+                                                {{ $role->name_en }} — {{ $role->description }}
+                                            </option>
+                                        @endforeach
                                     </select>
                                 </div>
                                 <p class="kh-user-create__field-hint" id="inputRoleHint">Choose the lowest access level this person needs.</p>
                                 @error('role')
                                     <p class="kh-user-create__field-error" id="inputRoleError">
+                                        <i data-feather="alert-circle" aria-hidden="true"></i>{{ $message }}
+                                    </p>
+                                @enderror
+                            </div>
+
+                            <div class="kh-user-create__field kh-user-create__field--wide" data-employer-only
+                                @if ($currentRole !== 'employer') hidden @endif>
+                                <label class="kh-user-create__label" for="inputCompanyName">
+                                    Company name <span class="kh-required" aria-hidden="true">*</span>
+                                </label>
+                                <div class="kh-user-create__input-wrap">
+                                    <i data-feather="briefcase" aria-hidden="true"></i>
+                                    <input @class(['kh-user-create__control', 'is-invalid' => $errors->has('company_name')])
+                                        id="inputCompanyName" name="company_name" type="text"
+                                        value="{{ old('company_name') }}" placeholder="e.g. Tech Horizon Co., Ltd"
+                                        maxlength="255"
+                                        aria-describedby="inputCompanyNameHint{{ $errors->has('company_name') ? ' inputCompanyNameError' : '' }}">
+                                </div>
+                                <p class="kh-user-create__field-hint" id="inputCompanyNameHint">Required for employers, who post jobs on this company's behalf.</p>
+                                @error('company_name')
+                                    <p class="kh-user-create__field-error" id="inputCompanyNameError">
                                         <i data-feather="alert-circle" aria-hidden="true"></i>{{ $message }}
                                     </p>
                                 @enderror
@@ -318,18 +362,19 @@
                         </div>
 
                         <dl class="kh-user-create__role-list">
-                            <div>
-                                <dt><span class="kh-user-create__role-dot kh-user-create__role-dot--admin"></span>Administrator</dt>
-                                <dd>Full configuration and team access.</dd>
-                            </div>
-                            <div>
-                                <dt><span class="kh-user-create__role-dot kh-user-create__role-dot--manager"></span>Manager</dt>
-                                <dd>Operational and content management.</dd>
-                            </div>
-                            <div>
-                                <dt><span class="kh-user-create__role-dot kh-user-create__role-dot--user"></span>User</dt>
-                                <dd>Standard platform access.</dd>
-                            </div>
+                            @foreach ($roles as $role)
+                                <div>
+                                    <dt>
+                                        <span @class([
+                                            'kh-user-create__role-dot',
+                                            'kh-user-create__role-dot--admin' => $role->code === 'admin',
+                                            'kh-user-create__role-dot--manager' => $role->code === 'employer',
+                                            'kh-user-create__role-dot--user' => $role->code === 'employee',
+                                        ])></span>{{ $role->name_en }}
+                                    </dt>
+                                    <dd>{{ $role->description }}</dd>
+                                </div>
+                            @endforeach
                         </dl>
                     </section>
                 </aside>

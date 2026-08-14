@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 
 class ProfileController extends Controller
 {
@@ -21,27 +21,30 @@ class ProfileController extends Controller
 
     public function update(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'last_name' => 'nullable|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,' . Auth::user()->id,
+        $user = Auth::user();
+
+        $validated = $request->validate([
+            'display_name' => 'required|string|max:160',
+            'email' => ['required', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user->id)],
+            'phone' => ['nullable', 'string', 'max:30', Rule::unique('users', 'phone')->ignore($user->id)],
             'current_password' => 'nullable|required_with:new_password',
-            'new_password' => 'nullable|min:8|max:12|required_with:current_password',
-            'password_confirmation' => 'nullable|min:8|max:12|required_with:new_password|same:new_password'
+            'new_password' => 'nullable|min:8|confirmed|required_with:current_password',
         ]);
 
+        $user->display_name = $validated['display_name'];
+        $user->email = $validated['email'];
+        $user->phone = $validated['phone'] ?: null;
 
-        $user = User::findOrFail(Auth::user()->id);
-        $user->name = $request->input('name');
-        $user->last_name = $request->input('last_name');
-        $user->email = $request->input('email');
-
-        if (!is_null($request->input('current_password'))) {
-            if (Hash::check($request->input('current_password'), $user->password)) {
-                $user->password = $request->input('new_password');
-            } else {
-                return redirect()->back()->withInput();
+        if (! empty($validated['new_password'])) {
+            if (! Hash::check($validated['current_password'], $user->getAuthPassword())) {
+                return redirect()->back()
+                    ->withInput()
+                    ->withErrors(['current_password' => 'That is not your current password.']);
             }
+
+            // Assigned through the model's hashed cast. The previous version wrote
+            // the raw input straight to the column, storing it unhashed.
+            $user->password_hash = $validated['new_password'];
         }
 
         $user->save();

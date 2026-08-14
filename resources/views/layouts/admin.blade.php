@@ -38,10 +38,8 @@
 <body class="nav-fixed @yield('body-class')">
     @php
         $adminUser = auth()->user();
-        $adminFirstName = $adminUser?->first_name ?? $adminUser?->name ?? 'Administrator';
-        $adminLastName = $adminUser?->last_name ?? '';
-        $adminFullName = trim($adminFirstName . ' ' . $adminLastName);
-        $adminInitial = strtoupper(substr($adminFirstName, 0, 1));
+        $adminFullName = $adminUser?->displayName() ?? 'Administrator';
+        $adminInitial = $adminUser ? mb_substr($adminUser->initials(), 0, 1) : 'A';
     @endphp
     <nav class="topnav navbar navbar-expand shadow justify-content-between justify-content-sm-start navbar-light bg-white"
         id="sidenavAccordion">

@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @php
-    $userName = auth()->user()->first_name ?? auth()->user()->name ?? 'Admin';
+    $userName = auth()->user()?->displayName() ?? 'Admin';
     $firstName = trim(explode(' ', $userName)[0] ?? $userName);
     $todayLabel = now()->format('l, F j');
     $stats = [

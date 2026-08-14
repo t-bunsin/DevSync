@@ -2,21 +2,25 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
+use App\Models\Role;
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Database\Seeder;
 
 class UserSeeder extends Seeder
 {
     public function run(): void
     {
-        User::create([
-        'first_name' => 'bunsin',
-        'last_name' => 'toeng',
-        'email' => 'admin@gmail.com',
-        'password'=> bcrypt('12345678'),
-        'phone_number' => '1234567890',
-        'role' => 'user'
-        ]);
+        $user = User::updateOrCreate(
+            ['email' => 'admin@gmail.com'],
+            [
+                'display_name' => 'bunsin toeng',
+                'phone' => '1234567890',
+                'status' => User::STATUS_ACTIVE,
+                'preferred_locale' => 'en',
+                'password_hash' => '12345678',   // hashed by the model cast
+            ]
+        );
+
+        $user->syncRoles([Role::ADMIN], Role::ADMIN);
     }
 }

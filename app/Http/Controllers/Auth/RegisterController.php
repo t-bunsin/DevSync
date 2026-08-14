@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
+use App\Models\EmployerProfile;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
@@ -50,8 +52,8 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'first_name' => ['required', 'string', 'max:255'],
-            'last_name' => ['required', 'string', 'max:255'],
+            'first_name' => ['required', 'string', 'max:80'],
+            'last_name' => ['required', 'string', 'max:80'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'account_type' => ['required', 'in:employee,employer'],
             'company_name' => ['nullable', 'required_if:account_type,employer', 'string', 'max:255'],
@@ -71,13 +73,27 @@ class RegisterController extends Controller
     {
         $isEmployer = ($data['account_type'] ?? 'employee') === 'employer';
 
-        return User::create([
-            'first_name' => $data['first_name'],
-            'last_name' => $data['last_name'],
+        // The signup form still asks for first and last name; module 01 stores a
+        // single display_name, so they are joined here rather than changing the
+        // public-facing form.
+        $user = User::create([
+            'display_name' => trim($data['first_name'] . ' ' . $data['last_name']),
             'email' => $data['email'],
-            'account_type' => $isEmployer ? 'employer' : 'employee',
-            'company_name' => $isEmployer ? $data['company_name'] : null,
-            'password' => Hash::make($data['password']),
+            'status' => User::STATUS_ACTIVE,
+            'preferred_locale' => in_array(app()->getLocale(), ['km', 'kh'], true) ? 'km' : 'en',
+            'password_hash' => Hash::make($data['password']),
         ]);
+
+        $role = $isEmployer ? Role::EMPLOYER : Role::EMPLOYEE;
+        $user->syncRoles([$role], $role);
+
+        if ($isEmployer) {
+            EmployerProfile::create([
+                'user_id' => $user->id,
+                'company_name' => $data['company_name'],
+            ]);
+        }
+
+        return $user;
     }
 }

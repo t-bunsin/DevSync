@@ -23,6 +23,28 @@
             });
         });
 
+        // Company name only applies to employers. Kept in sync with the role
+        // select so the field is not submitted as dead weight for other roles;
+        // the server still enforces required_if independently.
+        const roleSelect = document.querySelector('[data-role-select]');
+        const employerOnly = document.querySelectorAll('[data-employer-only]');
+
+        if (roleSelect && employerOnly.length) {
+            const syncEmployerFields = () => {
+                const isEmployer = roleSelect.value === 'employer';
+
+                employerOnly.forEach((field) => {
+                    field.hidden = !isEmployer;
+                    field.querySelectorAll('input, select, textarea').forEach((input) => {
+                        input.required = isEmployer;
+                    });
+                });
+            };
+
+            roleSelect.addEventListener('change', syncEmployerFields);
+            syncEmployerFields();
+        }
+
         const errorSummary = document.querySelector('.kh-user-create__error-summary');
 
         if (errorSummary) {

@@ -37,6 +37,8 @@ class ResetPasswordController extends Controller
      */
     protected function setUserPassword($user, $password)
     {
-        $user->password = $password;
+        // Module 01 stores the credential in password_hash; the model's hashed
+        // cast does the hashing on assignment.
+        $user->password_hash = $password;
     }
 }

@@ -3,7 +3,7 @@
 @section('main-content')
     @php
         $totalUsers = $users->count();
-        $administratorCount = $users->filter(fn ($user) => str_contains(strtolower($user->role ?? ''), 'admin'))->count();
+        $administratorCount = $users->filter(fn ($user) => $user->isAdmin())->count();
         $addedThisMonth = $users->filter(fn ($user) => $user->created_at && $user->created_at->gte(now()->startOfMonth()))->count();
     @endphp
 
@@ -580,6 +580,38 @@
             text-align: center;
         }
 
+        .kh-users__id {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .kh-users__status {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.14rem 0.42rem;
+            font-size: 0.66rem;
+            font-weight: 800;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+            border-radius: 999px;
+        }
+
+        .kh-users__status--active {
+            color: #047857;
+            background: #d1fae5;
+        }
+
+        .kh-users__status--pending {
+            color: #b45309;
+            background: #fef3c7;
+        }
+
+        .kh-users__status--danger {
+            color: #b91c1c;
+            background: #fee2e2;
+        }
+
         .kh-users__action:disabled {
             opacity: 0.45;
             cursor: not-allowed;
@@ -855,8 +887,8 @@
                         <tr>
                             <th>User</th>
                             <th>Email</th>
-                            <th>Role</th>
-                            <th>Groups</th>
+                            <th>Primary role</th>
+                            <th>All roles</th>
                             <th>Joined Date</th>
                             <th>Actions</th>
                         </tr>
@@ -864,14 +896,20 @@
                     <tbody>
                         @forelse ($users as $user)
                             @php
-                                $displayName = trim(($user->first_name ?? $user->name ?? '') . ' ' . ($user->last_name ?? '')) ?: 'Unnamed User';
-                                $initials = mb_strtoupper(mb_substr($user->first_name ?: ($user->name ?: 'U'), 0, 1) . mb_substr($user->last_name ?: '', 0, 1));
-                                $roleKey = strtolower($user->role ?: 'user');
+                                $displayName = $user->displayName();
+                                $initials = $user->initials();
+                                $primaryRole = $user->primaryRole();
+                                $roleKey = $primaryRole?->code ?? 'employee';
+                                $roleLabel = $primaryRole?->name_en ?? 'No role';
                                 $roleClass = match ($roleKey) {
-                                    'administrator', 'admin' => 'kh-users__role--administrator',
-                                    'manager', 'editor' => 'kh-users__role--manager',
-                                    'guest' => 'kh-users__role--guest',
+                                    'admin' => 'kh-users__role--administrator',
+                                    'employer' => 'kh-users__role--manager',
                                     default => '',
+                                };
+                                $statusClass = match ($user->status) {
+                                    'active' => 'kh-users__status--active',
+                                    'suspended', 'banned' => 'kh-users__status--danger',
+                                    default => 'kh-users__status--pending',
                                 };
                             @endphp
                             <tr>
@@ -880,23 +918,35 @@
                                         <span class="kh-users__avatar" aria-hidden="true">{{ $initials }}</span>
                                         <div>
                                             <span class="kh-users__name">{{ $displayName }}</span>
-                                            <span class="kh-users__id">User #{{ str_pad((string) $user->id, 4, '0', STR_PAD_LEFT) }}</span>
+                                            <span class="kh-users__id">
+                                                <span class="kh-users__status {{ $statusClass }}">{{ ucfirst($user->status) }}</span>
+                                                <span title="{{ $user->id }}">{{ Str::before($user->id, '-') }}</span>
+                                            </span>
                                         </div>
                                     </div>
                                 </td>
                                 <td>
-                                    <a class="kh-users__email" href="mailto:{{ $user->email }}">
-                                        <i data-feather="mail"></i>
-                                        <span>{{ $user->email }}</span>
-                                    </a>
+                                    @if ($user->email)
+                                        <a class="kh-users__email" href="mailto:{{ $user->email }}">
+                                            <i data-feather="mail"></i>
+                                            <span>{{ $user->email }}</span>
+                                        </a>
+                                    @else
+                                        <span class="kh-users__id">{{ $user->phone ?: '—' }}</span>
+                                    @endif
                                 </td>
-                                <td><span class="kh-users__role {{ $roleClass }}">{{ $user->role ?: 'User' }}</span></td>
+                                <td><span class="kh-users__role {{ $roleClass }}">{{ $roleLabel }}</span></td>
                                 <td>
                                     <div class="kh-users__groups">
-                                        <span class="kh-users__group">Sales</span>
-                                        <span class="kh-users__group kh-users__group--blue">Developers</span>
-                                        <span class="kh-users__group kh-users__group--purple">Managers</span>
-                                        <span class="kh-users__group kh-users__group-more">+2 more</span>
+                                        @forelse ($user->roles->sortBy('sort_order') as $role)
+                                            <span @class([
+                                                'kh-users__group',
+                                                'kh-users__group--purple' => $role->code === 'admin',
+                                                'kh-users__group--blue' => $role->code === 'employer',
+                                            ])>{{ $role->name_en }}</span>
+                                        @empty
+                                            <span class="kh-users__group kh-users__group-more">No roles</span>
+                                        @endforelse
                                     </div>
                                 </td>
                                 <td>
