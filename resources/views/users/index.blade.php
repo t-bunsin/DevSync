@@ -580,6 +580,167 @@
             text-align: center;
         }
 
+        .kh-users__action:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+        }
+
+        .kh-users__action:disabled:hover {
+            color: #dc2626;
+            background: #fef2f2;
+            transform: none;
+        }
+
+        /* Delete confirmation modal */
+        .kh-users__modal .modal-content {
+            border: 0;
+            border-radius: 24px;
+            box-shadow: 0 30px 60px rgba(15, 23, 42, 0.22);
+            overflow: hidden;
+        }
+
+        .kh-users__modal-body {
+            padding: 2rem 1.85rem 1.5rem;
+            text-align: center;
+        }
+
+        .kh-users__modal-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 62px;
+            height: 62px;
+            margin-bottom: 1.1rem;
+            color: #dc2626;
+            background: #fef2f2;
+            border: 8px solid #fff5f5;
+            border-radius: 50%;
+        }
+
+        .kh-users__modal-icon svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .kh-users__modal-title {
+            margin: 0 0 0.5rem;
+            color: #0f172a;
+            font-size: 1.2rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+
+        .kh-users__modal-text {
+            margin: 0 auto;
+            max-width: 380px;
+            color: #64748b;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .kh-users__modal-user {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-top: 1.35rem;
+            padding: 0.85rem 1rem;
+            background: #f8fafc;
+            border: 1px solid rgba(226, 232, 240, 0.9);
+            border-radius: 16px;
+            text-align: left;
+        }
+
+        .kh-users__modal-footer {
+            display: flex;
+            gap: 0.65rem;
+            padding: 1.1rem 1.85rem 1.6rem;
+            border-top: 0;
+        }
+
+        .kh-users__modal-footer > * {
+            flex: 1 1 0;
+            margin: 0;
+        }
+
+        .kh-users__modal-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            width: 100%;
+            min-height: 46px;
+            padding: 0 1rem;
+            border: 1px solid transparent;
+            font-size: 0.92rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background-color 0.18s ease, color 0.18s ease, transform 0.18s ease;
+            border-radius: 13px;
+        }
+
+        .kh-users__modal-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .kh-users__modal-btn--ghost {
+            color: #475569;
+            background: #f1f5f9;
+            border-color: #e2e8f0;
+        }
+
+        .kh-users__modal-btn--ghost:hover {
+            background: #e2e8f0;
+        }
+
+        .kh-users__modal-btn--danger {
+            color: #fff;
+            background: #dc2626;
+            box-shadow: 0 12px 24px rgba(220, 38, 38, 0.24);
+        }
+
+        .kh-users__modal-btn--danger:hover {
+            background: #b91c1c;
+        }
+
+        .kh-users__modal-btn--danger svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .kh-users__modal-btn.is-busy {
+            opacity: 0.7;
+            cursor: progress;
+            transform: none;
+        }
+
+        html[data-admin-theme="dark"] .kh-users__modal-title {
+            color: #eaf4f5;
+        }
+
+        html[data-admin-theme="dark"] .kh-users__modal-text {
+            color: #8ea5ad;
+        }
+
+        html[data-admin-theme="dark"] .kh-users__modal-icon {
+            background: rgba(220, 38, 38, 0.16);
+            border-color: rgba(220, 38, 38, 0.08);
+        }
+
+        html[data-admin-theme="dark"] .kh-users__modal-user {
+            background: #0b161b;
+            border-color: #263940;
+        }
+
+        html[data-admin-theme="dark"] .kh-users__modal-btn--ghost {
+            color: #dce8e9;
+            background: #16262d;
+            border-color: #263940;
+        }
+
+        html[data-admin-theme="dark"] .kh-users__modal-btn--ghost:hover {
+            background: #1d323b;
+        }
+
         @media (max-width: 992px) {
             .kh-users {
                 padding: 1rem;
@@ -685,6 +846,10 @@
                     <div class="alert alert-success" role="alert">{{ session('success') }}</div>
                 @endif
 
+                @if (session('error'))
+                    <div class="alert alert-danger" role="alert">{{ session('error') }}</div>
+                @endif
+
                 <table id="datatablesSimple">
                     <thead>
                         <tr>
@@ -742,12 +907,25 @@
                                 </td>
                                 <td>
                                     <div class="kh-users__actions">
-                                        <a class="kh-users__action" href="user-management-edit-user.html" aria-label="Edit {{ $displayName }}" title="Edit user">
+                                        <a class="kh-users__action" href="{{ route('user.edit', $user) }}" aria-label="Edit {{ $displayName }}" title="Edit user">
                                             <i data-feather="edit-2"></i>
                                         </a>
-                                        <button class="kh-users__action kh-users__action--danger" type="button" aria-label="Delete {{ $displayName }}" title="Delete user">
-                                            <i data-feather="trash-2"></i>
-                                        </button>
+                                        @if ($user->id === auth()->id())
+                                            <button class="kh-users__action kh-users__action--danger" type="button" disabled
+                                                aria-label="Delete {{ $displayName }}" title="You cannot delete your own account">
+                                                <i data-feather="trash-2"></i>
+                                            </button>
+                                        @else
+                                            <button class="kh-users__action kh-users__action--danger" type="button"
+                                                data-bs-toggle="modal" data-bs-target="#deleteUserModal"
+                                                data-user-name="{{ $displayName }}"
+                                                data-user-email="{{ $user->email }}"
+                                                data-user-initials="{{ $initials }}"
+                                                data-delete-action="{{ route('user.destroy', $user) }}"
+                                                aria-label="Delete {{ $displayName }}" title="Delete user">
+                                                <i data-feather="trash-2"></i>
+                                            </button>
+                                        @endif
                                     </div>
                                 </td>
                             </tr>
@@ -762,6 +940,96 @@
         </section>
     </main>
 
+    <div class="modal fade kh-users__modal" id="deleteUserModal" tabindex="-1"
+        aria-labelledby="deleteUserModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body kh-users__modal-body">
+                    <span class="kh-users__modal-icon" aria-hidden="true"><i data-feather="alert-triangle"></i></span>
+
+                    <h5 class="kh-users__modal-title" id="deleteUserModalLabel">Delete this user?</h5>
+                    <p class="kh-users__modal-text">
+                        This permanently removes the account and revokes its access. This action cannot be undone.
+                    </p>
+
+                    <div class="kh-users__modal-user">
+                        <span class="kh-users__avatar" data-delete-initials aria-hidden="true"></span>
+                        <div>
+                            <span class="kh-users__name" data-delete-name></span>
+                            <span class="kh-users__id" data-delete-email></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer kh-users__modal-footer">
+                    <button class="kh-users__modal-btn kh-users__modal-btn--ghost" type="button" data-bs-dismiss="modal">
+                        Cancel
+                    </button>
+                    <form method="POST" action="" id="deleteUserForm">
+                        @csrf
+                        @method('DELETE')
+                        <button class="kh-users__modal-btn kh-users__modal-btn--danger" type="submit">
+                            <i data-feather="trash-2" aria-hidden="true"></i>
+                            <span>Delete user</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js"></script>
     <script src="https://sb-admin-pro.startbootstrap.com/js/datatables/datatables-simple-demo.js"></script>
 @endsection
+
+@push('scripts')
+    <script>
+        (function () {
+            'use strict';
+
+            const modal = document.getElementById('deleteUserModal');
+            const form = document.getElementById('deleteUserForm');
+
+            if (!modal || !form) {
+                return;
+            }
+
+            const nameEl = modal.querySelector('[data-delete-name]');
+            const emailEl = modal.querySelector('[data-delete-email]');
+            const initialsEl = modal.querySelector('[data-delete-initials]');
+            const submitBtn = form.querySelector('button[type="submit"]');
+
+            // Bootstrap delegates its own toggle listener, so this keeps working
+            // after simple-datatables rebuilds the rows on search or paging.
+            modal.addEventListener('show.bs.modal', (event) => {
+                const trigger = event.relatedTarget;
+
+                if (!trigger) {
+                    return;
+                }
+
+                form.setAttribute('action', trigger.dataset.deleteAction || '');
+                nameEl.textContent = trigger.dataset.userName || 'this user';
+                emailEl.textContent = trigger.dataset.userEmail || '';
+                initialsEl.textContent = trigger.dataset.userInitials || '';
+            });
+
+            // Guard against a double submit while the delete request is in flight.
+            form.addEventListener('submit', () => {
+                submitBtn.disabled = true;
+                submitBtn.classList.add('is-busy');
+            });
+
+            modal.addEventListener('hidden.bs.modal', () => {
+                form.setAttribute('action', '');
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('is-busy');
+            });
+
+            // Re-draw the feather icons that were injected into the modal.
+            if (window.feather) {
+                window.feather.replace();
+            }
+        })();
+    </script>
+@endpush
