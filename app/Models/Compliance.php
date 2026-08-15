@@ -16,6 +16,7 @@ class Compliance extends Model
     protected $table = 'compliances';
 
     protected $fillable = [
+        'company_id',
         'name',
         'category',
         'reference',
@@ -47,6 +48,11 @@ class Compliance extends Model
             'Data Protection',
             'Other',
         ];
+    }
+
+    public function company(): BelongsTo
+    {
+        return $this->belongsTo(Company::class);
     }
 
     public function verifier(): BelongsTo

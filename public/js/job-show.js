@@ -15,6 +15,16 @@
         const sectionBody = document.getElementById('job-page-section-body');
         const listTitle = document.getElementById('job-page-list-title');
         const list = document.getElementById('job-page-list');
+        const companyHeader = document.getElementById('job-page-company-header');
+        const companyProfile = document.getElementById('job-page-company-profile');
+        const mainBlock = document.getElementById('job-page-main-block');
+        const extraBlock = document.getElementById('job-page-extra');
+        const kicker = document.getElementById('job-page-kicker');
+        const kickerLabels = {
+            description: 'Role overview',
+            requirements: 'What we look for',
+            company: 'About the company',
+        };
         const saveButton = document.getElementById('job-page-save-button');
         const applyButton = document.getElementById('job-page-apply-button');
         const applyDialog = document.getElementById('job-page-apply-dialog');
@@ -60,7 +70,11 @@
             const tabName = tab.dataset.jobPageTab;
             const tabContent = job.tabs[tabName];
 
-            if (!tabContent) {
+            // The Company tab has no authored panel of its own — it shows the
+            // employer profile — so it must not bail out here.
+            const isCompanyTab = tabName === 'company';
+
+            if (!tabContent && !isCompanyTab) {
                 return;
             }
 
@@ -70,6 +84,31 @@
                 item.setAttribute('aria-selected', String(isActive));
                 item.tabIndex = isActive ? 0 : -1;
             });
+
+            // The banner and employer profile belong to the Company tab only.
+            if (companyHeader) {
+                companyHeader.hidden = !isCompanyTab;
+            }
+
+            if (companyProfile) {
+                companyProfile.hidden = !isCompanyTab;
+            }
+
+            if (mainBlock) {
+                mainBlock.hidden = isCompanyTab;
+            }
+
+            if (extraBlock) {
+                extraBlock.hidden = tabName !== 'requirements';
+            }
+
+            if (!tabContent) {
+                return;
+            }
+
+            if (kicker && kickerLabels[tabName]) {
+                kicker.textContent = kickerLabels[tabName];
+            }
 
             sectionTitle.textContent = tabContent.title;
             sectionBody.textContent = tabContent.body;

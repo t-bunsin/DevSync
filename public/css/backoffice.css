@@ -1,5 +1,9 @@
 /*
- * KH-WORKS — Compliance module.
+ * KH-WORKS — shared back-office CRUD styles (kh-bo).
+ *
+ * Used by the Compliance register and Job Posts. Started life as
+ * compliance.css; generalised when the second module needed the same table,
+ * tiles, filters and form.
  *
  * Uses the --kh-* tokens that dashboard.css sets on body.nav-fixed, which
  * admin-theme.css redefines for the dark admin theme, so both themes come for
@@ -7,10 +11,10 @@
  * whatever the surroundings are doing.
  */
 
-.kh-comp {
-  --comp-blue: #1d9bf0;
-  --comp-amber: #b7791f;
-  --comp-danger: #c0392b;
+.kh-bo {
+  --bo-blue: #1d9bf0;
+  --bo-amber: #b7791f;
+  --bo-danger: #c0392b;
 
   padding: 26px clamp(18px, 2.2vw, 34px) 54px;
   width: min(100%, 1600px);
@@ -20,7 +24,7 @@
 
 /* Header
    ------------------------------------------------------------------ */
-.kh-comp__head {
+.kh-bo__head {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
@@ -28,7 +32,7 @@
   margin-bottom: 20px;
 }
 
-.kh-comp__kicker {
+.kh-bo__kicker {
   color: var(--kh-ocean);
   font-size: 0.7rem;
   font-weight: 700;
@@ -36,20 +40,20 @@
   text-transform: uppercase;
 }
 
-.kh-comp__head h1 {
+.kh-bo__head h1 {
   margin: 6px 0 0;
   font-size: clamp(1.6rem, 2.6vw, 2.2rem);
   font-weight: 600;
   letter-spacing: -0.045em;
 }
 
-.kh-comp__head p {
+.kh-bo__head p {
   margin: 5px 0 0;
   color: var(--kh-muted);
   font-size: 0.8rem;
 }
 
-.kh-comp__btn {
+.kh-bo__btn {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -65,37 +69,37 @@
   transition: filter 180ms ease, transform 180ms ease;
 }
 
-.kh-comp__btn:hover {
+.kh-bo__btn:hover {
   color: #fff;
   filter: brightness(1.08);
   transform: translateY(-1px);
 }
 
-.kh-comp__btn--ghost {
+.kh-bo__btn--ghost {
   color: var(--kh-ink);
   background: var(--kh-surface);
   border-color: var(--kh-line);
 }
 
-.kh-comp__btn--ghost:hover {
+.kh-bo__btn--ghost:hover {
   color: var(--kh-ink);
 }
 
-.kh-comp__btn svg {
+.kh-bo__btn svg {
   width: 16px;
   height: 16px;
 }
 
 /* Summary tiles
    ------------------------------------------------------------------ */
-.kh-comp__tiles {
+.kh-bo__tiles {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 14px;
   margin-bottom: 18px;
 }
 
-.kh-comp__tile {
+.kh-bo__tile {
   display: flex;
   align-items: center;
   gap: 13px;
@@ -105,7 +109,7 @@
   border-radius: 16px;
 }
 
-.kh-comp__tile-icon {
+.kh-bo__tile-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -117,43 +121,43 @@
   border-radius: 11px;
 }
 
-.kh-comp__tile-icon--blue {
-  color: var(--comp-blue);
-  background: color-mix(in srgb, var(--comp-blue) 13%, transparent);
+.kh-bo__tile-icon--blue {
+  color: var(--bo-blue);
+  background: color-mix(in srgb, var(--bo-blue) 13%, transparent);
 }
 
-.kh-comp__tile-icon--amber {
-  color: var(--comp-amber);
-  background: color-mix(in srgb, var(--comp-amber) 14%, transparent);
+.kh-bo__tile-icon--amber {
+  color: var(--bo-amber);
+  background: color-mix(in srgb, var(--bo-amber) 14%, transparent);
 }
 
-.kh-comp__tile-icon--danger {
-  color: var(--comp-danger);
-  background: color-mix(in srgb, var(--comp-danger) 13%, transparent);
+.kh-bo__tile-icon--danger {
+  color: var(--bo-danger);
+  background: color-mix(in srgb, var(--bo-danger) 13%, transparent);
 }
 
-.kh-comp__tile strong {
+.kh-bo__tile strong {
   display: block;
   font-size: 1.3rem;
   font-weight: 700;
   line-height: 1.1;
 }
 
-.kh-comp__tile span {
+.kh-bo__tile span {
   color: var(--kh-muted);
   font-size: 0.75rem;
 }
 
 /* Card + filters
    ------------------------------------------------------------------ */
-.kh-comp__card {
+.kh-bo__card {
   background: var(--kh-surface);
   border: 1px solid var(--kh-line);
   border-radius: 18px;
   overflow: hidden;
 }
 
-.kh-comp__card-head {
+.kh-bo__card-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -163,26 +167,26 @@
   border-bottom: 1px solid var(--kh-line);
 }
 
-.kh-comp__card-head h2 {
+.kh-bo__card-head h2 {
   margin: 0;
   font-size: 1rem;
   font-weight: 700;
 }
 
-.kh-comp__card-head p {
+.kh-bo__card-head p {
   margin: 3px 0 0;
   color: var(--kh-muted);
   font-size: 0.78rem;
 }
 
-.kh-comp__tools {
+.kh-bo__tools {
   display: flex;
   align-items: center;
   gap: 8px;
   flex-wrap: wrap;
 }
 
-.kh-comp__filters {
+.kh-bo__filters {
   display: inline-flex;
   gap: 4px;
   padding: 4px;
@@ -190,7 +194,7 @@
   border-radius: 999px;
 }
 
-.kh-comp__filter {
+.kh-bo__filter {
   padding: 7px 14px;
   color: var(--kh-muted);
   border-radius: 999px;
@@ -200,21 +204,21 @@
   white-space: nowrap;
 }
 
-.kh-comp__filter:hover {
+.kh-bo__filter:hover {
   color: var(--kh-ink);
 }
 
-.kh-comp__filter.is-active {
+.kh-bo__filter.is-active {
   color: #fff;
   background: var(--kh-ocean);
 }
 
-.kh-comp__search {
+.kh-bo__search {
   display: flex;
   gap: 6px;
 }
 
-.kh-comp__search input {
+.kh-bo__search input {
   min-width: 190px;
   padding: 9px 13px;
   color: var(--kh-ink);
@@ -224,7 +228,7 @@
   font-size: 0.8rem;
 }
 
-.kh-comp__search input:focus {
+.kh-bo__search input:focus {
   outline: 3px solid color-mix(in srgb, var(--kh-ocean) 26%, transparent);
   outline-offset: 1px;
   border-color: var(--kh-ocean);
@@ -232,17 +236,17 @@
 
 /* Table
    ------------------------------------------------------------------ */
-.kh-comp__table-wrap {
+.kh-bo__table-wrap {
   overflow-x: auto;
 }
 
-.kh-comp__table {
+.kh-bo__table {
   width: 100%;
   border-collapse: collapse;
   font-size: 0.83rem;
 }
 
-.kh-comp__table th {
+.kh-bo__table th {
   padding: 12px 18px;
   color: var(--kh-muted);
   background: color-mix(in srgb, var(--kh-ink) 3%, transparent);
@@ -255,30 +259,30 @@
   white-space: nowrap;
 }
 
-.kh-comp__table td {
+.kh-bo__table td {
   padding: 14px 18px;
   border-bottom: 1px solid var(--kh-line);
   vertical-align: middle;
 }
 
-.kh-comp__table tbody tr:last-child td {
+.kh-bo__table tbody tr:last-child td {
   border-bottom: 0;
 }
 
-.kh-comp__table tbody tr:hover td {
+.kh-bo__table tbody tr:hover td {
   background: color-mix(in srgb, var(--kh-ocean) 4%, transparent);
 }
 
 /* Identity cell
    ------------------------------------------------------------------ */
-.kh-comp__identity {
+.kh-bo__identity {
   display: flex;
   align-items: center;
   gap: 12px;
   min-width: 240px;
 }
 
-.kh-comp__logo {
+.kh-bo__logo {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -294,20 +298,20 @@
   font-weight: 700;
 }
 
-.kh-comp__logo img {
+.kh-bo__logo img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.kh-comp__name {
+.kh-bo__name {
   display: flex;
   align-items: center;
   gap: 6px;
   font-weight: 600;
 }
 
-.kh-comp__ref {
+.kh-bo__ref {
   display: block;
   margin-top: 2px;
   color: var(--kh-muted);
@@ -316,7 +320,7 @@
 
 /* Status
    ------------------------------------------------------------------ */
-.kh-comp__status {
+.kh-bo__status {
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -327,7 +331,7 @@
   white-space: nowrap;
 }
 
-.kh-comp__status::before {
+.kh-bo__status::before {
   content: "";
   width: 6px;
   height: 6px;
@@ -335,31 +339,31 @@
   background: currentColor;
 }
 
-.kh-comp__status--verified {
-  color: var(--comp-blue);
-  background: color-mix(in srgb, var(--comp-blue) 12%, transparent);
+.kh-bo__status--verified {
+  color: var(--bo-blue);
+  background: color-mix(in srgb, var(--bo-blue) 12%, transparent);
 }
 
-.kh-comp__status--pending {
-  color: var(--comp-amber);
-  background: color-mix(in srgb, var(--comp-amber) 14%, transparent);
+.kh-bo__status--pending {
+  color: var(--bo-amber);
+  background: color-mix(in srgb, var(--bo-amber) 14%, transparent);
 }
 
-.kh-comp__status--rejected {
-  color: var(--comp-danger);
-  background: color-mix(in srgb, var(--comp-danger) 12%, transparent);
+.kh-bo__status--rejected {
+  color: var(--bo-danger);
+  background: color-mix(in srgb, var(--bo-danger) 12%, transparent);
 }
 
-.kh-comp__expiry-flag {
+.kh-bo__expiry-flag {
   display: inline-block;
   margin-top: 3px;
-  color: var(--comp-amber);
+  color: var(--bo-amber);
   font-size: 0.71rem;
   font-weight: 600;
 }
 
-.kh-comp__expiry-flag--past {
-  color: var(--comp-danger);
+.kh-bo__expiry-flag--past {
+  color: var(--bo-danger);
 }
 
 /* The blue badge itself
@@ -379,14 +383,14 @@
 
 /* Row actions
    ------------------------------------------------------------------ */
-.kh-comp__actions {
+.kh-bo__actions {
   display: flex;
   align-items: center;
   gap: 6px;
   justify-content: flex-end;
 }
 
-.kh-comp__action {
+.kh-bo__action {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -400,42 +404,42 @@
   transition: color 160ms ease, border-color 160ms ease, background 160ms ease;
 }
 
-.kh-comp__action svg {
+.kh-bo__action svg {
   width: 15px;
   height: 15px;
 }
 
-.kh-comp__action:hover {
+.kh-bo__action:hover {
   color: var(--kh-ocean);
   border-color: var(--kh-ocean);
   background: color-mix(in srgb, var(--kh-ocean) 8%, transparent);
 }
 
-.kh-comp__action--verify:hover {
-  color: var(--comp-blue);
-  border-color: var(--comp-blue);
-  background: color-mix(in srgb, var(--comp-blue) 10%, transparent);
+.kh-bo__action--verify:hover {
+  color: var(--bo-blue);
+  border-color: var(--bo-blue);
+  background: color-mix(in srgb, var(--bo-blue) 10%, transparent);
 }
 
-.kh-comp__action--verify.is-on {
+.kh-bo__action--verify.is-on {
   color: #fff;
-  background: var(--comp-blue);
-  border-color: var(--comp-blue);
+  background: var(--bo-blue);
+  border-color: var(--bo-blue);
 }
 
-.kh-comp__action--danger:hover {
-  color: var(--comp-danger);
-  border-color: var(--comp-danger);
-  background: color-mix(in srgb, var(--comp-danger) 9%, transparent);
+.kh-bo__action--danger:hover {
+  color: var(--bo-danger);
+  border-color: var(--bo-danger);
+  background: color-mix(in srgb, var(--bo-danger) 9%, transparent);
 }
 
-.kh-comp__empty {
+.kh-bo__empty {
   padding: 46px 20px;
   color: var(--kh-muted);
   text-align: center;
 }
 
-.kh-comp__empty strong {
+.kh-bo__empty strong {
   display: block;
   margin-bottom: 5px;
   color: var(--kh-ink);
@@ -444,7 +448,7 @@
 
 /* Flash
    ------------------------------------------------------------------ */
-.kh-comp__flash {
+.kh-bo__flash {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -460,40 +464,40 @@
 
 /* Form
    ------------------------------------------------------------------ */
-.kh-comp__form-card {
+.kh-bo__form-card {
   padding: 24px;
   background: var(--kh-surface);
   border: 1px solid var(--kh-line);
   border-radius: 18px;
 }
 
-.kh-comp__grid {
+.kh-bo__grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 16px;
 }
 
-.kh-comp__field {
+.kh-bo__field {
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
 
-.kh-comp__field--wide {
+.kh-bo__field--wide {
   grid-column: 1 / -1;
 }
 
-.kh-comp__label {
+.kh-bo__label {
   color: var(--kh-ink);
   font-size: 0.78rem;
   font-weight: 600;
 }
 
-.kh-comp__required {
-  color: var(--comp-danger);
+.kh-bo__required {
+  color: var(--bo-danger);
 }
 
-.kh-comp__control {
+.kh-bo__control {
   width: 100%;
   padding: 11px 13px;
   color: var(--kh-ink);
@@ -503,39 +507,39 @@
   font-size: 0.85rem;
 }
 
-.kh-comp__control:focus {
+.kh-bo__control:focus {
   outline: 3px solid color-mix(in srgb, var(--kh-ocean) 26%, transparent);
   outline-offset: 1px;
   border-color: var(--kh-ocean);
 }
 
-.kh-comp__control.is-invalid {
-  border-color: var(--comp-danger);
+.kh-bo__control.is-invalid {
+  border-color: var(--bo-danger);
 }
 
-textarea.kh-comp__control {
+textarea.kh-bo__control {
   min-height: 110px;
   resize: vertical;
 }
 
-.kh-comp__hint {
+.kh-bo__hint {
   color: var(--kh-muted);
   font-size: 0.74rem;
 }
 
-.kh-comp__error {
-  color: var(--comp-danger);
+.kh-bo__error {
+  color: var(--bo-danger);
   font-size: 0.75rem;
   font-weight: 600;
 }
 
-.kh-comp__logo-field {
+.kh-bo__logo-field {
   display: flex;
   align-items: center;
   gap: 14px;
 }
 
-.kh-comp__logo-preview {
+.kh-bo__logo-preview {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -551,13 +555,13 @@ textarea.kh-comp__control {
   font-weight: 700;
 }
 
-.kh-comp__logo-preview img {
+.kh-bo__logo-preview img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.kh-comp__checkbox {
+.kh-bo__checkbox {
   display: inline-flex;
   align-items: center;
   gap: 7px;
@@ -565,7 +569,7 @@ textarea.kh-comp__control {
   font-size: 0.77rem;
 }
 
-.kh-comp__form-actions {
+.kh-bo__form-actions {
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -575,17 +579,17 @@ textarea.kh-comp__control {
   border-top: 1px solid var(--kh-line);
 }
 
-.kh-comp__errors {
+.kh-bo__errors {
   padding: 14px 16px;
   margin-bottom: 18px;
-  color: var(--comp-danger);
-  background: color-mix(in srgb, var(--comp-danger) 9%, transparent);
-  border: 1px solid color-mix(in srgb, var(--comp-danger) 28%, transparent);
+  color: var(--bo-danger);
+  background: color-mix(in srgb, var(--bo-danger) 9%, transparent);
+  border: 1px solid color-mix(in srgb, var(--bo-danger) 28%, transparent);
   border-radius: 13px;
   font-size: 0.82rem;
 }
 
-.kh-comp__errors ul {
+.kh-bo__errors ul {
   margin: 6px 0 0;
   padding-left: 18px;
 }
@@ -593,35 +597,35 @@ textarea.kh-comp__control {
 /* Responsive
    ------------------------------------------------------------------ */
 @media (max-width: 1100px) {
-  .kh-comp__tiles {
+  .kh-bo__tiles {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
 @media (max-width: 760px) {
-  .kh-comp__head {
+  .kh-bo__head {
     align-items: stretch;
     flex-direction: column;
     gap: 14px;
   }
 
-  .kh-comp__grid {
+  .kh-bo__grid {
     grid-template-columns: 1fr;
   }
 
-  .kh-comp__card-head {
+  .kh-bo__card-head {
     align-items: stretch;
     flex-direction: column;
   }
 
-  .kh-comp__search input {
+  .kh-bo__search input {
     min-width: 0;
     width: 100%;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .kh-comp__btn:hover {
+  .kh-bo__btn:hover {
     transform: none;
   }
 }

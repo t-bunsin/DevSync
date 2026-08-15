@@ -239,21 +239,23 @@
                         <!-- Sidenav Menu Heading (Core)-->
                         <div class="sidenav-menu-heading">Core</div>
                         <!-- Sidenav Accordion (Dashboard)-->
-                        <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse"
-                            data-bs-target="#collapseDashboards" aria-expanded="false"
+                        <a class="nav-link collapsed {{ request()->routeIs('home') ? 'kh-nav-parent-active' : '' }}"
+                            href="javascript:void(0);" data-bs-toggle="collapse"
+                            data-bs-target="#collapseDashboards"
+                            aria-expanded="{{ request()->routeIs('home') ? 'true' : 'false' }}"
                             aria-controls="collapseDashboards">
                             <div class="nav-link-icon"><i data-feather="activity"></i></div>
                             Dashboards
                             <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
-                        <div class="collapse" id="collapseDashboards" data-bs-parent="#accordionSidenav">
+                        <div class="collapse {{ request()->routeIs('home') ? 'show' : '' }}"
+                            id="collapseDashboards" data-bs-parent="#accordionSidenav">
                             <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
-                                <a class="nav-link" href="dashboard-1.html">
-                                    Default
-                                    <span class="badge bg-primary-soft text-primary ms-auto">Updated</span>
+                                <a class="nav-link {{ request()->routeIs('home') ? 'active fw-bold' : '' }}"
+                                    href="{{ route('home') }}">
+                                    Overview
+                                    <span class="badge bg-primary-soft text-primary ms-auto">Live</span>
                                 </a>
-                                <a class="nav-link" href="dashboard-2.html">Multipurpose</a>
-                                <a class="nav-link" href="dashboard-3.html">Affiliate</a>
                             </nav>
                         </div>
                         <!-- Sidenav Heading (Custom)-->
@@ -362,9 +364,9 @@
                         </div>
                         <!-- Sidenav Accordion (Applications)-->
                         <!-- Applications Menu -->
-                        <a class="nav-link collapsed {{ request()->is('applications/*') || request()->routeIs('users', 'user.*') || request()->is('user-management-*') ? 'kh-nav-parent-active' : '' }}"
+                        <a class="nav-link collapsed {{ request()->is('applications/*') || request()->routeIs('users', 'user.*', 'job-posts.*') || request()->is('user-management-*') ? 'kh-nav-parent-active' : '' }}"
                             href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseApps"
-                            aria-expanded="{{ request()->is('applications/*') || request()->routeIs('users', 'user.*') || request()->is('user-management-*') ? 'true' : 'false' }}"
+                            aria-expanded="{{ request()->is('applications/*') || request()->routeIs('users', 'user.*', 'job-posts.*') || request()->is('user-management-*') ? 'true' : 'false' }}"
                             aria-controls="collapseApps">
                             <div class="nav-link-icon">
                                 <i data-feather="globe"></i>
@@ -373,7 +375,7 @@
                             <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
 
-                        <div class="collapse {{ request()->is('applications/*') || request()->routeIs('users', 'user.*') || request()->is('user-management-*') ? 'show' : '' }}"
+                        <div class="collapse {{ request()->is('applications/*') || request()->routeIs('users', 'user.*', 'job-posts.*') || request()->is('user-management-*') ? 'show' : '' }}"
                             id="collapseApps" data-bs-parent="#accordionSidenav">
                             <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavAppsMenu">
 
@@ -397,6 +399,26 @@
                                     </nav>
                                 </div>
 
+                                <!-- Job Post Management Inside Applications -->
+                                <a class="nav-link collapsed {{ request()->routeIs('job-posts.*') ? 'kh-nav-parent-active fw-bold' : '' }}"
+                                    href="javascript:void(0);" data-bs-toggle="collapse"
+                                    data-bs-target="#appsCollapseJobPosts"
+                                    aria-expanded="{{ request()->routeIs('job-posts.*') ? 'true' : 'false' }}"
+                                    aria-controls="appsCollapseJobPosts">
+                                    Job Post Management
+                                    <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                </a>
+
+                                <div class="collapse {{ request()->routeIs('job-posts.*') ? 'show' : '' }}"
+                                    id="appsCollapseJobPosts" data-bs-parent="#accordionSidenavAppsMenu">
+                                    <nav class="sidenav-menu-nested nav">
+                                        <a class="nav-link {{ request()->routeIs('job-posts.index') ? 'active fw-bold' : '' }}"
+                                            href="{{ route('job-posts.index') }}">Job Posts</a>
+                                        <a class="nav-link {{ request()->routeIs('job-posts.create') ? 'active fw-bold' : '' }}"
+                                            href="{{ route('job-posts.create') }}">Add Job Post</a>
+                                    </nav>
+                                </div>
+
                                 <!-- Nested Sidenav Accordion (Apps -> Posts Management)-->
                                 <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse"
                                     data-bs-target="#appsCollapsePostsManagement" aria-expanded="false"
@@ -416,16 +438,16 @@
                             </nav>
                         </div>
                         <!-- Sidenav Accordion (Companies)-->
-                        <a class="nav-link collapsed {{ request()->routeIs('compliance.*') ? 'kh-nav-parent-active' : '' }}"
+                        <a class="nav-link collapsed {{ request()->routeIs('compliance.*', 'companies', 'companies.*') ? 'kh-nav-parent-active' : '' }}"
                             href="javascript:void(0);" data-bs-toggle="collapse"
                             data-bs-target="#collapseFlows"
-                            aria-expanded="{{ request()->routeIs('compliance.*') ? 'true' : 'false' }}"
+                            aria-expanded="{{ request()->routeIs('compliance.*', 'companies', 'companies.*') ? 'true' : 'false' }}"
                             aria-controls="collapseFlows">
                             <div class="nav-link-icon"><i data-feather="repeat"></i></div>
                             Companies
                             <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
-                        <div class="collapse {{ request()->routeIs('compliance.*') ? 'show' : '' }}"
+                        <div class="collapse {{ request()->routeIs('compliance.*', 'companies', 'companies.*') ? 'show' : '' }}"
                             id="collapseFlows" data-bs-parent="#accordionSidenav">
                             <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavCompaniesMenu">
 
@@ -446,6 +468,26 @@
                                             href="{{ route('compliance.index') }}">Compliance Register</a>
                                         <a class="nav-link {{ request()->routeIs('compliance.create') ? 'active fw-bold' : '' }}"
                                             href="{{ route('compliance.create') }}">Add Record</a>
+                                    </nav>
+                                </div>
+
+                                <!-- Company Directory Inside Companies -->
+                                <a class="nav-link collapsed {{ request()->routeIs('companies', 'companies.*') ? 'kh-nav-parent-active fw-bold' : '' }}"
+                                    href="javascript:void(0);" data-bs-toggle="collapse"
+                                    data-bs-target="#companiesCollapseDirectory"
+                                    aria-expanded="{{ request()->routeIs('companies', 'companies.*') ? 'true' : 'false' }}"
+                                    aria-controls="companiesCollapseDirectory">
+                                    Company Directory
+                                    <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                </a>
+
+                                <div class="collapse {{ request()->routeIs('companies', 'companies.*') ? 'show' : '' }}"
+                                    id="companiesCollapseDirectory" data-bs-parent="#accordionSidenavCompaniesMenu">
+                                    <nav class="sidenav-menu-nested nav">
+                                        <a class="nav-link {{ request()->routeIs('companies') ? 'active fw-bold' : '' }}"
+                                            href="{{ route('companies') }}">All Companies</a>
+                                        <a class="nav-link {{ request()->routeIs('companies.create') ? 'active fw-bold' : '' }}"
+                                            href="{{ route('companies.create') }}">Add Company</a>
                                     </nav>
                                 </div>
 

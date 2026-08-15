@@ -52,6 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
         badge: explorer.querySelector('#detail-badge'),
         title: explorer.querySelector('#detail-title'),
         company: explorer.querySelector('#detail-company'),
+        companyVerified: explorer.querySelector('#detail-company-verified'),
         location: explorer.querySelector('#detail-location'),
         salary: explorer.querySelector('#detail-salary'),
         posted: explorer.querySelector('#detail-posted'),
@@ -263,6 +264,11 @@ document.addEventListener('DOMContentLoaded', () => {
         detailFields.badge.textContent = job.featured ? 'Featured role' : 'Open role';
         detailFields.title.textContent = job.title;
         detailFields.company.textContent = job.company;
+
+        // Verification belongs to the employer, so it follows the selected job.
+        if (detailFields.companyVerified) {
+            detailFields.companyVerified.hidden = !job.company_verified;
+        }
         detailFields.location.textContent = job.location;
         detailFields.salary.textContent = job.salary;
         detailFields.posted.textContent = job.posted;

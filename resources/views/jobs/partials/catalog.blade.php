@@ -83,7 +83,12 @@
                             </div>
 
                             <div class="jf-job-card__content">
-                                <p class="jf-job-card__company">{{ $job['company'] }}</p>
+                                <p class="jf-job-card__company">
+                                    {{ $job['company'] }}
+                                    @if (! empty($job['company_verified']))
+                                        <x-verified-badge :show-label="false" :size="14" label="Verified employer" />
+                                    @endif
+                                </p>
                                 <h3>
                                     <button class="jf-job-card__preview" type="button"
                                         data-preview-job="{{ $job['id'] }}"
@@ -133,7 +138,13 @@
                     </div>
 
                     <div class="jf-detail__content">
-                        <p id="detail-company">{{ $selectedJob['company'] }}</p>
+                        <p class="jf-detail__company">
+                            <span id="detail-company">{{ $selectedJob['company'] }}</span>
+                            <span id="detail-company-verified"
+                                @unless (! empty($selectedJob['company_verified'])) hidden @endunless>
+                                <x-verified-badge :show-label="false" :size="15" label="Verified employer" />
+                            </span>
+                        </p>
                         <h2 id="detail-title">{{ $selectedJob['title'] }}</h2>
                         <div class="jf-detail__meta">
                             <span><i class="fas fa-location-dot" aria-hidden="true"></i> <span id="detail-location">{{ $selectedJob['location'] }}</span></span>

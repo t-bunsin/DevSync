@@ -144,6 +144,30 @@
                     </div>
 
                     <div class="jf-auth__field jf-auth__field--company" data-company-field>
+                        <label for="company_id">Company</label>
+                        <select id="company_id" name="company_id" data-company-select
+                            @error('company_id') aria-invalid="true" @enderror>
+                            <option value="">Select your company…</option>
+                            @foreach ($companies as $company)
+                                <option value="{{ $company->id }}" @selected(old('company_id') == $company->id)>
+                                    {{ $company->name }}
+                                </option>
+                            @endforeach
+                            <option value="__new" @selected(old('company_id') === null && old('company_name'))>
+                                My company is not listed
+                            </option>
+                        </select>
+                        @error('company_id')
+                            <small class="jf-auth__error">{{ $message }}</small>
+                        @else
+                            <small class="jf-auth__hint">Shown on the roles you post.</small>
+                        @enderror
+                    </div>
+
+                    {{-- Revealed by the "not listed" option; submitting it registers
+                         the company for an admin to approve. --}}
+                    <div class="jf-auth__field jf-auth__field--company" data-company-name-field
+                        @unless (old('company_name')) hidden @endunless>
                         <label for="company_name">Company name</label>
                         <input id="company_name" name="company_name" type="text" value="{{ old('company_name') }}"
                             placeholder="e.g. ABA Bank" autocomplete="organization"
@@ -151,7 +175,7 @@
                         @error('company_name')
                             <small class="jf-auth__error">{{ $message }}</small>
                         @else
-                            <small class="jf-auth__hint">Shown on the roles you post.</small>
+                            <small class="jf-auth__hint">We will register it and review it before it goes live.</small>
                         @enderror
                     </div>
 
@@ -208,5 +232,38 @@
 @endsection
 
 @push('scripts')
+    <script>
+        (function () {
+            'use strict';
+
+            const select = document.querySelector('[data-company-select]');
+            const nameField = document.querySelector('[data-company-name-field]');
+
+            if (!select || !nameField) {
+                return;
+            }
+
+            function sync() {
+                const wantsNew = select.value === '__new';
+                nameField.hidden = !wantsNew;
+
+                // The value is not a real company id, so never post it.
+                if (wantsNew) {
+                    select.querySelector('option[value="__new"]').value = '__new';
+                }
+            }
+
+            select.addEventListener('change', sync);
+            sync();
+
+            // Strip the sentinel on submit so validation sees an empty company_id.
+            select.form?.addEventListener('submit', function () {
+                if (select.value === '__new') {
+                    select.value = '';
+                }
+            });
+        })();
+    </script>
+
     <script src="{{ asset('js/auth.js') }}?v={{ filemtime(public_path('js/auth.js')) }}"></script>
 @endpush

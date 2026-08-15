@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Company;
 use App\Models\Compliance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -41,7 +42,10 @@ class ComplianceController extends Controller
 
     public function create()
     {
-        return view('compliance.create', ['compliance' => new Compliance()]);
+        return view('compliance.create', [
+            'compliance' => new Compliance(),
+            'companies' => Company::approved()->orderBy('name')->get(),
+        ]);
     }
 
     public function store(Request $request)
@@ -49,6 +53,7 @@ class ComplianceController extends Controller
         $validated = $this->validated($request);
 
         $compliance = new Compliance($validated);
+        $compliance->name = Company::findOrFail($validated['company_id'])->name;
 
         if ($request->hasFile('logo')) {
             $compliance->logo = $request->file('logo')->store('compliance-logos', 'public');
@@ -69,7 +74,10 @@ class ComplianceController extends Controller
 
     public function edit(Compliance $compliance)
     {
-        return view('compliance.edit', compact('compliance'));
+        return view('compliance.edit', [
+            'compliance' => $compliance,
+            'companies' => Company::approved()->orderBy('name')->get(),
+        ]);
     }
 
     public function update(Request $request, Compliance $compliance)
@@ -77,6 +85,7 @@ class ComplianceController extends Controller
         $validated = $this->validated($request);
 
         $compliance->fill($validated);
+        $compliance->name = Company::findOrFail($validated['company_id'])->name;
 
         if ($request->hasFile('logo')) {
             $this->deleteLogo($compliance);
@@ -134,7 +143,7 @@ class ComplianceController extends Controller
     private function validated(Request $request): array
     {
         return $request->validate([
-            'name' => 'required|string|max:255',
+            'company_id' => 'required|exists:companies,id',
             'category' => ['required', Rule::in(Compliance::categories())],
             'reference' => 'nullable|string|max:120',
             'status' => ['required', Rule::in(Compliance::statuses())],
@@ -143,6 +152,7 @@ class ComplianceController extends Controller
             'notes' => 'nullable|string|max:2000',
             'logo' => 'nullable|image|mimes:jpg,jpeg,png,svg,webp|max:2048',
         ], [
+            'company_id.required' => 'Choose which company this record belongs to.',
             'expires_on.after_or_equal' => 'The expiry date cannot be before the issue date.',
             'logo.max' => 'The logo must be 2 MB or smaller.',
         ]);

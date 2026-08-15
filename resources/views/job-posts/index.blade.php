@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Companies | KH-WORKS Admin')
+@section('title', 'Job Posts | KH-WORKS Admin')
 
 @push('styles')
     <link href="{{ asset('css/backoffice.css') }}?v={{ filemtime(public_path('css/backoffice.css')) }}" rel="stylesheet" />
@@ -8,23 +8,23 @@
 
 @section('main-content')
     @php
-        $total = $companies->count();
-        $filters = ['' => 'All', 'approved' => 'Approved', 'pending' => 'Pending', 'rejected' => 'Rejected'];
+        $total = $posts->count();
+        $filters = ['' => 'All', 'published' => 'Published', 'draft' => 'Draft', 'closed' => 'Closed'];
     @endphp
 
     <div class="kh-bo">
         <header class="kh-bo__head">
             <div>
                 <span class="kh-bo__kicker">Back office</span>
-                <h1>Companies</h1>
-                <p>Employers on the platform, the licences they hold, and the roles they advertise.</p>
+                <h1>Job posts</h1>
+                <p>Write the roles that appear on the public jobs pages.</p>
             </div>
 
-            <a class="kh-bo__btn" href="{{ route('companies.create') }}">
+            <a class="kh-bo__btn" href="{{ route('job-posts.create') }}">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
                     <path d="M12 5v14M5 12h14" />
                 </svg>
-                Add company
+                Add job post
             </a>
         </header>
 
@@ -38,75 +38,74 @@
             </div>
         @endif
 
-        @if ($errors->any())
-            <div class="kh-bo__errors" role="alert">
-                @foreach ($errors->all() as $message)
-                    <div>{{ $message }}</div>
-                @endforeach
+        @if ($counts->get('published', 0) === 0)
+            <div class="kh-bo__errors" role="status">
+                <strong>No published posts yet.</strong>
+                The public jobs pages are still showing the built-in demo roles. Publish a post here and it replaces them.
             </div>
         @endif
 
-        <section class="kh-bo__tiles" aria-label="Company summary">
+        <section class="kh-bo__tiles" aria-label="Job post summary">
             <article class="kh-bo__tile">
                 <span class="kh-bo__tile-icon" aria-hidden="true">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M3 21h18" /><path d="M5 21V7l7-4 7 4v14" /><path d="M9 9h2M9 13h2M9 17h2M13 9h2M13 13h2M13 17h2" />
+                        <rect x="2" y="7" width="20" height="14" rx="2" /><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2" />
                     </svg>
                 </span>
-                <div><strong>{{ number_format($counts->sum()) }}</strong><span>Companies</span></div>
+                <div><strong>{{ number_format($counts->sum()) }}</strong><span>Job posts</span></div>
             </article>
 
             <article class="kh-bo__tile">
                 <span class="kh-bo__tile-icon kh-bo__tile-icon--blue" aria-hidden="true">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M9 12l2 2 4-4" /><circle cx="12" cy="12" r="9" />
+                        <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z" /><circle cx="12" cy="12" r="3" />
                     </svg>
                 </span>
-                <div><strong>{{ number_format($counts->get('approved', 0)) }}</strong><span>Approved</span></div>
+                <div><strong>{{ number_format($counts->get('published', 0)) }}</strong><span>Published</span></div>
             </article>
 
             <article class="kh-bo__tile">
                 <span class="kh-bo__tile-icon kh-bo__tile-icon--amber" aria-hidden="true">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" />
+                        <path d="M12 20h9" /><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z" />
                     </svg>
                 </span>
-                <div><strong>{{ number_format($counts->get('pending', 0)) }}</strong><span>Awaiting approval</span></div>
+                <div><strong>{{ number_format($counts->get('draft', 0)) }}</strong><span>Drafts</span></div>
             </article>
 
             <article class="kh-bo__tile">
                 <span class="kh-bo__tile-icon kh-bo__tile-icon--danger" aria-hidden="true">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="9" /><path d="M15 9l-6 6M9 9l6 6" />
+                        <rect x="3" y="11" width="18" height="10" rx="2" /><path d="M7 11V7a5 5 0 0110 0v4" />
                     </svg>
                 </span>
-                <div><strong>{{ number_format($counts->get('rejected', 0)) }}</strong><span>Rejected</span></div>
+                <div><strong>{{ number_format($counts->get('closed', 0)) }}</strong><span>Closed</span></div>
             </article>
         </section>
 
         <section class="kh-bo__card">
             <div class="kh-bo__card-head">
                 <div>
-                    <h2>Company directory</h2>
-                    <p>{{ $total }} {{ \Illuminate\Support\Str::plural('company', $total) }} shown.</p>
+                    <h2>All job posts</h2>
+                    <p>{{ $total }} {{ \Illuminate\Support\Str::plural('post', $total) }} shown.</p>
                 </div>
 
                 <div class="kh-bo__tools">
                     <div class="kh-bo__filters">
                         @foreach ($filters as $value => $label)
                             <a class="kh-bo__filter{{ (string) $activeStatus === (string) $value ? ' is-active' : '' }}"
-                                href="{{ route('companies', array_filter(['status' => $value, 'q' => $searchTerm])) }}">
+                                href="{{ route('job-posts.index', array_filter(['status' => $value, 'q' => $searchTerm])) }}">
                                 {{ $label }}
                             </a>
                         @endforeach
                     </div>
 
-                    <form class="kh-bo__search" method="GET" action="{{ route('companies') }}" role="search">
+                    <form class="kh-bo__search" method="GET" action="{{ route('job-posts.index') }}" role="search">
                         @if ($activeStatus)
                             <input type="hidden" name="status" value="{{ $activeStatus }}">
                         @endif
                         <input type="search" name="q" value="{{ $searchTerm }}"
-                            placeholder="Search name or registration" aria-label="Search companies">
+                            placeholder="Search title or company" aria-label="Search job posts">
                         <button class="kh-bo__btn kh-bo__btn--ghost" type="submit">Search</button>
                     </form>
                 </div>
@@ -116,86 +115,78 @@
                 <table class="kh-bo__table">
                     <thead>
                         <tr>
-                            <th scope="col">Company</th>
-                            <th scope="col">Contact</th>
+                            <th scope="col">Role</th>
+                            <th scope="col">Location</th>
+                            <th scope="col">Type</th>
                             <th scope="col">Status</th>
-                            <th scope="col">Compliance</th>
-                            <th scope="col">Job posts</th>
+                            <th scope="col">Posted</th>
                             <th scope="col"><span class="visually-hidden">Actions</span></th>
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse ($companies as $company)
-                            @php
-                                $verified = $company->complianceRecords
-                                    ->where('status', \App\Models\Compliance::STATUS_VERIFIED)->count();
-                            @endphp
+                        @forelse ($posts as $post)
                             <tr>
                                 <td>
                                     <div class="kh-bo__identity">
-                                        <span class="kh-bo__logo" aria-hidden="true">
-                                            @if ($company->logoUrl())
-                                                <img src="{{ $company->logoUrl() }}" alt="">
-                                            @else
-                                                {{ $company->initials() }}
-                                            @endif
-                                        </span>
+                                        <span class="kh-bo__logo" aria-hidden="true">{{ strtoupper(substr($post->company, 0, 2)) }}</span>
                                         <div>
                                             <span class="kh-bo__name">
-                                                {{ $company->name }}
-                                                @if ($verified > 0)
-                                                    <x-verified-badge :show-label="false" :size="16" />
+                                                {{ $post->title }}
+                                                @if ($post->featured)
+                                                    <span class="kh-bo__status kh-bo__status--verified">Featured</span>
+                                                @endif
+                                                @if ($post->highlighted)
+                                                    <span class="kh-bo__status kh-bo__status--pending">Spotlight</span>
                                                 @endif
                                             </span>
-                                            <span class="kh-bo__ref">{{ $company->registration_no ?: 'No registration number' }}</span>
+                                            <span class="kh-bo__ref">{{ $post->company }} · /jobs/{{ $post->slug }}</span>
                                         </div>
                                     </div>
                                 </td>
 
-                                <td>
-                                    {{ $company->email ?: '—' }}
-                                    <span class="kh-bo__ref">{{ $company->phone ?: 'No phone' }}</span>
-                                </td>
+                                <td>{{ $post->location }}</td>
+                                <td>{{ $post->type }} · {{ $post->mode }}</td>
 
                                 <td>
-                                    <span class="kh-bo__status kh-bo__status--{{ $company->status === 'approved' ? 'verified' : ($company->status === 'pending' ? 'pending' : 'rejected') }}">
-                                        {{ ucfirst($company->status) }}
+                                    <span class="kh-bo__status kh-bo__status--{{ $post->status === 'published' ? 'verified' : ($post->status === 'draft' ? 'pending' : 'rejected') }}">
+                                        {{ ucfirst($post->status) }}
                                     </span>
                                 </td>
 
                                 <td>
-                                    @if ($company->compliance_records_count === 0)
-                                        <span class="kh-bo__expiry-flag kh-bo__expiry-flag--past">None on file</span>
+                                    @if ($post->isPublished())
+                                        {{ $post->postedLabel() }}
+                                        <span class="kh-bo__ref">{{ $post->deadlineLabel() }}</span>
                                     @else
-                                        {{ $verified }}/{{ $company->compliance_records_count }} verified
-                                        <span class="kh-bo__ref">
-                                            <a href="{{ route('compliance.index', ['q' => $company->name]) }}">View records</a>
-                                        </span>
+                                        <span class="kh-bo__ref">Not live</span>
                                     @endif
                                 </td>
 
                                 <td>
-                                    {{ $company->job_posts_count }}
-                                    <span class="kh-bo__ref">
-                                        <a href="{{ route('job-posts.index', ['q' => $company->name]) }}">View posts</a>
-                                    </span>
-                                </td>
-
-                                <td>
                                     <div class="kh-bo__actions">
-                                        <a class="kh-bo__action" href="{{ route('companies.edit', $company) }}"
-                                            title="Edit company" aria-label="Edit {{ $company->name }}">
+                                        @if ($post->isPublished())
+                                            <a class="kh-bo__action" href="{{ route('jobs.show', $post->slug) }}"
+                                                target="_blank" rel="noopener"
+                                                title="View on the site" aria-label="View {{ $post->title }} on the public site">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                                    <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" /><path d="M15 3h6v6" /><path d="M10 14L21 3" />
+                                                </svg>
+                                            </a>
+                                        @endif
+
+                                        <a class="kh-bo__action" href="{{ route('job-posts.edit', $post) }}"
+                                            title="Edit post" aria-label="Edit {{ $post->title }}">
                                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                                 <path d="M12 20h9" /><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z" />
                                             </svg>
                                         </a>
 
-                                        <form method="POST" action="{{ route('companies.destroy', $company) }}"
-                                            onsubmit="return confirm('Delete {{ addslashes($company->name) }}? This cannot be undone.');">
+                                        <form method="POST" action="{{ route('job-posts.destroy', $post) }}"
+                                            onsubmit="return confirm('Delete “{{ addslashes($post->title) }}”? This cannot be undone.');">
                                             @csrf
                                             @method('DELETE')
                                             <button class="kh-bo__action kh-bo__action--danger" type="submit"
-                                                title="Delete company" aria-label="Delete {{ $company->name }}">
+                                                title="Delete post" aria-label="Delete {{ $post->title }}">
                                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                                     <path d="M3 6h18" /><path d="M8 6V4h8v2" /><path d="M19 6l-1 14H6L5 6" />
                                                 </svg>
@@ -208,13 +199,13 @@
                             <tr>
                                 <td colspan="6">
                                     <div class="kh-bo__empty">
-                                        <strong>No companies</strong>
+                                        <strong>No job posts</strong>
                                         <span>
                                             @if ($activeStatus || $searchTerm)
                                                 Nothing matches this filter.
-                                                <a href="{{ route('companies') }}">Clear it</a> to see everything.
+                                                <a href="{{ route('job-posts.index') }}">Clear it</a> to see everything.
                                             @else
-                                                Add the first employer to start posting jobs against it.
+                                                Add the first job post to replace the demo roles on the public site.
                                             @endif
                                         </span>
                                     </div>

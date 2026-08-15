@@ -198,7 +198,9 @@ class JobDetailsTest extends TestCase
                 $this->assertArrayHasKey($key, $job);
             }
 
-            foreach (['description', 'requirements', 'company'] as $tab) {
+            // The third panel was `company`; the Company tab now renders the
+            // employer's own profile, so that panel became extra job copy.
+            foreach (['description', 'requirements', 'job_description'] as $tab) {
                 $this->assertArrayHasKey($tab, $job['tabs']);
                 $this->assertArrayHasKey('title', $job['tabs'][$tab]);
                 $this->assertArrayHasKey('body', $job['tabs'][$tab]);

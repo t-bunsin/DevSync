@@ -1,84 +1,72 @@
 @extends('layouts.admin')
 
-@php
-    $userName = auth()->user()?->displayName() ?? 'Admin';
-    $firstName = trim(explode(' ', $userName)[0] ?? $userName);
-    $todayLabel = now()->format('l, F j');
-    $stats = [
-        [
-            'label' => 'Active users',
-            'value' => number_format($widget['users'] ?? 0),
-            'icon' => 'users',
-            'tone' => 'teal',
-            'delta' => '+12.5%',
-            'note' => 'from last month',
-            'points' => '2,35 18,32 34,34 50,24 66,27 82,17 98,20 114,9',
-        ],
-        [
-            'label' => 'Open roles',
-            'value' => '128',
-            'icon' => 'briefcase',
-            'tone' => 'blue',
-            'delta' => '+8.2%',
-            'note' => '12 published this week',
-            'points' => '2,38 18,34 34,30 50,31 66,22 82,18 98,12 114,8',
-        ],
-        [
-            'label' => 'Applications',
-            'value' => '842',
-            'icon' => 'send',
-            'tone' => 'gold',
-            'delta' => '+31.0%',
-            'note' => 'candidate submissions',
-            'points' => '2,37 18,30 34,32 50,20 66,25 82,13 98,17 114,5',
-        ],
-        [
-            'label' => 'Response rate',
-            'value' => '89%',
-            'icon' => 'message-circle',
-            'tone' => 'violet',
-            'delta' => '+4.6%',
-            'note' => '7-day employer average',
-            'points' => '2,35 18,29 34,31 50,25 66,20 82,21 98,12 114,10',
-        ],
-    ];
+@section('title', 'Dashboard | KH-WORKS Admin')
 
-    $pipeline = [
-        ['label' => 'New applications', 'value' => 342, 'percentage' => 100, 'tone' => 'teal'],
-        ['label' => 'Screening', 'value' => 186, 'percentage' => 72, 'tone' => 'blue'],
-        ['label' => 'Interview', 'value' => 74, 'percentage' => 46, 'tone' => 'gold'],
-        ['label' => 'Offer', 'value' => 21, 'percentage' => 24, 'tone' => 'violet'],
-    ];
-
-    $activities = [
-        ['icon' => 'building', 'tone' => 'teal', 'title' => 'Tech Horizon submitted verification', 'meta' => 'Company review · just now', 'href' => route('companies')],
-        ['icon' => 'user-plus', 'tone' => 'blue', 'title' => '12 candidates completed their profiles', 'meta' => 'Candidate activity · 38 minutes ago', 'href' => route('users')],
-        ['icon' => 'check-circle', 'tone' => 'gold', 'title' => 'Product Designer reached its target', 'meta' => 'Hiring milestone · 2 hours ago', 'href' => route('companies')],
-        ['icon' => 'briefcase', 'tone' => 'violet', 'title' => 'ABA Bank published a new role', 'meta' => 'New listing · today', 'href' => route('companies')],
-    ];
-@endphp
-
-@section('title', 'Dashboard | KH-WORKS')
+{{-- Dashboard shell: canvas background and the tightened admin chrome. --}}
 @section('body-class', 'kh-dashboard-page')
 
 @section('main-content')
+    @php
+        $userName = auth()->user()?->displayName() ?? 'Admin';
+        $firstName = trim(explode(' ', $userName)[0] ?? $userName);
+        $todayLabel = now()->format('l, F j');
+
+        // Everything except the user count is still placeholder copy.
+        $stats = [
+            [
+                'label' => 'Active users',
+                'value' => number_format($widget['users'] ?? 0),
+                'icon' => 'users',
+                'tone' => 'teal',
+                'delta' => '+12.5%',
+                'note' => 'from last month',
+                'points' => '2,35 18,32 34,34 50,24 66,27 82,17 98,20 114,9',
+            ],
+            [
+                'label' => 'Open roles',
+                'value' => number_format($widget['open_roles'] ?? 0),
+                'icon' => 'briefcase',
+                'tone' => 'blue',
+                'delta' => '+8.2%',
+                'note' => 'published job posts',
+                'points' => '2,38 18,34 34,30 50,31 66,22 82,18 98,12 114,8',
+            ],
+            [
+                'label' => 'Applications',
+                'value' => '842',
+                'icon' => 'send',
+                'tone' => 'gold',
+                'delta' => '+31.0%',
+                'note' => 'candidate submissions',
+                'points' => '2,37 18,30 34,32 50,20 66,25 82,13 98,17 114,5',
+            ],
+            [
+                'label' => 'Response rate',
+                'value' => '89%',
+                'icon' => 'message-circle',
+                'tone' => 'violet',
+                'delta' => '+4.6%',
+                'note' => '7-day employer average',
+                'points' => '2,35 18,29 34,31 50,25 66,20 82,21 98,12 114,10',
+            ],
+        ];
+
+        $pipeline = [
+            ['label' => 'New applications', 'value' => 342, 'percentage' => 100, 'tone' => 'teal'],
+            ['label' => 'Screening', 'value' => 186, 'percentage' => 72, 'tone' => 'blue'],
+            ['label' => 'Interview', 'value' => 74, 'percentage' => 46, 'tone' => 'gold'],
+            ['label' => 'Offer', 'value' => 21, 'percentage' => 24, 'tone' => 'violet'],
+        ];
+
+        $activities = [
+            ['icon' => 'building', 'tone' => 'teal', 'title' => 'Tech Horizon submitted verification', 'meta' => 'Company review · just now', 'href' => route('companies')],
+            ['icon' => 'user-plus', 'tone' => 'blue', 'title' => '12 candidates completed their profiles', 'meta' => 'Candidate activity · 38 minutes ago', 'href' => route('users')],
+            ['icon' => 'check-circle', 'tone' => 'gold', 'title' => 'Product Designer reached its target', 'meta' => 'Hiring milestone · 2 hours ago', 'href' => route('companies')],
+            ['icon' => 'briefcase', 'tone' => 'violet', 'title' => 'ABA Bank published a new role', 'meta' => 'New listing · today', 'href' => route('companies')],
+        ];
+    @endphp
+
     <div class="kh-dash">
-        @if (session('success'))
-            <div class="kh-flash" role="status">
-                <i data-feather="check-circle"></i>
-                <span>{{ session('success') }}</span>
-                <button type="button" data-dismiss-flash aria-label="Dismiss message"><i data-feather="x"></i></button>
-            </div>
-        @endif
-
-        @if (session('status'))
-            <div class="kh-flash" role="status">
-                <i data-feather="check-circle"></i>
-                <span>{{ session('status') }}</span>
-                <button type="button" data-dismiss-flash aria-label="Dismiss message"><i data-feather="x"></i></button>
-            </div>
-        @endif
-
         <header class="kh-dash__intro">
             <div>
                 <div class="kh-dash__breadcrumb"><span>Workspace</span><i data-feather="chevron-right"></i><strong>Overview</strong></div>
@@ -88,7 +76,7 @@
             <div class="kh-dash__intro-actions">
                 <span class="kh-date"><i data-feather="calendar"></i>{{ $todayLabel }}</span>
                 <a class="kh-button kh-button--ghost" href="{{ url('/') }}" target="_blank" rel="noopener"><i data-feather="external-link"></i>View site</a>
-                <a class="kh-button kh-button--primary" href="{{ route('companies') }}"><i data-feather="plus"></i>Add company</a>
+                <a class="kh-button kh-button--primary" href="{{ route('user.create') }}"><i data-feather="user-plus"></i>Add user</a>
             </div>
         </header>
 
@@ -231,14 +219,13 @@
             <article class="kh-panel kh-actions">
                 <header class="kh-panel__head"><div><span class="kh-panel__kicker">Shortcuts</span><h2>Quick actions</h2></div></header>
                 <div class="kh-actions__grid">
-                    <a href="{{ route('users') }}"><span><i data-feather="users"></i></span><strong>Users</strong><small>Manage accounts</small></a>
+                    <a href="{{ route('user.create') }}"><span><i data-feather="user-plus"></i></span><strong>Add user</strong><small>Create an account</small></a>
                     <a href="{{ route('companies') }}"><span><i data-feather="briefcase"></i></span><strong>Companies</strong><small>Review employers</small></a>
                     <a href="{{ route('profile') }}"><span><i data-feather="settings"></i></span><strong>Settings</strong><small>Update profile</small></a>
                     <a href="{{ url('/') }}" target="_blank" rel="noopener"><span><i data-feather="globe"></i></span><strong>Website</strong><small>Open frontend</small></a>
                 </div>
             </article>
         </div>
-    </div>
 @endsection
 
 @push('scripts')

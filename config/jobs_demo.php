@@ -4,7 +4,7 @@ return [
     [
         'id' => 'retail-associates',
         'title' => 'Retail Associates',
-        'company' => 'ABA Bank',
+        'company' => 'PPCB Bank',
         'location' => 'Phnom Penh, Cambodia',
         'salary' => '$19.25 - $20.25 an hour',
         'short_salary' => '$19.25 - $20.25 / hour',
@@ -24,7 +24,7 @@ return [
         'tabs' => [
             'description' => [
                 'title' => 'Support Customers With Confidence',
-                'body' => 'ABA Bank is hiring service-minded retail associates to deliver a polished branch experience, guide customers through day-to-day banking needs, and help maintain a fast, organized front office.',
+                'body' => 'PPCB Bank is hiring service-minded retail associates to deliver a polished branch experience, guide customers through day-to-day banking needs, and help maintain a fast, organized front office.',
                 'list_title' => 'What You Will Do',
                 'list' => [
                     'Welcome customers and guide them to the right service desk',
@@ -44,9 +44,9 @@ return [
                     'A detail-oriented, service-first mindset',
                 ],
             ],
-            'company' => [
-                'title' => 'About ABA Bank',
-                'body' => 'ABA Bank is one of Cambodia’s leading financial institutions, known for customer trust, accessible services, and strong digital banking adoption.',
+            'job_description' => [
+                'title' => 'About PPCB Bank',
+                'body' => 'PPCB Bank is one of Cambodia’s leading financial institutions, known for customer trust, accessible services, and strong digital banking adoption.',
                 'list_title' => 'Why Join',
                 'list' => [
                     'Structured onboarding and branch training',
@@ -109,7 +109,7 @@ return [
                     'Comfort working asynchronously with distributed teams',
                 ],
             ],
-            'company' => [
+            'job_description' => [
                 'title' => 'About Tech Corp',
                 'body' => 'Tech Corp builds digital products for scaling teams across Southeast Asia with a focus on developer experience, reliable systems, and fast iteration.',
                 'list_title' => 'Why Engineers Like It Here',
@@ -174,7 +174,7 @@ return [
                     'Ability to balance speed, polish, and product goals',
                 ],
             ],
-            'company' => [
+            'job_description' => [
                 'title' => 'About Design Studio',
                 'body' => 'Design Studio partners with startups and established brands to create digital experiences that feel modern, useful, and visually sharp.',
                 'list_title' => 'What You Can Expect',

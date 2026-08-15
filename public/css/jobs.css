@@ -1940,6 +1940,51 @@ body.jf-body::selection {
   font-weight: 700;
 }
 
+/* Employer identity on the job pages
+   ------------------------------------------------------------------
+   The blue verification badge is styled here rather than in
+   backoffice.css, which the public pages do not load. The mark itself
+   carries its own fill, so only the layout needs declaring. */
+.kh-verified {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  vertical-align: middle;
+  color: #1d9bf0;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.kh-verified__mark {
+  flex-shrink: 0;
+}
+
+/* An uploaded logo fills the tile; the keyword artwork keeps its padding. */
+.jf-logo--photo {
+  overflow: hidden;
+  padding: 0;
+  background: #fff;
+}
+
+.jf-logo--photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.jf-job-page__company,
+.jf-job-card__company,
+.jf-detail__company {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* The panel sits on the dark hero, where the label would go unread. */
+.jf-detail__company .kh-verified {
+  color: #8bd5d1;
+}
+
 /* Footer styles live in footer.css, loaded on every frontend page. */
 
 

@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Compliance;
+use App\Models\JobPost;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\View\View;
 
 class JobController extends Controller
@@ -37,9 +40,35 @@ class JobController extends Controller
         ]);
     }
 
+    /**
+     * Published job posts, mapped into the array shape the job views have
+     * always read. Falls back to config/jobs_demo.php when there is nothing to
+     * show, so a fresh install still renders a populated site instead of an
+     * empty explorer.
+     *
+     * The hasTable() guard is deliberate: these pages are public and must keep
+     * rendering before this module has been migrated.
+     */
     private function catalog(): Collection
     {
-        return collect(config('jobs_demo', []));
+        if (! Schema::hasTable('job_posts')) {
+            return collect(config('jobs_demo', []));
+        }
+
+        $posts = JobPost::query()
+            // The count travels with the employer so the whole listing resolves
+            // its verification badges without a query per company.
+            ->with(['employer' => fn ($query) => $query->withCount([
+                'complianceRecords as verified_compliance_count' => fn ($records) => $records
+                    ->where('status', Compliance::STATUS_VERIFIED),
+            ])])
+            ->published()
+            ->orderByDesc('featured')
+            ->orderByDesc('published_at')
+            ->get()
+            ->map(fn (JobPost $post) => $post->toCatalogArray());
+
+        return $posts->isNotEmpty() ? $posts : collect(config('jobs_demo', []));
     }
 
     /**

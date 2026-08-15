@@ -22,8 +22,16 @@
             <div class="jf-job-page__hero">
                 <div class="jf-job-page__hero-copy">
                     <div class="jf-job-page__company-row">
-                        <div class="jf-logo jf-job-page__logo jf-logo--{{ $job['logo'] }}" aria-hidden="true">
-                            @if ($job['logo'] === 'aba')
+                        {{-- An uploaded company logo wins; otherwise the keyword artwork. --}}
+                        <div @class([
+                            'jf-logo',
+                            'jf-job-page__logo',
+                            'jf-logo--' . $job['logo'],
+                            'jf-logo--photo' => ! empty($job['company_logo_url']),
+                        ]) aria-hidden="true">
+                            @if (! empty($job['company_logo_url']))
+                                <img src="{{ $job['company_logo_url'] }}" alt="">
+                            @elseif ($job['logo'] === 'aba')
                                 <span>ABA</span><small>BANK</small>
                             @elseif ($job['logo'] === 'tech')
                                 <i class="fas fa-wifi"></i>
@@ -33,7 +41,13 @@
                         </div>
                         <div>
                             <span class="jf-job-page__eyebrow">{{ $job['department'] }}</span>
-                            <strong>{{ $job['company'] }}</strong>
+                            <strong class="jf-job-page__company">
+                                {{ $job['company'] }}
+                                @if (! empty($job['company_verified']))
+                                    <x-verified-badge :show-label="false" :size="17"
+                                        label="Verified employer" title="Verified employer" />
+                                @endif
+                            </strong>
                         </div>
                     </div>
 
@@ -93,15 +107,123 @@
 
                     <div class="jf-job-page__article jf-detail__article" id="job-page-panel"
                         role="tabpanel" aria-live="polite" aria-labelledby="job-tab-description">
-                        <span class="jf-kicker">Role overview</span>
-                        <h2 id="job-page-section-title">{{ $job['tabs']['description']['title'] }}</h2>
-                        <p id="job-page-section-body">{{ $job['tabs']['description']['body'] }}</p>
-                        <h3 id="job-page-list-title">{{ $job['tabs']['description']['list_title'] }}</h3>
-                        <ul class="jf-detail__list" id="job-page-list">
-                            @foreach ($job['tabs']['description']['list'] as $item)
-                                <li>{{ $item }}</li>
+                        {{-- Company profile banner. Server-rendered and revealed
+                             by job-show.js only while the Company tab is open. --}}
+                        <div class="jf-company-banner" id="job-page-company-header" hidden>
+                            <div @class(['jf-company-banner__cover', 'jf-company-banner__cover--photo' => ! empty($job['company_cover_url'])])
+                                @if (! empty($job['company_cover_url'])) style="background-image: url('{{ $job['company_cover_url'] }}')" @endif
+                                role="img" aria-label="{{ $job['company'] }} cover image">
+                            </div>
+
+                            <div class="jf-company-banner__bar">
+                                <span class="jf-company-banner__logo" aria-hidden="true">
+                                    @if (! empty($job['company_logo_url']))
+                                        <img src="{{ $job['company_logo_url'] }}" alt="">
+                                    @else
+                                        <i class="fas fa-building"></i>
+                                    @endif
+                                </span>
+
+                                <h3 class="jf-company-banner__name">
+                                    {{ $job['company'] }}
+                                    @if (! empty($job['company_verified']))
+                                        <x-verified-badge :show-label="false" :size="19" label="Verified employer" />
+                                    @endif
+                                </h3>
+                            </div>
+                        </div>
+
+                        {{-- Employer profile, same visibility rule as the banner. --}}
+                        <div class="jf-company-profile" id="job-page-company-profile" hidden>
+                            @if (! empty($job['company_details']) || ! empty($job['company_address']))
+                                <div class="jf-company-profile__cards">
+                                    @if (! empty($job['company_details']))
+                                        <section class="jf-cprofile-card jf-cprofile-card--teal">
+                                            <header class="jf-cprofile-card__head">
+                                                <span class="jf-cprofile-card__icon" aria-hidden="true"><i class="fas fa-user-tie"></i></span>
+                                                <h3>Employer Details</h3>
+                                            </header>
+                                            <dl class="jf-cprofile-facts">
+                                                @foreach ($job['company_details'] as $label => $value)
+                                                    <div class="jf-cprofile-facts__row">
+                                                        <dt>{{ $label }}</dt>
+                                                        <dd>{{ $value }}</dd>
+                                                    </div>
+                                                @endforeach
+                                            </dl>
+                                        </section>
+                                    @endif
+
+                                    @if (! empty($job['company_address']))
+                                        <section class="jf-cprofile-card jf-cprofile-card--gold">
+                                            <header class="jf-cprofile-card__head">
+                                                <span class="jf-cprofile-card__icon" aria-hidden="true"><i class="fas fa-location-dot"></i></span>
+                                                <h3>Address</h3>
+                                            </header>
+                                            <p class="jf-cprofile-card__text">{{ $job['company_address'] }}</p>
+                                            @if (! empty($job['company_website']))
+                                                <a class="jf-cprofile-card__link" href="{{ $job['company_website'] }}"
+                                                    target="_blank" rel="noopener noreferrer">
+                                                    <i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i>
+                                                    {{ preg_replace('#^https?://#', '', $job['company_website']) }}
+                                                </a>
+                                            @endif
+                                        </section>
+                                    @endif
+                                </div>
+                            @endif
+
+                            @foreach ($job['company_sections'] ?? [] as $section)
+                                <section class="jf-cprofile-story jf-cprofile-story--{{ $section['tone'] ?? 'teal' }}">
+                                    <header class="jf-cprofile-story__head">
+                                        <span class="jf-cprofile-card__icon" aria-hidden="true"><i class="fas {{ $section['icon'] }}"></i></span>
+                                        <h3>{{ $section['title'] }}</h3>
+                                    </header>
+                                    <div class="jf-cprofile-story__body">
+                                        {{-- Employer-authored prose: blank lines start a new paragraph. --}}
+                                        @foreach (preg_split('/\R{2,}/', trim($section['body'])) as $paragraph)
+                                            <p>{!! nl2br(e($paragraph)) !!}</p>
+                                        @endforeach
+                                    </div>
+                                </section>
                             @endforeach
-                        </ul>
+                        </div>
+
+                        {{-- The JS-driven panel. Hidden on the Company tab, which
+                             renders the employer profile above instead. --}}
+                        <div id="job-page-main-block">
+                            <span class="jf-kicker" id="job-page-kicker">Role overview</span>
+                            <h2 id="job-page-section-title">{{ $job['tabs']['description']['title'] }}</h2>
+                            <p id="job-page-section-body">{{ $job['tabs']['description']['body'] }}</p>
+                            <h3 id="job-page-list-title">{{ $job['tabs']['description']['list_title'] }}</h3>
+                            <ul class="jf-detail__list" id="job-page-list">
+                                @foreach ($job['tabs']['description']['list'] as $item)
+                                    <li>{{ $item }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+
+                        {{-- The post's extra job copy. Static, and only shown
+                             while the Requirements tab is open. --}}
+                        @php($extra = $job['tabs']['job_description'] ?? null)
+                        @if ($extra && (filled($extra['body']) || ! empty($extra['list'])))
+                            <div class="jf-job-extra" id="job-page-extra" hidden>
+                                <h2 class="jf-job-extra__title">{{ $extra['title'] }}</h2>
+
+                                @if (filled($extra['body']))
+                                    <p>{{ $extra['body'] }}</p>
+                                @endif
+
+                                @if (! empty($extra['list']))
+                                    <h3>{{ $extra['list_title'] }}</h3>
+                                    <ul class="jf-detail__list">
+                                        @foreach ($extra['list'] as $item)
+                                            <li>{{ $item }}</li>
+                                        @endforeach
+                                    </ul>
+                                @endif
+                            </div>
+                        @endif
                     </div>
                 </article>
 

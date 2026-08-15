@@ -6,7 +6,9 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\CompaniesController;
 use App\Http\Controllers\ComplianceController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\JobController;
+use App\Http\Controllers\JobPostController;
 use Illuminate\Http\Request;
 
 
@@ -38,16 +40,14 @@ Route::get('/language/{locale}', function (Request $request, string $locale) {
 
 Auth::routes();
 
-// The dashboard was merged into the users screen, which is now the workspace
-// landing page. Kept as a redirect so existing links and bookmarks still work.
-Route::redirect('/home', '/users')->name('home');
+// The workspace dashboard, reached from Dashboards in the admin sidebar.
+Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 Route::get('/profile', 'ProfileController@index')->name('profile');
 Route::put('/profile', 'ProfileController@update')->name('profile.update');
 
 
 
-Route::get('/companies', [CompaniesController::class, 'index'])->name('companies');
 
 Route::middleware('auth')->group(function () {
     Route::get('/users', [UserController::class, 'index'])->name('users');
@@ -57,6 +57,13 @@ Route::middleware('auth')->group(function () {
     Route::post('/compliance/{compliance}/verify', [ComplianceController::class, 'verify'])
         ->name('compliance.verify');
     Route::resource('compliance', ComplianceController::class);
+
+    Route::resource('job-posts', JobPostController::class)
+        ->parameters(['job-posts' => 'jobPost']);
+
+    // Index keeps the bare `companies` name that the admin shell already links to.
+    Route::get('/companies', [CompaniesController::class, 'index'])->name('companies');
+    Route::resource('companies', CompaniesController::class)->except(['index']);
 });
 
 Route::get('/about', function () {

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\JobPost;
 use App\Models\User;
-use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
@@ -24,11 +24,9 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $users = User::count();
-
         $widget = [
-            'users' => $users,
-            //...
+            'users' => User::count(),
+            'open_roles' => JobPost::published()->count(),
         ];
 
         return view('home', compact('widget'));

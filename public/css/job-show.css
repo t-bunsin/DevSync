@@ -766,3 +766,365 @@ html[data-theme="dark"] .jf-job-page__back-link:hover {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Company profile banner (Company tab)
+   ------------------------------------------------------------------
+   A quiet cover band with the logo card overlapping its lower edge and
+   the name set below in ink. Deliberately no scrim and no text over the
+   image: white type on an arbitrary uploaded photo is the part that
+   never stays clean. Shown by job-show.js only on the Company tab. */
+/* Breaks out of .jf-job-page__article's padding so the cover runs the full
+   width of the content card instead of sitting inset inside it. The negative
+   margin has to track that padding, so both use the same clamp(). */
+.jf-company-banner {
+  margin: calc(-1 * clamp(26px, 5vw, 48px)) calc(-1 * clamp(26px, 5vw, 48px)) 30px;
+  overflow: hidden;
+  background: var(--jf-paper, #fff);
+  border: 0;
+  border-bottom: 1px solid var(--jf-line, #dce5e7);
+  border-radius: 0;
+}
+
+.jf-company-banner[hidden] {
+  display: none;
+}
+
+.jf-company-banner__cover {
+  height: clamp(150px, 21vw, 240px);
+  /* Default when no cover is uploaded: a soft brand wash, not a grey band. */
+  background:
+    linear-gradient(115deg, #0f5f73 0%, #1ca6a0 58%, #7fd3c8 100%);
+  background-size: cover;
+  background-position: center;
+}
+
+.jf-company-banner__cover--photo {
+  background-color: #eef3f4;
+  background-repeat: no-repeat;
+}
+
+.jf-company-banner__bar {
+  display: flex;
+  align-items: flex-end;
+  gap: 18px;
+  padding: 0 clamp(26px, 5vw, 48px) 22px;
+  margin-top: -34px;
+}
+
+/* Width adapts so a wide wordmark is not squashed into a square, while a
+   square mark still reads as a tile. */
+.jf-company-banner__logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 66px;
+  max-width: 190px;
+  height: 66px;
+  padding: 9px 12px;
+  flex-shrink: 0;
+  overflow: hidden;
+  color: var(--jf-ocean, #0f5f73);
+  background: #fff;
+  border: 1px solid var(--jf-line, #dce5e7);
+  border-radius: 18px;
+  box-shadow: 0 6px 16px rgba(11, 38, 56, 0.09);
+  font-size: 1.3rem;
+}
+
+.jf-company-banner__logo img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.jf-company-banner .jf-company-banner__name {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0;
+  padding-bottom: 5px;
+  color: var(--jf-ink, #102a43);
+  font-size: clamp(1.08rem, 1.9vw, 1.4rem);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+}
+
+@media (max-width: 560px) {
+  /* Matches the article's own padding at this breakpoint (24px 20px 28px). */
+  .jf-company-banner {
+    margin: -24px -20px 24px;
+  }
+
+  .jf-company-banner__bar {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+    padding: 0 20px 18px;
+    margin-top: -28px;
+  }
+
+  .jf-company-banner__logo {
+    min-width: 56px;
+    max-width: 150px;
+    height: 56px;
+    padding: 8px 10px;
+    border-radius: 15px;
+  }
+
+  .jf-company-banner .jf-company-banner__name {
+    padding-bottom: 0;
+    font-size: 1.05rem;
+  }
+}
+
+/* Employer profile (Company tab)
+   ------------------------------------------------------------------
+   Tinted cards with gradient icon chips rather than a flat run of
+   headings. `--tone` is set per card and drives the chip, the accent
+   rule and the hover tint from one place. */
+.jf-company-profile[hidden] {
+  display: none;
+}
+
+.jf-company-profile {
+  --tone: var(--jf-teal, #1ca6a0);
+  --tone-deep: var(--jf-teal-dark, #127d7a);
+}
+
+.jf-cprofile-card--teal,
+.jf-cprofile-story--teal {
+  --tone: #1ca6a0;
+  --tone-deep: #0f5f73;
+}
+
+.jf-cprofile-card--gold,
+.jf-cprofile-story--gold {
+  --tone: #e6a53f;
+  --tone-deep: #b7791f;
+}
+
+.jf-cprofile-story--ocean {
+  --tone: #2f8fb0;
+  --tone-deep: #0f5f73;
+}
+
+.jf-cprofile-story--navy {
+  --tone: #4e7fe5;
+  --tone-deep: #24457f;
+}
+
+/* Shared chip
+   ------------------------------------------------------------------ */
+.jf-cprofile-card__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  color: #fff;
+  background: linear-gradient(135deg, var(--tone), var(--tone-deep));
+  border-radius: 14px;
+  box-shadow: 0 8px 18px color-mix(in srgb, var(--tone) 34%, transparent);
+  font-size: 0.95rem;
+}
+
+/* Fact cards
+   ------------------------------------------------------------------ */
+.jf-company-profile__cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+.jf-cprofile-card {
+  position: relative;
+  overflow: hidden;
+  padding: 20px 22px 22px;
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--tone) 7%, transparent), transparent 62%),
+    var(--jf-paper, #fff);
+  border: 1px solid var(--jf-line, #dce5e7);
+  border-radius: 20px;
+  transition: transform 220ms var(--jf-ease-out, ease), box-shadow 220ms ease;
+}
+
+.jf-cprofile-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 3px;
+  background: linear-gradient(90deg, var(--tone), transparent);
+}
+
+.jf-cprofile-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--jf-shadow-md, 0 16px 40px rgba(11, 38, 56, 0.09));
+}
+
+.jf-cprofile-card__head,
+.jf-cprofile-story__head {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  margin-bottom: 15px;
+}
+
+.jf-job-page__article .jf-cprofile-card__head h3,
+.jf-job-page__article .jf-cprofile-story__head h3 {
+  margin: 0;
+  color: var(--jf-ink, #102a43);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.jf-cprofile-facts {
+  display: grid;
+  gap: 9px;
+  margin: 0;
+}
+
+.jf-cprofile-facts__row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding-bottom: 9px;
+  border-bottom: 1px dashed var(--jf-line, #dce5e7);
+}
+
+.jf-cprofile-facts__row:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.jf-cprofile-facts dt {
+  min-width: 104px;
+  color: var(--jf-ink-soft, #486581);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.jf-cprofile-facts dd {
+  margin: 0;
+  color: var(--jf-ink, #102a43);
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.jf-job-page__article .jf-cprofile-card__text {
+  margin: 0;
+  color: var(--jf-ink-soft, #486581);
+  font-size: 0.87rem;
+  line-height: 1.7;
+}
+
+.jf-cprofile-card__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 12px;
+  color: var(--tone-deep);
+  font-size: 0.83rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.jf-cprofile-card__link:hover {
+  color: var(--tone-deep);
+  text-decoration: underline;
+}
+
+.jf-cprofile-card__link i {
+  font-size: 0.72rem;
+}
+
+/* Narrative sections
+   ------------------------------------------------------------------ */
+.jf-cprofile-story {
+  position: relative;
+  padding: 20px 22px 20px 24px;
+  margin-bottom: 14px;
+  background: var(--jf-paper, #fff);
+  border: 1px solid var(--jf-line, #dce5e7);
+  border-radius: 20px;
+  transition: border-color 220ms ease, box-shadow 220ms ease;
+}
+
+/* Accent rule down the left edge, tinted per section. */
+.jf-cprofile-story::before {
+  content: "";
+  position: absolute;
+  top: 20px;
+  bottom: 20px;
+  left: 0;
+  width: 3px;
+  background: linear-gradient(180deg, var(--tone), transparent);
+  border-radius: 0 3px 3px 0;
+}
+
+.jf-cprofile-story:hover {
+  border-color: color-mix(in srgb, var(--tone) 42%, var(--jf-line, #dce5e7));
+  box-shadow: var(--jf-shadow-md, 0 16px 40px rgba(11, 38, 56, 0.09));
+}
+
+.jf-cprofile-story:last-child {
+  margin-bottom: 4px;
+}
+
+.jf-cprofile-story__body {
+  padding-left: 55px;
+}
+
+.jf-job-page__article .jf-cprofile-story__body p {
+  margin: 0 0 12px;
+  color: var(--jf-ink-soft, #486581);
+  font-size: 0.88rem;
+  line-height: 1.75;
+}
+
+.jf-cprofile-story__body p:last-child {
+  margin-bottom: 0;
+}
+
+@media (max-width: 560px) {
+  .jf-cprofile-story__body {
+    padding-left: 0;
+  }
+
+  .jf-cprofile-facts__row {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .jf-cprofile-facts dt {
+    min-width: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .jf-cprofile-card:hover {
+    transform: none;
+  }
+}
+
+/* Extra job copy, shown under Requirements
+   ------------------------------------------------------------------ */
+.jf-job-extra[hidden] {
+  display: none;
+}
+
+.jf-job-extra {
+  padding-top: 22px;
+  margin-top: 26px;
+  border-top: 1px solid var(--jf-line, #dce5e7);
+}
+
+.jf-job-page__article .jf-job-extra__title {
+  margin: 0 0 10px;
+  font-size: clamp(1.1rem, 1.9vw, 1.4rem);
+}
