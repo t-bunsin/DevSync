@@ -30,6 +30,8 @@ class User extends Authenticatable
         'phone',
         'password_hash',
         'status',
+        'first_name',
+        'last_name',
         'display_name',
         'avatar_url',
         'preferred_locale',
@@ -133,6 +135,23 @@ class User extends Authenticatable
     // -----------------------------------------------------------------
     // Display
     // -----------------------------------------------------------------
+
+    /**
+     * Write the name parts and refresh display_name from them. The parts are
+     * what a form collects, but display_name is what the rest of the app (and
+     * v_user_access) reads, so the two are only ever set together.
+     */
+    public function setName(?string $first, ?string $last): void
+    {
+        $this->first_name = trim((string) $first) ?: null;
+        $this->last_name = trim((string) $last) ?: null;
+        $this->display_name = self::composeDisplayName($first, $last);
+    }
+
+    public static function composeDisplayName(?string $first, ?string $last): ?string
+    {
+        return trim(trim((string) $first) . ' ' . trim((string) $last)) ?: null;
+    }
 
     public function displayName(): string
     {

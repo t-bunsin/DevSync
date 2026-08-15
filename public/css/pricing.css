@@ -1,0 +1,497 @@
+/*
+ * Homepage pricing.
+ *
+ * Compact cards with a lot of air inside them: the section sits on a soft
+ * radial wash, each card lifts and reveals a teal/gold accent bar on hover
+ * (the same treatment .jf-step uses in jobs.css), and the recommended plan
+ * wears that accent permanently so the eye lands there first.
+ *
+ * Cross-card alignment is done with fixed blocks — the blurb reserves two
+ * lines and the feature list flexes — so the dividers and the buttons sit on
+ * the same baseline in every card without needing subgrid.
+ *
+ * Colours come from the jobs.css token set, so the dark theme is inherited;
+ * only hardcoded accents need their own override.
+ */
+
+.jf-pricing {
+  position: relative;
+  padding: 44px 0 18px;
+}
+
+/* Soft wash so the cards sit on something rather than floating on flat paint. */
+.jf-pricing::before {
+  content: "";
+  position: absolute;
+  /* Kept inside the section's own box: bleeding it sideways with a negative
+     inset widens the document and gives the page a horizontal scrollbar. */
+  inset: 8% 0 12%;
+  background:
+    radial-gradient(58% 62% at 18% 32%, rgba(28, 166, 160, 0.1), transparent 70%),
+    radial-gradient(52% 58% at 86% 72%, rgba(243, 189, 101, 0.12), transparent 72%);
+  pointer-events: none;
+}
+
+.jf-pricing > .jf-shell {
+  position: relative;
+}
+
+/* Heading
+   ------------------------------------------------------------------ */
+.jf-pricing__heading {
+  max-width: 620px;
+  margin: 0 auto 26px;
+  text-align: center;
+}
+
+.jf-pricing__heading h2 {
+  margin: 8px 0 0;
+  font-size: clamp(1.65rem, 2.9vw, 2.25rem);
+  letter-spacing: -0.045em;
+}
+
+.jf-pricing__heading > p {
+  margin: 9px auto 0;
+  max-width: 46ch;
+  color: var(--jf-ink-soft);
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+/* Billing switch
+   ------------------------------------------------------------------ */
+.jf-pricing__billing {
+  display: flex;
+  justify-content: center;
+  margin: 0 0 26px;
+}
+
+.jf-pricing__billing[hidden] {
+  display: none;
+}
+
+.jf-pricing__switch {
+  display: inline-flex;
+  gap: 4px;
+  padding: 4px;
+  background: var(--jf-paper);
+  border: 1px solid var(--jf-line);
+  border-radius: 999px;
+  box-shadow: var(--jf-shadow-md);
+}
+
+.jf-pricing__switch button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 20px;
+  color: var(--jf-ink-soft);
+  background: transparent;
+  border: 0;
+  border-radius: 999px;
+  font-size: 0.83rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: color 200ms ease, background 200ms ease;
+}
+
+.jf-pricing__switch button:hover {
+  color: var(--jf-ink);
+}
+
+.jf-pricing__switch button[aria-pressed="true"] {
+  color: #fff;
+  background: linear-gradient(120deg, var(--jf-teal-dark), var(--jf-ocean));
+  box-shadow: 0 10px 22px rgba(18, 125, 122, 0.24);
+}
+
+.jf-pricing__switch button:focus-visible {
+  outline: 3px solid rgba(28, 166, 160, 0.32);
+  outline-offset: 2px;
+}
+
+.jf-pricing__save {
+  padding: 3px 8px;
+  color: var(--jf-navy, #0b2638);
+  background: var(--jf-gold);
+  border-radius: 999px;
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* Cards
+   ------------------------------------------------------------------ */
+.jf-pricing__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 16px;
+}
+
+.jf-plan {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  padding: 26px 24px 24px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.6), var(--jf-paper) 58%);
+  background-color: var(--jf-paper);
+  border: 1px solid var(--jf-line);
+  border-radius: var(--jf-radius-lg);
+  transition: transform 260ms var(--jf-ease-out), box-shadow 260ms ease,
+    border-color 260ms ease;
+}
+
+/* Accent bar, hidden until hover — same idiom as .jf-step in jobs.css. */
+.jf-plan::after {
+  content: "";
+  position: absolute;
+  inset: -1px -1px auto;
+  height: 3px;
+  background: linear-gradient(90deg, var(--jf-teal), var(--jf-gold));
+  border-radius: var(--jf-radius-lg) var(--jf-radius-lg) 0 0;
+  opacity: 0;
+  transition: opacity 260ms ease;
+}
+
+.jf-plan:hover {
+  transform: translateY(-5px);
+  border-color: rgba(28, 166, 160, 0.3);
+  box-shadow: var(--jf-shadow-lg);
+}
+
+.jf-plan:hover::after {
+  opacity: 1;
+}
+
+.jf-plan--featured {
+  background: linear-gradient(180deg, rgba(28, 166, 160, 0.07), var(--jf-paper) 46%);
+  background-color: var(--jf-paper);
+  border-color: rgba(28, 166, 160, 0.4);
+  box-shadow: var(--jf-shadow-md);
+}
+
+.jf-plan--featured::after {
+  opacity: 1;
+}
+
+/* Above the accent bar, which runs along the same edge and would otherwise
+   paint straight through the label. */
+.jf-plan__badge {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  right: 24px;
+  transform: translateY(-50%);
+  padding: 6px 13px;
+  color: #fff;
+  background: linear-gradient(120deg, var(--jf-teal-dark), var(--jf-ocean));
+  border-radius: 999px;
+  box-shadow: 0 10px 22px rgba(15, 95, 115, 0.28);
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* Card head
+   ------------------------------------------------------------------ */
+.jf-plan__name {
+  margin: 0;
+  color: var(--jf-ink-soft);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.jf-plan__price {
+  display: flex;
+  align-items: baseline;
+  gap: 3px;
+  margin: 10px 0 0;
+}
+
+.jf-plan__price strong {
+  color: var(--jf-ocean);
+  font-size: clamp(2rem, 3.2vw, 2.55rem);
+  font-weight: 800;
+  letter-spacing: -0.055em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Guarded: without background-clip the transparent fill would hide the price. */
+@supports (background-clip: text) or (-webkit-background-clip: text) {
+  .jf-plan__price strong {
+    background: linear-gradient(130deg, var(--jf-ocean), var(--jf-teal));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+}
+
+.jf-plan__price span {
+  color: var(--jf-ink-soft);
+  font-size: 0.84rem;
+  font-weight: 600;
+}
+
+.jf-plan__billing-note {
+  margin: 7px 0 0;
+  color: var(--jf-ink-soft);
+  font-size: 0.74rem;
+  font-weight: 600;
+}
+
+/* Reserves two lines so the divider below sits at the same height in every
+   card, however long the sentence is. */
+.jf-plan__blurb {
+  min-height: 2.8em;
+  margin: 9px 0 0;
+  color: var(--jf-ink-soft);
+  font-size: 0.8rem;
+  line-height: 1.55;
+}
+
+/* Features
+   ------------------------------------------------------------------ */
+.jf-plan__features {
+  flex: 1;
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  margin: 16px 0 0;
+  padding: 16px 0 0;
+  border-top: 1px solid var(--jf-line);
+  list-style: none;
+}
+
+.jf-plan__features li {
+  display: grid;
+  grid-template-columns: 19px 1fr;
+  align-items: start;
+  gap: 10px;
+  color: var(--jf-ink-soft);
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+.jf-plan__features i {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 19px;
+  height: 19px;
+  margin-top: 1px;
+  color: var(--jf-teal-dark);
+  background: rgba(28, 166, 160, 0.12);
+  border-radius: 50%;
+  font-size: 0.6rem;
+}
+
+/* The one line that differs between tiers carries the weight, so a scan down
+   a column lands on what the extra money buys. */
+.jf-plan__features li.is-highlight {
+  color: var(--jf-ink);
+  font-weight: 600;
+}
+
+.jf-plan__features li.is-highlight i {
+  color: #fff;
+  background: var(--jf-teal-dark);
+}
+
+/* Action
+   ------------------------------------------------------------------ */
+.jf-plan__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 44px;
+  margin-top: 20px;
+  color: var(--jf-ink);
+  background: transparent;
+  border: 1.5px solid var(--jf-line-dark);
+  font-size: 0.86rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.jf-plan__cta:hover {
+  color: var(--jf-ocean);
+  background: rgba(28, 166, 160, 0.08);
+  border-color: var(--jf-teal);
+}
+
+.jf-plan__cta--solid {
+  color: #fff;
+  background: linear-gradient(120deg, var(--jf-teal-dark), var(--jf-ocean));
+  border-color: transparent;
+  box-shadow: 0 12px 26px rgba(18, 125, 122, 0.26);
+}
+
+.jf-plan__cta--solid:hover {
+  color: #fff;
+  background: linear-gradient(120deg, var(--jf-ocean), var(--jf-teal-dark));
+  border-color: transparent;
+  box-shadow: 0 16px 32px rgba(18, 125, 122, 0.32);
+}
+
+.jf-pricing__note {
+  margin: 16px 0 0;
+  color: var(--jf-ink-soft);
+  font-size: 0.78rem;
+  text-align: center;
+}
+
+/* Dark theme
+   ------------------------------------------------------------------ */
+html[data-theme="dark"] .jf-pricing::before {
+  background:
+    radial-gradient(46% 60% at 22% 32%, rgba(118, 214, 209, 0.07), transparent 70%),
+    radial-gradient(40% 55% at 82% 72%, rgba(243, 189, 101, 0.06), transparent 72%);
+}
+
+html[data-theme="dark"] .jf-plan {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.035), var(--jf-paper) 58%);
+  background-color: var(--jf-paper);
+}
+
+html[data-theme="dark"] .jf-plan--featured {
+  background: linear-gradient(180deg, rgba(118, 214, 209, 0.09), var(--jf-paper) 46%);
+  background-color: var(--jf-paper);
+  border-color: rgba(118, 214, 209, 0.34);
+}
+
+@supports (background-clip: text) or (-webkit-background-clip: text) {
+  html[data-theme="dark"] .jf-plan__price strong {
+    background: linear-gradient(130deg, #9ae4e0, #76d6d1);
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+}
+
+html[data-theme="dark"] .jf-pricing__switch button[aria-pressed="true"] {
+  color: #061014;
+  background: linear-gradient(120deg, #83ded8, #9ae4e0);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.34);
+}
+
+html[data-theme="dark"] .jf-pricing__save {
+  color: #2a1c05;
+}
+
+html[data-theme="dark"] .jf-plan__badge {
+  color: #061014;
+  background: linear-gradient(120deg, #83ded8, #9ae4e0);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.34);
+}
+
+html[data-theme="dark"] .jf-plan__features i {
+  color: #83ded8;
+  background: rgba(131, 222, 216, 0.14);
+}
+
+html[data-theme="dark"] .jf-plan__features li.is-highlight i {
+  color: #061014;
+  background: #83ded8;
+}
+
+html[data-theme="dark"] .jf-plan__cta {
+  color: var(--jf-ink);
+  border-color: var(--jf-line-dark);
+}
+
+html[data-theme="dark"] .jf-plan__cta:hover {
+  color: #061014;
+  background: #83ded8;
+  border-color: #83ded8;
+}
+
+html[data-theme="dark"] .jf-plan__cta--solid {
+  color: #061014;
+  background: linear-gradient(120deg, #83ded8, #9ae4e0);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.36);
+}
+
+html[data-theme="dark"] .jf-plan__cta--solid:hover {
+  color: #061014;
+  background: linear-gradient(120deg, #9ae4e0, #83ded8);
+}
+
+/* Entrance
+   ------------------------------------------------------------------ */
+@media (prefers-reduced-motion: no-preference) {
+  .jf-plan {
+    animation: jf-enter-up 620ms var(--jf-ease-out) both;
+  }
+
+  .jf-plan:nth-child(2) {
+    animation-delay: 90ms;
+  }
+
+  .jf-plan:nth-child(3) {
+    animation-delay: 170ms;
+  }
+
+  /* Where supported, the stagger plays as the section scrolls into view
+     instead of on load — the section sits well below the fold. */
+  @supports (animation-timeline: view()) {
+    .jf-plan {
+      animation-timeline: view();
+      animation-range: entry 10% cover 26%;
+      animation-fill-mode: both;
+      animation-delay: 0s;
+    }
+
+    .jf-plan:nth-child(2) {
+      animation-range: entry 14% cover 30%;
+    }
+
+    .jf-plan:nth-child(3) {
+      animation-range: entry 18% cover 34%;
+    }
+  }
+}
+
+/* Responsive
+   ------------------------------------------------------------------ */
+@media (max-width: 940px) {
+  .jf-pricing__grid {
+    grid-template-columns: 1fr;
+    gap: 13px;
+    max-width: 460px;
+    margin-inline: auto;
+  }
+
+  .jf-plan__blurb {
+    min-height: 0;
+  }
+
+  /* Stacked, the badge would hang over the card above; buy it clear space. */
+  .jf-plan--featured {
+    margin-top: 10px;
+  }
+}
+
+@media (max-width: 560px) {
+  .jf-pricing {
+    padding-top: 32px;
+  }
+
+  .jf-plan {
+    padding: 22px 20px 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .jf-plan,
+  .jf-plan:hover {
+    transform: none;
+  }
+}

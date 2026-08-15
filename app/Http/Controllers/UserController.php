@@ -16,7 +16,11 @@ class UserController extends Controller
         // Eager loaded so the list does not fire a roles query per row.
         $users = User::with('roles')->orderBy('created_at')->get();
 
-        return view('users.index', compact('users'));
+        // This screen carries the workspace overview since the dashboard was
+        // merged into it; the admin shell reads $widget for the sidebar count.
+        $widget = ['users' => $users->count()];
+
+        return view('users.index', compact('users', 'widget'));
     }
 
     public function create()
@@ -31,7 +35,7 @@ class UserController extends Controller
         $validated = $request->validate($this->rules());
 
         $user = new User();
-        $user->display_name = $validated['display_name'];
+        $user->setName($validated['first_name'], $validated['last_name']);
         $user->email = $validated['email'];
         $user->phone = $validated['phone'] ?: null;
         $user->status = $validated['status'];
@@ -66,7 +70,7 @@ class UserController extends Controller
     {
         $validated = $request->validate($this->rules($user));
 
-        $user->display_name = $validated['display_name'];
+        $user->setName($validated['first_name'], $validated['last_name']);
         $user->email = $validated['email'];
         $user->phone = $validated['phone'] ?: null;
         $user->status = $validated['status'];
@@ -102,7 +106,8 @@ class UserController extends Controller
     private function rules(?User $user = null): array
     {
         return [
-            'display_name' => 'required|string|max:160',
+            'first_name' => 'required|string|max:80',
+            'last_name' => 'required|string|max:80',
             'email' => ['required', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user?->id)],
             'phone' => ['nullable', 'string', 'max:30', Rule::unique('users', 'phone')->ignore($user?->id)],
             'role' => ['required', Rule::exists('roles', 'code')],

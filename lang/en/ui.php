@@ -32,6 +32,13 @@ return [
     'footer' => [
         'copy' => 'Connecting talent with modern teams across Cambodia and remote-first companies.',
         'browse_jobs' => 'Browse Jobs',
+        'nav_label' => 'Footer',
+        'explore' => 'Explore',
+        'account' => 'Account',
+        'pricing' => 'Pricing',
+        'follow_on' => 'Follow us on :network (opens in a new tab)',
+        'rights' => 'All rights reserved.',
+        'place' => 'Phnom Penh · Cambodia',
     ],
     'chat' => [
         'label' => 'Chat with us',

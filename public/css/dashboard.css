@@ -217,9 +217,10 @@ body.nav-fixed {
   color: #78929c;
 }
 
-.kh-dashboard-page #accordionSidenav > :not(.kh-app-menu) {
-  display: none !important;
-}
+/* The dashboard page used to swap the sidebar for a stripped-down .kh-app-menu
+   and hide everything else. The full accordion is the sidebar now, so nothing
+   is hidden here; the .kh-app-menu rules below are kept in case that simplified
+   menu is wanted again. */
 
 .kh-app-menu {
   display: block;

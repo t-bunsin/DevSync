@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CompaniesController;
+use App\Http\Controllers\ComplianceController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\JobController;
 use Illuminate\Http\Request;
@@ -37,7 +38,9 @@ Route::get('/language/{locale}', function (Request $request, string $locale) {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+// The dashboard was merged into the users screen, which is now the workspace
+// landing page. Kept as a redirect so existing links and bookmarks still work.
+Route::redirect('/home', '/users')->name('home');
 
 Route::get('/profile', 'ProfileController@index')->name('profile');
 Route::put('/profile', 'ProfileController@update')->name('profile.update');
@@ -50,6 +53,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/users', [UserController::class, 'index'])->name('users');
     Route::post('/users', [UserController::class, 'store'])->name('users.store');
     Route::resource('user', UserController::class);
+
+    Route::post('/compliance/{compliance}/verify', [ComplianceController::class, 'verify'])
+        ->name('compliance.verify');
+    Route::resource('compliance', ComplianceController::class);
 });
 
 Route::get('/about', function () {

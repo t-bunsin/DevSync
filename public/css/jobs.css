@@ -1940,81 +1940,11 @@ body.jf-body::selection {
   font-weight: 700;
 }
 
-/* Footer */
-.jf-footer {
-  padding: 64px 0 22px;
-  color: #d7e5e7;
-  background: var(--jf-navy);
-}
+/* Footer styles live in footer.css, loaded on every frontend page. */
 
-.jf-footer__inner {
-  display: grid;
-  grid-template-columns: 1.3fr 1fr;
-  gap: 80px;
-  align-items: start;
-  padding: 0 0 42px;
-  background: transparent;
-  border: 0;
-  border-radius: 0;
-  backdrop-filter: none;
-}
 
-.jf-footer__brand {
-  display: inline-block;
-  margin: 0 0 13px;
-  color: #fff;
-  font-size: 1.25rem;
-  font-weight: 700;
-  letter-spacing: -0.04em;
-}
 
-.jf-footer__brand span {
-  color: #83ded8;
-}
 
-.jf-footer__copy {
-  max-width: 48ch;
-  margin: 0;
-  color: #9eb4bb;
-  font-size: 0.76rem;
-  line-height: 1.7;
-}
-
-.jf-footer__links {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 30px;
-}
-
-.jf-footer__links > div {
-  display: grid;
-  gap: 9px;
-}
-
-.jf-footer__links strong {
-  margin-bottom: 4px;
-  color: #fff;
-  font-size: 0.72rem;
-}
-
-.jf-footer__links a {
-  color: #9eb4bb;
-  font-size: 0.75rem;
-}
-
-.jf-footer__links a:hover {
-  color: #83ded8;
-}
-
-.jf-footer__bottom {
-  display: flex;
-  justify-content: space-between;
-  gap: 20px;
-  padding-top: 20px;
-  color: #78909a;
-  border-top: 1px solid rgba(255, 255, 255, 0.09);
-  font-size: 0.75rem;
-}
 
 /* White / black theme switch */
 html[data-theme="dark"] {
@@ -2286,9 +2216,6 @@ html[data-theme="dark"] .jf-dialog__success {
   background: #123126;
 }
 
-html[data-theme="dark"] .jf-footer {
-  background: #040b0f;
-}
 
 [hidden] {
   display: none !important;
@@ -2527,8 +2454,7 @@ html[data-theme="dark"] .jf-footer {
 
   .jf-search__header,
   .jf-search__footer,
-  .jf-board__heading,
-  .jf-footer__bottom {
+  .jf-board__heading {
     align-items: flex-start;
     flex-direction: column;
   }
@@ -2581,10 +2507,6 @@ html[data-theme="dark"] .jf-footer {
     grid-template-columns: 1fr;
   }
 
-  .jf-footer__inner {
-    grid-template-columns: 1fr;
-    gap: 34px;
-  }
 }
 
 @media (max-width: 480px) {

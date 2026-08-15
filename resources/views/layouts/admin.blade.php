@@ -51,7 +51,7 @@
         <!-- * * Tip * * You can use text or an image for your navbar brand.-->
         <!-- * * * * * * When using an image, we recommend the SVG format.-->
         <!-- * * * * * * Dimensions: Maximum height: 32px, maximum width: 240px-->
-        <a class="navbar-brand kh-admin-brand pe-3 ps-4 ps-lg-2" href="{{ route('home') }}">
+        <a class="navbar-brand kh-admin-brand pe-3 ps-4 ps-lg-2" href="{{ route('users') }}">
             <span class="kh-admin-brand__mark"><i class="fas fa-briefcase"></i></span>
             <span>KH-<strong>WORKS</strong></span>
         </a>
@@ -141,7 +141,7 @@
                             <div class="dropdown-notifications-item-content-text">ABA Bank published a new retail role.</div>
                         </div>
                     </a>
-                    <a class="dropdown-item dropdown-notifications-footer" href="{{ route('home') }}">Open dashboard</a>
+                    <a class="dropdown-item dropdown-notifications-footer" href="{{ route('users') }}">Open workspace</a>
                 </div>
             </li>
             <!-- Messages Dropdown-->
@@ -219,44 +219,6 @@
             <nav class="sidenav shadow-right sidenav-light">
                 <div class="sidenav-menu">
                     <div class="nav accordion" id="accordionSidenav">
-                        @if (request()->routeIs('home'))
-                            <div class="kh-app-menu">
-                                <div class="sidenav-menu-heading">Workspace</div>
-                                <a class="nav-link active" href="{{ route('home') }}" aria-current="page">
-                                    <div class="nav-link-icon"><i data-feather="grid"></i></div>
-                                    Overview
-                                    <span class="kh-nav-live"><i></i>Live</span>
-                                </a>
-
-                                <div class="sidenav-menu-heading">Management</div>
-                                <a class="nav-link" href="{{ route('users') }}">
-                                    <div class="nav-link-icon"><i data-feather="users"></i></div>
-                                    Candidates
-                                    <span class="kh-nav-count">{{ number_format($widget['users'] ?? 0) }}</span>
-                                </a>
-                                <a class="nav-link" href="{{ route('companies') }}">
-                                    <div class="nav-link-icon"><i data-feather="briefcase"></i></div>
-                                    Companies
-                                </a>
-                                <a class="nav-link" href="{{ route('profile') }}">
-                                    <div class="nav-link-icon"><i data-feather="settings"></i></div>
-                                    Account settings
-                                </a>
-
-                                <div class="sidenav-menu-heading">Public site</div>
-                                <a class="nav-link" href="{{ url('/') }}" target="_blank" rel="noopener">
-                                    <div class="nav-link-icon"><i data-feather="globe"></i></div>
-                                    Open website
-                                    <i class="kh-nav-external" data-feather="external-link"></i>
-                                </a>
-
-                                <div class="kh-sidebar-pulse">
-                                    <span><i data-feather="zap"></i>Platform pulse</span>
-                                    <strong>Everything looks healthy</strong>
-                                    <div><i></i><small>All systems operational</small></div>
-                                </div>
-                            </div>
-                        @endif
                         <!-- Sidenav Menu Heading (Account)-->
                         <!-- * * Note: * * Visible only on and above the sm breakpoint-->
                         <div class="sidenav-menu-heading d-sm-none">Account</div>
@@ -453,15 +415,40 @@
                                 </div>
                             </nav>
                         </div>
-                        <!-- Sidenav Accordion (Flows)-->
-                        <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse"
-                            data-bs-target="#collapseFlows" aria-expanded="false" aria-controls="collapseFlows">
+                        <!-- Sidenav Accordion (Companies)-->
+                        <a class="nav-link collapsed {{ request()->routeIs('compliance.*') ? 'kh-nav-parent-active' : '' }}"
+                            href="javascript:void(0);" data-bs-toggle="collapse"
+                            data-bs-target="#collapseFlows"
+                            aria-expanded="{{ request()->routeIs('compliance.*') ? 'true' : 'false' }}"
+                            aria-controls="collapseFlows">
                             <div class="nav-link-icon"><i data-feather="repeat"></i></div>
-                            Flows
+                            Companies
                             <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
-                        <div class="collapse" id="collapseFlows" data-bs-parent="#accordionSidenav">
-                            <nav class="sidenav-menu-nested nav">
+                        <div class="collapse {{ request()->routeIs('compliance.*') ? 'show' : '' }}"
+                            id="collapseFlows" data-bs-parent="#accordionSidenav">
+                            <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavCompaniesMenu">
+
+                                <!-- Compliance Menu Inside Companies -->
+                                <a class="nav-link collapsed {{ request()->routeIs('compliance.*') ? 'kh-nav-parent-active fw-bold' : '' }}"
+                                    href="javascript:void(0);" data-bs-toggle="collapse"
+                                    data-bs-target="#companiesCollapseCompliance"
+                                    aria-expanded="{{ request()->routeIs('compliance.*') ? 'true' : 'false' }}"
+                                    aria-controls="companiesCollapseCompliance">
+                                    Compliance
+                                    <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                </a>
+
+                                <div class="collapse {{ request()->routeIs('compliance.*') ? 'show' : '' }}"
+                                    id="companiesCollapseCompliance" data-bs-parent="#accordionSidenavCompaniesMenu">
+                                    <nav class="sidenav-menu-nested nav">
+                                        <a class="nav-link {{ request()->routeIs('compliance.index') ? 'active fw-bold' : '' }}"
+                                            href="{{ route('compliance.index') }}">Compliance Register</a>
+                                        <a class="nav-link {{ request()->routeIs('compliance.create') ? 'active fw-bold' : '' }}"
+                                            href="{{ route('compliance.create') }}">Add Record</a>
+                                    </nav>
+                                </div>
+
                                 <a class="nav-link" href="multi-tenant-select.html">Multi-Tenant Registration</a>
                                 <a class="nav-link" href="wizard.html">Wizard</a>
                             </nav>

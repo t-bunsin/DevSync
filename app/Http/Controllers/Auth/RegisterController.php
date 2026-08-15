@@ -73,11 +73,10 @@ class RegisterController extends Controller
     {
         $isEmployer = ($data['account_type'] ?? 'employee') === 'employer';
 
-        // The signup form still asks for first and last name; module 01 stores a
-        // single display_name, so they are joined here rather than changing the
-        // public-facing form.
         $user = User::create([
-            'display_name' => trim($data['first_name'] . ' ' . $data['last_name']),
+            'first_name' => $data['first_name'],
+            'last_name' => $data['last_name'],
+            'display_name' => User::composeDisplayName($data['first_name'], $data['last_name']),
             'email' => $data['email'],
             'status' => User::STATUS_ACTIVE,
             'preferred_locale' => in_array(app()->getLocale(), ['km', 'kh'], true) ? 'km' : 'en',

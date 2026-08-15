@@ -10,7 +10,8 @@
 @section('main-content')
     @php
         $errorTargets = [
-            'display_name' => 'inputDisplayName',
+            'first_name' => 'inputFirstName',
+            'last_name' => 'inputLastName',
             'email' => 'inputEmailAddress',
             'phone' => 'inputPhone',
             'role' => 'inputRole',
@@ -97,27 +98,51 @@
                                 </span>
                             </div>
 
-                            <div class="kh-user-create__field kh-user-create__field--wide">
-                                <label class="kh-user-create__label" for="inputDisplayName">
-                                    Display name <span class="kh-required" aria-hidden="true">*</span>
-                                </label>
-                                <div class="kh-user-create__input-wrap">
-                                    <i data-feather="user" aria-hidden="true"></i>
-                                    <input @class(['kh-user-create__control', 'is-invalid' => $errors->has('display_name')])
-                                        id="inputDisplayName" name="display_name" type="text"
-                                        value="{{ old('display_name') }}" placeholder="e.g. Dara Sok" autocomplete="name"
-                                        maxlength="160"
-                                        aria-invalid="{{ $errors->has('display_name') ? 'true' : 'false' }}"
-                                        aria-describedby="inputDisplayNameHint{{ $errors->has('display_name') ? ' inputDisplayNameError' : '' }}"
-                                        autofocus required>
+                            <div class="kh-user-create__grid">
+                                <div class="kh-user-create__field">
+                                    <label class="kh-user-create__label" for="inputFirstName">
+                                        First name <span class="kh-required" aria-hidden="true">*</span>
+                                    </label>
+                                    <div class="kh-user-create__input-wrap">
+                                        <i data-feather="user" aria-hidden="true"></i>
+                                        <input @class(['kh-user-create__control', 'is-invalid' => $errors->has('first_name')])
+                                            id="inputFirstName" name="first_name" type="text"
+                                            value="{{ old('first_name') }}" placeholder="e.g. Dara" autocomplete="given-name"
+                                            maxlength="80"
+                                            aria-invalid="{{ $errors->has('first_name') ? 'true' : 'false' }}"
+                                            aria-describedby="inputNameHint{{ $errors->has('first_name') ? ' inputFirstNameError' : '' }}"
+                                            autofocus required>
+                                    </div>
+                                    @error('first_name')
+                                        <p class="kh-user-create__field-error" id="inputFirstNameError">
+                                            <i data-feather="alert-circle" aria-hidden="true"></i>{{ $message }}
+                                        </p>
+                                    @enderror
                                 </div>
-                                <p class="kh-user-create__field-hint" id="inputDisplayNameHint">The full name shown across the platform.</p>
-                                @error('display_name')
-                                    <p class="kh-user-create__field-error" id="inputDisplayNameError">
-                                        <i data-feather="alert-circle" aria-hidden="true"></i>{{ $message }}
-                                    </p>
-                                @enderror
+
+                                <div class="kh-user-create__field">
+                                    <label class="kh-user-create__label" for="inputLastName">
+                                        Last name <span class="kh-required" aria-hidden="true">*</span>
+                                    </label>
+                                    <div class="kh-user-create__input-wrap">
+                                        <i data-feather="user" aria-hidden="true"></i>
+                                        <input @class(['kh-user-create__control', 'is-invalid' => $errors->has('last_name')])
+                                            id="inputLastName" name="last_name" type="text"
+                                            value="{{ old('last_name') }}" placeholder="e.g. Sok" autocomplete="family-name"
+                                            maxlength="80"
+                                            aria-invalid="{{ $errors->has('last_name') ? 'true' : 'false' }}"
+                                            aria-describedby="inputNameHint{{ $errors->has('last_name') ? ' inputLastNameError' : '' }}"
+                                            required>
+                                    </div>
+                                    @error('last_name')
+                                        <p class="kh-user-create__field-error" id="inputLastNameError">
+                                            <i data-feather="alert-circle" aria-hidden="true"></i>{{ $message }}
+                                        </p>
+                                    @enderror
+                                </div>
                             </div>
+
+                            <p class="kh-user-create__field-hint" id="inputNameHint">Shown together as the full name across the platform.</p>
 
                             <div class="kh-user-create__grid">
                                 <div class="kh-user-create__field">

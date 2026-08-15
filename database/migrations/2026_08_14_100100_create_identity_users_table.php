@@ -94,12 +94,21 @@ return new class extends Migration
         // recreates the legacy table moments before this runs, so an empty table
         // cannot be told apart from one whose accounts fresh discarded a second
         // earlier — which is exactly how this schema went live by accident once.
-        if (! filter_var(env('MODULE01_REPLACE_USERS', false), FILTER_VALIDATE_BOOLEAN)) {
+        // Read through config, not env(): env() returns null once the config
+        // cache exists, which switched this opt-in off behind our backs and
+        // made the migration refuse even with the value set in .env.
+        if (! filter_var(config('module01.replace_users', false), FILTER_VALIDATE_BOOLEAN)) {
+            $cachedConfig = file_exists(base_path('bootstrap/cache/config.php'));
+
             throw new RuntimeException(
                 "Refusing to replace the legacy `users` table without an explicit opt-in.\n"
                 . "Module 01 changes the primary key from BIGINT to UUID, so the two cannot coexist and\n"
                 . "adopting it discards every existing account.\n\n"
                 . "When you actually intend that, set MODULE01_REPLACE_USERS=true in .env and re-run.\n"
+                . ($cachedConfig
+                    ? "NOTE: bootstrap/cache/config.php exists, so .env is not being read at all.\n"
+                    . "If you have already set the value, run `php artisan config:clear` and re-run.\n"
+                    : '')
                 . "Back up `users` first — the app's User model, auth, and the user screens all still\n"
                 . "target the legacy columns and will need rewriting onto UUIDs and user_roles."
             );

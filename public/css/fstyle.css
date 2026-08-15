@@ -1081,45 +1081,8 @@ select {
   font-size: 1.05rem;
 }
 
-.jf-footer {
-  padding: 18px 0 28px;
-}
-
-.jf-footer__inner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-  padding: 22px 24px;
-  background: rgba(255, 255, 255, 0.75);
-  border: 1px solid rgba(225, 231, 251, 0.8);
-  border-radius: 24px;
-  backdrop-filter: blur(16px);
-}
-
-.jf-footer__brand {
-  margin-bottom: 8px;
-  font-size: 1rem;
-  font-weight: 700;
-}
-
-.jf-footer__copy {
-  margin: 0;
-  font-size: 0.92rem;
-  color: var(--jf-text-muted);
-}
-
-.jf-footer__links {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  flex-wrap: wrap;
-  color: var(--jf-text-muted);
-}
-
-.jf-footer__links a:hover {
-  color: var(--jf-primary);
-}
+/* Footer styles live in footer.css, which master.blade.php loads on every
+   frontend page. */
 
 [hidden] {
   display: none !important;
@@ -1286,8 +1249,7 @@ select {
   .jf-header__inner,
   .jf-board__grid,
   .jf-detail__hero,
-  .jf-detail__body,
-  .jf-footer__inner {
+  .jf-detail__body {
     grid-template-columns: 1fr;
     flex-direction: column;
     align-items: stretch;

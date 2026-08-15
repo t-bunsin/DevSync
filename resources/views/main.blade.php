@@ -4,6 +4,7 @@
 
 @push('styles')
     <link rel="stylesheet" href="{{ asset('css/jobs.css') }}?v={{ filemtime(public_path('css/jobs.css')) }}">
+    <link rel="stylesheet" href="{{ asset('css/pricing.css') }}?v={{ filemtime(public_path('css/pricing.css')) }}">
 @endpush
 
 @section('content')
@@ -203,8 +204,162 @@
 
         @include('jobs.partials.catalog')
     </div>
+
+    @php
+        // Annual billing is the monthly rate less this much, so a price change
+        // only ever has to be made in one place: the 'monthly' key below.
+        $annualDiscount = 0.20;
+
+        // Listed cheapest first, left to right.
+        $plans = [
+            [
+                'id' => 'revenue-share',
+                'name' => 'Revenue Share',
+                'monthly' => 0,
+                'blurb' => 'For a new board finding its first employers.',
+                'cta' => 'Start free',
+                'href' => route('register'),
+                'featured' => false,
+                'features' => [
+                    ['label' => '25% Revenue Share', 'highlight' => true],
+                    ['label' => '1 Job Board', 'highlight' => false],
+                    ['label' => 'Unlimited Pageviews', 'highlight' => false],
+                    ['label' => 'Email Support', 'highlight' => false],
+                    ['label' => 'Custom Domains', 'highlight' => false],
+                    ['label' => '2 Custom Pages', 'highlight' => false],
+                    ['label' => 'Employer Profiles & Directory', 'highlight' => false],
+                ],
+            ],
+            [
+                'id' => 'single-site',
+                'name' => 'Single Site',
+                'monthly' => 99,
+                'blurb' => 'For one board with steady traffic and hiring.',
+                'cta' => 'Choose Single Site',
+                'href' => route('register'),
+                'featured' => true,
+                'features' => [
+                    ['label' => 'No Revenue Share', 'highlight' => true],
+                    ['label' => '1 Job Board', 'highlight' => false],
+                    ['label' => '40,000 Pageviews / Month', 'highlight' => false],
+                    ['label' => 'Email Support', 'highlight' => false],
+                    ['label' => 'Custom Domains', 'highlight' => false],
+                    ['label' => 'Unlimited Custom Pages and Blogs', 'highlight' => false],
+                    ['label' => 'Employer Profiles & Directory', 'highlight' => false],
+                ],
+            ],
+            [
+                'id' => 'multi-site',
+                'name' => 'Multi Site',
+                'monthly' => 249,
+                'blurb' => 'For agencies running several boards at once.',
+                'cta' => 'Talk to sales',
+                'href' => route('contact'),
+                'featured' => false,
+                'features' => [
+                    ['label' => 'No Revenue Share', 'highlight' => true],
+                    ['label' => '3 Job Boards', 'highlight' => false],
+                    ['label' => '150,000 Pageviews / Month', 'highlight' => false],
+                    ['label' => 'Email & Phone Support', 'highlight' => false],
+                    ['label' => 'Custom Domains', 'highlight' => false],
+                    ['label' => 'Unlimited Custom Pages and Blogs', 'highlight' => false],
+                    ['label' => 'Employer Profiles & Directory', 'highlight' => false],
+                ],
+            ],
+        ];
+
+        // Both billing periods are derived here rather than typed twice, so the
+        // annual column can never drift out of step with the monthly one.
+        $plans = array_map(function (array $plan) use ($annualDiscount) {
+            $monthly = $plan['monthly'];
+            $annual = (int) round($monthly * (1 - $annualDiscount));
+
+            $plan['amounts'] = [
+                'monthly' => [
+                    'price' => '$' . number_format($monthly),
+                    'note' => $monthly === 0 ? 'Free forever' : 'Billed monthly',
+                ],
+                'annual' => [
+                    'price' => '$' . number_format($annual),
+                    'note' => $monthly === 0
+                        ? 'Free forever'
+                        : 'Billed $' . number_format($annual * 12) . ' per year',
+                ],
+            ];
+
+            return $plan;
+        }, $plans);
+
+        $savingLabel = 'Save ' . round($annualDiscount * 100) . '%';
+    @endphp
+
+    <section class="jf-pricing" id="pricing" aria-labelledby="pricing-title">
+        <div class="jf-shell">
+            <div class="jf-pricing__heading">
+                <span class="jf-kicker">Pricing</span>
+                <h2 id="pricing-title">Plans that grow with your job board</h2>
+                <p>Start free and share revenue, or switch to a flat monthly fee once your traffic makes that the cheaper deal.</p>
+            </div>
+
+            {{-- Hidden until pricing.js takes over, so a control that cannot
+                 work without scripting is never shown. Monthly is the markup
+                 default, which is what a no-script visitor keeps. --}}
+            <div class="jf-pricing__billing" data-billing-toggle hidden>
+                <div class="jf-pricing__switch" role="group" aria-label="Billing period">
+                    <button type="button" data-period="monthly" aria-pressed="true">Monthly</button>
+                    <button type="button" data-period="annual" aria-pressed="false">
+                        Annual<span class="jf-pricing__save">{{ $savingLabel }}</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="jf-pricing__grid">
+                @foreach ($plans as $plan)
+                    <article @class(['jf-plan', 'jf-plan--featured' => $plan['featured']])
+                        aria-labelledby="plan-{{ $plan['id'] }}">
+                        @if ($plan['featured'])
+                            <span class="jf-plan__badge">Most popular</span>
+                        @endif
+
+                        <h3 class="jf-plan__name" id="plan-{{ $plan['id'] }}">{{ $plan['name'] }}</h3>
+
+                        <p class="jf-plan__price">
+                            <strong data-amount
+                                data-monthly="{{ $plan['amounts']['monthly']['price'] }}"
+                                data-annual="{{ $plan['amounts']['annual']['price'] }}">{{ $plan['amounts']['monthly']['price'] }}</strong><span>/month</span>
+                        </p>
+
+                        <p class="jf-plan__billing-note" data-amount
+                            data-monthly="{{ $plan['amounts']['monthly']['note'] }}"
+                            data-annual="{{ $plan['amounts']['annual']['note'] }}">{{ $plan['amounts']['monthly']['note'] }}</p>
+
+                        <p class="jf-plan__blurb">{{ $plan['blurb'] }}</p>
+
+                        <ul class="jf-plan__features">
+                            @foreach ($plan['features'] as $feature)
+                                <li @class(['is-highlight' => $feature['highlight']])>
+                                    <i class="fas fa-check" aria-hidden="true"></i>
+                                    <span>{{ $feature['label'] }}</span>
+                                </li>
+                            @endforeach
+                        </ul>
+
+                        <a @class(['jf-btn', 'jf-plan__cta', 'jf-plan__cta--solid' => $plan['featured']])
+                            href="{{ $plan['href'] }}">
+                            {{ $plan['cta'] }}<span class="visually-hidden"> — {{ $plan['name'] }}, <span data-amount
+                                    data-monthly="{{ $plan['amounts']['monthly']['price'] }}"
+                                    data-annual="{{ $plan['amounts']['annual']['price'] }}">{{ $plan['amounts']['monthly']['price'] }}</span> per month</span>
+                        </a>
+                    </article>
+                @endforeach
+            </div>
+
+            <p class="jf-pricing__note">All plans include employer profiles and the public directory. Cancel or change plan at any time.</p>
+        </div>
+    </section>
 @endsection
 
 @push('scripts')
     <script src="{{ asset('js/jobs.js') }}?v={{ filemtime(public_path('js/jobs.js')) }}"></script>
+    <script src="{{ asset('js/pricing.js') }}?v={{ filemtime(public_path('js/pricing.js')) }}"></script>
 @endpush

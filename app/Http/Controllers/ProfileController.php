@@ -24,14 +24,15 @@ class ProfileController extends Controller
         $user = Auth::user();
 
         $validated = $request->validate([
-            'display_name' => 'required|string|max:160',
+            'first_name' => 'required|string|max:80',
+            'last_name' => 'required|string|max:80',
             'email' => ['required', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user->id)],
             'phone' => ['nullable', 'string', 'max:30', Rule::unique('users', 'phone')->ignore($user->id)],
             'current_password' => 'nullable|required_with:new_password',
             'new_password' => 'nullable|min:8|confirmed|required_with:current_password',
         ]);
 
-        $user->display_name = $validated['display_name'];
+        $user->setName($validated['first_name'], $validated['last_name']);
         $user->email = $validated['email'];
         $user->phone = $validated['phone'] ?: null;
 
