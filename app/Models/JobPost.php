@@ -43,6 +43,9 @@ class JobPost extends Model
         'tabs',
         'quick_apply_title',
         'quick_apply_text',
+        'benefits',
+        'highlights',
+        'career_opportunities',
     ];
 
     protected $casts = [
@@ -103,6 +106,33 @@ class JobPost extends Model
                 ->orWhere('company', 'like', "%{$term}%")
                 ->orWhere('location', 'like', "%{$term}%");
         });
+    }
+
+    /**
+     * The three "What we can offer" columns, authored one item per line.
+     * Empty columns are dropped so the card never renders a blank heading.
+     */
+    public function offerColumns(): array
+    {
+        return collect([
+            ['key' => 'benefits', 'title' => 'Benefits', 'icon' => 'fa-thumbs-up'],
+            ['key' => 'highlights', 'title' => 'Highlights', 'icon' => 'fa-lightbulb'],
+            ['key' => 'career_opportunities', 'title' => 'Career Opportunities', 'icon' => 'fa-star'],
+        ])
+            ->map(fn (array $column) => $column + [
+                'items' => $this->linesOf($this->{$column['key']}),
+            ])
+            ->filter(fn (array $column) => $column['items'] !== [])
+            ->values()
+            ->all();
+    }
+
+    private function linesOf(?string $value): array
+    {
+        return array_values(array_filter(
+            array_map('trim', preg_split('/\R/', (string) $value) ?: []),
+            fn (string $line) => $line !== ''
+        ));
     }
 
     public function isPublished(): bool
@@ -221,6 +251,7 @@ class JobPost extends Model
                 'title' => $this->quick_apply_title ?: 'Quick apply',
                 'text' => $this->quick_apply_text ?: 'Applications are reviewed as they arrive.',
             ],
+            'offer' => $this->offerColumns(),
         ];
     }
 

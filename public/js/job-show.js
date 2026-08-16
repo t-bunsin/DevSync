@@ -19,6 +19,7 @@
         const companyProfile = document.getElementById('job-page-company-profile');
         const mainBlock = document.getElementById('job-page-main-block');
         const extraBlock = document.getElementById('job-page-extra');
+        const offerBlock = document.getElementById('job-page-offer');
         const kicker = document.getElementById('job-page-kicker');
         const kickerLabels = {
             description: 'Role overview',
@@ -100,6 +101,10 @@
 
             if (extraBlock) {
                 extraBlock.hidden = tabName !== 'requirements';
+            }
+
+            if (offerBlock) {
+                offerBlock.hidden = tabName !== 'requirements';
             }
 
             if (!tabContent) {

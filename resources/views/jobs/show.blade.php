@@ -203,6 +203,29 @@
                             </ul>
                         </div>
 
+                        {{-- What the employer offers. Static, shown with the
+                             Requirements tab alongside the extra job copy. --}}
+                        @if (! empty($job['offer']))
+                            <div class="jf-offer" id="job-page-offer" hidden>
+                                <h2 class="jf-offer__title">What we can offer</h2>
+                                <div class="jf-offer__grid">
+                                    @foreach ($job['offer'] as $column)
+                                        <section class="jf-offer__col">
+                                            <h3>
+                                                <span class="jf-offer__icon" aria-hidden="true"><i class="fas {{ $column['icon'] }}"></i></span>
+                                                {{ $column['title'] }}
+                                            </h3>
+                                            <ul>
+                                                @foreach ($column['items'] as $item)
+                                                    <li>{{ $item }}</li>
+                                                @endforeach
+                                            </ul>
+                                        </section>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endif
+
                         {{-- The post's extra job copy. Static, and only shown
                              while the Requirements tab is open. --}}
                         @php($extra = $job['tabs']['job_description'] ?? null)

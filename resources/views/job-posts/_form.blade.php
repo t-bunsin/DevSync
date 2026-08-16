@@ -8,11 +8,9 @@
         return implode("\n", $tabs[$key]['list'] ?? []);
     };
 
-    $tabLabels = [
-        'description' => ['Description', 'Shown on the first tab of the job page.'],
-        'requirements' => ['Requirements', 'Shown on the second tab.'],
-        'job_description' => ['Job description', 'Extra role copy, shown under the Requirements tab.'],
-    ];
+    $panelFields = function (string $key, string $label) use ($tabs, $listValue) {
+        return compact('key', 'label');
+    };
 @endphp
 
 @if ($errors->any())
@@ -26,8 +24,20 @@
     </div>
 @endif
 
-<div class="kh-bo__form-card">
-    <div class="kh-bo__grid">
+<div class="kh-bo__form-card" data-bo-tabs>
+    <div class="kh-bo__tabs" role="tablist" aria-label="Job post sections">
+        <button class="kh-bo__tab" type="button" role="tab" data-bo-tab="overview"
+            aria-selected="true" aria-controls="bo-panel-overview">Overview</button>
+        <button class="kh-bo__tab" type="button" role="tab" data-bo-tab="description"
+            aria-selected="false" aria-controls="bo-panel-description">Job description</button>
+        <button class="kh-bo__tab" type="button" role="tab" data-bo-tab="requirements"
+            aria-selected="false" aria-controls="bo-panel-requirements">Requirements</button>
+    </div>
+
+    {{-- Panels are hidden, never removed, so every field still submits. --}}
+    <div class="kh-bo__panel" data-bo-panel="overview" id="bo-panel-overview" role="tabpanel">
+        <div class="kh-bo__grid">
+
         <div class="kh-bo__field">
             <label class="kh-bo__label" for="title">Job title <span class="kh-bo__required" aria-hidden="true">*</span></label>
             <input @class(['kh-bo__control', 'is-invalid' => $errors->has('title')])
@@ -166,39 +176,133 @@
                 Spotlight — the role the explorer opens on (only one post can hold this)
             </label>
         </div>
+        </div>
+    </div>
 
-        {{-- Detail page panels --}}
-        @foreach ($tabLabels as $key => [$label, $hint])
+    <div class="kh-bo__panel" data-bo-panel="description" id="bo-panel-description" role="tabpanel" hidden>
+        <div class="kh-bo__grid">
+            <div class="kh-bo__section-label">
+                Overview
+                <span>The first tab on the public job page.</span>
+            </div>
+
+            <div class="kh-bo__field">
+                <label class="kh-bo__label" for="tabs_description_title">Heading</label>
+                <input class="kh-bo__control" id="tabs_description_title" name="tabs[description][title]" type="text"
+                    value="{{ old("tabs.description.title", $tabs['description']['title'] ?? '') }}" placeholder="Section heading">
+            </div>
+
+            <div class="kh-bo__field">
+                <label class="kh-bo__label" for="tabs_description_list_title">List heading</label>
+                <input class="kh-bo__control" id="tabs_description_list_title" name="tabs[description][list_title]" type="text"
+                    value="{{ old("tabs.description.list_title", $tabs['description']['list_title'] ?? '') }}" placeholder="e.g. What You Will Do">
+            </div>
+
             <div class="kh-bo__field kh-bo__field--wide">
-                <span class="kh-bo__label">{{ $label }}</span>
-                <span class="kh-bo__hint">{{ $hint }}</span>
+                <label class="kh-bo__label" for="tabs_description_body">Paragraph</label>
+                <textarea class="kh-bo__control" id="tabs_description_body" name="tabs[description][body]"
+                    placeholder="A short paragraph.">{{ old("tabs.description.body", $tabs['description']['body'] ?? '') }}</textarea>
             </div>
 
-            <div class="kh-bo__field">
-                <label class="kh-bo__label" for="tabs_{{ $key }}_title">Heading</label>
-                <input class="kh-bo__control" id="tabs_{{ $key }}_title" name="tabs[{{ $key }}][title]" type="text"
-                    value="{{ old("tabs.$key.title", $tabs[$key]['title'] ?? '') }}" placeholder="Section heading">
-            </div>
-
-            <div class="kh-bo__field">
-                <label class="kh-bo__label" for="tabs_{{ $key }}_list_title">List heading</label>
-                <input class="kh-bo__control" id="tabs_{{ $key }}_list_title" name="tabs[{{ $key }}][list_title]" type="text"
-                    value="{{ old("tabs.$key.list_title", $tabs[$key]['list_title'] ?? '') }}" placeholder="e.g. What You Will Do">
-            </div>
-
-            <div class="kh-bo__field">
-                <label class="kh-bo__label" for="tabs_{{ $key }}_body">Paragraph</label>
-                <textarea class="kh-bo__control" id="tabs_{{ $key }}_body" name="tabs[{{ $key }}][body]"
-                    placeholder="A short paragraph.">{{ old("tabs.$key.body", $tabs[$key]['body'] ?? '') }}</textarea>
-            </div>
-
-            <div class="kh-bo__field">
-                <label class="kh-bo__label" for="tabs_{{ $key }}_list">Bullet points</label>
-                <textarea class="kh-bo__control" id="tabs_{{ $key }}_list" name="tabs[{{ $key }}][list]"
-                    placeholder="One per line.">{{ old("tabs.$key.list", $listValue($key)) }}</textarea>
+            <div class="kh-bo__field kh-bo__field--wide">
+                <label class="kh-bo__label" for="tabs_description_list">Bullet points</label>
+                <textarea class="kh-bo__control" id="tabs_description_list" name="tabs[description][list]"
+                    placeholder="One per line.">{{ old("tabs.description.list", $listValue('description')) }}</textarea>
                 <span class="kh-bo__hint">One bullet per line.</span>
             </div>
-        @endforeach
+
+            <div class="kh-bo__section-label">
+                Job description
+                <span>Extra role copy, shown under the Requirements tab.</span>
+            </div>
+
+            <div class="kh-bo__field">
+                <label class="kh-bo__label" for="tabs_job_description_title">Heading</label>
+                <input class="kh-bo__control" id="tabs_job_description_title" name="tabs[job_description][title]" type="text"
+                    value="{{ old("tabs.job_description.title", $tabs['job_description']['title'] ?? '') }}" placeholder="Section heading">
+            </div>
+
+            <div class="kh-bo__field">
+                <label class="kh-bo__label" for="tabs_job_description_list_title">List heading</label>
+                <input class="kh-bo__control" id="tabs_job_description_list_title" name="tabs[job_description][list_title]" type="text"
+                    value="{{ old("tabs.job_description.list_title", $tabs['job_description']['list_title'] ?? '') }}" placeholder="e.g. What You Will Do">
+            </div>
+
+            <div class="kh-bo__field kh-bo__field--wide">
+                <label class="kh-bo__label" for="tabs_job_description_body">Paragraph</label>
+                <textarea class="kh-bo__control" id="tabs_job_description_body" name="tabs[job_description][body]"
+                    placeholder="A short paragraph.">{{ old("tabs.job_description.body", $tabs['job_description']['body'] ?? '') }}</textarea>
+            </div>
+
+            <div class="kh-bo__field kh-bo__field--wide">
+                <label class="kh-bo__label" for="tabs_job_description_list">Bullet points</label>
+                <textarea class="kh-bo__control" id="tabs_job_description_list" name="tabs[job_description][list]"
+                    placeholder="One per line.">{{ old("tabs.job_description.list", $listValue('job_description')) }}</textarea>
+                <span class="kh-bo__hint">One bullet per line.</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="kh-bo__panel" data-bo-panel="requirements" id="bo-panel-requirements" role="tabpanel" hidden>
+        <div class="kh-bo__grid">
+            <div class="kh-bo__section-label">
+                Requirements
+                <span>The second tab on the public job page.</span>
+            </div>
+
+            <div class="kh-bo__field">
+                <label class="kh-bo__label" for="tabs_requirements_title">Heading</label>
+                <input class="kh-bo__control" id="tabs_requirements_title" name="tabs[requirements][title]" type="text"
+                    value="{{ old("tabs.requirements.title", $tabs['requirements']['title'] ?? '') }}" placeholder="Section heading">
+            </div>
+
+            <div class="kh-bo__field">
+                <label class="kh-bo__label" for="tabs_requirements_list_title">List heading</label>
+                <input class="kh-bo__control" id="tabs_requirements_list_title" name="tabs[requirements][list_title]" type="text"
+                    value="{{ old("tabs.requirements.list_title", $tabs['requirements']['list_title'] ?? '') }}" placeholder="e.g. What You Will Do">
+            </div>
+
+            <div class="kh-bo__field kh-bo__field--wide">
+                <label class="kh-bo__label" for="tabs_requirements_body">Paragraph</label>
+                <textarea class="kh-bo__control" id="tabs_requirements_body" name="tabs[requirements][body]"
+                    placeholder="A short paragraph.">{{ old("tabs.requirements.body", $tabs['requirements']['body'] ?? '') }}</textarea>
+            </div>
+
+            <div class="kh-bo__field kh-bo__field--wide">
+                <label class="kh-bo__label" for="tabs_requirements_list">Bullet points</label>
+                <textarea class="kh-bo__control" id="tabs_requirements_list" name="tabs[requirements][list]"
+                    placeholder="One per line.">{{ old("tabs.requirements.list", $listValue('requirements')) }}</textarea>
+                <span class="kh-bo__hint">One bullet per line.</span>
+            </div>
+
+            <div class="kh-bo__section-label">
+                What we can offer
+                <span>Shown as a three-column card on the job page. One item per line; blank columns are left out.</span>
+            </div>
+
+            <div class="kh-bo__field">
+                <label class="kh-bo__label" for="benefits">Benefits</label>
+                <textarea @class(['kh-bo__control', 'is-invalid' => $errors->has('benefits')])
+                    id="benefits" name="benefits" maxlength="2000"
+                    placeholder="Salary&#10;Lunch Allowance&#10;Seniority Payment">{{ old('benefits', $post->benefits) }}</textarea>
+                @error('benefits') <span class="kh-bo__error">{{ $message }}</span> @enderror
+            </div>
+
+            <div class="kh-bo__field">
+                <label class="kh-bo__label" for="highlights">Highlights</label>
+                <textarea @class(['kh-bo__control', 'is-invalid' => $errors->has('highlights')])
+                    id="highlights" name="highlights" maxlength="2000"
+                    placeholder="An awesome company&#10;Join a winning team">{{ old('highlights', $post->highlights) }}</textarea>
+                @error('highlights') <span class="kh-bo__error">{{ $message }}</span> @enderror
+            </div>
+
+            <div class="kh-bo__field">
+                <label class="kh-bo__label" for="career_opportunities">Career Opportunities</label>
+                <textarea @class(['kh-bo__control', 'is-invalid' => $errors->has('career_opportunities')])
+                    id="career_opportunities" name="career_opportunities" maxlength="2000"
+                    placeholder="Opportunities for promotion&#10;Possibility for job training">{{ old('career_opportunities', $post->career_opportunities) }}</textarea>
+                @error('career_opportunities') <span class="kh-bo__error">{{ $message }}</span> @enderror
+            </div>
 
         <div class="kh-bo__field">
             <label class="kh-bo__label" for="quick_apply_title">Apply box heading</label>
@@ -211,6 +315,7 @@
             <input class="kh-bo__control" id="quick_apply_text" name="quick_apply_text" type="text" maxlength="500"
                 value="{{ old('quick_apply_text', $post->quick_apply_text) }}"
                 placeholder="Applications are reviewed as they arrive.">
+        </div>
         </div>
     </div>
 

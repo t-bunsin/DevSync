@@ -24,3 +24,7 @@
         </form>
     </div>
 @endsection
+
+@push('scripts')
+    <script src="{{ asset('js/backoffice-tabs.js') }}?v={{ filemtime(public_path('js/backoffice-tabs.js')) }}"></script>
+@endpush

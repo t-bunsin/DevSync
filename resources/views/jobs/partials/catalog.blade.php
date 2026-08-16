@@ -61,8 +61,14 @@
                             data-search="{{ strtolower(implode(' ', $searchIndex)) }}"
                         >
                             <div class="jf-job-card__topline">
-                                <div class="jf-logo jf-logo--{{ $job['logo'] }}">
-                                    @if ($job['logo'] === 'aba')
+                                <div @class([
+                                    'jf-logo',
+                                    'jf-logo--' . $job['logo'],
+                                    'jf-logo--photo' => ! empty($job['company_logo_url']),
+                                ])>
+                                    @if (! empty($job['company_logo_url']))
+                                        <img src="{{ $job['company_logo_url'] }}" alt="">
+                                    @elseif ($job['logo'] === 'aba')
                                         <span>ABA</span><small>BANK</small>
                                     @elseif ($job['logo'] === 'tech')
                                         <i class="fas fa-wifi" aria-hidden="true"></i>
@@ -173,8 +179,8 @@
                         role="tab" aria-selected="true" aria-controls="detail-panel-content" tabindex="0">Overview</button>
                     <button class="jf-tab" id="job-tab-requirements" type="button" data-tab="requirements"
                         role="tab" aria-selected="false" aria-controls="detail-panel-content" tabindex="-1">Requirements</button>
-                    <button class="jf-tab" id="job-tab-company" type="button" data-tab="company"
-                        role="tab" aria-selected="false" aria-controls="detail-panel-content" tabindex="-1">Company</button>
+                    <button class="jf-tab" id="job-tab-job-description" type="button" data-tab="job_description"
+                        role="tab" aria-selected="false" aria-controls="detail-panel-content" tabindex="-1">Job description</button>
                 </div>
 
                 <div class="jf-detail__body">

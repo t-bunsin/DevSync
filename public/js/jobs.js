@@ -222,7 +222,13 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const renderTab = (job, animate = true) => {
-        const panel = job.tabs[activeTab];
+        // Falls back rather than throwing: a panel key that no longer exists
+        // used to leave the previous tab's content on screen.
+        const panel = job.tabs[activeTab] || job.tabs.description;
+
+        if (!panel) {
+            return;
+        }
 
         detailFields.sectionTitle.textContent = panel.title;
         detailFields.sectionBody.textContent = panel.body;

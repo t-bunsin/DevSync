@@ -133,6 +133,9 @@ class JobPostController extends Controller
             'highlighted' => 'nullable|boolean',
             'quick_apply_title' => 'nullable|string|max:255',
             'quick_apply_text' => 'nullable|string|max:500',
+            'benefits' => 'nullable|string|max:2000',
+            'highlights' => 'nullable|string|max:2000',
+            'career_opportunities' => 'nullable|string|max:2000',
         ], [
             'company_id.required' => 'Choose which company is hiring.',
             'slug.regex' => 'The URL slug may only use lowercase letters, numbers and hyphens.',

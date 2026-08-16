@@ -9739,3 +9739,1121 @@ target the legacy columns and will need rewriting onto UUIDs and user_roles. at 
 #37 /Users/toengbunsin/Documents/development/DevSync/artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
 #38 {main}
 "} 
+[2026-08-16 07:59:54] local.ERROR: syntax error, unexpected single-quoted string "english", expecting "]" {"view":{"view":"/Users/toengbunsin/Documents/development/DevSync/resources/views/partials/header.blade.php","data":{"errors":"<pre class=sf-dump id=sf-dump-2061270264 data-indent-pad=\"  \"><span class=sf-dump-note>Illuminate\\Support\\ViewErrorBag</span> {<a class=sf-dump-ref>#1345</a><samp data-depth=1 class=sf-dump-expanded>
+  #<span class=sf-dump-protected title=\"Protected property\">bags</span>: []
+</samp>}
+</pre><script>Sfdump(\"sf-dump-2061270264\", {\"maxDepth\":3,\"maxStringLength\":160})</script>
+","jobs":"<pre class=sf-dump id=sf-dump-488823031 data-indent-pad=\"  \"><span class=sf-dump-note>array:3</span> [<samp data-depth=1 class=sf-dump-expanded>
+  <span class=sf-dump-index>0</span> => <span class=sf-dump-note>array:30</span> [<samp data-depth=2 class=sf-dump-compact>
+    \"<span class=sf-dump-key>id</span>\" => \"<span class=sf-dump-str title=\"17 characters\">retail-associates</span>\"
+    \"<span class=sf-dump-key>title</span>\" => \"<span class=sf-dump-str title=\"17 characters\">Retail Associates</span>\"
+    \"<span class=sf-dump-key>company</span>\" => \"<span class=sf-dump-str title=\"9 characters\">PPCB Bank</span>\"
+    \"<span class=sf-dump-key>location</span>\" => \"<span class=sf-dump-str title=\"20 characters\">Phnom Penh, Cambodia</span>\"
+    \"<span class=sf-dump-key>salary</span>\" => \"<span class=sf-dump-str title=\"23 characters\">$19.25 - $20.25 an hour</span>\"
+    \"<span class=sf-dump-key>short_salary</span>\" => \"<span class=sf-dump-str title=\"22 characters\">$19.25 - $20.25 / hour</span>\"
+    \"<span class=sf-dump-key>summary</span>\" => \"<span class=sf-dump-str title=\"85 characters\">Help customers, support branch operations, and create a welcoming banking experience.</span>\"
+    \"<span class=sf-dump-key>type</span>\" => \"<span class=sf-dump-str title=\"9 characters\">Full-time</span>\"
+    \"<span class=sf-dump-key>mode</span>\" => \"<span class=sf-dump-str title=\"7 characters\">On-site</span>\"
+    \"<span class=sf-dump-key>experience</span>\" => \"<span class=sf-dump-str title=\"8 characters\">1+ Years</span>\"
+    \"<span class=sf-dump-key>department</span>\" => \"<span class=sf-dump-str title=\"14 characters\">Retail Banking</span>\"
+    \"<span class=sf-dump-key>deadline</span>\" => \"<span class=sf-dump-str title=\"11 characters\">4 days left</span>\"
+    \"<span class=sf-dump-key>posted</span>\" => \"<span class=sf-dump-str title=\"17 characters\">Posted 2 days ago</span>\"
+    \"<span class=sf-dump-key>posted_days</span>\" => <span class=sf-dump-num>2</span>
+    \"<span class=sf-dump-key>applicants</span>\" => \"<span class=sf-dump-str title=\"13 characters\">48 applicants</span>\"
+    \"<span class=sf-dump-key>featured</span>\" => <span class=sf-dump-const>true</span>
+    \"<span class=sf-dump-key>highlighted</span>\" => <span class=sf-dump-const>false</span>
+    \"<span class=sf-dump-key>logo</span>\" => \"<span class=sf-dump-str title=\"3 characters\">aba</span>\"
+    \"<span class=sf-dump-key>company_logo_url</span>\" => \"<span class=sf-dump-str title=\"35 characters\">/storage/companies/ppcbank-logo.png</span>\"
+    \"<span class=sf-dump-key>company_cover_url</span>\" => \"<span class=sf-dump-str title=\"36 characters\">/storage/companies/ppcbank-cover.jpg</span>\"
+    \"<span class=sf-dump-key>company_details</span>\" => <span class=sf-dump-note>array:3</span> [<samp data-depth=3 class=sf-dump-compact>
+      \"<span class=sf-dump-key>Type</span>\" => \"<span class=sf-dump-str title=\"15 characters\">Direct Employer</span>\"
+      \"<span class=sf-dump-key>Industry</span>\" => \"<span class=sf-dump-str title=\"32 characters\">Banking/ Insurance/ Microfinance</span>\"
+      \"<span class=sf-dump-key>No. Employees</span>\" => \"<span class=sf-dump-str title=\"11 characters\">501 to 1000</span>\"
+    </samp>]
+    \"<span class=sf-dump-key>company_address</span>\" => \"<span class=sf-dump-str title=\"81 characters\">No.217, Norodom Blvd, Sangkat Tonle Bassac, Khan Chamkamorn, Phnom Penh, Cambodia</span>\"
+    \"<span class=sf-dump-key>company_website</span>\" => \"<span class=sf-dump-str title=\"26 characters\">https://www.ppcbank.com.kh</span>\"
+    \"<span class=sf-dump-key>company_sections</span>\" => <span class=sf-dump-note>array:4</span> [<samp data-depth=3 class=sf-dump-compact>
+      <span class=sf-dump-index>0</span> => <span class=sf-dump-note>array:5</span> [ &#8230;5]
+      <span class=sf-dump-index>1</span> => <span class=sf-dump-note>array:5</span> [ &#8230;5]
+      <span class=sf-dump-index>2</span> => <span class=sf-dump-note>array:5</span> [ &#8230;5]
+      <span class=sf-dump-index>3</span> => <span class=sf-dump-note>array:5</span> [ &#8230;5]
+    </samp>]
+    \"<span class=sf-dump-key>company_verified</span>\" => <span class=sf-dump-const>true</span>
+    \"<span class=sf-dump-key>badges</span>\" => <span class=sf-dump-note>array:2</span> [<samp data-depth=3 class=sf-dump-compact>
+      <span class=sf-dump-index>0</span> => \"<span class=sf-dump-str title=\"9 characters\">Full-time</span>\"
+      <span class=sf-dump-index>1</span> => \"<span class=sf-dump-str title=\"7 characters\">On-site</span>\"
+    </samp>]
+    \"<span class=sf-dump-key>tabs</span>\" => <span class=sf-dump-note>array:3</span> [<samp data-depth=3 class=sf-dump-compact>
+      \"<span class=sf-dump-key>description</span>\" => <span class=sf-dump-note>array:4</span> [ &#8230;4]
+      \"<span class=sf-dump-key>requirements</span>\" => <span class=sf-dump-note>array:4</span> [ &#8230;4]
+      \"<span class=sf-dump-key>job_description</span>\" => <span class=sf-dump-note>array:4</span> [ &#8230;4]
+    </samp>]
+    \"<span class=sf-dump-key>detail_items</span>\" => <span class=sf-dump-note>array:4</span> [<samp data-depth=3 class=sf-dump-compact>
+      <span class=sf-dump-index>0</span> => <span class=sf-dump-note>array:2</span> [ &#8230;2]
+      <span class=sf-dump-index>1</span> => <span class=sf-dump-note>array:2</span> [ &#8230;2]
+      <span class=sf-dump-index>2</span> => <span class=sf-dump-note>array:2</span> [ &#8230;2]
+      <span class=sf-dump-index>3</span> => <span class=sf-dump-note>array:2</span> [ &#8230;2]
+    </samp>]
+    \"<span class=sf-dump-key>quick_apply</span>\" => <span class=sf-dump-note>array:2</span> [<samp data-depth=3 class=sf-dump-compact>
+      \"<span class=sf-dump-key>title</span>\" => \"<span class=sf-dump-str title=\"13 characters\">Branch hiring</span>\"
+      \"<span class=sf-dump-key>text</span>\" => \"<span class=sf-dump-str title=\"55 characters\">Applications are reviewed daily for immediate openings.</span>\"
+    </samp>]
+    \"<span class=sf-dump-key>offer</span>\" => <span class=sf-dump-note>array:3</span> [<samp data-depth=3 class=sf-dump-compact>
+      <span class=sf-dump-index>0</span> => <span class=sf-dump-note>array:4</span> [ &#8230;4]
+      <span class=sf-dump-index>1</span> => <span class=sf-dump-note>array:4</span> [ &#8230;4]
+      <span class=sf-dump-index>2</span> => <span class=sf-dump-note>array:4</span> [ &#8230;4]
+    </samp>]
+  </samp>]
+  <span class=sf-dump-index>1</span> => <span class=sf-dump-note>array:30</span> [<samp data-depth=2 class=sf-dump-compact>
+    \"<span class=sf-dump-key>id</span>\" => \"<span class=sf-dump-str title=\"17 characters\">software-engineer</span>\"
+    \"<span class=sf-dump-key>title</span>\" => \"<span class=sf-dump-str title=\"17 characters\">Software Engineer</span>\"
+    \"<span class=sf-dump-key>company</span>\" => \"<span class=sf-dump-str title=\"9 characters\">Tech Corp</span>\"
+    \"<span class=sf-dump-key>location</span>\" => \"<span class=sf-dump-str title=\"6 characters\">Remote</span>\"
+    \"<span class=sf-dump-key>salary</span>\" => \"<span class=sf-dump-str title=\"25 characters\">$80,000 - $120,000 a year</span>\"
+    \"<span class=sf-dump-key>short_salary</span>\" => \"<span class=sf-dump-str title=\"19 characters\">$80k - $120k / year</span>\"
+    \"<span class=sf-dump-key>summary</span>\" => \"<span class=sf-dump-str title=\"84 characters\">Build reliable digital products with a collaborative, remote-first engineering team.</span>\"
+    \"<span class=sf-dump-key>type</span>\" => \"<span class=sf-dump-str title=\"9 characters\">Full-time</span>\"
+    \"<span class=sf-dump-key>mode</span>\" => \"<span class=sf-dump-str title=\"6 characters\">Remote</span>\"
+    \"<span class=sf-dump-key>experience</span>\" => \"<span class=sf-dump-str title=\"8 characters\">3+ Years</span>\"
+    \"<span class=sf-dump-key>department</span>\" => \"<span class=sf-dump-str title=\"11 characters\">Engineering</span>\"
+    \"<span class=sf-dump-key>deadline</span>\" => \"<span class=sf-dump-str title=\"11 characters\">9 days left</span>\"
+    \"<span class=sf-dump-key>posted</span>\" => \"<span class=sf-dump-str title=\"17 characters\">Posted 4 days ago</span>\"
+    \"<span class=sf-dump-key>posted_days</span>\" => <span class=sf-dump-num>4</span>
+    \"<span class=sf-dump-key>applicants</span>\" => \"<span class=sf-dump-str title=\"14 characters\">245 applicants</span>\"
+    \"<span class=sf-dump-key>featured</span>\" => <span class=sf-dump-const>true</span>
+    \"<span class=sf-dump-key>highlighted</span>\" => <span class=sf-dump-const>true</span>
+    \"<span class=sf-dump-key>logo</span>\" => \"<span class=sf-dump-str title=\"4 characters\">tech</span>\"
+    \"<span class=sf-dump-key>company_logo_url</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>company_cover_url</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>company_details</span>\" => []
+    \"<span class=sf-dump-key>company_address</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>company_website</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>company_sections</span>\" => []
+    \"<span class=sf-dump-key>company_verified</span>\" => <span class=sf-dump-const>false</span>
+    \"<span class=sf-dump-key>badges</span>\" => <span class=sf-dump-note>array:2</span> [<samp data-depth=3 class=sf-dump-compact>
+      <span class=sf-dump-index>0</span> => \"<span class=sf-dump-str title=\"9 characters\">Full-time</span>\"
+      <span class=sf-dump-index>1</span> => \"<span class=sf-dump-str title=\"6 characters\">Remote</span>\"
+    </samp>]
+    \"<span class=sf-dump-key>tabs</span>\" => <span class=sf-dump-note>array:3</span> [<samp data-depth=3 class=sf-dump-compact>
+      \"<span class=sf-dump-key>description</span>\" => <span class=sf-dump-note>array:4</span> [ &#8230;4]
+      \"<span class=sf-dump-key>requirements</span>\" => <span class=sf-dump-note>array:4</span> [ &#8230;4]
+      \"<span class=sf-dump-key>job_description</span>\" => <span class=sf-dump-note>array:4</span> [ &#8230;4]
+    </samp>]
+    \"<span class=sf-dump-key>detail_items</span>\" => <span class=sf-dump-note>array:4</span> [<samp data-depth=3 class=sf-dump-compact>
+      <span class=sf-dump-index>0</span> => <span class=sf-dump-note>array:2</span> [ &#8230;2]
+      <span class=sf-dump-index>1</span> => <span class=sf-dump-note>array:2</span> [ &#8230;2]
+      <span class=sf-dump-index>2</span> => <span class=sf-dump-note>array:2</span> [ &#8230;2]
+      <span class=sf-dump-index>3</span> => <span class=sf-dump-note>array:2</span> [ &#8230;2]
+    </samp>]
+    \"<span class=sf-dump-key>quick_apply</span>\" => <span class=sf-dump-note>array:2</span> [<samp data-depth=3 class=sf-dump-compact>
+      \"<span class=sf-dump-key>title</span>\" => \"<span class=sf-dump-str title=\"11 characters\">Quick apply</span>\"
+      \"<span class=sf-dump-key>text</span>\" => \"<span class=sf-dump-str title=\"61 characters\">Apply today and expect an initial response within three days.</span>\"
+    </samp>]
+    \"<span class=sf-dump-key>offer</span>\" => []
+  </samp>]
+  <span class=sf-dump-index>2</span> => <span class=sf-dump-note>array:30</span> [<samp data-depth=2 class=sf-dump-compact>
+    \"<span class=sf-dump-key>id</span>\" => \"<span class=sf-dump-str title=\"14 characters\">ui-ux-designer</span>\"
+    \"<span class=sf-dump-key>title</span>\" => \"<span class=sf-dump-str title=\"14 characters\">UI/UX Designer</span>\"
+    \"<span class=sf-dump-key>company</span>\" => \"<span class=sf-dump-str title=\"13 characters\">Design Studio</span>\"
+    \"<span class=sf-dump-key>location</span>\" => \"<span class=sf-dump-str title=\"20 characters\">Phnom Penh, Cambodia</span>\"
+    \"<span class=sf-dump-key>salary</span>\" => \"<span class=sf-dump-str title=\"24 characters\">$60,000 - $90,000 a year</span>\"
+    \"<span class=sf-dump-key>short_salary</span>\" => \"<span class=sf-dump-str title=\"18 characters\">$60k - $90k / year</span>\"
+    \"<span class=sf-dump-key>summary</span>\" => \"<span class=sf-dump-str title=\"78 characters\">Shape intuitive product experiences for ambitious teams across Southeast Asia.</span>\"
+    \"<span class=sf-dump-key>type</span>\" => \"<span class=sf-dump-str title=\"9 characters\">Full-time</span>\"
+    \"<span class=sf-dump-key>mode</span>\" => \"<span class=sf-dump-str title=\"6 characters\">Hybrid</span>\"
+    \"<span class=sf-dump-key>experience</span>\" => \"<span class=sf-dump-str title=\"8 characters\">2+ Years</span>\"
+    \"<span class=sf-dump-key>department</span>\" => \"<span class=sf-dump-str title=\"14 characters\">Product Design</span>\"
+    \"<span class=sf-dump-key>deadline</span>\" => \"<span class=sf-dump-str title=\"12 characters\">11 days left</span>\"
+    \"<span class=sf-dump-key>posted</span>\" => \"<span class=sf-dump-str title=\"17 characters\">Posted 6 days ago</span>\"
+    \"<span class=sf-dump-key>posted_days</span>\" => <span class=sf-dump-num>6</span>
+    \"<span class=sf-dump-key>applicants</span>\" => \"<span class=sf-dump-str title=\"13 characters\">94 applicants</span>\"
+    \"<span class=sf-dump-key>featured</span>\" => <span class=sf-dump-const>false</span>
+    \"<span class=sf-dump-key>highlighted</span>\" => <span class=sf-dump-const>false</span>
+    \"<span class=sf-dump-key>logo</span>\" => \"<span class=sf-dump-str title=\"6 characters\">design</span>\"
+    \"<span class=sf-dump-key>company_logo_url</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>company_cover_url</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>company_details</span>\" => []
+    \"<span class=sf-dump-key>company_address</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>company_website</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>company_sections</span>\" => []
+    \"<span class=sf-dump-key>company_verified</span>\" => <span class=sf-dump-const>false</span>
+    \"<span class=sf-dump-key>badges</span>\" => <span class=sf-dump-note>array:2</span> [<samp data-depth=3 class=sf-dump-compact>
+      <span class=sf-dump-index>0</span> => \"<span class=sf-dump-str title=\"9 characters\">Full-time</span>\"
+      <span class=sf-dump-index>1</span> => \"<span class=sf-dump-str title=\"6 characters\">Hybrid</span>\"
+    </samp>]
+    \"<span class=sf-dump-key>tabs</span>\" => <span class=sf-dump-note>array:3</span> [<samp data-depth=3 class=sf-dump-compact>
+      \"<span class=sf-dump-key>description</span>\" => <span class=sf-dump-note>array:4</span> [ &#8230;4]
+      \"<span class=sf-dump-key>requirements</span>\" => <span class=sf-dump-note>array:4</span> [ &#8230;4]
+      \"<span class=sf-dump-key>job_description</span>\" => <span class=sf-dump-note>array:4</span> [ &#8230;4]
+    </samp>]
+    \"<span class=sf-dump-key>detail_items</span>\" => <span class=sf-dump-note>array:4</span> [<samp data-depth=3 class=sf-dump-compact>
+      <span class=sf-dump-index>0</span> => <span class=sf-dump-note>array:2</span> [ &#8230;2]
+      <span class=sf-dump-index>1</span> => <span class=sf-dump-note>array:2</span> [ &#8230;2]
+      <span class=sf-dump-index>2</span> => <span class=sf-dump-note>array:2</span> [ &#8230;2]
+      <span class=sf-dump-index>3</span> => <span class=sf-dump-note>array:2</span> [ &#8230;2]
+    </samp>]
+    \"<span class=sf-dump-key>quick_apply</span>\" => <span class=sf-dump-note>array:2</span> [<samp data-depth=3 class=sf-dump-compact>
+      \"<span class=sf-dump-key>title</span>\" => \"<span class=sf-dump-str title=\"16 characters\">Portfolio review</span>\"
+      \"<span class=sf-dump-key>text</span>\" => \"<span class=sf-dump-str title=\"63 characters\">Share your best work and we will arrange a design conversation.</span>\"
+    </samp>]
+    \"<span class=sf-dump-key>offer</span>\" => []
+  </samp>]
+</samp>]
+</pre><script>Sfdump(\"sf-dump-488823031\", {\"maxDepth\":3,\"maxStringLength\":160})</script>
+","selectedJob":"<pre class=sf-dump id=sf-dump-348875329 data-indent-pad=\"  \"><span class=sf-dump-note>array:30</span> [<samp data-depth=1 class=sf-dump-expanded>
+  \"<span class=sf-dump-key>id</span>\" => \"<span class=sf-dump-str title=\"17 characters\">software-engineer</span>\"
+  \"<span class=sf-dump-key>title</span>\" => \"<span class=sf-dump-str title=\"17 characters\">Software Engineer</span>\"
+  \"<span class=sf-dump-key>company</span>\" => \"<span class=sf-dump-str title=\"9 characters\">Tech Corp</span>\"
+  \"<span class=sf-dump-key>location</span>\" => \"<span class=sf-dump-str title=\"6 characters\">Remote</span>\"
+  \"<span class=sf-dump-key>salary</span>\" => \"<span class=sf-dump-str title=\"25 characters\">$80,000 - $120,000 a year</span>\"
+  \"<span class=sf-dump-key>short_salary</span>\" => \"<span class=sf-dump-str title=\"19 characters\">$80k - $120k / year</span>\"
+  \"<span class=sf-dump-key>summary</span>\" => \"<span class=sf-dump-str title=\"84 characters\">Build reliable digital products with a collaborative, remote-first engineering team.</span>\"
+  \"<span class=sf-dump-key>type</span>\" => \"<span class=sf-dump-str title=\"9 characters\">Full-time</span>\"
+  \"<span class=sf-dump-key>mode</span>\" => \"<span class=sf-dump-str title=\"6 characters\">Remote</span>\"
+  \"<span class=sf-dump-key>experience</span>\" => \"<span class=sf-dump-str title=\"8 characters\">3+ Years</span>\"
+  \"<span class=sf-dump-key>department</span>\" => \"<span class=sf-dump-str title=\"11 characters\">Engineering</span>\"
+  \"<span class=sf-dump-key>deadline</span>\" => \"<span class=sf-dump-str title=\"11 characters\">9 days left</span>\"
+  \"<span class=sf-dump-key>posted</span>\" => \"<span class=sf-dump-str title=\"17 characters\">Posted 4 days ago</span>\"
+  \"<span class=sf-dump-key>posted_days</span>\" => <span class=sf-dump-num>4</span>
+  \"<span class=sf-dump-key>applicants</span>\" => \"<span class=sf-dump-str title=\"14 characters\">245 applicants</span>\"
+  \"<span class=sf-dump-key>featured</span>\" => <span class=sf-dump-const>true</span>
+  \"<span class=sf-dump-key>highlighted</span>\" => <span class=sf-dump-const>true</span>
+  \"<span class=sf-dump-key>logo</span>\" => \"<span class=sf-dump-str title=\"4 characters\">tech</span>\"
+  \"<span class=sf-dump-key>company_logo_url</span>\" => <span class=sf-dump-const>null</span>
+  \"<span class=sf-dump-key>company_cover_url</span>\" => <span class=sf-dump-const>null</span>
+  \"<span class=sf-dump-key>company_details</span>\" => []
+  \"<span class=sf-dump-key>company_address</span>\" => <span class=sf-dump-const>null</span>
+  \"<span class=sf-dump-key>company_website</span>\" => <span class=sf-dump-const>null</span>
+  \"<span class=sf-dump-key>company_sections</span>\" => []
+  \"<span class=sf-dump-key>company_verified</span>\" => <span class=sf-dump-const>false</span>
+  \"<span class=sf-dump-key>badges</span>\" => <span class=sf-dump-note>array:2</span> [<samp data-depth=2 class=sf-dump-compact>
+    <span class=sf-dump-index>0</span> => \"<span class=sf-dump-str title=\"9 characters\">Full-time</span>\"
+    <span class=sf-dump-index>1</span> => \"<span class=sf-dump-str title=\"6 characters\">Remote</span>\"
+  </samp>]
+  \"<span class=sf-dump-key>tabs</span>\" => <span class=sf-dump-note>array:3</span> [<samp data-depth=2 class=sf-dump-compact>
+    \"<span class=sf-dump-key>description</span>\" => <span class=sf-dump-note>array:4</span> [<samp data-depth=3 class=sf-dump-compact>
+      \"<span class=sf-dump-key>title</span>\" => \"<span class=sf-dump-str title=\"26 characters\">Build Products That Matter</span>\"
+      \"<span class=sf-dump-key>body</span>\" => \"<span class=sf-dump-str title=\"182 characters\">We are looking for a thoughtful Software Engineer to develop useful, reliable products. You will work remotely with a collaborative team and own meaningful work from idea to release.</span>\"
+      \"<span class=sf-dump-key>list_title</span>\" => \"<span class=sf-dump-str title=\"16 characters\">What You Will Do</span>\"
+      \"<span class=sf-dump-key>list</span>\" => <span class=sf-dump-note>array:4</span> [ &#8230;4]
+    </samp>]
+    \"<span class=sf-dump-key>requirements</span>\" => <span class=sf-dump-note>array:4</span> [<samp data-depth=3 class=sf-dump-compact>
+      \"<span class=sf-dump-key>title</span>\" => \"<span class=sf-dump-str title=\"23 characters\">What We Are Looking For</span>\"
+      \"<span class=sf-dump-key>body</span>\" => \"<span class=sf-dump-str title=\"153 characters\">This role fits engineers who enjoy shipping product in a collaborative remote environment and can take ownership of features from design through release.</span>\"
+      \"<span class=sf-dump-key>list_title</span>\" => \"<span class=sf-dump-str title=\"11 characters\">Core Skills</span>\"
+      \"<span class=sf-dump-key>list</span>\" => <span class=sf-dump-note>array:4</span> [ &#8230;4]
+    </samp>]
+    \"<span class=sf-dump-key>job_description</span>\" => <span class=sf-dump-note>array:4</span> [<samp data-depth=3 class=sf-dump-compact>
+      \"<span class=sf-dump-key>title</span>\" => \"<span class=sf-dump-str title=\"15 characters\">About Tech Corp</span>\"
+      \"<span class=sf-dump-key>body</span>\" => \"<span class=sf-dump-str title=\"149 characters\">Tech Corp builds digital products for scaling teams across Southeast Asia with a focus on developer experience, reliable systems, and fast iteration.</span>\"
+      \"<span class=sf-dump-key>list_title</span>\" => \"<span class=sf-dump-str title=\"26 characters\">Why Engineers Like It Here</span>\"
+      \"<span class=sf-dump-key>list</span>\" => <span class=sf-dump-note>array:3</span> [ &#8230;3]
+    </samp>]
+  </samp>]
+  \"<span class=sf-dump-key>detail_items</span>\" => <span class=sf-dump-note>array:4</span> [<samp data-depth=2 class=sf-dump-compact>
+    <span class=sf-dump-index>0</span> => <span class=sf-dump-note>array:2</span> [<samp data-depth=3 class=sf-dump-compact>
+      \"<span class=sf-dump-key>label</span>\" => \"<span class=sf-dump-str title=\"8 characters\">Job type</span>\"
+      \"<span class=sf-dump-key>value</span>\" => \"<span class=sf-dump-str title=\"9 characters\">Full-time</span>\"
+    </samp>]
+    <span class=sf-dump-index>1</span> => <span class=sf-dump-note>array:2</span> [<samp data-depth=3 class=sf-dump-compact>
+      \"<span class=sf-dump-key>label</span>\" => \"<span class=sf-dump-str title=\"9 characters\">Work mode</span>\"
+      \"<span class=sf-dump-key>value</span>\" => \"<span class=sf-dump-str title=\"6 characters\">Remote</span>\"
+    </samp>]
+    <span class=sf-dump-index>2</span> => <span class=sf-dump-note>array:2</span> [<samp data-depth=3 class=sf-dump-compact>
+      \"<span class=sf-dump-key>label</span>\" => \"<span class=sf-dump-str title=\"10 characters\">Experience</span>\"
+      \"<span class=sf-dump-key>value</span>\" => \"<span class=sf-dump-str title=\"8 characters\">3+ Years</span>\"
+    </samp>]
+    <span class=sf-dump-index>3</span> => <span class=sf-dump-note>array:2</span> [<samp data-depth=3 class=sf-dump-compact>
+      \"<span class=sf-dump-key>label</span>\" => \"<span class=sf-dump-str title=\"10 characters\">Department</span>\"
+      \"<span class=sf-dump-key>value</span>\" => \"<span class=sf-dump-str title=\"11 characters\">Engineering</span>\"
+    </samp>]
+  </samp>]
+  \"<span class=sf-dump-key>quick_apply</span>\" => <span class=sf-dump-note>array:2</span> [<samp data-depth=2 class=sf-dump-compact>
+    \"<span class=sf-dump-key>title</span>\" => \"<span class=sf-dump-str title=\"11 characters\">Quick apply</span>\"
+    \"<span class=sf-dump-key>text</span>\" => \"<span class=sf-dump-str title=\"61 characters\">Apply today and expect an initial response within three days.</span>\"
+  </samp>]
+  \"<span class=sf-dump-key>offer</span>\" => []
+</samp>]
+</pre><script>Sfdump(\"sf-dump-348875329\", {\"maxDepth\":3,\"maxStringLength\":160})</script>
+","spotlightJobs":"<pre class=sf-dump id=sf-dump-773088301 data-indent-pad=\"  \"><span class=sf-dump-note>array:3</span> [<samp data-depth=1 class=sf-dump-expanded>
+  <span class=sf-dump-index>0</span> => <span class=sf-dump-note>array:30</span> [<samp data-depth=2 class=sf-dump-compact>
+    \"<span class=sf-dump-key>id</span>\" => \"<span class=sf-dump-str title=\"17 characters\">retail-associates</span>\"
+    \"<span class=sf-dump-key>title</span>\" => \"<span class=sf-dump-str title=\"17 characters\">Retail Associates</span>\"
+    \"<span class=sf-dump-key>company</span>\" => \"<span class=sf-dump-str title=\"9 characters\">PPCB Bank</span>\"
+    \"<span class=sf-dump-key>location</span>\" => \"<span class=sf-dump-str title=\"20 characters\">Phnom Penh, Cambodia</span>\"
+    \"<span class=sf-dump-key>salary</span>\" => \"<span class=sf-dump-str title=\"23 characters\">$19.25 - $20.25 an hour</span>\"
+    \"<span class=sf-dump-key>short_salary</span>\" => \"<span class=sf-dump-str title=\"22 characters\">$19.25 - $20.25 / hour</span>\"
+    \"<span class=sf-dump-key>summary</span>\" => \"<span class=sf-dump-str title=\"85 characters\">Help customers, support branch operations, and create a welcoming banking experience.</span>\"
+    \"<span class=sf-dump-key>type</span>\" => \"<span class=sf-dump-str title=\"9 characters\">Full-time</span>\"
+    \"<span class=sf-dump-key>mode</span>\" => \"<span class=sf-dump-str title=\"7 characters\">On-site</span>\"
+    \"<span class=sf-dump-key>experience</span>\" => \"<span class=sf-dump-str title=\"8 characters\">1+ Years</span>\"
+    \"<span class=sf-dump-key>department</span>\" => \"<span class=sf-dump-str title=\"14 characters\">Retail Banking</span>\"
+    \"<span class=sf-dump-key>deadline</span>\" => \"<span class=sf-dump-str title=\"11 characters\">4 days left</span>\"
+    \"<span class=sf-dump-key>posted</span>\" => \"<span class=sf-dump-str title=\"17 characters\">Posted 2 days ago</span>\"
+    \"<span class=sf-dump-key>posted_days</span>\" => <span class=sf-dump-num>2</span>
+    \"<span class=sf-dump-key>applicants</span>\" => \"<span class=sf-dump-str title=\"13 characters\">48 applicants</span>\"
+    \"<span class=sf-dump-key>featured</span>\" => <span class=sf-dump-const>true</span>
+    \"<span class=sf-dump-key>highlighted</span>\" => <span class=sf-dump-const>false</span>
+    \"<span class=sf-dump-key>logo</span>\" => \"<span class=sf-dump-str title=\"3 characters\">aba</span>\"
+    \"<span class=sf-dump-key>company_logo_url</span>\" => \"<span class=sf-dump-str title=\"35 characters\">/storage/companies/ppcbank-logo.png</span>\"
+    \"<span class=sf-dump-key>company_cover_url</span>\" => \"<span class=sf-dump-str title=\"36 characters\">/storage/companies/ppcbank-cover.jpg</span>\"
+    \"<span class=sf-dump-key>company_details</span>\" => <span class=sf-dump-note>array:3</span> [<samp data-depth=3 class=sf-dump-compact>
+      \"<span class=sf-dump-key>Type</span>\" => \"<span class=sf-dump-str title=\"15 characters\">Direct Employer</span>\"
+      \"<span class=sf-dump-key>Industry</span>\" => \"<span class=sf-dump-str title=\"32 characters\">Banking/ Insurance/ Microfinance</span>\"
+      \"<span class=sf-dump-key>No. Employees</span>\" => \"<span class=sf-dump-str title=\"11 characters\">501 to 1000</span>\"
+    </samp>]
+    \"<span class=sf-dump-key>company_address</span>\" => \"<span class=sf-dump-str title=\"81 characters\">No.217, Norodom Blvd, Sangkat Tonle Bassac, Khan Chamkamorn, Phnom Penh, Cambodia</span>\"
+    \"<span class=sf-dump-key>company_website</span>\" => \"<span class=sf-dump-str title=\"26 characters\">https://www.ppcbank.com.kh</span>\"
+    \"<span class=sf-dump-key>company_sections</span>\" => <span class=sf-dump-note>array:4</span> [<samp data-depth=3 class=sf-dump-compact>
+      <span class=sf-dump-index>0</span> => <span class=sf-dump-note>array:5</span> [ &#8230;5]
+      <span class=sf-dump-index>1</span> => <span class=sf-dump-note>array:5</span> [ &#8230;5]
+      <span class=sf-dump-index>2</span> => <span class=sf-dump-note>array:5</span> [ &#8230;5]
+      <span class=sf-dump-index>3</span> => <span class=sf-dump-note>array:5</span> [ &#8230;5]
+    </samp>]
+    \"<span class=sf-dump-key>company_verified</span>\" => <span class=sf-dump-const>true</span>
+    \"<span class=sf-dump-key>badges</span>\" => <span class=sf-dump-note>array:2</span> [<samp data-depth=3 class=sf-dump-compact>
+      <span class=sf-dump-index>0</span> => \"<span class=sf-dump-str title=\"9 characters\">Full-time</span>\"
+      <span class=sf-dump-index>1</span> => \"<span class=sf-dump-str title=\"7 characters\">On-site</span>\"
+    </samp>]
+    \"<span class=sf-dump-key>tabs</span>\" => <span class=sf-dump-note>array:3</span> [<samp data-depth=3 class=sf-dump-compact>
+      \"<span class=sf-dump-key>description</span>\" => <span class=sf-dump-note>array:4</span> [ &#8230;4]
+      \"<span class=sf-dump-key>requirements</span>\" => <span class=sf-dump-note>array:4</span> [ &#8230;4]
+      \"<span class=sf-dump-key>job_description</span>\" => <span class=sf-dump-note>array:4</span> [ &#8230;4]
+    </samp>]
+    \"<span class=sf-dump-key>detail_items</span>\" => <span class=sf-dump-note>array:4</span> [<samp data-depth=3 class=sf-dump-compact>
+      <span class=sf-dump-index>0</span> => <span class=sf-dump-note>array:2</span> [ &#8230;2]
+      <span class=sf-dump-index>1</span> => <span class=sf-dump-note>array:2</span> [ &#8230;2]
+      <span class=sf-dump-index>2</span> => <span class=sf-dump-note>array:2</span> [ &#8230;2]
+      <span class=sf-dump-index>3</span> => <span class=sf-dump-note>array:2</span> [ &#8230;2]
+    </samp>]
+    \"<span class=sf-dump-key>quick_apply</span>\" => <span class=sf-dump-note>array:2</span> [<samp data-depth=3 class=sf-dump-compact>
+      \"<span class=sf-dump-key>title</span>\" => \"<span class=sf-dump-str title=\"13 characters\">Branch hiring</span>\"
+      \"<span class=sf-dump-key>text</span>\" => \"<span class=sf-dump-str title=\"55 characters\">Applications are reviewed daily for immediate openings.</span>\"
+    </samp>]
+    \"<span class=sf-dump-key>offer</span>\" => <span class=sf-dump-note>array:3</span> [<samp data-depth=3 class=sf-dump-compact>
+      <span class=sf-dump-index>0</span> => <span class=sf-dump-note>array:4</span> [ &#8230;4]
+      <span class=sf-dump-index>1</span> => <span class=sf-dump-note>array:4</span> [ &#8230;4]
+      <span class=sf-dump-index>2</span> => <span class=sf-dump-note>array:4</span> [ &#8230;4]
+    </samp>]
+  </samp>]
+  <span class=sf-dump-index>1</span> => <span class=sf-dump-note>array:30</span> [<samp data-depth=2 class=sf-dump-compact>
+    \"<span class=sf-dump-key>id</span>\" => \"<span class=sf-dump-str title=\"17 characters\">software-engineer</span>\"
+    \"<span class=sf-dump-key>title</span>\" => \"<span class=sf-dump-str title=\"17 characters\">Software Engineer</span>\"
+    \"<span class=sf-dump-key>company</span>\" => \"<span class=sf-dump-str title=\"9 characters\">Tech Corp</span>\"
+    \"<span class=sf-dump-key>location</span>\" => \"<span class=sf-dump-str title=\"6 characters\">Remote</span>\"
+    \"<span class=sf-dump-key>salary</span>\" => \"<span class=sf-dump-str title=\"25 characters\">$80,000 - $120,000 a year</span>\"
+    \"<span class=sf-dump-key>short_salary</span>\" => \"<span class=sf-dump-str title=\"19 characters\">$80k - $120k / year</span>\"
+    \"<span class=sf-dump-key>summary</span>\" => \"<span class=sf-dump-str title=\"84 characters\">Build reliable digital products with a collaborative, remote-first engineering team.</span>\"
+    \"<span class=sf-dump-key>type</span>\" => \"<span class=sf-dump-str title=\"9 characters\">Full-time</span>\"
+    \"<span class=sf-dump-key>mode</span>\" => \"<span class=sf-dump-str title=\"6 characters\">Remote</span>\"
+    \"<span class=sf-dump-key>experience</span>\" => \"<span class=sf-dump-str title=\"8 characters\">3+ Years</span>\"
+    \"<span class=sf-dump-key>department</span>\" => \"<span class=sf-dump-str title=\"11 characters\">Engineering</span>\"
+    \"<span class=sf-dump-key>deadline</span>\" => \"<span class=sf-dump-str title=\"11 characters\">9 days left</span>\"
+    \"<span class=sf-dump-key>posted</span>\" => \"<span class=sf-dump-str title=\"17 characters\">Posted 4 days ago</span>\"
+    \"<span class=sf-dump-key>posted_days</span>\" => <span class=sf-dump-num>4</span>
+    \"<span class=sf-dump-key>applicants</span>\" => \"<span class=sf-dump-str title=\"14 characters\">245 applicants</span>\"
+    \"<span class=sf-dump-key>featured</span>\" => <span class=sf-dump-const>true</span>
+    \"<span class=sf-dump-key>highlighted</span>\" => <span class=sf-dump-const>true</span>
+    \"<span class=sf-dump-key>logo</span>\" => \"<span class=sf-dump-str title=\"4 characters\">tech</span>\"
+    \"<span class=sf-dump-key>company_logo_url</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>company_cover_url</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>company_details</span>\" => []
+    \"<span class=sf-dump-key>company_address</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>company_website</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>company_sections</span>\" => []
+    \"<span class=sf-dump-key>company_verified</span>\" => <span class=sf-dump-const>false</span>
+    \"<span class=sf-dump-key>badges</span>\" => <span class=sf-dump-note>array:2</span> [<samp data-depth=3 class=sf-dump-compact>
+      <span class=sf-dump-index>0</span> => \"<span class=sf-dump-str title=\"9 characters\">Full-time</span>\"
+      <span class=sf-dump-index>1</span> => \"<span class=sf-dump-str title=\"6 characters\">Remote</span>\"
+    </samp>]
+    \"<span class=sf-dump-key>tabs</span>\" => <span class=sf-dump-note>array:3</span> [<samp data-depth=3 class=sf-dump-compact>
+      \"<span class=sf-dump-key>description</span>\" => <span class=sf-dump-note>array:4</span> [ &#8230;4]
+      \"<span class=sf-dump-key>requirements</span>\" => <span class=sf-dump-note>array:4</span> [ &#8230;4]
+      \"<span class=sf-dump-key>job_description</span>\" => <span class=sf-dump-note>array:4</span> [ &#8230;4]
+    </samp>]
+    \"<span class=sf-dump-key>detail_items</span>\" => <span class=sf-dump-note>array:4</span> [<samp data-depth=3 class=sf-dump-compact>
+      <span class=sf-dump-index>0</span> => <span class=sf-dump-note>array:2</span> [ &#8230;2]
+      <span class=sf-dump-index>1</span> => <span class=sf-dump-note>array:2</span> [ &#8230;2]
+      <span class=sf-dump-index>2</span> => <span class=sf-dump-note>array:2</span> [ &#8230;2]
+      <span class=sf-dump-index>3</span> => <span class=sf-dump-note>array:2</span> [ &#8230;2]
+    </samp>]
+    \"<span class=sf-dump-key>quick_apply</span>\" => <span class=sf-dump-note>array:2</span> [<samp data-depth=3 class=sf-dump-compact>
+      \"<span class=sf-dump-key>title</span>\" => \"<span class=sf-dump-str title=\"11 characters\">Quick apply</span>\"
+      \"<span class=sf-dump-key>text</span>\" => \"<span class=sf-dump-str title=\"61 characters\">Apply today and expect an initial response within three days.</span>\"
+    </samp>]
+    \"<span class=sf-dump-key>offer</span>\" => []
+  </samp>]
+  <span class=sf-dump-index>2</span> => <span class=sf-dump-note>array:30</span> [<samp data-depth=2 class=sf-dump-compact>
+    \"<span class=sf-dump-key>id</span>\" => \"<span class=sf-dump-str title=\"14 characters\">ui-ux-designer</span>\"
+    \"<span class=sf-dump-key>title</span>\" => \"<span class=sf-dump-str title=\"14 characters\">UI/UX Designer</span>\"
+    \"<span class=sf-dump-key>company</span>\" => \"<span class=sf-dump-str title=\"13 characters\">Design Studio</span>\"
+    \"<span class=sf-dump-key>location</span>\" => \"<span class=sf-dump-str title=\"20 characters\">Phnom Penh, Cambodia</span>\"
+    \"<span class=sf-dump-key>salary</span>\" => \"<span class=sf-dump-str title=\"24 characters\">$60,000 - $90,000 a year</span>\"
+    \"<span class=sf-dump-key>short_salary</span>\" => \"<span class=sf-dump-str title=\"18 characters\">$60k - $90k / year</span>\"
+    \"<span class=sf-dump-key>summary</span>\" => \"<span class=sf-dump-str title=\"78 characters\">Shape intuitive product experiences for ambitious teams across Southeast Asia.</span>\"
+    \"<span class=sf-dump-key>type</span>\" => \"<span class=sf-dump-str title=\"9 characters\">Full-time</span>\"
+    \"<span class=sf-dump-key>mode</span>\" => \"<span class=sf-dump-str title=\"6 characters\">Hybrid</span>\"
+    \"<span class=sf-dump-key>experience</span>\" => \"<span class=sf-dump-str title=\"8 characters\">2+ Years</span>\"
+    \"<span class=sf-dump-key>department</span>\" => \"<span class=sf-dump-str title=\"14 characters\">Product Design</span>\"
+    \"<span class=sf-dump-key>deadline</span>\" => \"<span class=sf-dump-str title=\"12 characters\">11 days left</span>\"
+    \"<span class=sf-dump-key>posted</span>\" => \"<span class=sf-dump-str title=\"17 characters\">Posted 6 days ago</span>\"
+    \"<span class=sf-dump-key>posted_days</span>\" => <span class=sf-dump-num>6</span>
+    \"<span class=sf-dump-key>applicants</span>\" => \"<span class=sf-dump-str title=\"13 characters\">94 applicants</span>\"
+    \"<span class=sf-dump-key>featured</span>\" => <span class=sf-dump-const>false</span>
+    \"<span class=sf-dump-key>highlighted</span>\" => <span class=sf-dump-const>false</span>
+    \"<span class=sf-dump-key>logo</span>\" => \"<span class=sf-dump-str title=\"6 characters\">design</span>\"
+    \"<span class=sf-dump-key>company_logo_url</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>company_cover_url</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>company_details</span>\" => []
+    \"<span class=sf-dump-key>company_address</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>company_website</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>company_sections</span>\" => []
+    \"<span class=sf-dump-key>company_verified</span>\" => <span class=sf-dump-const>false</span>
+    \"<span class=sf-dump-key>badges</span>\" => <span class=sf-dump-note>array:2</span> [<samp data-depth=3 class=sf-dump-compact>
+      <span class=sf-dump-index>0</span> => \"<span class=sf-dump-str title=\"9 characters\">Full-time</span>\"
+      <span class=sf-dump-index>1</span> => \"<span class=sf-dump-str title=\"6 characters\">Hybrid</span>\"
+    </samp>]
+    \"<span class=sf-dump-key>tabs</span>\" => <span class=sf-dump-note>array:3</span> [<samp data-depth=3 class=sf-dump-compact>
+      \"<span class=sf-dump-key>description</span>\" => <span class=sf-dump-note>array:4</span> [ &#8230;4]
+      \"<span class=sf-dump-key>requirements</span>\" => <span class=sf-dump-note>array:4</span> [ &#8230;4]
+      \"<span class=sf-dump-key>job_description</span>\" => <span class=sf-dump-note>array:4</span> [ &#8230;4]
+    </samp>]
+    \"<span class=sf-dump-key>detail_items</span>\" => <span class=sf-dump-note>array:4</span> [<samp data-depth=3 class=sf-dump-compact>
+      <span class=sf-dump-index>0</span> => <span class=sf-dump-note>array:2</span> [ &#8230;2]
+      <span class=sf-dump-index>1</span> => <span class=sf-dump-note>array:2</span> [ &#8230;2]
+      <span class=sf-dump-index>2</span> => <span class=sf-dump-note>array:2</span> [ &#8230;2]
+      <span class=sf-dump-index>3</span> => <span class=sf-dump-note>array:2</span> [ &#8230;2]
+    </samp>]
+    \"<span class=sf-dump-key>quick_apply</span>\" => <span class=sf-dump-note>array:2</span> [<samp data-depth=3 class=sf-dump-compact>
+      \"<span class=sf-dump-key>title</span>\" => \"<span class=sf-dump-str title=\"16 characters\">Portfolio review</span>\"
+      \"<span class=sf-dump-key>text</span>\" => \"<span class=sf-dump-str title=\"63 characters\">Share your best work and we will arrange a design conversation.</span>\"
+    </samp>]
+    \"<span class=sf-dump-key>offer</span>\" => []
+  </samp>]
+</samp>]
+</pre><script>Sfdump(\"sf-dump-773088301\", {\"maxDepth\":3,\"maxStringLength\":160})</script>
+"}},"exception":"[object] (Spatie\\LaravelIgnition\\Exceptions\\ViewException(code: 0): syntax error, unexpected single-quoted string \"english\", expecting \"]\" at /Users/toengbunsin/Documents/development/DevSync/lang/en/ui.php:21)
+[stacktrace]
+#0 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(124): Illuminate\\Filesystem\\Filesystem::{closure:Illuminate\\Filesystem\\Filesystem::getRequire():120}()
+#1 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Translation/FileLoader.php(129): Illuminate\\Filesystem\\Filesystem->getRequire('/Users/toengbun...')
+#2 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Collections/Traits/EnumeratesValues.php(815): Illuminate\\Translation\\FileLoader->{closure:Illuminate\\Translation\\FileLoader::loadPaths():127}(Array, '/Users/toengbun...', 1)
+#3 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Translation/FileLoader.php(127): Illuminate\\Support\\Collection->reduce(Object(Closure), Array)
+#4 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Translation/FileLoader.php(68): Illuminate\\Translation\\FileLoader->loadPaths(Array, 'en', 'ui')
+#5 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Translation/Translator.php(334): Illuminate\\Translation\\FileLoader->load('en', 'ui', '*')
+#6 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Translation/Translator.php(247): Illuminate\\Translation\\Translator->load('*', 'ui', 'en')
+#7 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Translation/Translator.php(172): Illuminate\\Translation\\Translator->getLine('*', 'ui', 'en', 'nav.home', Array)
+#8 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Foundation/helpers.php(965): Illuminate\\Translation\\Translator->get('ui.nav.home', Array, 'en')
+#9 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Foundation/helpers.php(1000): trans('ui.nav.home', Array, NULL)
+#10 /Users/toengbunsin/Documents/development/DevSync/resources/views/partials/header.blade.php(20): __('ui.nav.home')
+#11 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(123): require('/Users/toengbun...')
+#12 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(124): Illuminate\\Filesystem\\Filesystem::{closure:Illuminate\\Filesystem\\Filesystem::getRequire():120}()
+#13 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/Engines/PhpEngine.php(57): Illuminate\\Filesystem\\Filesystem->getRequire('/Users/toengbun...', Array)
+#14 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/Engines/CompilerEngine.php(74): Illuminate\\View\\Engines\\PhpEngine->evaluatePath('/Users/toengbun...', Array)
+#15 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/View.php(208): Illuminate\\View\\Engines\\CompilerEngine->get('/Users/toengbun...', Array)
+#16 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/View.php(191): Illuminate\\View\\View->getContents()
+#17 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/View.php(160): Illuminate\\View\\View->renderContents()
+#18 /Users/toengbunsin/Documents/development/DevSync/resources/views/layouts/master.blade.php(31): Illuminate\\View\\View->render()
+#19 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(123): require('/Users/toengbun...')
+#20 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(124): Illuminate\\Filesystem\\Filesystem::{closure:Illuminate\\Filesystem\\Filesystem::getRequire():120}()
+#21 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/Engines/PhpEngine.php(57): Illuminate\\Filesystem\\Filesystem->getRequire('/Users/toengbun...', Array)
+#22 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/Engines/CompilerEngine.php(74): Illuminate\\View\\Engines\\PhpEngine->evaluatePath('/Users/toengbun...', Array)
+#23 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/View.php(208): Illuminate\\View\\Engines\\CompilerEngine->get('/Users/toengbun...', Array)
+#24 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/View.php(191): Illuminate\\View\\View->getContents()
+#25 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/View.php(160): Illuminate\\View\\View->renderContents()
+#26 /Users/toengbunsin/Documents/development/DevSync/resources/views/jobs/index.blade.php(28): Illuminate\\View\\View->render()
+#27 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(123): require('/Users/toengbun...')
+#28 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(124): Illuminate\\Filesystem\\Filesystem::{closure:Illuminate\\Filesystem\\Filesystem::getRequire():120}()
+#29 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/Engines/PhpEngine.php(57): Illuminate\\Filesystem\\Filesystem->getRequire('/Users/toengbun...', Array)
+#30 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/Engines/CompilerEngine.php(74): Illuminate\\View\\Engines\\PhpEngine->evaluatePath('/Users/toengbun...', Array)
+#31 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/View.php(208): Illuminate\\View\\Engines\\CompilerEngine->get('/Users/toengbun...', Array)
+#32 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/View.php(191): Illuminate\\View\\View->getContents()
+#33 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/View.php(160): Illuminate\\View\\View->renderContents()
+#34 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Http/Response.php(78): Illuminate\\View\\View->render()
+#35 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Http/Response.php(34): Illuminate\\Http\\Response->setContent(Object(Illuminate\\View\\View))
+#36 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Routing/Router.php(924): Illuminate\\Http\\Response->__construct(Object(Illuminate\\View\\View), 200, Array)
+#37 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Routing/Router.php(891): Illuminate\\Routing\\Router::toResponse(Object(Illuminate\\Http\\Request), Object(Illuminate\\View\\View))
+#38 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Routing/Router.php(807): Illuminate\\Routing\\Router->prepareResponse(Object(Illuminate\\Http\\Request), Object(Illuminate\\View\\View))
+#39 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(169): Illuminate\\Routing\\Router->{closure:Illuminate\\Routing\\Router::runRouteWithinStack():807}(Object(Illuminate\\Http\\Request))
+#40 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Routing/Middleware/SubstituteBindings.php(50): Illuminate\\Pipeline\\Pipeline->{closure:Illuminate\\Pipeline\\Pipeline::prepareDestination():167}(Object(Illuminate\\Http\\Request))
+#41 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(208): Illuminate\\Routing\\Middleware\\SubstituteBindings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#42 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/VerifyCsrfToken.php(87): Illuminate\\Pipeline\\Pipeline->{closure:{closure:Illuminate\\Pipeline\\Pipeline::carry():183}:184}(Object(Illuminate\\Http\\Request))
+#43 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(208): Illuminate\\Foundation\\Http\\Middleware\\VerifyCsrfToken->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#44 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/Middleware/ShareErrorsFromSession.php(48): Illuminate\\Pipeline\\Pipeline->{closure:{closure:Illuminate\\Pipeline\\Pipeline::carry():183}:184}(Object(Illuminate\\Http\\Request))
+#45 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(208): Illuminate\\View\\Middleware\\ShareErrorsFromSession->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#46 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Session/Middleware/StartSession.php(120): Illuminate\\Pipeline\\Pipeline->{closure:{closure:Illuminate\\Pipeline\\Pipeline::carry():183}:184}(Object(Illuminate\\Http\\Request))
+#47 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Session/Middleware/StartSession.php(63): Illuminate\\Session\\Middleware\\StartSession->handleStatefulRequest(Object(Illuminate\\Http\\Request), Object(Illuminate\\Session\\Store), Object(Closure))
+#48 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(208): Illuminate\\Session\\Middleware\\StartSession->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#49 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Cookie/Middleware/AddQueuedCookiesToResponse.php(36): Illuminate\\Pipeline\\Pipeline->{closure:{closure:Illuminate\\Pipeline\\Pipeline::carry():183}:184}(Object(Illuminate\\Http\\Request))
+#50 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(208): Illuminate\\Cookie\\Middleware\\AddQueuedCookiesToResponse->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#51 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Cookie/Middleware/EncryptCookies.php(74): Illuminate\\Pipeline\\Pipeline->{closure:{closure:Illuminate\\Pipeline\\Pipeline::carry():183}:184}(Object(Illuminate\\Http\\Request))
+#52 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(208): Illuminate\\Cookie\\Middleware\\EncryptCookies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#53 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(126): Illuminate\\Pipeline\\Pipeline->{closure:{closure:Illuminate\\Pipeline\\Pipeline::carry():183}:184}(Object(Illuminate\\Http\\Request))
+#54 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Routing/Router.php(807): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#55 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Routing/Router.php(786): Illuminate\\Routing\\Router->runRouteWithinStack(Object(Illuminate\\Routing\\Route), Object(Illuminate\\Http\\Request))
+#56 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Routing/Router.php(750): Illuminate\\Routing\\Router->runRoute(Object(Illuminate\\Http\\Request), Object(Illuminate\\Routing\\Route))
+#57 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Routing/Router.php(739): Illuminate\\Routing\\Router->dispatchToRoute(Object(Illuminate\\Http\\Request))
+#58 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(200): Illuminate\\Routing\\Router->dispatch(Object(Illuminate\\Http\\Request))
+#59 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(169): Illuminate\\Foundation\\Http\\Kernel->{closure:Illuminate\\Foundation\\Http\\Kernel::dispatchToRouter():197}(Object(Illuminate\\Http\\Request))
+#60 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->{closure:Illuminate\\Pipeline\\Pipeline::prepareDestination():167}(Object(Illuminate\\Http\\Request))
+#61 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ConvertEmptyStringsToNull.php(31): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#62 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(208): Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#63 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->{closure:{closure:Illuminate\\Pipeline\\Pipeline::carry():183}:184}(Object(Illuminate\\Http\\Request))
+#64 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TrimStrings.php(51): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#65 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(208): Illuminate\\Foundation\\Http\\Middleware\\TrimStrings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#66 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Http/Middleware/ValidatePostSize.php(27): Illuminate\\Pipeline\\Pipeline->{closure:{closure:Illuminate\\Pipeline\\Pipeline::carry():183}:184}(Object(Illuminate\\Http\\Request))
+#67 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(208): Illuminate\\Http\\Middleware\\ValidatePostSize->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#68 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/PreventRequestsDuringMaintenance.php(109): Illuminate\\Pipeline\\Pipeline->{closure:{closure:Illuminate\\Pipeline\\Pipeline::carry():183}:184}(Object(Illuminate\\Http\\Request))
+#69 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(208): Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#70 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Http/Middleware/HandleCors.php(48): Illuminate\\Pipeline\\Pipeline->{closure:{closure:Illuminate\\Pipeline\\Pipeline::carry():183}:184}(Object(Illuminate\\Http\\Request))
+#71 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(208): Illuminate\\Http\\Middleware\\HandleCors->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#72 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Http/Middleware/TrustProxies.php(58): Illuminate\\Pipeline\\Pipeline->{closure:{closure:Illuminate\\Pipeline\\Pipeline::carry():183}:184}(Object(Illuminate\\Http\\Request))
+#73 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(208): Illuminate\\Http\\Middleware\\TrustProxies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#74 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(126): Illuminate\\Pipeline\\Pipeline->{closure:{closure:Illuminate\\Pipeline\\Pipeline::carry():183}:184}(Object(Illuminate\\Http\\Request))
+#75 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(175): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#76 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(144): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
+#77 /Users/toengbunsin/Documents/development/DevSync/public/index.php(54): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
+#78 /Users/toengbunsin/Documents/development/DevSync/server.php(21): require_once('/Users/toengbun...')
+#79 {main}
+
+[previous exception] [object] (ParseError(code: 0): syntax error, unexpected single-quoted string \"english\", expecting \"]\" at /Users/toengbunsin/Documents/development/DevSync/lang/en/ui.php:21)
+[stacktrace]
+#0 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(124): Illuminate\\Filesystem\\Filesystem::{closure:Illuminate\\Filesystem\\Filesystem::getRequire():120}()
+#1 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Translation/FileLoader.php(129): Illuminate\\Filesystem\\Filesystem->getRequire('/Users/toengbun...')
+#2 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Collections/Traits/EnumeratesValues.php(815): Illuminate\\Translation\\FileLoader->{closure:Illuminate\\Translation\\FileLoader::loadPaths():127}(Array, '/Users/toengbun...', 1)
+#3 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Translation/FileLoader.php(127): Illuminate\\Support\\Collection->reduce(Object(Closure), Array)
+#4 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Translation/FileLoader.php(68): Illuminate\\Translation\\FileLoader->loadPaths(Array, 'en', 'ui')
+#5 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Translation/Translator.php(334): Illuminate\\Translation\\FileLoader->load('en', 'ui', '*')
+#6 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Translation/Translator.php(247): Illuminate\\Translation\\Translator->load('*', 'ui', 'en')
+#7 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Translation/Translator.php(172): Illuminate\\Translation\\Translator->getLine('*', 'ui', 'en', 'nav.home', Array)
+#8 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Foundation/helpers.php(965): Illuminate\\Translation\\Translator->get('ui.nav.home', Array, 'en')
+#9 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Foundation/helpers.php(1000): trans('ui.nav.home', Array, NULL)
+#10 /Users/toengbunsin/Documents/development/DevSync/storage/framework/views/fe6debf9be27d64d7ade6c297085b3b4.php(20): __('ui.nav.home')
+#11 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(123): require('/Users/toengbun...')
+#12 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(124): Illuminate\\Filesystem\\Filesystem::{closure:Illuminate\\Filesystem\\Filesystem::getRequire():120}()
+#13 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/Engines/PhpEngine.php(57): Illuminate\\Filesystem\\Filesystem->getRequire('/Users/toengbun...', Array)
+#14 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/Engines/CompilerEngine.php(74): Illuminate\\View\\Engines\\PhpEngine->evaluatePath('/Users/toengbun...', Array)
+#15 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/View.php(208): Illuminate\\View\\Engines\\CompilerEngine->get('/Users/toengbun...', Array)
+#16 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/View.php(191): Illuminate\\View\\View->getContents()
+#17 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/View.php(160): Illuminate\\View\\View->renderContents()
+#18 /Users/toengbunsin/Documents/development/DevSync/storage/framework/views/6d567aacea02fa47a1563c9f391f0242.php(31): Illuminate\\View\\View->render()
+#19 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(123): require('/Users/toengbun...')
+#20 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(124): Illuminate\\Filesystem\\Filesystem::{closure:Illuminate\\Filesystem\\Filesystem::getRequire():120}()
+#21 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/Engines/PhpEngine.php(57): Illuminate\\Filesystem\\Filesystem->getRequire('/Users/toengbun...', Array)
+#22 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/Engines/CompilerEngine.php(74): Illuminate\\View\\Engines\\PhpEngine->evaluatePath('/Users/toengbun...', Array)
+#23 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/View.php(208): Illuminate\\View\\Engines\\CompilerEngine->get('/Users/toengbun...', Array)
+#24 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/View.php(191): Illuminate\\View\\View->getContents()
+#25 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/View.php(160): Illuminate\\View\\View->renderContents()
+#26 /Users/toengbunsin/Documents/development/DevSync/storage/framework/views/ed72f020a5b979aedb46c4a046acdfe0.php(28): Illuminate\\View\\View->render()
+#27 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(123): require('/Users/toengbun...')
+#28 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(124): Illuminate\\Filesystem\\Filesystem::{closure:Illuminate\\Filesystem\\Filesystem::getRequire():120}()
+#29 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/Engines/PhpEngine.php(57): Illuminate\\Filesystem\\Filesystem->getRequire('/Users/toengbun...', Array)
+#30 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/Engines/CompilerEngine.php(74): Illuminate\\View\\Engines\\PhpEngine->evaluatePath('/Users/toengbun...', Array)
+#31 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/View.php(208): Illuminate\\View\\Engines\\CompilerEngine->get('/Users/toengbun...', Array)
+#32 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/View.php(191): Illuminate\\View\\View->getContents()
+#33 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/View.php(160): Illuminate\\View\\View->renderContents()
+#34 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Http/Response.php(78): Illuminate\\View\\View->render()
+#35 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Http/Response.php(34): Illuminate\\Http\\Response->setContent(Object(Illuminate\\View\\View))
+#36 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Routing/Router.php(924): Illuminate\\Http\\Response->__construct(Object(Illuminate\\View\\View), 200, Array)
+#37 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Routing/Router.php(891): Illuminate\\Routing\\Router::toResponse(Object(Illuminate\\Http\\Request), Object(Illuminate\\View\\View))
+#38 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Routing/Router.php(807): Illuminate\\Routing\\Router->prepareResponse(Object(Illuminate\\Http\\Request), Object(Illuminate\\View\\View))
+#39 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(169): Illuminate\\Routing\\Router->{closure:Illuminate\\Routing\\Router::runRouteWithinStack():807}(Object(Illuminate\\Http\\Request))
+#40 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Routing/Middleware/SubstituteBindings.php(50): Illuminate\\Pipeline\\Pipeline->{closure:Illuminate\\Pipeline\\Pipeline::prepareDestination():167}(Object(Illuminate\\Http\\Request))
+#41 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(208): Illuminate\\Routing\\Middleware\\SubstituteBindings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#42 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/VerifyCsrfToken.php(87): Illuminate\\Pipeline\\Pipeline->{closure:{closure:Illuminate\\Pipeline\\Pipeline::carry():183}:184}(Object(Illuminate\\Http\\Request))
+#43 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(208): Illuminate\\Foundation\\Http\\Middleware\\VerifyCsrfToken->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#44 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/Middleware/ShareErrorsFromSession.php(48): Illuminate\\Pipeline\\Pipeline->{closure:{closure:Illuminate\\Pipeline\\Pipeline::carry():183}:184}(Object(Illuminate\\Http\\Request))
+#45 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(208): Illuminate\\View\\Middleware\\ShareErrorsFromSession->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#46 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Session/Middleware/StartSession.php(120): Illuminate\\Pipeline\\Pipeline->{closure:{closure:Illuminate\\Pipeline\\Pipeline::carry():183}:184}(Object(Illuminate\\Http\\Request))
+#47 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Session/Middleware/StartSession.php(63): Illuminate\\Session\\Middleware\\StartSession->handleStatefulRequest(Object(Illuminate\\Http\\Request), Object(Illuminate\\Session\\Store), Object(Closure))
+#48 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(208): Illuminate\\Session\\Middleware\\StartSession->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#49 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Cookie/Middleware/AddQueuedCookiesToResponse.php(36): Illuminate\\Pipeline\\Pipeline->{closure:{closure:Illuminate\\Pipeline\\Pipeline::carry():183}:184}(Object(Illuminate\\Http\\Request))
+#50 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(208): Illuminate\\Cookie\\Middleware\\AddQueuedCookiesToResponse->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#51 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Cookie/Middleware/EncryptCookies.php(74): Illuminate\\Pipeline\\Pipeline->{closure:{closure:Illuminate\\Pipeline\\Pipeline::carry():183}:184}(Object(Illuminate\\Http\\Request))
+#52 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(208): Illuminate\\Cookie\\Middleware\\EncryptCookies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#53 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(126): Illuminate\\Pipeline\\Pipeline->{closure:{closure:Illuminate\\Pipeline\\Pipeline::carry():183}:184}(Object(Illuminate\\Http\\Request))
+#54 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Routing/Router.php(807): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#55 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Routing/Router.php(786): Illuminate\\Routing\\Router->runRouteWithinStack(Object(Illuminate\\Routing\\Route), Object(Illuminate\\Http\\Request))
+#56 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Routing/Router.php(750): Illuminate\\Routing\\Router->runRoute(Object(Illuminate\\Http\\Request), Object(Illuminate\\Routing\\Route))
+#57 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Routing/Router.php(739): Illuminate\\Routing\\Router->dispatchToRoute(Object(Illuminate\\Http\\Request))
+#58 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(200): Illuminate\\Routing\\Router->dispatch(Object(Illuminate\\Http\\Request))
+#59 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(169): Illuminate\\Foundation\\Http\\Kernel->{closure:Illuminate\\Foundation\\Http\\Kernel::dispatchToRouter():197}(Object(Illuminate\\Http\\Request))
+#60 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->{closure:Illuminate\\Pipeline\\Pipeline::prepareDestination():167}(Object(Illuminate\\Http\\Request))
+#61 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ConvertEmptyStringsToNull.php(31): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#62 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(208): Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#63 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->{closure:{closure:Illuminate\\Pipeline\\Pipeline::carry():183}:184}(Object(Illuminate\\Http\\Request))
+#64 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TrimStrings.php(51): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#65 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(208): Illuminate\\Foundation\\Http\\Middleware\\TrimStrings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#66 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Http/Middleware/ValidatePostSize.php(27): Illuminate\\Pipeline\\Pipeline->{closure:{closure:Illuminate\\Pipeline\\Pipeline::carry():183}:184}(Object(Illuminate\\Http\\Request))
+#67 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(208): Illuminate\\Http\\Middleware\\ValidatePostSize->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#68 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/PreventRequestsDuringMaintenance.php(109): Illuminate\\Pipeline\\Pipeline->{closure:{closure:Illuminate\\Pipeline\\Pipeline::carry():183}:184}(Object(Illuminate\\Http\\Request))
+#69 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(208): Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#70 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Http/Middleware/HandleCors.php(48): Illuminate\\Pipeline\\Pipeline->{closure:{closure:Illuminate\\Pipeline\\Pipeline::carry():183}:184}(Object(Illuminate\\Http\\Request))
+#71 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(208): Illuminate\\Http\\Middleware\\HandleCors->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#72 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Http/Middleware/TrustProxies.php(58): Illuminate\\Pipeline\\Pipeline->{closure:{closure:Illuminate\\Pipeline\\Pipeline::carry():183}:184}(Object(Illuminate\\Http\\Request))
+#73 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(208): Illuminate\\Http\\Middleware\\TrustProxies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#74 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(126): Illuminate\\Pipeline\\Pipeline->{closure:{closure:Illuminate\\Pipeline\\Pipeline::carry():183}:184}(Object(Illuminate\\Http\\Request))
+#75 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(175): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#76 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(144): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
+#77 /Users/toengbunsin/Documents/development/DevSync/public/index.php(54): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
+#78 /Users/toengbunsin/Documents/development/DevSync/server.php(21): require_once('/Users/toengbun...')
+#79 {main}
+"} 
+[2026-08-16 07:59:55] local.ERROR: syntax error, unexpected single-quoted string "english", expecting "]" {"view":{"view":"/Users/toengbunsin/Documents/development/DevSync/resources/views/partials/header.blade.php","data":{"errors":"<pre class=sf-dump id=sf-dump-28263198 data-indent-pad=\"  \"><span class=sf-dump-note>Illuminate\\Support\\ViewErrorBag</span> {<a class=sf-dump-ref>#1345</a><samp data-depth=1 class=sf-dump-expanded>
+  #<span class=sf-dump-protected title=\"Protected property\">bags</span>: []
+</samp>}
+</pre><script>Sfdump(\"sf-dump-28263198\", {\"maxDepth\":3,\"maxStringLength\":160})</script>
+","jobs":"<pre class=sf-dump id=sf-dump-1654666474 data-indent-pad=\"  \"><span class=sf-dump-note>array:3</span> [<samp data-depth=1 class=sf-dump-expanded>
+  <span class=sf-dump-index>0</span> => <span class=sf-dump-note>array:30</span> [<samp data-depth=2 class=sf-dump-compact>
+    \"<span class=sf-dump-key>id</span>\" => \"<span class=sf-dump-str title=\"17 characters\">retail-associates</span>\"
+    \"<span class=sf-dump-key>title</span>\" => \"<span class=sf-dump-str title=\"17 characters\">Retail Associates</span>\"
+    \"<span class=sf-dump-key>company</span>\" => \"<span class=sf-dump-str title=\"9 characters\">PPCB Bank</span>\"
+    \"<span class=sf-dump-key>location</span>\" => \"<span class=sf-dump-str title=\"20 characters\">Phnom Penh, Cambodia</span>\"
+    \"<span class=sf-dump-key>salary</span>\" => \"<span class=sf-dump-str title=\"23 characters\">$19.25 - $20.25 an hour</span>\"
+    \"<span class=sf-dump-key>short_salary</span>\" => \"<span class=sf-dump-str title=\"22 characters\">$19.25 - $20.25 / hour</span>\"
+    \"<span class=sf-dump-key>summary</span>\" => \"<span class=sf-dump-str title=\"85 characters\">Help customers, support branch operations, and create a welcoming banking experience.</span>\"
+    \"<span class=sf-dump-key>type</span>\" => \"<span class=sf-dump-str title=\"9 characters\">Full-time</span>\"
+    \"<span class=sf-dump-key>mode</span>\" => \"<span class=sf-dump-str title=\"7 characters\">On-site</span>\"
+    \"<span class=sf-dump-key>experience</span>\" => \"<span class=sf-dump-str title=\"8 characters\">1+ Years</span>\"
+    \"<span class=sf-dump-key>department</span>\" => \"<span class=sf-dump-str title=\"14 characters\">Retail Banking</span>\"
+    \"<span class=sf-dump-key>deadline</span>\" => \"<span class=sf-dump-str title=\"11 characters\">4 days left</span>\"
+    \"<span class=sf-dump-key>posted</span>\" => \"<span class=sf-dump-str title=\"17 characters\">Posted 2 days ago</span>\"
+    \"<span class=sf-dump-key>posted_days</span>\" => <span class=sf-dump-num>2</span>
+    \"<span class=sf-dump-key>applicants</span>\" => \"<span class=sf-dump-str title=\"13 characters\">48 applicants</span>\"
+    \"<span class=sf-dump-key>featured</span>\" => <span class=sf-dump-const>true</span>
+    \"<span class=sf-dump-key>highlighted</span>\" => <span class=sf-dump-const>false</span>
+    \"<span class=sf-dump-key>logo</span>\" => \"<span class=sf-dump-str title=\"3 characters\">aba</span>\"
+    \"<span class=sf-dump-key>company_logo_url</span>\" => \"<span class=sf-dump-str title=\"35 characters\">/storage/companies/ppcbank-logo.png</span>\"
+    \"<span class=sf-dump-key>company_cover_url</span>\" => \"<span class=sf-dump-str title=\"36 characters\">/storage/companies/ppcbank-cover.jpg</span>\"
+    \"<span class=sf-dump-key>company_details</span>\" => <span class=sf-dump-note>array:3</span> [<samp data-depth=3 class=sf-dump-compact>
+      \"<span class=sf-dump-key>Type</span>\" => \"<span class=sf-dump-str title=\"15 characters\">Direct Employer</span>\"
+      \"<span class=sf-dump-key>Industry</span>\" => \"<span class=sf-dump-str title=\"32 characters\">Banking/ Insurance/ Microfinance</span>\"
+      \"<span class=sf-dump-key>No. Employees</span>\" => \"<span class=sf-dump-str title=\"11 characters\">501 to 1000</span>\"
+    </samp>]
+    \"<span class=sf-dump-key>company_address</span>\" => \"<span class=sf-dump-str title=\"81 characters\">No.217, Norodom Blvd, Sangkat Tonle Bassac, Khan Chamkamorn, Phnom Penh, Cambodia</span>\"
+    \"<span class=sf-dump-key>company_website</span>\" => \"<span class=sf-dump-str title=\"26 characters\">https://www.ppcbank.com.kh</span>\"
+    \"<span class=sf-dump-key>company_sections</span>\" => <span class=sf-dump-note>array:4</span> [<samp data-depth=3 class=sf-dump-compact>
+      <span class=sf-dump-index>0</span> => <span class=sf-dump-note>array:5</span> [ &#8230;5]
+      <span class=sf-dump-index>1</span> => <span class=sf-dump-note>array:5</span> [ &#8230;5]
+      <span class=sf-dump-index>2</span> => <span class=sf-dump-note>array:5</span> [ &#8230;5]
+      <span class=sf-dump-index>3</span> => <span class=sf-dump-note>array:5</span> [ &#8230;5]
+    </samp>]
+    \"<span class=sf-dump-key>company_verified</span>\" => <span class=sf-dump-const>true</span>
+    \"<span class=sf-dump-key>badges</span>\" => <span class=sf-dump-note>array:2</span> [<samp data-depth=3 class=sf-dump-compact>
+      <span class=sf-dump-index>0</span> => \"<span class=sf-dump-str title=\"9 characters\">Full-time</span>\"
+      <span class=sf-dump-index>1</span> => \"<span class=sf-dump-str title=\"7 characters\">On-site</span>\"
+    </samp>]
+    \"<span class=sf-dump-key>tabs</span>\" => <span class=sf-dump-note>array:3</span> [<samp data-depth=3 class=sf-dump-compact>
+      \"<span class=sf-dump-key>description</span>\" => <span class=sf-dump-note>array:4</span> [ &#8230;4]
+      \"<span class=sf-dump-key>requirements</span>\" => <span class=sf-dump-note>array:4</span> [ &#8230;4]
+      \"<span class=sf-dump-key>job_description</span>\" => <span class=sf-dump-note>array:4</span> [ &#8230;4]
+    </samp>]
+    \"<span class=sf-dump-key>detail_items</span>\" => <span class=sf-dump-note>array:4</span> [<samp data-depth=3 class=sf-dump-compact>
+      <span class=sf-dump-index>0</span> => <span class=sf-dump-note>array:2</span> [ &#8230;2]
+      <span class=sf-dump-index>1</span> => <span class=sf-dump-note>array:2</span> [ &#8230;2]
+      <span class=sf-dump-index>2</span> => <span class=sf-dump-note>array:2</span> [ &#8230;2]
+      <span class=sf-dump-index>3</span> => <span class=sf-dump-note>array:2</span> [ &#8230;2]
+    </samp>]
+    \"<span class=sf-dump-key>quick_apply</span>\" => <span class=sf-dump-note>array:2</span> [<samp data-depth=3 class=sf-dump-compact>
+      \"<span class=sf-dump-key>title</span>\" => \"<span class=sf-dump-str title=\"13 characters\">Branch hiring</span>\"
+      \"<span class=sf-dump-key>text</span>\" => \"<span class=sf-dump-str title=\"55 characters\">Applications are reviewed daily for immediate openings.</span>\"
+    </samp>]
+    \"<span class=sf-dump-key>offer</span>\" => <span class=sf-dump-note>array:3</span> [<samp data-depth=3 class=sf-dump-compact>
+      <span class=sf-dump-index>0</span> => <span class=sf-dump-note>array:4</span> [ &#8230;4]
+      <span class=sf-dump-index>1</span> => <span class=sf-dump-note>array:4</span> [ &#8230;4]
+      <span class=sf-dump-index>2</span> => <span class=sf-dump-note>array:4</span> [ &#8230;4]
+    </samp>]
+  </samp>]
+  <span class=sf-dump-index>1</span> => <span class=sf-dump-note>array:30</span> [<samp data-depth=2 class=sf-dump-compact>
+    \"<span class=sf-dump-key>id</span>\" => \"<span class=sf-dump-str title=\"17 characters\">software-engineer</span>\"
+    \"<span class=sf-dump-key>title</span>\" => \"<span class=sf-dump-str title=\"17 characters\">Software Engineer</span>\"
+    \"<span class=sf-dump-key>company</span>\" => \"<span class=sf-dump-str title=\"9 characters\">Tech Corp</span>\"
+    \"<span class=sf-dump-key>location</span>\" => \"<span class=sf-dump-str title=\"6 characters\">Remote</span>\"
+    \"<span class=sf-dump-key>salary</span>\" => \"<span class=sf-dump-str title=\"25 characters\">$80,000 - $120,000 a year</span>\"
+    \"<span class=sf-dump-key>short_salary</span>\" => \"<span class=sf-dump-str title=\"19 characters\">$80k - $120k / year</span>\"
+    \"<span class=sf-dump-key>summary</span>\" => \"<span class=sf-dump-str title=\"84 characters\">Build reliable digital products with a collaborative, remote-first engineering team.</span>\"
+    \"<span class=sf-dump-key>type</span>\" => \"<span class=sf-dump-str title=\"9 characters\">Full-time</span>\"
+    \"<span class=sf-dump-key>mode</span>\" => \"<span class=sf-dump-str title=\"6 characters\">Remote</span>\"
+    \"<span class=sf-dump-key>experience</span>\" => \"<span class=sf-dump-str title=\"8 characters\">3+ Years</span>\"
+    \"<span class=sf-dump-key>department</span>\" => \"<span class=sf-dump-str title=\"11 characters\">Engineering</span>\"
+    \"<span class=sf-dump-key>deadline</span>\" => \"<span class=sf-dump-str title=\"11 characters\">9 days left</span>\"
+    \"<span class=sf-dump-key>posted</span>\" => \"<span class=sf-dump-str title=\"17 characters\">Posted 4 days ago</span>\"
+    \"<span class=sf-dump-key>posted_days</span>\" => <span class=sf-dump-num>4</span>
+    \"<span class=sf-dump-key>applicants</span>\" => \"<span class=sf-dump-str title=\"14 characters\">245 applicants</span>\"
+    \"<span class=sf-dump-key>featured</span>\" => <span class=sf-dump-const>true</span>
+    \"<span class=sf-dump-key>highlighted</span>\" => <span class=sf-dump-const>true</span>
+    \"<span class=sf-dump-key>logo</span>\" => \"<span class=sf-dump-str title=\"4 characters\">tech</span>\"
+    \"<span class=sf-dump-key>company_logo_url</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>company_cover_url</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>company_details</span>\" => []
+    \"<span class=sf-dump-key>company_address</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>company_website</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>company_sections</span>\" => []
+    \"<span class=sf-dump-key>company_verified</span>\" => <span class=sf-dump-const>false</span>
+    \"<span class=sf-dump-key>badges</span>\" => <span class=sf-dump-note>array:2</span> [<samp data-depth=3 class=sf-dump-compact>
+      <span class=sf-dump-index>0</span> => \"<span class=sf-dump-str title=\"9 characters\">Full-time</span>\"
+      <span class=sf-dump-index>1</span> => \"<span class=sf-dump-str title=\"6 characters\">Remote</span>\"
+    </samp>]
+    \"<span class=sf-dump-key>tabs</span>\" => <span class=sf-dump-note>array:3</span> [<samp data-depth=3 class=sf-dump-compact>
+      \"<span class=sf-dump-key>description</span>\" => <span class=sf-dump-note>array:4</span> [ &#8230;4]
+      \"<span class=sf-dump-key>requirements</span>\" => <span class=sf-dump-note>array:4</span> [ &#8230;4]
+      \"<span class=sf-dump-key>job_description</span>\" => <span class=sf-dump-note>array:4</span> [ &#8230;4]
+    </samp>]
+    \"<span class=sf-dump-key>detail_items</span>\" => <span class=sf-dump-note>array:4</span> [<samp data-depth=3 class=sf-dump-compact>
+      <span class=sf-dump-index>0</span> => <span class=sf-dump-note>array:2</span> [ &#8230;2]
+      <span class=sf-dump-index>1</span> => <span class=sf-dump-note>array:2</span> [ &#8230;2]
+      <span class=sf-dump-index>2</span> => <span class=sf-dump-note>array:2</span> [ &#8230;2]
+      <span class=sf-dump-index>3</span> => <span class=sf-dump-note>array:2</span> [ &#8230;2]
+    </samp>]
+    \"<span class=sf-dump-key>quick_apply</span>\" => <span class=sf-dump-note>array:2</span> [<samp data-depth=3 class=sf-dump-compact>
+      \"<span class=sf-dump-key>title</span>\" => \"<span class=sf-dump-str title=\"11 characters\">Quick apply</span>\"
+      \"<span class=sf-dump-key>text</span>\" => \"<span class=sf-dump-str title=\"61 characters\">Apply today and expect an initial response within three days.</span>\"
+    </samp>]
+    \"<span class=sf-dump-key>offer</span>\" => []
+  </samp>]
+  <span class=sf-dump-index>2</span> => <span class=sf-dump-note>array:30</span> [<samp data-depth=2 class=sf-dump-compact>
+    \"<span class=sf-dump-key>id</span>\" => \"<span class=sf-dump-str title=\"14 characters\">ui-ux-designer</span>\"
+    \"<span class=sf-dump-key>title</span>\" => \"<span class=sf-dump-str title=\"14 characters\">UI/UX Designer</span>\"
+    \"<span class=sf-dump-key>company</span>\" => \"<span class=sf-dump-str title=\"13 characters\">Design Studio</span>\"
+    \"<span class=sf-dump-key>location</span>\" => \"<span class=sf-dump-str title=\"20 characters\">Phnom Penh, Cambodia</span>\"
+    \"<span class=sf-dump-key>salary</span>\" => \"<span class=sf-dump-str title=\"24 characters\">$60,000 - $90,000 a year</span>\"
+    \"<span class=sf-dump-key>short_salary</span>\" => \"<span class=sf-dump-str title=\"18 characters\">$60k - $90k / year</span>\"
+    \"<span class=sf-dump-key>summary</span>\" => \"<span class=sf-dump-str title=\"78 characters\">Shape intuitive product experiences for ambitious teams across Southeast Asia.</span>\"
+    \"<span class=sf-dump-key>type</span>\" => \"<span class=sf-dump-str title=\"9 characters\">Full-time</span>\"
+    \"<span class=sf-dump-key>mode</span>\" => \"<span class=sf-dump-str title=\"6 characters\">Hybrid</span>\"
+    \"<span class=sf-dump-key>experience</span>\" => \"<span class=sf-dump-str title=\"8 characters\">2+ Years</span>\"
+    \"<span class=sf-dump-key>department</span>\" => \"<span class=sf-dump-str title=\"14 characters\">Product Design</span>\"
+    \"<span class=sf-dump-key>deadline</span>\" => \"<span class=sf-dump-str title=\"12 characters\">11 days left</span>\"
+    \"<span class=sf-dump-key>posted</span>\" => \"<span class=sf-dump-str title=\"17 characters\">Posted 6 days ago</span>\"
+    \"<span class=sf-dump-key>posted_days</span>\" => <span class=sf-dump-num>6</span>
+    \"<span class=sf-dump-key>applicants</span>\" => \"<span class=sf-dump-str title=\"13 characters\">94 applicants</span>\"
+    \"<span class=sf-dump-key>featured</span>\" => <span class=sf-dump-const>false</span>
+    \"<span class=sf-dump-key>highlighted</span>\" => <span class=sf-dump-const>false</span>
+    \"<span class=sf-dump-key>logo</span>\" => \"<span class=sf-dump-str title=\"6 characters\">design</span>\"
+    \"<span class=sf-dump-key>company_logo_url</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>company_cover_url</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>company_details</span>\" => []
+    \"<span class=sf-dump-key>company_address</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>company_website</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>company_sections</span>\" => []
+    \"<span class=sf-dump-key>company_verified</span>\" => <span class=sf-dump-const>false</span>
+    \"<span class=sf-dump-key>badges</span>\" => <span class=sf-dump-note>array:2</span> [<samp data-depth=3 class=sf-dump-compact>
+      <span class=sf-dump-index>0</span> => \"<span class=sf-dump-str title=\"9 characters\">Full-time</span>\"
+      <span class=sf-dump-index>1</span> => \"<span class=sf-dump-str title=\"6 characters\">Hybrid</span>\"
+    </samp>]
+    \"<span class=sf-dump-key>tabs</span>\" => <span class=sf-dump-note>array:3</span> [<samp data-depth=3 class=sf-dump-compact>
+      \"<span class=sf-dump-key>description</span>\" => <span class=sf-dump-note>array:4</span> [ &#8230;4]
+      \"<span class=sf-dump-key>requirements</span>\" => <span class=sf-dump-note>array:4</span> [ &#8230;4]
+      \"<span class=sf-dump-key>job_description</span>\" => <span class=sf-dump-note>array:4</span> [ &#8230;4]
+    </samp>]
+    \"<span class=sf-dump-key>detail_items</span>\" => <span class=sf-dump-note>array:4</span> [<samp data-depth=3 class=sf-dump-compact>
+      <span class=sf-dump-index>0</span> => <span class=sf-dump-note>array:2</span> [ &#8230;2]
+      <span class=sf-dump-index>1</span> => <span class=sf-dump-note>array:2</span> [ &#8230;2]
+      <span class=sf-dump-index>2</span> => <span class=sf-dump-note>array:2</span> [ &#8230;2]
+      <span class=sf-dump-index>3</span> => <span class=sf-dump-note>array:2</span> [ &#8230;2]
+    </samp>]
+    \"<span class=sf-dump-key>quick_apply</span>\" => <span class=sf-dump-note>array:2</span> [<samp data-depth=3 class=sf-dump-compact>
+      \"<span class=sf-dump-key>title</span>\" => \"<span class=sf-dump-str title=\"16 characters\">Portfolio review</span>\"
+      \"<span class=sf-dump-key>text</span>\" => \"<span class=sf-dump-str title=\"63 characters\">Share your best work and we will arrange a design conversation.</span>\"
+    </samp>]
+    \"<span class=sf-dump-key>offer</span>\" => []
+  </samp>]
+</samp>]
+</pre><script>Sfdump(\"sf-dump-1654666474\", {\"maxDepth\":3,\"maxStringLength\":160})</script>
+","selectedJob":"<pre class=sf-dump id=sf-dump-1871210421 data-indent-pad=\"  \"><span class=sf-dump-note>array:30</span> [<samp data-depth=1 class=sf-dump-expanded>
+  \"<span class=sf-dump-key>id</span>\" => \"<span class=sf-dump-str title=\"17 characters\">software-engineer</span>\"
+  \"<span class=sf-dump-key>title</span>\" => \"<span class=sf-dump-str title=\"17 characters\">Software Engineer</span>\"
+  \"<span class=sf-dump-key>company</span>\" => \"<span class=sf-dump-str title=\"9 characters\">Tech Corp</span>\"
+  \"<span class=sf-dump-key>location</span>\" => \"<span class=sf-dump-str title=\"6 characters\">Remote</span>\"
+  \"<span class=sf-dump-key>salary</span>\" => \"<span class=sf-dump-str title=\"25 characters\">$80,000 - $120,000 a year</span>\"
+  \"<span class=sf-dump-key>short_salary</span>\" => \"<span class=sf-dump-str title=\"19 characters\">$80k - $120k / year</span>\"
+  \"<span class=sf-dump-key>summary</span>\" => \"<span class=sf-dump-str title=\"84 characters\">Build reliable digital products with a collaborative, remote-first engineering team.</span>\"
+  \"<span class=sf-dump-key>type</span>\" => \"<span class=sf-dump-str title=\"9 characters\">Full-time</span>\"
+  \"<span class=sf-dump-key>mode</span>\" => \"<span class=sf-dump-str title=\"6 characters\">Remote</span>\"
+  \"<span class=sf-dump-key>experience</span>\" => \"<span class=sf-dump-str title=\"8 characters\">3+ Years</span>\"
+  \"<span class=sf-dump-key>department</span>\" => \"<span class=sf-dump-str title=\"11 characters\">Engineering</span>\"
+  \"<span class=sf-dump-key>deadline</span>\" => \"<span class=sf-dump-str title=\"11 characters\">9 days left</span>\"
+  \"<span class=sf-dump-key>posted</span>\" => \"<span class=sf-dump-str title=\"17 characters\">Posted 4 days ago</span>\"
+  \"<span class=sf-dump-key>posted_days</span>\" => <span class=sf-dump-num>4</span>
+  \"<span class=sf-dump-key>applicants</span>\" => \"<span class=sf-dump-str title=\"14 characters\">245 applicants</span>\"
+  \"<span class=sf-dump-key>featured</span>\" => <span class=sf-dump-const>true</span>
+  \"<span class=sf-dump-key>highlighted</span>\" => <span class=sf-dump-const>true</span>
+  \"<span class=sf-dump-key>logo</span>\" => \"<span class=sf-dump-str title=\"4 characters\">tech</span>\"
+  \"<span class=sf-dump-key>company_logo_url</span>\" => <span class=sf-dump-const>null</span>
+  \"<span class=sf-dump-key>company_cover_url</span>\" => <span class=sf-dump-const>null</span>
+  \"<span class=sf-dump-key>company_details</span>\" => []
+  \"<span class=sf-dump-key>company_address</span>\" => <span class=sf-dump-const>null</span>
+  \"<span class=sf-dump-key>company_website</span>\" => <span class=sf-dump-const>null</span>
+  \"<span class=sf-dump-key>company_sections</span>\" => []
+  \"<span class=sf-dump-key>company_verified</span>\" => <span class=sf-dump-const>false</span>
+  \"<span class=sf-dump-key>badges</span>\" => <span class=sf-dump-note>array:2</span> [<samp data-depth=2 class=sf-dump-compact>
+    <span class=sf-dump-index>0</span> => \"<span class=sf-dump-str title=\"9 characters\">Full-time</span>\"
+    <span class=sf-dump-index>1</span> => \"<span class=sf-dump-str title=\"6 characters\">Remote</span>\"
+  </samp>]
+  \"<span class=sf-dump-key>tabs</span>\" => <span class=sf-dump-note>array:3</span> [<samp data-depth=2 class=sf-dump-compact>
+    \"<span class=sf-dump-key>description</span>\" => <span class=sf-dump-note>array:4</span> [<samp data-depth=3 class=sf-dump-compact>
+      \"<span class=sf-dump-key>title</span>\" => \"<span class=sf-dump-str title=\"26 characters\">Build Products That Matter</span>\"
+      \"<span class=sf-dump-key>body</span>\" => \"<span class=sf-dump-str title=\"182 characters\">We are looking for a thoughtful Software Engineer to develop useful, reliable products. You will work remotely with a collaborative team and own meaningful work from idea to release.</span>\"
+      \"<span class=sf-dump-key>list_title</span>\" => \"<span class=sf-dump-str title=\"16 characters\">What You Will Do</span>\"
+      \"<span class=sf-dump-key>list</span>\" => <span class=sf-dump-note>array:4</span> [ &#8230;4]
+    </samp>]
+    \"<span class=sf-dump-key>requirements</span>\" => <span class=sf-dump-note>array:4</span> [<samp data-depth=3 class=sf-dump-compact>
+      \"<span class=sf-dump-key>title</span>\" => \"<span class=sf-dump-str title=\"23 characters\">What We Are Looking For</span>\"
+      \"<span class=sf-dump-key>body</span>\" => \"<span class=sf-dump-str title=\"153 characters\">This role fits engineers who enjoy shipping product in a collaborative remote environment and can take ownership of features from design through release.</span>\"
+      \"<span class=sf-dump-key>list_title</span>\" => \"<span class=sf-dump-str title=\"11 characters\">Core Skills</span>\"
+      \"<span class=sf-dump-key>list</span>\" => <span class=sf-dump-note>array:4</span> [ &#8230;4]
+    </samp>]
+    \"<span class=sf-dump-key>job_description</span>\" => <span class=sf-dump-note>array:4</span> [<samp data-depth=3 class=sf-dump-compact>
+      \"<span class=sf-dump-key>title</span>\" => \"<span class=sf-dump-str title=\"15 characters\">About Tech Corp</span>\"
+      \"<span class=sf-dump-key>body</span>\" => \"<span class=sf-dump-str title=\"149 characters\">Tech Corp builds digital products for scaling teams across Southeast Asia with a focus on developer experience, reliable systems, and fast iteration.</span>\"
+      \"<span class=sf-dump-key>list_title</span>\" => \"<span class=sf-dump-str title=\"26 characters\">Why Engineers Like It Here</span>\"
+      \"<span class=sf-dump-key>list</span>\" => <span class=sf-dump-note>array:3</span> [ &#8230;3]
+    </samp>]
+  </samp>]
+  \"<span class=sf-dump-key>detail_items</span>\" => <span class=sf-dump-note>array:4</span> [<samp data-depth=2 class=sf-dump-compact>
+    <span class=sf-dump-index>0</span> => <span class=sf-dump-note>array:2</span> [<samp data-depth=3 class=sf-dump-compact>
+      \"<span class=sf-dump-key>label</span>\" => \"<span class=sf-dump-str title=\"8 characters\">Job type</span>\"
+      \"<span class=sf-dump-key>value</span>\" => \"<span class=sf-dump-str title=\"9 characters\">Full-time</span>\"
+    </samp>]
+    <span class=sf-dump-index>1</span> => <span class=sf-dump-note>array:2</span> [<samp data-depth=3 class=sf-dump-compact>
+      \"<span class=sf-dump-key>label</span>\" => \"<span class=sf-dump-str title=\"9 characters\">Work mode</span>\"
+      \"<span class=sf-dump-key>value</span>\" => \"<span class=sf-dump-str title=\"6 characters\">Remote</span>\"
+    </samp>]
+    <span class=sf-dump-index>2</span> => <span class=sf-dump-note>array:2</span> [<samp data-depth=3 class=sf-dump-compact>
+      \"<span class=sf-dump-key>label</span>\" => \"<span class=sf-dump-str title=\"10 characters\">Experience</span>\"
+      \"<span class=sf-dump-key>value</span>\" => \"<span class=sf-dump-str title=\"8 characters\">3+ Years</span>\"
+    </samp>]
+    <span class=sf-dump-index>3</span> => <span class=sf-dump-note>array:2</span> [<samp data-depth=3 class=sf-dump-compact>
+      \"<span class=sf-dump-key>label</span>\" => \"<span class=sf-dump-str title=\"10 characters\">Department</span>\"
+      \"<span class=sf-dump-key>value</span>\" => \"<span class=sf-dump-str title=\"11 characters\">Engineering</span>\"
+    </samp>]
+  </samp>]
+  \"<span class=sf-dump-key>quick_apply</span>\" => <span class=sf-dump-note>array:2</span> [<samp data-depth=2 class=sf-dump-compact>
+    \"<span class=sf-dump-key>title</span>\" => \"<span class=sf-dump-str title=\"11 characters\">Quick apply</span>\"
+    \"<span class=sf-dump-key>text</span>\" => \"<span class=sf-dump-str title=\"61 characters\">Apply today and expect an initial response within three days.</span>\"
+  </samp>]
+  \"<span class=sf-dump-key>offer</span>\" => []
+</samp>]
+</pre><script>Sfdump(\"sf-dump-1871210421\", {\"maxDepth\":3,\"maxStringLength\":160})</script>
+","spotlightJobs":"<pre class=sf-dump id=sf-dump-85473253 data-indent-pad=\"  \"><span class=sf-dump-note>array:3</span> [<samp data-depth=1 class=sf-dump-expanded>
+  <span class=sf-dump-index>0</span> => <span class=sf-dump-note>array:30</span> [<samp data-depth=2 class=sf-dump-compact>
+    \"<span class=sf-dump-key>id</span>\" => \"<span class=sf-dump-str title=\"17 characters\">retail-associates</span>\"
+    \"<span class=sf-dump-key>title</span>\" => \"<span class=sf-dump-str title=\"17 characters\">Retail Associates</span>\"
+    \"<span class=sf-dump-key>company</span>\" => \"<span class=sf-dump-str title=\"9 characters\">PPCB Bank</span>\"
+    \"<span class=sf-dump-key>location</span>\" => \"<span class=sf-dump-str title=\"20 characters\">Phnom Penh, Cambodia</span>\"
+    \"<span class=sf-dump-key>salary</span>\" => \"<span class=sf-dump-str title=\"23 characters\">$19.25 - $20.25 an hour</span>\"
+    \"<span class=sf-dump-key>short_salary</span>\" => \"<span class=sf-dump-str title=\"22 characters\">$19.25 - $20.25 / hour</span>\"
+    \"<span class=sf-dump-key>summary</span>\" => \"<span class=sf-dump-str title=\"85 characters\">Help customers, support branch operations, and create a welcoming banking experience.</span>\"
+    \"<span class=sf-dump-key>type</span>\" => \"<span class=sf-dump-str title=\"9 characters\">Full-time</span>\"
+    \"<span class=sf-dump-key>mode</span>\" => \"<span class=sf-dump-str title=\"7 characters\">On-site</span>\"
+    \"<span class=sf-dump-key>experience</span>\" => \"<span class=sf-dump-str title=\"8 characters\">1+ Years</span>\"
+    \"<span class=sf-dump-key>department</span>\" => \"<span class=sf-dump-str title=\"14 characters\">Retail Banking</span>\"
+    \"<span class=sf-dump-key>deadline</span>\" => \"<span class=sf-dump-str title=\"11 characters\">4 days left</span>\"
+    \"<span class=sf-dump-key>posted</span>\" => \"<span class=sf-dump-str title=\"17 characters\">Posted 2 days ago</span>\"
+    \"<span class=sf-dump-key>posted_days</span>\" => <span class=sf-dump-num>2</span>
+    \"<span class=sf-dump-key>applicants</span>\" => \"<span class=sf-dump-str title=\"13 characters\">48 applicants</span>\"
+    \"<span class=sf-dump-key>featured</span>\" => <span class=sf-dump-const>true</span>
+    \"<span class=sf-dump-key>highlighted</span>\" => <span class=sf-dump-const>false</span>
+    \"<span class=sf-dump-key>logo</span>\" => \"<span class=sf-dump-str title=\"3 characters\">aba</span>\"
+    \"<span class=sf-dump-key>company_logo_url</span>\" => \"<span class=sf-dump-str title=\"35 characters\">/storage/companies/ppcbank-logo.png</span>\"
+    \"<span class=sf-dump-key>company_cover_url</span>\" => \"<span class=sf-dump-str title=\"36 characters\">/storage/companies/ppcbank-cover.jpg</span>\"
+    \"<span class=sf-dump-key>company_details</span>\" => <span class=sf-dump-note>array:3</span> [<samp data-depth=3 class=sf-dump-compact>
+      \"<span class=sf-dump-key>Type</span>\" => \"<span class=sf-dump-str title=\"15 characters\">Direct Employer</span>\"
+      \"<span class=sf-dump-key>Industry</span>\" => \"<span class=sf-dump-str title=\"32 characters\">Banking/ Insurance/ Microfinance</span>\"
+      \"<span class=sf-dump-key>No. Employees</span>\" => \"<span class=sf-dump-str title=\"11 characters\">501 to 1000</span>\"
+    </samp>]
+    \"<span class=sf-dump-key>company_address</span>\" => \"<span class=sf-dump-str title=\"81 characters\">No.217, Norodom Blvd, Sangkat Tonle Bassac, Khan Chamkamorn, Phnom Penh, Cambodia</span>\"
+    \"<span class=sf-dump-key>company_website</span>\" => \"<span class=sf-dump-str title=\"26 characters\">https://www.ppcbank.com.kh</span>\"
+    \"<span class=sf-dump-key>company_sections</span>\" => <span class=sf-dump-note>array:4</span> [<samp data-depth=3 class=sf-dump-compact>
+      <span class=sf-dump-index>0</span> => <span class=sf-dump-note>array:5</span> [ &#8230;5]
+      <span class=sf-dump-index>1</span> => <span class=sf-dump-note>array:5</span> [ &#8230;5]
+      <span class=sf-dump-index>2</span> => <span class=sf-dump-note>array:5</span> [ &#8230;5]
+      <span class=sf-dump-index>3</span> => <span class=sf-dump-note>array:5</span> [ &#8230;5]
+    </samp>]
+    \"<span class=sf-dump-key>company_verified</span>\" => <span class=sf-dump-const>true</span>
+    \"<span class=sf-dump-key>badges</span>\" => <span class=sf-dump-note>array:2</span> [<samp data-depth=3 class=sf-dump-compact>
+      <span class=sf-dump-index>0</span> => \"<span class=sf-dump-str title=\"9 characters\">Full-time</span>\"
+      <span class=sf-dump-index>1</span> => \"<span class=sf-dump-str title=\"7 characters\">On-site</span>\"
+    </samp>]
+    \"<span class=sf-dump-key>tabs</span>\" => <span class=sf-dump-note>array:3</span> [<samp data-depth=3 class=sf-dump-compact>
+      \"<span class=sf-dump-key>description</span>\" => <span class=sf-dump-note>array:4</span> [ &#8230;4]
+      \"<span class=sf-dump-key>requirements</span>\" => <span class=sf-dump-note>array:4</span> [ &#8230;4]
+      \"<span class=sf-dump-key>job_description</span>\" => <span class=sf-dump-note>array:4</span> [ &#8230;4]
+    </samp>]
+    \"<span class=sf-dump-key>detail_items</span>\" => <span class=sf-dump-note>array:4</span> [<samp data-depth=3 class=sf-dump-compact>
+      <span class=sf-dump-index>0</span> => <span class=sf-dump-note>array:2</span> [ &#8230;2]
+      <span class=sf-dump-index>1</span> => <span class=sf-dump-note>array:2</span> [ &#8230;2]
+      <span class=sf-dump-index>2</span> => <span class=sf-dump-note>array:2</span> [ &#8230;2]
+      <span class=sf-dump-index>3</span> => <span class=sf-dump-note>array:2</span> [ &#8230;2]
+    </samp>]
+    \"<span class=sf-dump-key>quick_apply</span>\" => <span class=sf-dump-note>array:2</span> [<samp data-depth=3 class=sf-dump-compact>
+      \"<span class=sf-dump-key>title</span>\" => \"<span class=sf-dump-str title=\"13 characters\">Branch hiring</span>\"
+      \"<span class=sf-dump-key>text</span>\" => \"<span class=sf-dump-str title=\"55 characters\">Applications are reviewed daily for immediate openings.</span>\"
+    </samp>]
+    \"<span class=sf-dump-key>offer</span>\" => <span class=sf-dump-note>array:3</span> [<samp data-depth=3 class=sf-dump-compact>
+      <span class=sf-dump-index>0</span> => <span class=sf-dump-note>array:4</span> [ &#8230;4]
+      <span class=sf-dump-index>1</span> => <span class=sf-dump-note>array:4</span> [ &#8230;4]
+      <span class=sf-dump-index>2</span> => <span class=sf-dump-note>array:4</span> [ &#8230;4]
+    </samp>]
+  </samp>]
+  <span class=sf-dump-index>1</span> => <span class=sf-dump-note>array:30</span> [<samp data-depth=2 class=sf-dump-compact>
+    \"<span class=sf-dump-key>id</span>\" => \"<span class=sf-dump-str title=\"17 characters\">software-engineer</span>\"
+    \"<span class=sf-dump-key>title</span>\" => \"<span class=sf-dump-str title=\"17 characters\">Software Engineer</span>\"
+    \"<span class=sf-dump-key>company</span>\" => \"<span class=sf-dump-str title=\"9 characters\">Tech Corp</span>\"
+    \"<span class=sf-dump-key>location</span>\" => \"<span class=sf-dump-str title=\"6 characters\">Remote</span>\"
+    \"<span class=sf-dump-key>salary</span>\" => \"<span class=sf-dump-str title=\"25 characters\">$80,000 - $120,000 a year</span>\"
+    \"<span class=sf-dump-key>short_salary</span>\" => \"<span class=sf-dump-str title=\"19 characters\">$80k - $120k / year</span>\"
+    \"<span class=sf-dump-key>summary</span>\" => \"<span class=sf-dump-str title=\"84 characters\">Build reliable digital products with a collaborative, remote-first engineering team.</span>\"
+    \"<span class=sf-dump-key>type</span>\" => \"<span class=sf-dump-str title=\"9 characters\">Full-time</span>\"
+    \"<span class=sf-dump-key>mode</span>\" => \"<span class=sf-dump-str title=\"6 characters\">Remote</span>\"
+    \"<span class=sf-dump-key>experience</span>\" => \"<span class=sf-dump-str title=\"8 characters\">3+ Years</span>\"
+    \"<span class=sf-dump-key>department</span>\" => \"<span class=sf-dump-str title=\"11 characters\">Engineering</span>\"
+    \"<span class=sf-dump-key>deadline</span>\" => \"<span class=sf-dump-str title=\"11 characters\">9 days left</span>\"
+    \"<span class=sf-dump-key>posted</span>\" => \"<span class=sf-dump-str title=\"17 characters\">Posted 4 days ago</span>\"
+    \"<span class=sf-dump-key>posted_days</span>\" => <span class=sf-dump-num>4</span>
+    \"<span class=sf-dump-key>applicants</span>\" => \"<span class=sf-dump-str title=\"14 characters\">245 applicants</span>\"
+    \"<span class=sf-dump-key>featured</span>\" => <span class=sf-dump-const>true</span>
+    \"<span class=sf-dump-key>highlighted</span>\" => <span class=sf-dump-const>true</span>
+    \"<span class=sf-dump-key>logo</span>\" => \"<span class=sf-dump-str title=\"4 characters\">tech</span>\"
+    \"<span class=sf-dump-key>company_logo_url</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>company_cover_url</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>company_details</span>\" => []
+    \"<span class=sf-dump-key>company_address</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>company_website</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>company_sections</span>\" => []
+    \"<span class=sf-dump-key>company_verified</span>\" => <span class=sf-dump-const>false</span>
+    \"<span class=sf-dump-key>badges</span>\" => <span class=sf-dump-note>array:2</span> [<samp data-depth=3 class=sf-dump-compact>
+      <span class=sf-dump-index>0</span> => \"<span class=sf-dump-str title=\"9 characters\">Full-time</span>\"
+      <span class=sf-dump-index>1</span> => \"<span class=sf-dump-str title=\"6 characters\">Remote</span>\"
+    </samp>]
+    \"<span class=sf-dump-key>tabs</span>\" => <span class=sf-dump-note>array:3</span> [<samp data-depth=3 class=sf-dump-compact>
+      \"<span class=sf-dump-key>description</span>\" => <span class=sf-dump-note>array:4</span> [ &#8230;4]
+      \"<span class=sf-dump-key>requirements</span>\" => <span class=sf-dump-note>array:4</span> [ &#8230;4]
+      \"<span class=sf-dump-key>job_description</span>\" => <span class=sf-dump-note>array:4</span> [ &#8230;4]
+    </samp>]
+    \"<span class=sf-dump-key>detail_items</span>\" => <span class=sf-dump-note>array:4</span> [<samp data-depth=3 class=sf-dump-compact>
+      <span class=sf-dump-index>0</span> => <span class=sf-dump-note>array:2</span> [ &#8230;2]
+      <span class=sf-dump-index>1</span> => <span class=sf-dump-note>array:2</span> [ &#8230;2]
+      <span class=sf-dump-index>2</span> => <span class=sf-dump-note>array:2</span> [ &#8230;2]
+      <span class=sf-dump-index>3</span> => <span class=sf-dump-note>array:2</span> [ &#8230;2]
+    </samp>]
+    \"<span class=sf-dump-key>quick_apply</span>\" => <span class=sf-dump-note>array:2</span> [<samp data-depth=3 class=sf-dump-compact>
+      \"<span class=sf-dump-key>title</span>\" => \"<span class=sf-dump-str title=\"11 characters\">Quick apply</span>\"
+      \"<span class=sf-dump-key>text</span>\" => \"<span class=sf-dump-str title=\"61 characters\">Apply today and expect an initial response within three days.</span>\"
+    </samp>]
+    \"<span class=sf-dump-key>offer</span>\" => []
+  </samp>]
+  <span class=sf-dump-index>2</span> => <span class=sf-dump-note>array:30</span> [<samp data-depth=2 class=sf-dump-compact>
+    \"<span class=sf-dump-key>id</span>\" => \"<span class=sf-dump-str title=\"14 characters\">ui-ux-designer</span>\"
+    \"<span class=sf-dump-key>title</span>\" => \"<span class=sf-dump-str title=\"14 characters\">UI/UX Designer</span>\"
+    \"<span class=sf-dump-key>company</span>\" => \"<span class=sf-dump-str title=\"13 characters\">Design Studio</span>\"
+    \"<span class=sf-dump-key>location</span>\" => \"<span class=sf-dump-str title=\"20 characters\">Phnom Penh, Cambodia</span>\"
+    \"<span class=sf-dump-key>salary</span>\" => \"<span class=sf-dump-str title=\"24 characters\">$60,000 - $90,000 a year</span>\"
+    \"<span class=sf-dump-key>short_salary</span>\" => \"<span class=sf-dump-str title=\"18 characters\">$60k - $90k / year</span>\"
+    \"<span class=sf-dump-key>summary</span>\" => \"<span class=sf-dump-str title=\"78 characters\">Shape intuitive product experiences for ambitious teams across Southeast Asia.</span>\"
+    \"<span class=sf-dump-key>type</span>\" => \"<span class=sf-dump-str title=\"9 characters\">Full-time</span>\"
+    \"<span class=sf-dump-key>mode</span>\" => \"<span class=sf-dump-str title=\"6 characters\">Hybrid</span>\"
+    \"<span class=sf-dump-key>experience</span>\" => \"<span class=sf-dump-str title=\"8 characters\">2+ Years</span>\"
+    \"<span class=sf-dump-key>department</span>\" => \"<span class=sf-dump-str title=\"14 characters\">Product Design</span>\"
+    \"<span class=sf-dump-key>deadline</span>\" => \"<span class=sf-dump-str title=\"12 characters\">11 days left</span>\"
+    \"<span class=sf-dump-key>posted</span>\" => \"<span class=sf-dump-str title=\"17 characters\">Posted 6 days ago</span>\"
+    \"<span class=sf-dump-key>posted_days</span>\" => <span class=sf-dump-num>6</span>
+    \"<span class=sf-dump-key>applicants</span>\" => \"<span class=sf-dump-str title=\"13 characters\">94 applicants</span>\"
+    \"<span class=sf-dump-key>featured</span>\" => <span class=sf-dump-const>false</span>
+    \"<span class=sf-dump-key>highlighted</span>\" => <span class=sf-dump-const>false</span>
+    \"<span class=sf-dump-key>logo</span>\" => \"<span class=sf-dump-str title=\"6 characters\">design</span>\"
+    \"<span class=sf-dump-key>company_logo_url</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>company_cover_url</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>company_details</span>\" => []
+    \"<span class=sf-dump-key>company_address</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>company_website</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>company_sections</span>\" => []
+    \"<span class=sf-dump-key>company_verified</span>\" => <span class=sf-dump-const>false</span>
+    \"<span class=sf-dump-key>badges</span>\" => <span class=sf-dump-note>array:2</span> [<samp data-depth=3 class=sf-dump-compact>
+      <span class=sf-dump-index>0</span> => \"<span class=sf-dump-str title=\"9 characters\">Full-time</span>\"
+      <span class=sf-dump-index>1</span> => \"<span class=sf-dump-str title=\"6 characters\">Hybrid</span>\"
+    </samp>]
+    \"<span class=sf-dump-key>tabs</span>\" => <span class=sf-dump-note>array:3</span> [<samp data-depth=3 class=sf-dump-compact>
+      \"<span class=sf-dump-key>description</span>\" => <span class=sf-dump-note>array:4</span> [ &#8230;4]
+      \"<span class=sf-dump-key>requirements</span>\" => <span class=sf-dump-note>array:4</span> [ &#8230;4]
+      \"<span class=sf-dump-key>job_description</span>\" => <span class=sf-dump-note>array:4</span> [ &#8230;4]
+    </samp>]
+    \"<span class=sf-dump-key>detail_items</span>\" => <span class=sf-dump-note>array:4</span> [<samp data-depth=3 class=sf-dump-compact>
+      <span class=sf-dump-index>0</span> => <span class=sf-dump-note>array:2</span> [ &#8230;2]
+      <span class=sf-dump-index>1</span> => <span class=sf-dump-note>array:2</span> [ &#8230;2]
+      <span class=sf-dump-index>2</span> => <span class=sf-dump-note>array:2</span> [ &#8230;2]
+      <span class=sf-dump-index>3</span> => <span class=sf-dump-note>array:2</span> [ &#8230;2]
+    </samp>]
+    \"<span class=sf-dump-key>quick_apply</span>\" => <span class=sf-dump-note>array:2</span> [<samp data-depth=3 class=sf-dump-compact>
+      \"<span class=sf-dump-key>title</span>\" => \"<span class=sf-dump-str title=\"16 characters\">Portfolio review</span>\"
+      \"<span class=sf-dump-key>text</span>\" => \"<span class=sf-dump-str title=\"63 characters\">Share your best work and we will arrange a design conversation.</span>\"
+    </samp>]
+    \"<span class=sf-dump-key>offer</span>\" => []
+  </samp>]
+</samp>]
+</pre><script>Sfdump(\"sf-dump-85473253\", {\"maxDepth\":3,\"maxStringLength\":160})</script>
+"}},"exception":"[object] (Spatie\\LaravelIgnition\\Exceptions\\ViewException(code: 0): syntax error, unexpected single-quoted string \"english\", expecting \"]\" at /Users/toengbunsin/Documents/development/DevSync/lang/en/ui.php:21)
+[stacktrace]
+#0 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(124): Illuminate\\Filesystem\\Filesystem::{closure:Illuminate\\Filesystem\\Filesystem::getRequire():120}()
+#1 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Translation/FileLoader.php(129): Illuminate\\Filesystem\\Filesystem->getRequire('/Users/toengbun...')
+#2 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Collections/Traits/EnumeratesValues.php(815): Illuminate\\Translation\\FileLoader->{closure:Illuminate\\Translation\\FileLoader::loadPaths():127}(Array, '/Users/toengbun...', 1)
+#3 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Translation/FileLoader.php(127): Illuminate\\Support\\Collection->reduce(Object(Closure), Array)
+#4 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Translation/FileLoader.php(68): Illuminate\\Translation\\FileLoader->loadPaths(Array, 'en', 'ui')
+#5 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Translation/Translator.php(334): Illuminate\\Translation\\FileLoader->load('en', 'ui', '*')
+#6 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Translation/Translator.php(247): Illuminate\\Translation\\Translator->load('*', 'ui', 'en')
+#7 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Translation/Translator.php(172): Illuminate\\Translation\\Translator->getLine('*', 'ui', 'en', 'nav.home', Array)
+#8 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Foundation/helpers.php(965): Illuminate\\Translation\\Translator->get('ui.nav.home', Array, 'en')
+#9 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Foundation/helpers.php(1000): trans('ui.nav.home', Array, NULL)
+#10 /Users/toengbunsin/Documents/development/DevSync/resources/views/partials/header.blade.php(20): __('ui.nav.home')
+#11 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(123): require('/Users/toengbun...')
+#12 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(124): Illuminate\\Filesystem\\Filesystem::{closure:Illuminate\\Filesystem\\Filesystem::getRequire():120}()
+#13 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/Engines/PhpEngine.php(57): Illuminate\\Filesystem\\Filesystem->getRequire('/Users/toengbun...', Array)
+#14 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/Engines/CompilerEngine.php(74): Illuminate\\View\\Engines\\PhpEngine->evaluatePath('/Users/toengbun...', Array)
+#15 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/View.php(208): Illuminate\\View\\Engines\\CompilerEngine->get('/Users/toengbun...', Array)
+#16 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/View.php(191): Illuminate\\View\\View->getContents()
+#17 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/View.php(160): Illuminate\\View\\View->renderContents()
+#18 /Users/toengbunsin/Documents/development/DevSync/resources/views/layouts/master.blade.php(31): Illuminate\\View\\View->render()
+#19 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(123): require('/Users/toengbun...')
+#20 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(124): Illuminate\\Filesystem\\Filesystem::{closure:Illuminate\\Filesystem\\Filesystem::getRequire():120}()
+#21 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/Engines/PhpEngine.php(57): Illuminate\\Filesystem\\Filesystem->getRequire('/Users/toengbun...', Array)
+#22 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/Engines/CompilerEngine.php(74): Illuminate\\View\\Engines\\PhpEngine->evaluatePath('/Users/toengbun...', Array)
+#23 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/View.php(208): Illuminate\\View\\Engines\\CompilerEngine->get('/Users/toengbun...', Array)
+#24 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/View.php(191): Illuminate\\View\\View->getContents()
+#25 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/View.php(160): Illuminate\\View\\View->renderContents()
+#26 /Users/toengbunsin/Documents/development/DevSync/resources/views/jobs/index.blade.php(28): Illuminate\\View\\View->render()
+#27 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(123): require('/Users/toengbun...')
+#28 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(124): Illuminate\\Filesystem\\Filesystem::{closure:Illuminate\\Filesystem\\Filesystem::getRequire():120}()
+#29 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/Engines/PhpEngine.php(57): Illuminate\\Filesystem\\Filesystem->getRequire('/Users/toengbun...', Array)
+#30 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/Engines/CompilerEngine.php(74): Illuminate\\View\\Engines\\PhpEngine->evaluatePath('/Users/toengbun...', Array)
+#31 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/View.php(208): Illuminate\\View\\Engines\\CompilerEngine->get('/Users/toengbun...', Array)
+#32 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/View.php(191): Illuminate\\View\\View->getContents()
+#33 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/View.php(160): Illuminate\\View\\View->renderContents()
+#34 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Http/Response.php(78): Illuminate\\View\\View->render()
+#35 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Http/Response.php(34): Illuminate\\Http\\Response->setContent(Object(Illuminate\\View\\View))
+#36 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Routing/Router.php(924): Illuminate\\Http\\Response->__construct(Object(Illuminate\\View\\View), 200, Array)
+#37 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Routing/Router.php(891): Illuminate\\Routing\\Router::toResponse(Object(Illuminate\\Http\\Request), Object(Illuminate\\View\\View))
+#38 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Routing/Router.php(807): Illuminate\\Routing\\Router->prepareResponse(Object(Illuminate\\Http\\Request), Object(Illuminate\\View\\View))
+#39 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(169): Illuminate\\Routing\\Router->{closure:Illuminate\\Routing\\Router::runRouteWithinStack():807}(Object(Illuminate\\Http\\Request))
+#40 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Routing/Middleware/SubstituteBindings.php(50): Illuminate\\Pipeline\\Pipeline->{closure:Illuminate\\Pipeline\\Pipeline::prepareDestination():167}(Object(Illuminate\\Http\\Request))
+#41 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(208): Illuminate\\Routing\\Middleware\\SubstituteBindings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#42 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/VerifyCsrfToken.php(87): Illuminate\\Pipeline\\Pipeline->{closure:{closure:Illuminate\\Pipeline\\Pipeline::carry():183}:184}(Object(Illuminate\\Http\\Request))
+#43 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(208): Illuminate\\Foundation\\Http\\Middleware\\VerifyCsrfToken->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#44 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/Middleware/ShareErrorsFromSession.php(48): Illuminate\\Pipeline\\Pipeline->{closure:{closure:Illuminate\\Pipeline\\Pipeline::carry():183}:184}(Object(Illuminate\\Http\\Request))
+#45 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(208): Illuminate\\View\\Middleware\\ShareErrorsFromSession->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#46 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Session/Middleware/StartSession.php(120): Illuminate\\Pipeline\\Pipeline->{closure:{closure:Illuminate\\Pipeline\\Pipeline::carry():183}:184}(Object(Illuminate\\Http\\Request))
+#47 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Session/Middleware/StartSession.php(63): Illuminate\\Session\\Middleware\\StartSession->handleStatefulRequest(Object(Illuminate\\Http\\Request), Object(Illuminate\\Session\\Store), Object(Closure))
+#48 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(208): Illuminate\\Session\\Middleware\\StartSession->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#49 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Cookie/Middleware/AddQueuedCookiesToResponse.php(36): Illuminate\\Pipeline\\Pipeline->{closure:{closure:Illuminate\\Pipeline\\Pipeline::carry():183}:184}(Object(Illuminate\\Http\\Request))
+#50 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(208): Illuminate\\Cookie\\Middleware\\AddQueuedCookiesToResponse->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#51 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Cookie/Middleware/EncryptCookies.php(74): Illuminate\\Pipeline\\Pipeline->{closure:{closure:Illuminate\\Pipeline\\Pipeline::carry():183}:184}(Object(Illuminate\\Http\\Request))
+#52 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(208): Illuminate\\Cookie\\Middleware\\EncryptCookies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#53 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(126): Illuminate\\Pipeline\\Pipeline->{closure:{closure:Illuminate\\Pipeline\\Pipeline::carry():183}:184}(Object(Illuminate\\Http\\Request))
+#54 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Routing/Router.php(807): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#55 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Routing/Router.php(786): Illuminate\\Routing\\Router->runRouteWithinStack(Object(Illuminate\\Routing\\Route), Object(Illuminate\\Http\\Request))
+#56 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Routing/Router.php(750): Illuminate\\Routing\\Router->runRoute(Object(Illuminate\\Http\\Request), Object(Illuminate\\Routing\\Route))
+#57 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Routing/Router.php(739): Illuminate\\Routing\\Router->dispatchToRoute(Object(Illuminate\\Http\\Request))
+#58 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(200): Illuminate\\Routing\\Router->dispatch(Object(Illuminate\\Http\\Request))
+#59 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(169): Illuminate\\Foundation\\Http\\Kernel->{closure:Illuminate\\Foundation\\Http\\Kernel::dispatchToRouter():197}(Object(Illuminate\\Http\\Request))
+#60 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->{closure:Illuminate\\Pipeline\\Pipeline::prepareDestination():167}(Object(Illuminate\\Http\\Request))
+#61 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ConvertEmptyStringsToNull.php(31): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#62 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(208): Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#63 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->{closure:{closure:Illuminate\\Pipeline\\Pipeline::carry():183}:184}(Object(Illuminate\\Http\\Request))
+#64 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TrimStrings.php(51): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#65 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(208): Illuminate\\Foundation\\Http\\Middleware\\TrimStrings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#66 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Http/Middleware/ValidatePostSize.php(27): Illuminate\\Pipeline\\Pipeline->{closure:{closure:Illuminate\\Pipeline\\Pipeline::carry():183}:184}(Object(Illuminate\\Http\\Request))
+#67 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(208): Illuminate\\Http\\Middleware\\ValidatePostSize->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#68 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/PreventRequestsDuringMaintenance.php(109): Illuminate\\Pipeline\\Pipeline->{closure:{closure:Illuminate\\Pipeline\\Pipeline::carry():183}:184}(Object(Illuminate\\Http\\Request))
+#69 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(208): Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#70 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Http/Middleware/HandleCors.php(48): Illuminate\\Pipeline\\Pipeline->{closure:{closure:Illuminate\\Pipeline\\Pipeline::carry():183}:184}(Object(Illuminate\\Http\\Request))
+#71 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(208): Illuminate\\Http\\Middleware\\HandleCors->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#72 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Http/Middleware/TrustProxies.php(58): Illuminate\\Pipeline\\Pipeline->{closure:{closure:Illuminate\\Pipeline\\Pipeline::carry():183}:184}(Object(Illuminate\\Http\\Request))
+#73 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(208): Illuminate\\Http\\Middleware\\TrustProxies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#74 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(126): Illuminate\\Pipeline\\Pipeline->{closure:{closure:Illuminate\\Pipeline\\Pipeline::carry():183}:184}(Object(Illuminate\\Http\\Request))
+#75 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(175): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#76 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(144): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
+#77 /Users/toengbunsin/Documents/development/DevSync/public/index.php(54): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
+#78 /Users/toengbunsin/Documents/development/DevSync/server.php(21): require_once('/Users/toengbun...')
+#79 {main}
+
+[previous exception] [object] (ParseError(code: 0): syntax error, unexpected single-quoted string \"english\", expecting \"]\" at /Users/toengbunsin/Documents/development/DevSync/lang/en/ui.php:21)
+[stacktrace]
+#0 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(124): Illuminate\\Filesystem\\Filesystem::{closure:Illuminate\\Filesystem\\Filesystem::getRequire():120}()
+#1 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Translation/FileLoader.php(129): Illuminate\\Filesystem\\Filesystem->getRequire('/Users/toengbun...')
+#2 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Collections/Traits/EnumeratesValues.php(815): Illuminate\\Translation\\FileLoader->{closure:Illuminate\\Translation\\FileLoader::loadPaths():127}(Array, '/Users/toengbun...', 1)
+#3 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Translation/FileLoader.php(127): Illuminate\\Support\\Collection->reduce(Object(Closure), Array)
+#4 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Translation/FileLoader.php(68): Illuminate\\Translation\\FileLoader->loadPaths(Array, 'en', 'ui')
+#5 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Translation/Translator.php(334): Illuminate\\Translation\\FileLoader->load('en', 'ui', '*')
+#6 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Translation/Translator.php(247): Illuminate\\Translation\\Translator->load('*', 'ui', 'en')
+#7 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Translation/Translator.php(172): Illuminate\\Translation\\Translator->getLine('*', 'ui', 'en', 'nav.home', Array)
+#8 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Foundation/helpers.php(965): Illuminate\\Translation\\Translator->get('ui.nav.home', Array, 'en')
+#9 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Foundation/helpers.php(1000): trans('ui.nav.home', Array, NULL)
+#10 /Users/toengbunsin/Documents/development/DevSync/storage/framework/views/fe6debf9be27d64d7ade6c297085b3b4.php(20): __('ui.nav.home')
+#11 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(123): require('/Users/toengbun...')
+#12 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(124): Illuminate\\Filesystem\\Filesystem::{closure:Illuminate\\Filesystem\\Filesystem::getRequire():120}()
+#13 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/Engines/PhpEngine.php(57): Illuminate\\Filesystem\\Filesystem->getRequire('/Users/toengbun...', Array)
+#14 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/Engines/CompilerEngine.php(74): Illuminate\\View\\Engines\\PhpEngine->evaluatePath('/Users/toengbun...', Array)
+#15 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/View.php(208): Illuminate\\View\\Engines\\CompilerEngine->get('/Users/toengbun...', Array)
+#16 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/View.php(191): Illuminate\\View\\View->getContents()
+#17 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/View.php(160): Illuminate\\View\\View->renderContents()
+#18 /Users/toengbunsin/Documents/development/DevSync/storage/framework/views/6d567aacea02fa47a1563c9f391f0242.php(31): Illuminate\\View\\View->render()
+#19 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(123): require('/Users/toengbun...')
+#20 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(124): Illuminate\\Filesystem\\Filesystem::{closure:Illuminate\\Filesystem\\Filesystem::getRequire():120}()
+#21 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/Engines/PhpEngine.php(57): Illuminate\\Filesystem\\Filesystem->getRequire('/Users/toengbun...', Array)
+#22 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/Engines/CompilerEngine.php(74): Illuminate\\View\\Engines\\PhpEngine->evaluatePath('/Users/toengbun...', Array)
+#23 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/View.php(208): Illuminate\\View\\Engines\\CompilerEngine->get('/Users/toengbun...', Array)
+#24 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/View.php(191): Illuminate\\View\\View->getContents()
+#25 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/View.php(160): Illuminate\\View\\View->renderContents()
+#26 /Users/toengbunsin/Documents/development/DevSync/storage/framework/views/ed72f020a5b979aedb46c4a046acdfe0.php(28): Illuminate\\View\\View->render()
+#27 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(123): require('/Users/toengbun...')
+#28 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(124): Illuminate\\Filesystem\\Filesystem::{closure:Illuminate\\Filesystem\\Filesystem::getRequire():120}()
+#29 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/Engines/PhpEngine.php(57): Illuminate\\Filesystem\\Filesystem->getRequire('/Users/toengbun...', Array)
+#30 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/Engines/CompilerEngine.php(74): Illuminate\\View\\Engines\\PhpEngine->evaluatePath('/Users/toengbun...', Array)
+#31 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/View.php(208): Illuminate\\View\\Engines\\CompilerEngine->get('/Users/toengbun...', Array)
+#32 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/View.php(191): Illuminate\\View\\View->getContents()
+#33 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/View.php(160): Illuminate\\View\\View->renderContents()
+#34 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Http/Response.php(78): Illuminate\\View\\View->render()
+#35 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Http/Response.php(34): Illuminate\\Http\\Response->setContent(Object(Illuminate\\View\\View))
+#36 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Routing/Router.php(924): Illuminate\\Http\\Response->__construct(Object(Illuminate\\View\\View), 200, Array)
+#37 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Routing/Router.php(891): Illuminate\\Routing\\Router::toResponse(Object(Illuminate\\Http\\Request), Object(Illuminate\\View\\View))
+#38 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Routing/Router.php(807): Illuminate\\Routing\\Router->prepareResponse(Object(Illuminate\\Http\\Request), Object(Illuminate\\View\\View))
+#39 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(169): Illuminate\\Routing\\Router->{closure:Illuminate\\Routing\\Router::runRouteWithinStack():807}(Object(Illuminate\\Http\\Request))
+#40 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Routing/Middleware/SubstituteBindings.php(50): Illuminate\\Pipeline\\Pipeline->{closure:Illuminate\\Pipeline\\Pipeline::prepareDestination():167}(Object(Illuminate\\Http\\Request))
+#41 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(208): Illuminate\\Routing\\Middleware\\SubstituteBindings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#42 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/VerifyCsrfToken.php(87): Illuminate\\Pipeline\\Pipeline->{closure:{closure:Illuminate\\Pipeline\\Pipeline::carry():183}:184}(Object(Illuminate\\Http\\Request))
+#43 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(208): Illuminate\\Foundation\\Http\\Middleware\\VerifyCsrfToken->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#44 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/Middleware/ShareErrorsFromSession.php(48): Illuminate\\Pipeline\\Pipeline->{closure:{closure:Illuminate\\Pipeline\\Pipeline::carry():183}:184}(Object(Illuminate\\Http\\Request))
+#45 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(208): Illuminate\\View\\Middleware\\ShareErrorsFromSession->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#46 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Session/Middleware/StartSession.php(120): Illuminate\\Pipeline\\Pipeline->{closure:{closure:Illuminate\\Pipeline\\Pipeline::carry():183}:184}(Object(Illuminate\\Http\\Request))
+#47 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Session/Middleware/StartSession.php(63): Illuminate\\Session\\Middleware\\StartSession->handleStatefulRequest(Object(Illuminate\\Http\\Request), Object(Illuminate\\Session\\Store), Object(Closure))
+#48 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(208): Illuminate\\Session\\Middleware\\StartSession->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#49 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Cookie/Middleware/AddQueuedCookiesToResponse.php(36): Illuminate\\Pipeline\\Pipeline->{closure:{closure:Illuminate\\Pipeline\\Pipeline::carry():183}:184}(Object(Illuminate\\Http\\Request))
+#50 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(208): Illuminate\\Cookie\\Middleware\\AddQueuedCookiesToResponse->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#51 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Cookie/Middleware/EncryptCookies.php(74): Illuminate\\Pipeline\\Pipeline->{closure:{closure:Illuminate\\Pipeline\\Pipeline::carry():183}:184}(Object(Illuminate\\Http\\Request))
+#52 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(208): Illuminate\\Cookie\\Middleware\\EncryptCookies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#53 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(126): Illuminate\\Pipeline\\Pipeline->{closure:{closure:Illuminate\\Pipeline\\Pipeline::carry():183}:184}(Object(Illuminate\\Http\\Request))
+#54 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Routing/Router.php(807): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#55 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Routing/Router.php(786): Illuminate\\Routing\\Router->runRouteWithinStack(Object(Illuminate\\Routing\\Route), Object(Illuminate\\Http\\Request))
+#56 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Routing/Router.php(750): Illuminate\\Routing\\Router->runRoute(Object(Illuminate\\Http\\Request), Object(Illuminate\\Routing\\Route))
+#57 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Routing/Router.php(739): Illuminate\\Routing\\Router->dispatchToRoute(Object(Illuminate\\Http\\Request))
+#58 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(200): Illuminate\\Routing\\Router->dispatch(Object(Illuminate\\Http\\Request))
+#59 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(169): Illuminate\\Foundation\\Http\\Kernel->{closure:Illuminate\\Foundation\\Http\\Kernel::dispatchToRouter():197}(Object(Illuminate\\Http\\Request))
+#60 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->{closure:Illuminate\\Pipeline\\Pipeline::prepareDestination():167}(Object(Illuminate\\Http\\Request))
+#61 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ConvertEmptyStringsToNull.php(31): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#62 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(208): Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#63 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->{closure:{closure:Illuminate\\Pipeline\\Pipeline::carry():183}:184}(Object(Illuminate\\Http\\Request))
+#64 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TrimStrings.php(51): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#65 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(208): Illuminate\\Foundation\\Http\\Middleware\\TrimStrings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#66 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Http/Middleware/ValidatePostSize.php(27): Illuminate\\Pipeline\\Pipeline->{closure:{closure:Illuminate\\Pipeline\\Pipeline::carry():183}:184}(Object(Illuminate\\Http\\Request))
+#67 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(208): Illuminate\\Http\\Middleware\\ValidatePostSize->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#68 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/PreventRequestsDuringMaintenance.php(109): Illuminate\\Pipeline\\Pipeline->{closure:{closure:Illuminate\\Pipeline\\Pipeline::carry():183}:184}(Object(Illuminate\\Http\\Request))
+#69 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(208): Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#70 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Http/Middleware/HandleCors.php(48): Illuminate\\Pipeline\\Pipeline->{closure:{closure:Illuminate\\Pipeline\\Pipeline::carry():183}:184}(Object(Illuminate\\Http\\Request))
+#71 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(208): Illuminate\\Http\\Middleware\\HandleCors->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#72 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Http/Middleware/TrustProxies.php(58): Illuminate\\Pipeline\\Pipeline->{closure:{closure:Illuminate\\Pipeline\\Pipeline::carry():183}:184}(Object(Illuminate\\Http\\Request))
+#73 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(208): Illuminate\\Http\\Middleware\\TrustProxies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#74 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(126): Illuminate\\Pipeline\\Pipeline->{closure:{closure:Illuminate\\Pipeline\\Pipeline::carry():183}:184}(Object(Illuminate\\Http\\Request))
+#75 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(175): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#76 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(144): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
+#77 /Users/toengbunsin/Documents/development/DevSync/public/index.php(54): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
+#78 /Users/toengbunsin/Documents/development/DevSync/server.php(21): require_once('/Users/toengbun...')
+#79 {main}
+"} 

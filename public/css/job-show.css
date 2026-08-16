@@ -1128,3 +1128,78 @@ html[data-theme="dark"] .jf-job-page__back-link:hover {
   margin: 0 0 10px;
   font-size: clamp(1.1rem, 1.9vw, 1.4rem);
 }
+
+/* What we can offer (Requirements tab)
+   ------------------------------------------------------------------ */
+.jf-offer[hidden] {
+  display: none;
+}
+
+.jf-offer {
+  padding: 24px 26px 26px;
+  margin-top: 26px;
+  background: var(--jf-paper, #fff);
+  border: 1px solid color-mix(in srgb, var(--jf-ocean, #0f5f73) 26%, var(--jf-line, #dce5e7));
+  border-radius: 20px;
+}
+
+.jf-job-page__article .jf-offer__title {
+  margin: 0 0 18px;
+  font-size: clamp(1.1rem, 1.9vw, 1.4rem);
+}
+
+.jf-offer__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 22px;
+}
+
+.jf-offer__col + .jf-offer__col {
+  padding-left: 22px;
+  border-left: 1px solid var(--jf-line, #dce5e7);
+}
+
+.jf-job-page__article .jf-offer__col h3 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 12px;
+  color: var(--jf-ink, #102a43);
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.jf-offer__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  color: var(--jf-ocean, #0f5f73);
+  background: color-mix(in srgb, var(--jf-ocean, #0f5f73) 11%, transparent);
+  border-radius: 11px;
+  font-size: 0.85rem;
+}
+
+.jf-offer__col ul {
+  margin: 0;
+  padding-left: 18px;
+  list-style: disc;
+}
+
+.jf-offer__col li {
+  margin-bottom: 7px;
+  color: var(--jf-ink-soft, #486581);
+  font-size: 0.86rem;
+  line-height: 1.6;
+}
+
+@media (max-width: 700px) {
+  .jf-offer__col + .jf-offer__col {
+    padding-left: 0;
+    padding-top: 18px;
+    border-left: 0;
+    border-top: 1px solid var(--jf-line, #dce5e7);
+  }
+}

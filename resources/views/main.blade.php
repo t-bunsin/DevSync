@@ -56,8 +56,15 @@
                             @unless ($index === 0) aria-hidden="true" @endunless
                         >
                             <div class="jf-spotlight__company">
-                                <div class="jf-logo jf-logo--{{ $spotlightJob['logo'] }}">
-                                    @if ($spotlightJob['logo'] === 'aba')
+                                {{-- An uploaded company logo wins; otherwise the keyword artwork. --}}
+                                <div @class([
+                                    'jf-logo',
+                                    'jf-logo--' . $spotlightJob['logo'],
+                                    'jf-logo--photo' => ! empty($spotlightJob['company_logo_url']),
+                                ])>
+                                    @if (! empty($spotlightJob['company_logo_url']))
+                                        <img src="{{ $spotlightJob['company_logo_url'] }}" alt="">
+                                    @elseif ($spotlightJob['logo'] === 'aba')
                                         <span>ABA</span><small>BANK</small>
                                     @elseif ($spotlightJob['logo'] === 'tech')
                                         <i class="fas fa-wifi" aria-hidden="true"></i>
@@ -66,7 +73,12 @@
                                     @endif
                                 </div>
                                 <div>
-                                    <span>{{ $spotlightJob['company'] }}</span>
+                                    <span class="jf-spotlight__company-name">
+                                        {{ $spotlightJob['company'] }}
+                                        @if (! empty($spotlightJob['company_verified']))
+                                            <x-verified-badge :show-label="false" :size="14" label="Verified employer" />
+                                        @endif
+                                    </span>
                                     <strong>{{ $spotlightJob['title'] }}</strong>
                                 </div>
                             </div>
