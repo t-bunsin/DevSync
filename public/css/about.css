@@ -1,0 +1,729 @@
+/*
+ * About page — builds on the tokens and base styles in jobs.css.
+ *
+ * Section rhythm mirrors the contact page: a dark hero, then light bands on
+ * --jf-canvas / --jf-paper alternating down the page.
+ */
+
+/* Page head — breadcrumb, title, one line. Deliberately plain: the page's
+   weight belongs to the sections below it.
+   ------------------------------------------------------------------ */
+.jf-about-head {
+  padding: 26px 0 34px;
+  background:
+    radial-gradient(circle at 88% 0%, rgba(28, 166, 160, 0.08), transparent 24rem),
+    linear-gradient(180deg, #f8faf7 0%, var(--jf-canvas) 100%);
+  border-bottom: 1px solid var(--jf-line);
+}
+
+.jf-about-head__breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 36px;
+  margin-bottom: 10px;
+  color: #728793;
+  font-size: 0.72rem;
+}
+
+.jf-about-head__breadcrumb a {
+  color: var(--jf-ocean);
+  font-weight: 650;
+  text-decoration: none;
+}
+
+.jf-about-head__breadcrumb a:hover {
+  color: var(--jf-teal-dark);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.jf-about-head__breadcrumb i {
+  color: #a9b7bc;
+  font-size: 0.5rem;
+}
+
+.jf-about-head h1 {
+  margin: 0;
+  color: var(--jf-ink);
+  font-size: clamp(1.8rem, 3.4vw, 2.6rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.05em;
+}
+
+.jf-about-head p {
+  max-width: 620px;
+  margin: 10px 0 0;
+  color: var(--jf-ink-soft);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+/* Shared section furniture
+   ------------------------------------------------------------------ */
+.jf-about-section-head {
+  max-width: 620px;
+  margin-bottom: 30px;
+}
+
+.jf-about-section-head--center {
+  max-width: 640px;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.jf-about-section-head h2,
+.jf-about-intro__copy h2 {
+  margin: 10px 0 0;
+  color: var(--jf-ink);
+  font-size: clamp(1.7rem, 3.1vw, 2.5rem);
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: -0.045em;
+}
+
+.jf-about-section-head p {
+  margin: 12px 0 0;
+  color: var(--jf-ink-soft);
+  font-size: 0.94rem;
+  line-height: 1.65;
+}
+
+/* Intro + mosaic
+   ------------------------------------------------------------------ */
+.jf-about-intro {
+  padding: 74px 0;
+  background: var(--jf-paper);
+}
+
+.jf-about-intro__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  align-items: center;
+  gap: 54px;
+}
+
+.jf-about-intro__copy p {
+  margin: 18px 0 0;
+  color: var(--jf-ink-soft);
+  font-size: 0.95rem;
+  line-height: 1.75;
+}
+
+.jf-about-intro__copy strong {
+  color: var(--jf-ink);
+}
+
+.jf-about-intro__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  margin-top: 24px;
+  color: var(--jf-teal-dark);
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.jf-about-intro__link:hover {
+  color: var(--jf-ocean);
+  gap: 13px;
+  transition: gap 180ms ease;
+}
+
+.jf-about-mosaic {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-rows: minmax(140px, auto);
+  gap: 16px;
+}
+
+.jf-about-mosaic__tile {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  padding: 22px;
+  border-radius: var(--jf-radius-lg);
+  box-shadow: var(--jf-shadow-md);
+}
+
+.jf-about-mosaic__tile strong {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.jf-about-mosaic__tile span {
+  font-size: 0.8rem;
+  line-height: 1.55;
+}
+
+/* Tall verification tile, teal on white */
+.jf-about-mosaic__tile--verify {
+  grid-row: span 2;
+  color: var(--jf-ink);
+  background: linear-gradient(165deg, #e8f6f4, #ffffff 62%);
+  border: 1px solid var(--jf-line);
+}
+
+/* Badge pinned to the top, caption block to the bottom of the tall tile. */
+.jf-about-mosaic__tile--verify strong {
+  margin-top: auto;
+}
+
+.jf-about-mosaic__tile--verify span {
+  color: var(--jf-ink-soft);
+}
+
+/* Mock advert card */
+.jf-about-mosaic__tile--card {
+  justify-content: center;
+  color: #fff;
+  background: linear-gradient(150deg, var(--jf-ocean), var(--jf-navy));
+}
+
+.jf-about-mosaic__company {
+  color: #8ad9d3;
+  font-size: 0.68rem !important;
+  font-weight: 750;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.jf-about-mosaic__meta {
+  color: rgba(238, 248, 248, 0.75);
+}
+
+.jf-about-mosaic__meta i {
+  margin-right: 6px;
+}
+
+.jf-about-mosaic__salary {
+  margin-top: 4px;
+  padding-top: 11px;
+  color: #fff !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
+  font-weight: 700;
+}
+
+/* Live count */
+.jf-about-mosaic__tile--stat {
+  justify-content: center;
+  color: var(--jf-navy);
+  background: linear-gradient(160deg, var(--jf-gold), #fbdfae);
+}
+
+.jf-about-mosaic__tile--stat strong {
+  font-size: 2.3rem;
+  line-height: 1;
+  letter-spacing: -0.05em;
+}
+
+.jf-about-mosaic__tile--stat span {
+  font-weight: 600;
+}
+
+/* Pull quote — full width, so the mosaic closes on a line rather than
+   leaving the second column empty on the last row. */
+.jf-about-mosaic__tile--quote {
+  grid-column: 1 / -1;
+  flex-direction: row;
+  align-items: center;
+  gap: 14px;
+  min-height: 0;
+  padding: 18px 22px;
+  justify-content: flex-start;
+  color: var(--jf-ink);
+  background: var(--jf-sand);
+  border: 1px solid var(--jf-line);
+}
+
+.jf-about-mosaic__tile--quote i {
+  color: var(--jf-teal);
+  font-size: 1.1rem;
+}
+
+.jf-about-mosaic__tile--quote p {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1.55;
+}
+
+/* Stats band — dotted rules, as on the reference layout
+   ------------------------------------------------------------------ */
+.jf-about-stats {
+  padding: 40px 0;
+  background: var(--jf-canvas);
+  border-block: 1px dashed var(--jf-line-dark);
+}
+
+.jf-about-stats__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0;
+  margin: 0;
+}
+
+.jf-about-stats__item {
+  padding: 8px 26px;
+  text-align: center;
+  border-left: 1px dashed var(--jf-line-dark);
+}
+
+.jf-about-stats__item:first-child {
+  border-left: 0;
+}
+
+.jf-about-stats__item dt {
+  color: var(--jf-ink);
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.05em;
+}
+
+.jf-about-stats__item dd {
+  margin: 6px 0 0;
+  color: var(--jf-ink);
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.jf-about-stats__item dd span {
+  display: block;
+  margin-top: 3px;
+  color: var(--jf-ink-soft);
+  font-size: 0.74rem;
+  font-weight: 400;
+}
+
+/* Pillars
+   ------------------------------------------------------------------ */
+.jf-about-pillars {
+  padding: 74px 0;
+  background: var(--jf-paper);
+}
+
+.jf-about-pillars__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.jf-about-pillar {
+  padding: 26px 24px 28px;
+  background: var(--jf-canvas);
+  border: 1px solid var(--jf-line);
+  border-radius: var(--jf-radius-lg);
+  transition: transform 200ms ease, box-shadow 200ms ease;
+}
+
+.jf-about-pillar:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--jf-shadow-md);
+}
+
+.jf-about-pillar__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  color: var(--jf-teal-dark);
+  background: rgba(28, 166, 160, 0.13);
+  border-radius: 15px;
+  font-size: 1.05rem;
+}
+
+.jf-about-pillar h3 {
+  margin: 16px 0 0;
+  color: var(--jf-ink);
+  font-size: 1.14rem;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+}
+
+.jf-about-pillar p {
+  margin: 9px 0 0;
+  color: var(--jf-ink-soft);
+  font-size: 0.88rem;
+  line-height: 1.7;
+}
+
+.jf-about-pillar ul {
+  margin: 16px 0 0;
+  padding: 16px 0 0;
+  border-top: 1px solid var(--jf-line);
+  list-style: none;
+}
+
+.jf-about-pillar li {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  padding: 5px 0;
+  color: var(--jf-ink);
+  font-size: 0.83rem;
+}
+
+.jf-about-pillar li i {
+  margin-top: 3px;
+  color: var(--jf-success);
+  font-size: 0.72rem;
+}
+
+/* Timeline
+   ------------------------------------------------------------------
+   Years alternate above and below a single rail. The item is a 3-row grid
+   whose middle row holds the dot, so the rail can sit at a flat 50% however
+   long the copy runs. */
+.jf-about-timeline {
+  padding: 74px 0;
+  background: var(--jf-canvas);
+}
+
+.jf-about-timeline__rail {
+  position: relative;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.jf-about-timeline__rail::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 6%;
+  right: 6%;
+  height: 2px;
+  background: var(--jf-line-dark);
+  transform: translateY(-1px);
+}
+
+.jf-about-timeline__item {
+  display: grid;
+  grid-template-rows: 1fr 20px 1fr;
+  justify-items: center;
+  padding: 0 10px;
+}
+
+.jf-about-timeline__content {
+  grid-row: 1;
+  align-self: end;
+  padding-bottom: 16px;
+  text-align: center;
+}
+
+/* Zig-zag: every second milestone hangs below the rail. */
+.jf-about-timeline__item:nth-child(even) .jf-about-timeline__content {
+  grid-row: 3;
+  align-self: start;
+  padding: 16px 0 0;
+}
+
+.jf-about-timeline__year {
+  display: block;
+  color: var(--jf-ink-soft);
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.jf-about-timeline__item.is-active .jf-about-timeline__year {
+  color: var(--jf-teal-dark);
+}
+
+.jf-about-timeline__content p {
+  margin: 7px 0 0;
+  color: var(--jf-ink-soft);
+  font-size: 0.79rem;
+  line-height: 1.6;
+}
+
+.jf-about-timeline__dot {
+  grid-row: 2;
+  align-self: center;
+  width: 14px;
+  height: 14px;
+  background: var(--jf-paper);
+  border: 2px solid var(--jf-line-dark);
+  border-radius: 50%;
+}
+
+.jf-about-timeline__item.is-active .jf-about-timeline__dot {
+  background: var(--jf-teal-dark);
+  border-color: var(--jf-teal-dark);
+  box-shadow: 0 0 0 6px rgba(28, 166, 160, 0.2);
+}
+
+/* Employers on the platform
+   ------------------------------------------------------------------
+   Everything in this band is queried, so it is laid out like a register:
+   identity, what they do, how many roles are live. */
+.jf-about-employers {
+  padding: 74px 0;
+  background: var(--jf-paper);
+}
+
+.jf-about-employers__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.jf-about-employer {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 18px;
+  background: var(--jf-canvas);
+  border: 1px solid var(--jf-line);
+  border-radius: var(--jf-radius-md);
+}
+
+.jf-about-employer__logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  flex-shrink: 0;
+  overflow: hidden;
+  color: var(--jf-teal-dark);
+  background: rgba(28, 166, 160, 0.12);
+  border-radius: 13px;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.jf-about-employer__logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.jf-about-employer__body {
+  min-width: 0;
+  flex: 1;
+}
+
+.jf-about-employer h3 {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  color: var(--jf-ink);
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.jf-about-employer p {
+  margin: 2px 0 0;
+  overflow: hidden;
+  color: var(--jf-ink-soft);
+  font-size: 0.76rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.jf-about-employer__count {
+  flex-shrink: 0;
+  color: var(--jf-ink-soft);
+  font-size: 0.72rem;
+  text-align: right;
+}
+
+.jf-about-employer__count strong {
+  display: block;
+  color: var(--jf-ink);
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.jf-about-empty {
+  margin: 0;
+  padding: 22px;
+  color: var(--jf-ink-soft);
+  background: var(--jf-canvas);
+  border: 1px dashed var(--jf-line-dark);
+  border-radius: var(--jf-radius-md);
+  font-size: 0.88rem;
+}
+
+/* Dark theme
+   ------------------------------------------------------------------ */
+html[data-theme="dark"] .jf-about-head {
+  background:
+    radial-gradient(circle at 88% 0%, rgba(70, 190, 180, 0.055), transparent 24rem),
+    #071015;
+  border-color: #1d2e35;
+}
+
+html[data-theme="dark"] .jf-about-head__breadcrumb {
+  color: #8198a1;
+}
+
+html[data-theme="dark"] .jf-about-head__breadcrumb a {
+  color: #83ded8;
+}
+
+html[data-theme="dark"] .jf-about-intro,
+html[data-theme="dark"] .jf-about-pillars,
+html[data-theme="dark"] .jf-about-employers {
+  background: #0b161b;
+}
+
+html[data-theme="dark"] .jf-about-stats,
+html[data-theme="dark"] .jf-about-timeline {
+  background: #0e1b21;
+  border-color: #263940;
+}
+
+html[data-theme="dark"] .jf-about-pillar {
+  background: #14242b;
+  border-color: #263940;
+}
+
+html[data-theme="dark"] .jf-about-pillar__icon {
+  color: #83ded8;
+  background: rgba(28, 166, 160, 0.16);
+}
+
+html[data-theme="dark"] .jf-about-mosaic__tile--verify {
+  background: linear-gradient(165deg, #16323a, #14242b 62%);
+  border-color: #263940;
+}
+
+html[data-theme="dark"] .jf-about-mosaic__tile--quote {
+  background: #14242b;
+  border-color: #263940;
+}
+
+html[data-theme="dark"] .jf-about-stats__item,
+html[data-theme="dark"] .jf-about-timeline__rail::before {
+  border-color: #2c414a;
+  background-color: transparent;
+}
+
+html[data-theme="dark"] .jf-about-timeline__rail::before {
+  background: #2c414a;
+}
+
+html[data-theme="dark"] .jf-about-timeline__dot {
+  background: #0e1b21;
+  border-color: #2c414a;
+}
+
+html[data-theme="dark"] .jf-about-employer {
+  background: #14242b;
+  border-color: #263940;
+}
+
+html[data-theme="dark"] .jf-about-empty {
+  background: #14242b;
+  border-color: #2c414a;
+}
+
+html[data-theme="dark"] .jf-about-employer__logo {
+  color: #83ded8;
+  background: rgba(28, 166, 160, 0.16);
+}
+
+/* Responsive
+   ------------------------------------------------------------------ */
+@media (max-width: 1000px) {
+  .jf-about-intro__grid {
+    grid-template-columns: 1fr;
+    gap: 38px;
+  }
+
+  .jf-about-pillars__grid,
+  .jf-about-employers__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .jf-about-stats__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    row-gap: 26px;
+  }
+
+  .jf-about-stats__item:nth-child(odd) {
+    border-left: 0;
+  }
+
+  /* The rail goes vertical: dots run down the left, copy sits to the right. */
+  .jf-about-timeline__rail {
+    grid-auto-flow: row;
+    grid-auto-columns: auto;
+    padding-left: 6px;
+  }
+
+  .jf-about-timeline__rail::before {
+    top: 10px;
+    bottom: 10px;
+    left: 13px;
+    right: auto;
+    width: 2px;
+    height: auto;
+  }
+
+  .jf-about-timeline__item,
+  .jf-about-timeline__item:nth-child(even) {
+    grid-template-rows: auto;
+    grid-template-columns: 20px minmax(0, 1fr);
+    justify-items: start;
+    padding: 0 0 26px;
+  }
+
+  .jf-about-timeline__item .jf-about-timeline__content,
+  .jf-about-timeline__item:nth-child(even) .jf-about-timeline__content {
+    grid-row: 1;
+    grid-column: 2;
+    align-self: start;
+    padding: 0 0 0 16px;
+    text-align: left;
+  }
+
+  .jf-about-timeline__dot {
+    grid-row: 1;
+    grid-column: 1;
+    align-self: start;
+    margin-top: 4px;
+  }
+}
+
+@media (max-width: 620px) {
+  .jf-about-mosaic {
+    grid-template-columns: 1fr;
+  }
+
+  .jf-about-mosaic__tile--verify {
+    grid-row: span 1;
+  }
+
+  .jf-about-mosaic__tile--quote {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .jf-about-stats__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .jf-about-stats__item {
+    border-left: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .jf-about-pillar:hover {
+    transform: none;
+  }
+}

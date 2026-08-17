@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Company;
+use App\Models\Compliance;
 use App\Models\JobPost;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -16,8 +18,24 @@ class JobPostController extends Controller
 
     public function index(Request $request)
     {
+        $from = $this->dateInput($request->query('from'));
+        $to = $this->dateInput($request->query('to'));
+
+        // A backwards range would silently return nothing, so read it as given.
+        if ($from && $to && $from > $to) {
+            [$from, $to] = [$to, $from];
+        }
+
         $posts = JobPost::query()
+            // The count travels with the employer so every row resolves its
+            // verification badge without a query per company. Same idiom as
+            // JobController::catalog().
+            ->with(['author', 'employer' => fn ($query) => $query->withCount([
+                'complianceRecords as verified_compliance_count' => fn ($records) => $records
+                    ->where('status', Compliance::STATUS_VERIFIED),
+            ])])
             ->search($request->query('q'))
+            ->postedBetween($from, $to)
             ->when(
                 in_array($request->query('status'), JobPost::statuses(), true),
                 fn ($query) => $query->where('status', $request->query('status'))
@@ -36,7 +54,25 @@ class JobPostController extends Controller
             'counts' => $counts,
             'activeStatus' => $request->query('status'),
             'searchTerm' => $request->query('q'),
+            'fromDate' => $from,
+            'toDate' => $to,
         ]);
+    }
+
+    /** Only a well-formed Y-m-d survives; anything else drops the filter. */
+    private function dateInput(mixed $value): ?string
+    {
+        $value = is_string($value) ? trim($value) : '';
+
+        if ($value === '') {
+            return null;
+        }
+
+        try {
+            return Carbon::createFromFormat('Y-m-d', $value)->toDateString();
+        } catch (\Throwable) {
+            return null;
+        }
     }
 
     public function create()
@@ -53,6 +89,7 @@ class JobPostController extends Controller
 
         $post = new JobPost($validated);
         $post->company = Company::findOrFail($validated['company_id'])->name;
+        $post->created_by = $request->user()?->getKey();
 
         $post->slug = JobPost::makeSlug($request->input('slug') ?: $request->input('title'));
         $post->tabs = $this->tabsFrom($request);
@@ -68,7 +105,9 @@ class JobPostController extends Controller
 
     public function show(JobPost $jobPost)
     {
-        return redirect()->route('job-posts.edit', $jobPost);
+        $jobPost->load(['employer', 'author']);
+
+        return view('job-posts.show', ['post' => $jobPost]);
     }
 
     public function edit(JobPost $jobPost)

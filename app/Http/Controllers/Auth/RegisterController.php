@@ -45,17 +45,6 @@ class RegisterController extends Controller
     }
 
     /**
-     * Overrides the trait's version to hand the form the approved companies an
-     * employer can register against.
-     */
-    public function showRegistrationForm()
-    {
-        return view('auth.register', [
-            'companies' => Company::approved()->orderBy('name')->get(),
-        ]);
-    }
-
-    /**
      * Get a validator for an incoming registration request.
      *
      * @param  array  $data
@@ -68,14 +57,10 @@ class RegisterController extends Controller
             'last_name' => ['required', 'string', 'max:80'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'account_type' => ['required', 'in:employee,employer'],
-            // An employer either picks an approved company or names a new one
-            // for us to register; exactly one of the two has to arrive.
-            'company_id' => ['nullable', 'required_without:company_name', 'exclude_unless:account_type,employer', 'exists:companies,id'],
-            'company_name' => ['nullable', 'required_without:company_id', 'exclude_unless:account_type,employer', 'string', 'max:255'],
+            'company_name' => ['nullable', 'required_if:account_type,employer', 'string', 'max:255'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ], [
-            'company_id.required_without' => 'Choose your company, or add its name if it is not listed.',
-            'company_name.required_without' => 'Please tell us which company you are hiring for.',
+            'company_name.required_if' => 'Please tell us which company you are hiring for.',
         ]);
     }
 
@@ -115,16 +100,12 @@ class RegisterController extends Controller
     }
 
     /**
-     * An employer either signs up against a company we already approved, or
-     * registers a new one. A newly named company lands as `pending` — it is an
-     * unvetted claim until an admin approves it in the back office.
+     * Employers type their company name. An existing company is reused; a new
+     * name lands as `pending` — an unvetted claim until an admin approves it
+     * in the back office.
      */
     protected function resolveCompany(array $data): Company
     {
-        if (! empty($data['company_id'])) {
-            return Company::findOrFail($data['company_id']);
-        }
-
         $name = trim($data['company_name']);
 
         // Match case-insensitively so "aba bank" does not create a second ABA Bank.

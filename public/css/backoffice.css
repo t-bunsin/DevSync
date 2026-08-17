@@ -85,9 +85,27 @@
   color: var(--kh-ink);
 }
 
+.kh-bo__btn--danger {
+  color: var(--bo-danger);
+  border-color: color-mix(in srgb, var(--bo-danger) 35%, var(--kh-line));
+}
+
+.kh-bo__btn--danger:hover {
+  color: #fff;
+  background: var(--bo-danger);
+  border-color: var(--bo-danger);
+}
+
 .kh-bo__btn svg {
   width: 16px;
   height: 16px;
+}
+
+.kh-bo__head-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 /* Summary tiles
@@ -234,6 +252,20 @@
   border-color: var(--kh-ocean);
 }
 
+/* Posted-date inquiry range: two date fields reading as one control. */
+.kh-bo__range {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--kh-muted);
+  font-size: 0.8rem;
+}
+
+.kh-bo__range input {
+  min-width: 0;
+  width: 9.5rem;
+}
+
 /* Table
    ------------------------------------------------------------------ */
 .kh-bo__table-wrap {
@@ -318,6 +350,30 @@
   font-size: 0.73rem;
 }
 
+/* Posted column: a touch smaller than the rest of the row, and kept on one
+   line each — "1 day ago" wrapped to three lines in the narrow column. */
+.kh-bo__posted {
+  font-size: 0.78rem;
+  white-space: nowrap;
+}
+
+.kh-bo__posted .kh-bo__ref {
+  font-size: 0.7rem;
+}
+
+/* Deadline urgency: red at five days left or fewer, blue while there is room. */
+.kh-bo__deadline {
+  font-weight: 700;
+}
+
+.kh-bo__deadline--urgent {
+  color: var(--bo-danger);
+}
+
+.kh-bo__deadline--open {
+  color: var(--bo-blue);
+}
+
 /* Status
    ------------------------------------------------------------------ */
 .kh-bo__status {
@@ -372,6 +428,9 @@
   display: inline-flex;
   align-items: center;
   gap: 5px;
+  /* Needed where the badge sits inside a line of text (the table's meta row)
+     rather than in a flex container like .kh-bo__name. */
+  vertical-align: -3px;
   color: #1d9bf0;
   font-size: 0.73rem;
   font-weight: 700;
@@ -594,11 +653,156 @@ textarea.kh-bo__control {
   padding-left: 18px;
 }
 
+/* Detail page
+   ------------------------------------------------------------------
+   Read-only view of one record: a wide main column of content cards and a
+   narrow sidebar of facts. Reuses .kh-bo__card so both columns match the
+   index table's surface. */
+.kh-bo__detail {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(280px, 1fr);
+  align-items: start;
+  gap: 16px;
+}
+
+.kh-bo__detail-main,
+.kh-bo__detail-side {
+  display: grid;
+  gap: 16px;
+}
+
+.kh-bo__card-body {
+  padding: 18px 20px;
+}
+
+.kh-bo__card-body--stacked {
+  display: grid;
+  gap: 22px;
+}
+
+.kh-bo__chips {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.kh-bo__prose {
+  margin: 0;
+  color: var(--kh-ink);
+  font-size: 0.86rem;
+  line-height: 1.65;
+  white-space: pre-line;
+}
+
+.kh-bo__muted {
+  margin: 0;
+  color: var(--kh-muted);
+  font-size: 0.82rem;
+}
+
+/* Fact lists: two up on the wide column, single rows in the sidebar. */
+.kh-bo__facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 18px;
+  margin: 16px 0 0;
+}
+
+.kh-bo__facts--rows {
+  grid-template-columns: 1fr;
+  margin-top: 0;
+}
+
+.kh-bo__facts dt {
+  color: var(--kh-muted);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.kh-bo__facts dd {
+  margin: 3px 0 0;
+  font-size: 0.85rem;
+  overflow-wrap: anywhere;
+}
+
+.kh-bo__facts dd .kh-bo__ref {
+  margin-top: 2px;
+}
+
+.kh-bo__eyebrow {
+  display: block;
+  color: var(--kh-ocean);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.kh-bo__panel-view h3 {
+  margin: 5px 0 8px;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.kh-bo__panel-view h4 {
+  margin: 14px 0 6px;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.kh-bo__bullets {
+  margin: 0;
+  padding-left: 18px;
+  color: var(--kh-ink);
+  font-size: 0.84rem;
+  line-height: 1.6;
+}
+
+.kh-bo__offer {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 18px;
+}
+
+.kh-bo__offer h3 {
+  margin: 0 0 7px;
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.kh-bo__detail-side .kh-bo__identity {
+  min-width: 0;
+  margin-bottom: 14px;
+}
+
+.kh-bo__detail-side .kh-bo__btn {
+  width: 100%;
+  justify-content: center;
+  margin-top: 14px;
+}
+
+.kh-bo__name-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.kh-bo__name-link:hover {
+  color: var(--kh-ocean);
+  text-decoration: underline;
+}
+
 /* Responsive
    ------------------------------------------------------------------ */
 @media (max-width: 1100px) {
   .kh-bo__tiles {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .kh-bo__detail {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -618,9 +822,26 @@ textarea.kh-bo__control {
     flex-direction: column;
   }
 
+  .kh-bo__search {
+    flex-wrap: wrap;
+  }
+
   .kh-bo__search input {
     min-width: 0;
     width: 100%;
+  }
+
+  .kh-bo__range {
+    width: 100%;
+  }
+
+  .kh-bo__range input {
+    flex: 1;
+    width: auto;
+  }
+
+  .kh-bo__facts {
+    grid-template-columns: 1fr;
   }
 }
 

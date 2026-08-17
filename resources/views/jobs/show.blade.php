@@ -97,6 +97,9 @@
                         <button class="jf-tab is-active" id="job-tab-description" type="button"
                             data-job-page-tab="description" role="tab" aria-selected="true"
                             aria-controls="job-page-panel">Overview</button>
+                        <button class="jf-tab" id="job-tab-job-description" type="button"
+                            data-job-page-tab="job_description" role="tab" aria-selected="false"
+                            aria-controls="job-page-panel">Job description</button>
                         <button class="jf-tab" id="job-tab-requirements" type="button"
                             data-job-page-tab="requirements" role="tab" aria-selected="false"
                             aria-controls="job-page-panel">Requirements</button>
@@ -136,61 +139,55 @@
                         {{-- Employer profile, same visibility rule as the banner. --}}
                         <div class="jf-company-profile" id="job-page-company-profile" hidden>
                             @if (! empty($job['company_details']) || ! empty($job['company_address']))
-                                <div class="jf-company-profile__cards">
-                                    @if (! empty($job['company_details']))
-                                        <section class="jf-cprofile-card jf-cprofile-card--teal">
-                                            <header class="jf-cprofile-card__head">
-                                                <span class="jf-cprofile-card__icon" aria-hidden="true"><i class="fas fa-user-tie"></i></span>
-                                                <h3>Employer Details</h3>
-                                            </header>
-                                            <dl class="jf-cprofile-facts">
-                                                @foreach ($job['company_details'] as $label => $value)
-                                                    <div class="jf-cprofile-facts__row">
-                                                        <dt>{{ $label }}</dt>
-                                                        <dd>{{ $value }}</dd>
-                                                    </div>
-                                                @endforeach
-                                            </dl>
-                                        </section>
-                                    @endif
+                                <div class="jf-cprofile-meta">
+                                    @foreach ($job['company_details'] as $label => $value)
+                                        <div class="jf-cprofile-meta__item">
+                                            <dt>{{ $label }}</dt>
+                                            <dd>{{ $value }}</dd>
+                                        </div>
+                                    @endforeach
 
                                     @if (! empty($job['company_address']))
-                                        <section class="jf-cprofile-card jf-cprofile-card--gold">
-                                            <header class="jf-cprofile-card__head">
-                                                <span class="jf-cprofile-card__icon" aria-hidden="true"><i class="fas fa-location-dot"></i></span>
-                                                <h3>Address</h3>
-                                            </header>
-                                            <p class="jf-cprofile-card__text">{{ $job['company_address'] }}</p>
-                                            @if (! empty($job['company_website']))
-                                                <a class="jf-cprofile-card__link" href="{{ $job['company_website'] }}"
-                                                    target="_blank" rel="noopener noreferrer">
-                                                    <i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i>
-                                                    {{ preg_replace('#^https?://#', '', $job['company_website']) }}
-                                                </a>
-                                            @endif
-                                        </section>
+                                        <div class="jf-cprofile-meta__item jf-cprofile-meta__item--wide">
+                                            <dt>Address</dt>
+                                            <dd>
+                                                {{ $job['company_address'] }}
+                                                @if (! empty($job['company_website']))
+                                                    <a class="jf-cprofile-meta__link" href="{{ $job['company_website'] }}"
+                                                        target="_blank" rel="noopener noreferrer">
+                                                        {{ preg_replace('#^https?://#', '', $job['company_website']) }}
+                                                        <i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i>
+                                                    </a>
+                                                @endif
+                                            </dd>
+                                        </div>
                                     @endif
                                 </div>
                             @endif
 
-                            @foreach ($job['company_sections'] ?? [] as $section)
-                                <section class="jf-cprofile-story jf-cprofile-story--{{ $section['tone'] ?? 'teal' }}">
-                                    <header class="jf-cprofile-story__head">
-                                        <span class="jf-cprofile-card__icon" aria-hidden="true"><i class="fas {{ $section['icon'] }}"></i></span>
-                                        <h3>{{ $section['title'] }}</h3>
-                                    </header>
-                                    <div class="jf-cprofile-story__body">
+                            {{-- <details> rather than scripted panels: collapsing is
+                                 native, keyboard-accessible, and works without JS. --}}
+                            @foreach ($job['company_sections'] ?? [] as $index => $section)
+                                <details class="jf-cprofile-item" @if ($index < 2) open @endif>
+                                    <summary class="jf-cprofile-item__summary">
+                                        <span class="jf-cprofile-item__icon" aria-hidden="true"><i class="fas {{ $section['icon'] }}"></i></span>
+                                        <span class="jf-cprofile-item__title">{{ $section['title'] }}</span>
+                                        <i class="fas fa-chevron-down jf-cprofile-item__chevron" aria-hidden="true"></i>
+                                    </summary>
+
+                                    <div class="jf-cprofile-item__body">
                                         {{-- Employer-authored prose: blank lines start a new paragraph. --}}
                                         @foreach (preg_split('/\R{2,}/', trim($section['body'])) as $paragraph)
                                             <p>{!! nl2br(e($paragraph)) !!}</p>
                                         @endforeach
                                     </div>
-                                </section>
+                                </details>
                             @endforeach
                         </div>
 
-                        {{-- The JS-driven panel. Hidden on the Company tab, which
-                             renders the employer profile above instead. --}}
+                        {{-- The JS-driven panel: Overview, Job description and
+                             Requirements all render through it. Hidden only on the
+                             Company tab, which shows the employer profile above. --}}
                         <div id="job-page-main-block">
                             <span class="jf-kicker" id="job-page-kicker">Role overview</span>
                             <h2 id="job-page-section-title">{{ $job['tabs']['description']['title'] }}</h2>
@@ -203,8 +200,8 @@
                             </ul>
                         </div>
 
-                        {{-- What the employer offers. Static, shown with the
-                             Requirements tab alongside the extra job copy. --}}
+                        {{-- What the employer offers. Static, shown on the
+                             Requirements tab only. --}}
                         @if (! empty($job['offer']))
                             <div class="jf-offer" id="job-page-offer" hidden>
                                 <h2 class="jf-offer__title">What we can offer</h2>
@@ -226,27 +223,6 @@
                             </div>
                         @endif
 
-                        {{-- The post's extra job copy. Static, and only shown
-                             while the Requirements tab is open. --}}
-                        @php($extra = $job['tabs']['job_description'] ?? null)
-                        @if ($extra && (filled($extra['body']) || ! empty($extra['list'])))
-                            <div class="jf-job-extra" id="job-page-extra" hidden>
-                                <h2 class="jf-job-extra__title">{{ $extra['title'] }}</h2>
-
-                                @if (filled($extra['body']))
-                                    <p>{{ $extra['body'] }}</p>
-                                @endif
-
-                                @if (! empty($extra['list']))
-                                    <h3>{{ $extra['list_title'] }}</h3>
-                                    <ul class="jf-detail__list">
-                                        @foreach ($extra['list'] as $item)
-                                            <li>{{ $item }}</li>
-                                        @endforeach
-                                    </ul>
-                                @endif
-                            </div>
-                        @endif
                     </div>
                 </article>
 
@@ -307,7 +283,12 @@
                         @foreach ($relatedJobs as $relatedJob)
                             <a class="jf-job-page__related-card" href="{{ route('jobs.show', $relatedJob['id']) }}">
                                 <div class="jf-job-page__related-top">
-                                    <span>{{ $relatedJob['company'] }}</span>
+                                    <span>
+                                        {{ $relatedJob['company'] }}
+                                        @if (! empty($relatedJob['company_verified']))
+                                            <x-verified-badge :show-label="false" :size="13" label="Verified employer" />
+                                        @endif
+                                    </span>
                                     @if ($relatedJob['featured'])
                                         <small>Featured</small>
                                     @endif

@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AboutController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CompaniesController;
 use App\Http\Controllers\ComplianceController;
@@ -66,9 +67,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('companies', CompaniesController::class)->except(['index']);
 });
 
-Route::get('/about', function () {
-    return view('about');
-})->name('about');
+Route::get('/about', [AboutController::class, 'index'])->name('about');
 
 Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::post('/contact', [ContactController::class, 'send'])->name('contact.send');

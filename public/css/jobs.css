@@ -1671,9 +1671,12 @@ body.jf-body::selection {
   text-decoration: none;
 }
 
+/* Column count follows the number of tabs, so adding one does not wrap it
+   onto a second row. */
 .jf-tabs {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
   gap: 4px;
   padding: 8px;
   background: #f2f6f5;

@@ -10857,3 +10857,19 @@ target the legacy columns and will need rewriting onto UUIDs and user_roles. at 
 #78 /Users/toengbunsin/Documents/development/DevSync/server.php(21): require_once('/Users/toengbun...')
 #79 {main}
 "} 
+[2026-08-17 14:43:54] local.ERROR: Uncaught ErrorException: file_put_contents(/show.php): Failed to open stream: Read-only file system in Command line code:6
+Stack trace:
+#0 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php(256): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(2, 'file_put_conten...', 'Command line co...', 6)
+#1 [internal function]: Illuminate\Foundation\Bootstrap\HandleExceptions->{closure:Illuminate\Foundation\Bootstrap\HandleExceptions::forwardsTo():255}(2, 'file_put_conten...', 'Command line co...', 6)
+#2 Command line code(6): file_put_contents('/show.php', '<?php $__env->s...')
+#3 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Uncaught ErrorException: file_put_contents(/show.php): Failed to open stream: Read-only file system in Command line code:6
+Stack trace:
+#0 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php(256): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleError(2, 'file_put_conten...', 'Command line co...', 6)
+#1 [internal function]: Illuminate\\Foundation\\Bootstrap\\HandleExceptions->{closure:Illuminate\\Foundation\\Bootstrap\\HandleExceptions::forwardsTo():255}(2, 'file_put_conten...', 'Command line co...', 6)
+#2 Command line code(6): file_put_contents('/show.php', '<?php $__env->s...')
+#3 {main}
+  thrown at Command line code:6)
+[stacktrace]
+#0 {main}
+"} 

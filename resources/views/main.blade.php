@@ -172,50 +172,7 @@
         ];
     @endphp
 
-    <section class="jf-steps" id="how-it-works" aria-labelledby="steps-title">
-        <div class="jf-shell">
-            <div class="jf-steps__heading">
-                <div>
-                    <span class="jf-kicker">How it works</span>
-                    <h2 id="steps-title">Find your dream job in {{ count($howItWorks) }} steps</h2>
-                </div>
-                <p>From a two-minute profile to a sent application — no account required until you apply.</p>
-            </div>
-
-            <ol class="jf-steps__list">
-                @foreach ($howItWorks as $index => $step)
-                    <li class="jf-step">
-                        <div class="jf-step__top">
-                            <span class="jf-step__number" aria-hidden="true">{{ $index + 1 }}</span>
-                            <span class="jf-step__rail" aria-hidden="true"></span>
-                            <span class="jf-step__icon" aria-hidden="true"><i class="fas {{ $step['icon'] }}"></i></span>
-                        </div>
-
-                        <h3>{{ $step['title'] }}</h3>
-                        <p>{{ $step['body'] }}</p>
-                        <span class="jf-step__note">{{ $step['note'] }}</span>
-                    </li>
-                @endforeach
-            </ol>
-        </div>
-    </section>
-
-    <div data-jobs-explorer>
-        <section class="jf-trusted" id="companies" aria-labelledby="companies-title">
-            <div class="jf-shell jf-trusted__inner">
-                <p id="companies-title">Opportunities from teams shaping Cambodia</p>
-                <div class="jf-trusted__logos" aria-label="Featured employers">
-                    <span><b>ABA</b> Bank</span>
-                    <span><i class="fas fa-signal" aria-hidden="true"></i> Smart</span>
-                    <span><i class="fas fa-circle-nodes" aria-hidden="true"></i> Wing</span>
-                    <span><i class="fas fa-building" aria-hidden="true"></i> Chip Mong</span>
-                    <span><i class="fas fa-shield-heart" aria-hidden="true"></i> AIA</span>
-                </div>
-            </div>
-        </section>
-
-        @include('jobs.partials.catalog')
-    </div>
+   @include('jobs.partials.catalog')
 
     @php
         // Annual billing is the monthly rate less this much, so a price change
@@ -369,6 +326,50 @@
             <p class="jf-pricing__note">All plans include employer profiles and the public directory. Cancel or change plan at any time.</p>
         </div>
     </section>
+     <section class="jf-steps" id="how-it-works" aria-labelledby="steps-title">
+        <div class="jf-shell">
+            <div class="jf-steps__heading">
+                <div>
+                    <span class="jf-kicker">How it works</span>
+                    <h2 id="steps-title">Find your dream job in {{ count($howItWorks) }} steps</h2>
+                </div>
+                <p>From a two-minute profile to a sent application — no account required until you apply.</p>
+            </div>
+
+            <ol class="jf-steps__list">
+                @foreach ($howItWorks as $index => $step)
+                    <li class="jf-step">
+                        <div class="jf-step__top">
+                            <span class="jf-step__number" aria-hidden="true">{{ $index + 1 }}</span>
+                            <span class="jf-step__rail" aria-hidden="true"></span>
+                            <span class="jf-step__icon" aria-hidden="true"><i class="fas {{ $step['icon'] }}"></i></span>
+                        </div>
+
+                        <h3>{{ $step['title'] }}</h3>
+                        <p>{{ $step['body'] }}</p>
+                        <span class="jf-step__note">{{ $step['note'] }}</span>
+                    </li>
+                @endforeach
+            </ol>
+        </div>
+    </section>
+
+    <div data-jobs-explorer>
+        <section class="jf-trusted" id="companies" aria-labelledby="companies-title">
+            <div class="jf-shell jf-trusted__inner">
+                <p id="companies-title">Opportunities from teams shaping Cambodia</p>
+                <div class="jf-trusted__logos" aria-label="Featured employers">
+                    <span><b>ABA</b> Bank</span>
+                    <span><i class="fas fa-signal" aria-hidden="true"></i> Smart</span>
+                    <span><i class="fas fa-circle-nodes" aria-hidden="true"></i> Wing</span>
+                    <span><i class="fas fa-building" aria-hidden="true"></i> Chip Mong</span>
+                    <span><i class="fas fa-shield-heart" aria-hidden="true"></i> AIA</span>
+                </div>
+            </div>
+        </section>
+
+        
+    </div>
 @endsection
 
 @push('scripts')

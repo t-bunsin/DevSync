@@ -88,6 +88,17 @@ class JobPost extends Model
         return $this->belongsTo(Company::class, 'company_id');
     }
 
+    /** The staff account that registered the post; null for older records. */
+    public function author(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function authorLabel(): string
+    {
+        return $this->author?->displayName() ?: 'Unknown';
+    }
+
     public function scopePublished(Builder $query): Builder
     {
         return $query->where('status', self::STATUS_PUBLISHED);
@@ -106,6 +117,18 @@ class JobPost extends Model
                 ->orWhere('company', 'like', "%{$term}%")
                 ->orWhere('location', 'like', "%{$term}%");
         });
+    }
+
+    /**
+     * Posted-date window for the back office inquiry filter. Drafts have no
+     * `published_at`, so this falls back to `created_at` — the same date the
+     * Posted column reads. Both bounds are inclusive and independent.
+     */
+    public function scopePostedBetween(Builder $query, ?string $from, ?string $to): Builder
+    {
+        return $query
+            ->when($from, fn (Builder $q) => $q->whereRaw('DATE(COALESCE(published_at, created_at)) >= ?', [$from]))
+            ->when($to, fn (Builder $q) => $q->whereRaw('DATE(COALESCE(published_at, created_at)) <= ?', [$to]));
     }
 
     /**
@@ -166,28 +189,59 @@ class JobPost extends Model
         return $from ? max(0, (int) $from->startOfDay()->diffInDays(now()->startOfDay())) : 0;
     }
 
-    public function postedLabel(): string
+    /** The age on its own — "today", "1 day ago", "5 days ago". */
+    public function postedAgo(): string
     {
         $days = $this->postedDays();
 
         return match (true) {
-            $days === 0 => 'Posted today',
-            $days === 1 => 'Posted 1 day ago',
-            default => "Posted {$days} days ago",
+            $days === 0 => 'today',
+            $days === 1 => '1 day ago',
+            default => "{$days} days ago",
         };
+    }
+
+    public function postedLabel(): string
+    {
+        return 'Posted ' . $this->postedAgo();
+    }
+
+    /** Whole days until the deadline; 0 once it has passed, null if there is none. */
+    public function deadlineDaysLeft(): ?int
+    {
+        if (! $this->deadline) {
+            return null;
+        }
+
+        if ($this->deadline->isPast()) {
+            return 0;
+        }
+
+        return (int) now()->startOfDay()->diffInDays($this->deadline->startOfDay());
+    }
+
+    /**
+     * How the back office colours the deadline: red at five days left or
+     * fewer (a closed post included), blue while there is still room.
+     */
+    public function deadlineTone(): string
+    {
+        $days = $this->deadlineDaysLeft();
+
+        return $days !== null && $days <= 5 ? 'urgent' : 'open';
     }
 
     public function deadlineLabel(): string
     {
-        if (! $this->deadline) {
+        $days = $this->deadlineDaysLeft();
+
+        if ($days === null) {
             return 'Open until filled';
         }
 
         if ($this->deadline->isPast()) {
             return 'Closed';
         }
-
-        $days = (int) now()->startOfDay()->diffInDays($this->deadline->startOfDay());
 
         return match (true) {
             $days === 0 => 'Closes today',

@@ -282,6 +282,14 @@
   padding: 10px;
 }
 
+/* Four tabs are too tight to sit side by side on a narrow screen. */
+@media (max-width: 700px) {
+  .jf-job-page__content-card .jf-tabs {
+    grid-auto-flow: row;
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 .jf-job-page__content-card .jf-tab {
   min-height: 43px;
   font-size: 0.76rem;
@@ -520,6 +528,11 @@
 }
 
 .jf-job-page__related-top > span {
+  /* Flex so the verification badge sits beside the name without inheriting
+     the kicker's letter-spacing as a gap. */
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
   color: var(--jf-teal-dark);
   font-size: 0.67rem;
   font-weight: 750;
@@ -879,236 +892,166 @@ html[data-theme="dark"] .jf-job-page__back-link:hover {
 
 /* Employer profile (Company tab)
    ------------------------------------------------------------------
-   Tinted cards with gradient icon chips rather than a flat run of
-   headings. `--tone` is set per card and drives the chip, the accent
-   rule and the hover tint from one place. */
+   Editorial rather than boxed: a compact facts strip, then the
+   long-form sections as native <details> so a wall of prose can be
+   collapsed. No nested cards — the panel is already a card. */
 .jf-company-profile[hidden] {
   display: none;
 }
 
-.jf-company-profile {
-  --tone: var(--jf-teal, #1ca6a0);
-  --tone-deep: var(--jf-teal-dark, #127d7a);
-}
-
-.jf-cprofile-card--teal,
-.jf-cprofile-story--teal {
-  --tone: #1ca6a0;
-  --tone-deep: #0f5f73;
-}
-
-.jf-cprofile-card--gold,
-.jf-cprofile-story--gold {
-  --tone: #e6a53f;
-  --tone-deep: #b7791f;
-}
-
-.jf-cprofile-story--ocean {
-  --tone: #2f8fb0;
-  --tone-deep: #0f5f73;
-}
-
-.jf-cprofile-story--navy {
-  --tone: #4e7fe5;
-  --tone-deep: #24457f;
-}
-
-/* Shared chip
+/* Facts strip
    ------------------------------------------------------------------ */
-.jf-cprofile-card__icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 42px;
-  height: 42px;
-  flex-shrink: 0;
-  color: #fff;
-  background: linear-gradient(135deg, var(--tone), var(--tone-deep));
-  border-radius: 14px;
-  box-shadow: 0 8px 18px color-mix(in srgb, var(--tone) 34%, transparent);
-  font-size: 0.95rem;
-}
-
-/* Fact cards
-   ------------------------------------------------------------------ */
-.jf-company-profile__cards {
+.jf-cprofile-meta {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
-  gap: 16px;
-  margin-bottom: 22px;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 18px 26px;
+  padding-bottom: 22px;
+  margin-bottom: 6px;
+  border-bottom: 1px solid var(--jf-line, #dce5e7);
 }
 
-.jf-cprofile-card {
-  position: relative;
-  overflow: hidden;
-  padding: 20px 22px 22px;
-  background:
-    linear-gradient(180deg, color-mix(in srgb, var(--tone) 7%, transparent), transparent 62%),
-    var(--jf-paper, #fff);
-  border: 1px solid var(--jf-line, #dce5e7);
-  border-radius: 20px;
-  transition: transform 220ms var(--jf-ease-out, ease), box-shadow 220ms ease;
+.jf-cprofile-meta__item--wide {
+  grid-column: 1 / -1;
 }
 
-.jf-cprofile-card::before {
-  content: "";
-  position: absolute;
-  inset: 0 0 auto;
-  height: 3px;
-  background: linear-gradient(90deg, var(--tone), transparent);
-}
-
-.jf-cprofile-card:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--jf-shadow-md, 0 16px 40px rgba(11, 38, 56, 0.09));
-}
-
-.jf-cprofile-card__head,
-.jf-cprofile-story__head {
-  display: flex;
-  align-items: center;
-  gap: 13px;
-  margin-bottom: 15px;
-}
-
-.jf-job-page__article .jf-cprofile-card__head h3,
-.jf-job-page__article .jf-cprofile-story__head h3 {
-  margin: 0;
-  color: var(--jf-ink, #102a43);
-  font-size: 1rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-}
-
-.jf-cprofile-facts {
-  display: grid;
-  gap: 9px;
-  margin: 0;
-}
-
-.jf-cprofile-facts__row {
-  display: flex;
-  align-items: baseline;
-  gap: 10px;
-  padding-bottom: 9px;
-  border-bottom: 1px dashed var(--jf-line, #dce5e7);
-}
-
-.jf-cprofile-facts__row:last-child {
-  padding-bottom: 0;
-  border-bottom: 0;
-}
-
-.jf-cprofile-facts dt {
-  min-width: 104px;
+.jf-cprofile-meta dt {
+  margin-bottom: 5px;
   color: var(--jf-ink-soft, #486581);
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   font-weight: 700;
-  letter-spacing: 0.07em;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
 }
 
-.jf-cprofile-facts dd {
+.jf-cprofile-meta dd {
   margin: 0;
   color: var(--jf-ink, #102a43);
-  font-size: 0.88rem;
+  font-size: 0.9rem;
   font-weight: 600;
+  line-height: 1.55;
 }
 
-.jf-job-page__article .jf-cprofile-card__text {
-  margin: 0;
-  color: var(--jf-ink-soft, #486581);
-  font-size: 0.87rem;
-  line-height: 1.7;
-}
-
-.jf-cprofile-card__link {
+.jf-cprofile-meta__link {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  margin-top: 12px;
-  color: var(--tone-deep);
-  font-size: 0.83rem;
+  gap: 6px;
+  margin-top: 6px;
+  color: var(--jf-teal-dark, #127d7a);
+  font-size: 0.84rem;
   font-weight: 700;
   text-decoration: none;
 }
 
-.jf-cprofile-card__link:hover {
-  color: var(--tone-deep);
+.jf-cprofile-meta__link:hover {
+  color: var(--jf-teal-dark, #127d7a);
   text-decoration: underline;
 }
 
-.jf-cprofile-card__link i {
-  font-size: 0.72rem;
+.jf-cprofile-meta__link i {
+  font-size: 0.68rem;
 }
 
-/* Narrative sections
+/* Collapsible sections
    ------------------------------------------------------------------ */
-.jf-cprofile-story {
-  position: relative;
-  padding: 20px 22px 20px 24px;
-  margin-bottom: 14px;
-  background: var(--jf-paper, #fff);
-  border: 1px solid var(--jf-line, #dce5e7);
-  border-radius: 20px;
-  transition: border-color 220ms ease, box-shadow 220ms ease;
+.jf-cprofile-item {
+  border-bottom: 1px solid var(--jf-line, #dce5e7);
 }
 
-/* Accent rule down the left edge, tinted per section. */
-.jf-cprofile-story::before {
+.jf-cprofile-item:last-child {
+  border-bottom: 0;
+}
+
+.jf-cprofile-item__summary {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 18px 0;
+  cursor: pointer;
+  list-style: none;
+}
+
+/* Hide the native disclosure marker in both engines. */
+.jf-cprofile-item__summary::-webkit-details-marker {
+  display: none;
+}
+
+.jf-cprofile-item__summary::marker {
   content: "";
-  position: absolute;
-  top: 20px;
-  bottom: 20px;
-  left: 0;
-  width: 3px;
-  background: linear-gradient(180deg, var(--tone), transparent);
-  border-radius: 0 3px 3px 0;
 }
 
-.jf-cprofile-story:hover {
-  border-color: color-mix(in srgb, var(--tone) 42%, var(--jf-line, #dce5e7));
-  box-shadow: var(--jf-shadow-md, 0 16px 40px rgba(11, 38, 56, 0.09));
+.jf-cprofile-item__summary:focus-visible {
+  outline: 3px solid rgba(28, 166, 160, 0.3);
+  outline-offset: 3px;
+  border-radius: 10px;
 }
 
-.jf-cprofile-story:last-child {
-  margin-bottom: 4px;
+.jf-cprofile-item__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  color: var(--jf-teal-dark, #127d7a);
+  background: color-mix(in srgb, var(--jf-teal, #1ca6a0) 12%, transparent);
+  border-radius: 10px;
+  font-size: 0.8rem;
+  transition: color 200ms ease, background 200ms ease;
 }
 
-.jf-cprofile-story__body {
-  padding-left: 55px;
+.jf-cprofile-item[open] .jf-cprofile-item__icon {
+  color: #fff;
+  background: var(--jf-teal-dark, #127d7a);
 }
 
-.jf-job-page__article .jf-cprofile-story__body p {
+.jf-cprofile-item__title {
+  flex: 1;
+  color: var(--jf-ink, #102a43);
+  font-size: 0.98rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.jf-cprofile-item__chevron {
+  flex-shrink: 0;
+  color: var(--jf-ink-soft, #486581);
+  font-size: 0.72rem;
+  transition: transform 220ms var(--jf-ease-out, ease);
+}
+
+.jf-cprofile-item[open] .jf-cprofile-item__chevron {
+  transform: rotate(180deg);
+}
+
+.jf-cprofile-item__body {
+  padding: 0 0 20px 47px;
+}
+
+.jf-job-page__article .jf-cprofile-item__body p {
   margin: 0 0 12px;
   color: var(--jf-ink-soft, #486581);
   font-size: 0.88rem;
   line-height: 1.75;
 }
 
-.jf-cprofile-story__body p:last-child {
+.jf-cprofile-item__body p:last-child {
   margin-bottom: 0;
 }
 
-@media (max-width: 560px) {
-  .jf-cprofile-story__body {
-    padding-left: 0;
-  }
-
-  .jf-cprofile-facts__row {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 3px;
-  }
-
-  .jf-cprofile-facts dt {
-    min-width: 0;
+@media (prefers-reduced-motion: no-preference) {
+  .jf-cprofile-item[open] .jf-cprofile-item__body {
+    animation: jf-cprofile-reveal 260ms var(--jf-ease-out, ease) both;
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .jf-cprofile-card:hover {
-    transform: none;
+@keyframes jf-cprofile-reveal {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 560px) {
+  .jf-cprofile-item__body {
+    padding-left: 0;
   }
 }
 

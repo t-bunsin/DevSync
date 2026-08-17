@@ -10,6 +10,7 @@
     @php
         $total = $posts->count();
         $filters = ['' => 'All', 'published' => 'Published', 'draft' => 'Draft', 'closed' => 'Closed'];
+        $isFiltered = $activeStatus || $searchTerm || $fromDate || $toDate;
     @endphp
 
     <div class="kh-bo">
@@ -87,14 +88,26 @@
             <div class="kh-bo__card-head">
                 <div>
                     <h2>All job posts</h2>
-                    <p>{{ $total }} {{ \Illuminate\Support\Str::plural('post', $total) }} shown.</p>
+                    <p>
+                        {{ $total }} {{ \Illuminate\Support\Str::plural('post', $total) }} shown.
+                        @if ($fromDate || $toDate)
+                            Posted
+                            @if ($fromDate && $toDate)
+                                {{ $fromDate }} – {{ $toDate }}.
+                            @elseif ($fromDate)
+                                from {{ $fromDate }}.
+                            @else
+                                up to {{ $toDate }}.
+                            @endif
+                        @endif
+                    </p>
                 </div>
 
                 <div class="kh-bo__tools">
                     <div class="kh-bo__filters">
                         @foreach ($filters as $value => $label)
                             <a class="kh-bo__filter{{ (string) $activeStatus === (string) $value ? ' is-active' : '' }}"
-                                href="{{ route('job-posts.index', array_filter(['status' => $value, 'q' => $searchTerm])) }}">
+                                href="{{ route('job-posts.index', array_filter(['status' => $value, 'q' => $searchTerm, 'from' => $fromDate, 'to' => $toDate])) }}">
                                 {{ $label }}
                             </a>
                         @endforeach
@@ -106,7 +119,19 @@
                         @endif
                         <input type="search" name="q" value="{{ $searchTerm }}"
                             placeholder="Search title or company" aria-label="Search job posts">
+
+                        <div class="kh-bo__range">
+                            <input type="date" name="from" value="{{ $fromDate }}"
+                                aria-label="Posted from date" title="Posted from date">
+                            <span aria-hidden="true">–</span>
+                            <input type="date" name="to" value="{{ $toDate }}"
+                                aria-label="Posted end date" title="Posted end date">
+                        </div>
+
                         <button class="kh-bo__btn kh-bo__btn--ghost" type="submit">Search</button>
+                        @if ($isFiltered)
+                            <a class="kh-bo__btn kh-bo__btn--ghost" href="{{ route('job-posts.index') }}">Clear</a>
+                        @endif
                     </form>
                 </div>
             </div>
@@ -118,8 +143,10 @@
                             <th scope="col">Role</th>
                             <th scope="col">Location</th>
                             <th scope="col">Type</th>
+                            <th scope="col">Registered</th>
                             <th scope="col">Status</th>
                             <th scope="col">Posted</th>
+                            <th scope="col">Post by</th>
                             <th scope="col"><span class="visually-hidden">Actions</span></th>
                         </tr>
                     </thead>
@@ -128,10 +155,18 @@
                             <tr>
                                 <td>
                                     <div class="kh-bo__identity">
-                                        <span class="kh-bo__logo" aria-hidden="true">{{ strtoupper(substr($post->company, 0, 2)) }}</span>
+                                        <span class="kh-bo__logo" aria-hidden="true">
+                                            @if ($post->employer?->logoUrl())
+                                                <img src="{{ $post->employer->logoUrl() }}" alt="">
+                                            @elseif ($post->employer)
+                                                {{ $post->employer->initials() }}
+                                            @else
+                                                {{ strtoupper(substr($post->company, 0, 2)) }}
+                                            @endif
+                                        </span>
                                         <div>
                                             <span class="kh-bo__name">
-                                                {{ $post->title }}
+                                                <a class="kh-bo__name-link" href="{{ route('job-posts.show', $post) }}">{{ $post->title }}</a>
                                                 @if ($post->featured)
                                                     <span class="kh-bo__status kh-bo__status--verified">Featured</span>
                                                 @endif
@@ -139,7 +174,13 @@
                                                     <span class="kh-bo__status kh-bo__status--pending">Spotlight</span>
                                                 @endif
                                             </span>
-                                            <span class="kh-bo__ref">{{ $post->company }} · /jobs/{{ $post->slug }}</span>
+                                            <span class="kh-bo__ref">
+                                                {{ $post->company }}
+                                                @if ($post->employer?->hasVerifiedCompliance())
+                                                    <x-verified-badge :show-label="false" :size="14" />
+                                                @endif
+                                                · /jobs/{{ $post->slug }}
+                                            </span>
                                         </div>
                                     </div>
                                 </td>
@@ -148,17 +189,36 @@
                                 <td>{{ $post->type }} · {{ $post->mode }}</td>
 
                                 <td>
+                                    @if ($post->created_at)
+                                        {{ $post->created_at->format('d M Y') }}
+                                    @else
+                                        <span class="kh-bo__ref">—</span>
+                                    @endif
+                                </td>
+
+                                <td>
                                     <span class="kh-bo__status kh-bo__status--{{ $post->status === 'published' ? 'verified' : ($post->status === 'draft' ? 'pending' : 'rejected') }}">
                                         {{ ucfirst($post->status) }}
                                     </span>
                                 </td>
 
-                                <td>
+                                <td class="kh-bo__posted">
                                     @if ($post->isPublished())
-                                        {{ $post->postedLabel() }}
-                                        <span class="kh-bo__ref">{{ $post->deadlineLabel() }}</span>
+                                        {{ ucfirst($post->postedAgo()) }}
+                                        <span class="kh-bo__ref kh-bo__deadline kh-bo__deadline--{{ $post->deadlineTone() }}">
+                                            {{ $post->deadlineLabel() }}
+                                        </span>
                                     @else
                                         <span class="kh-bo__ref">Not live</span>
+                                    @endif
+                                </td>
+
+                                <td>
+                                    @if ($post->author)
+                                        {{ $post->author->displayName() }}
+                                        <span class="kh-bo__ref">{{ $post->author->email }}</span>
+                                    @else
+                                        <span class="kh-bo__ref">Unknown</span>
                                     @endif
                                 </td>
 
@@ -197,11 +257,11 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6">
+                                <td colspan="8">
                                     <div class="kh-bo__empty">
                                         <strong>No job posts</strong>
                                         <span>
-                                            @if ($activeStatus || $searchTerm)
+                                            @if ($isFiltered)
                                                 Nothing matches this filter.
                                                 <a href="{{ route('job-posts.index') }}">Clear it</a> to see everything.
                                             @else
