@@ -157,7 +157,13 @@
                             <tr>
                                 <td>
                                     <div class="kh-bo__identity">
-                                        <span class="kh-bo__logo" aria-hidden="true">{{ $resume->initials() }}</span>
+                                        <span class="kh-bo__logo" aria-hidden="true">
+                                            @if ($resume->photoUrl())
+                                                <img src="{{ $resume->photoUrl() }}" alt="">
+                                            @else
+                                                {{ $resume->initials() }}
+                                            @endif
+                                        </span>
                                         <div>
                                             <span class="kh-bo__name">{{ $resume->full_name }}</span>
                                             <span class="kh-bo__ref">{{ $resume->email ?: 'No email' }}</span>

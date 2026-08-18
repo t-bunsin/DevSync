@@ -456,3 +456,13 @@ html[data-admin-theme="dark"] .datatable-table {
     transition-duration: 0.01ms !important;
   }
 }
+
+html[data-admin-theme="dark"] .kh-admin-clock {
+  color: #c5d5d9;
+  background: #0e1b21;
+  border-color: #293d45;
+}
+
+html[data-admin-theme="dark"] .kh-admin-clock__time {
+  color: #edf6f7;
+}

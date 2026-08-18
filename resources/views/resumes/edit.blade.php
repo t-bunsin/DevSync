@@ -30,7 +30,7 @@
             </div>
         </header>
 
-        <form method="POST" action="{{ route('resumes.update', $resume) }}">
+        <form method="POST" action="{{ route('resumes.update', $resume) }}" enctype="multipart/form-data">
             @csrf
             @method('PUT')
             @include('resumes._form', ['resume' => $resume])

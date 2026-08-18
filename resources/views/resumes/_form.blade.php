@@ -31,6 +31,35 @@
             <span>The contact block printed at the top of the resume.</span>
         </div>
 
+        <div class="kh-bo__field kh-bo__field--wide">
+            <span class="kh-bo__label">Photo</span>
+            <div class="kh-bo__logo-field">
+                <span class="kh-bo__logo-preview" aria-hidden="true">
+                    @if ($resume->photoUrl())
+                        <img src="{{ $resume->photoUrl() }}" alt="">
+                    @else
+                        {{ $isEdit ? $resume->initials() : '—' }}
+                    @endif
+                </span>
+                <div class="kh-bo__field" style="flex: 1;">
+                    <input @class(['kh-bo__control', 'is-invalid' => $errors->has('photo')])
+                        id="photo" name="photo" type="file" accept="image/png,image/jpeg,image/webp">
+                    <span class="kh-bo__hint">JPG, PNG or WebP, up to 2 MB. Without one the initials are used.</span>
+
+                    @if ($isEdit && $resume->photo)
+                        <label class="kh-bo__checkbox">
+                            <input type="checkbox" name="remove_photo" value="1">
+                            Remove the current photo
+                        </label>
+                    @endif
+
+                    @error('photo')
+                        <span class="kh-bo__error">{{ $message }}</span>
+                    @enderror
+                </div>
+            </div>
+        </div>
+
         <div class="kh-bo__field">
             <label class="kh-bo__label" for="full_name">
                 Full name <span class="kh-bo__required" aria-hidden="true">*</span>

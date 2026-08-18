@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Storage;
 
 class Resume extends Model
 {
@@ -133,6 +134,41 @@ class Resume extends Model
         return preg_match('/^(\d{4})-(\d{2})$/', (string) $value, $m) === 1
             ? "{$m[2]}/{$m[1]}"
             : '';
+    }
+
+    public function hasPhoto(): bool
+    {
+        return $this->photo !== null && Storage::disk('public')->exists($this->photo);
+    }
+
+    /**
+     * asset() rather than Storage::url(): the latter builds on APP_URL, which
+     * points at the production host and breaks every photo when the app is
+     * served from anywhere else. Same call as Compliance::logoUrl().
+     */
+    public function photoUrl(): ?string
+    {
+        return $this->photo ? asset('storage/' . $this->photo) : null;
+    }
+
+    /**
+     * The photo inlined as a data URI, for the PDF.
+     *
+     * dompdf resolves image paths against a chroot of public_path(), and
+     * public/storage is a symlink out to storage/app/public — so a plain path
+     * or URL resolves outside the chroot and renders as a broken image. Base64
+     * sidesteps the filesystem entirely.
+     */
+    public function photoDataUri(): ?string
+    {
+        if (! $this->hasPhoto()) {
+            return null;
+        }
+
+        $disk = Storage::disk('public');
+        $mime = $disk->mimeType($this->photo) ?: 'image/jpeg';
+
+        return 'data:' . $mime . ';base64,' . base64_encode($disk->get($this->photo));
     }
 
     /** Two letters for the avatar tile, mirroring Compliance::initials(). */

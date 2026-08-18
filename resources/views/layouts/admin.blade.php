@@ -65,6 +65,15 @@
             </form> --}}
         <!-- Navbar Items-->
         <ul class="navbar-nav align-items-center ms-auto">
+            {{-- Local clock. Rendered hidden and filled in by admin-clock.js:
+                 APP_TIMEZONE is UTC, so a server-rendered value would show the
+                 wrong time until the script replaced it. --}}
+            <li class="nav-item d-none d-md-block me-3 kh-admin-clock-item">
+                <time class="kh-admin-clock" id="khAdminClock" hidden>
+                    <span data-clock-date></span>
+                    <span class="kh-admin-clock__time" data-clock-time></span>
+                </time>
+            </li>
             <li class="nav-item me-2 me-sm-3 kh-admin-theme-item">
                 <button class="kh-admin-theme-toggle" type="button" aria-label="Switch to dark theme"
                     aria-pressed="false" title="Switch to dark theme">
@@ -645,6 +654,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous">
     </script>
     <script src="{{ asset('js/admin-theme.js') }}"></script>
+    <script src="{{ asset('js/admin-clock.js') }}"></script>
     <script src="{{ asset('js/script.js') }}"></script>
     @if (request()->routeIs('companies'))
         <script src="{{ asset('js/app.js') }}"></script>

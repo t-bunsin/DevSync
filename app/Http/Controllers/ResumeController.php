@@ -6,6 +6,7 @@ use App\Models\Resume;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
@@ -69,6 +70,7 @@ class ResumeController extends Controller
         $resume = new Resume($this->validated($request));
 
         $this->fillSections($resume, $request);
+        $this->syncPhoto($resume, $request);
         $resume->created_by = Auth::id();
         $resume->save();
 
@@ -110,6 +112,7 @@ class ResumeController extends Controller
         $resume->fill($this->validated($request));
 
         $this->fillSections($resume, $request);
+        $this->syncPhoto($resume, $request);
         $resume->save();
 
         return redirect()
@@ -121,6 +124,7 @@ class ResumeController extends Controller
     {
         $name = $resume->full_name;
 
+        $this->deletePhoto($resume);
         $resume->delete();
 
         return redirect()
@@ -145,6 +149,7 @@ class ResumeController extends Controller
             'summary' => 'nullable|string|max:2000',
             'status' => ['required', Rule::in(Resume::statuses())],
             'skills' => 'nullable|string|max:2000',
+            'photo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ];
 
         foreach (Resume::SECTIONS as $section => $fields) {
@@ -162,12 +167,47 @@ class ResumeController extends Controller
             $rules[$key] = 'nullable|regex:/^\d{4}-\d{2}$/';
         }
 
-        return $request->validate($rules, [
+        $validated = $request->validate($rules, [
             'full_name.required' => 'Enter the name this resume belongs to.',
+            'photo.image' => 'The photo must be an image file.',
+            'photo.max' => 'The photo must be 2 MB or smaller.',
             'work_history.*.started_on.regex' => 'Enter work history dates as a month and year.',
             'work_history.*.ended_on.regex' => 'Enter work history dates as a month and year.',
             'education.*.graduated_on.regex' => 'Enter the graduation date as a month and year.',
         ]);
+
+        // syncPhoto() stores the upload and writes the path; mass assigning the
+        // UploadedFile itself would put an object where a path belongs.
+        unset($validated['photo']);
+
+        return $validated;
+    }
+
+    /**
+     * Applies a new upload, or clears the current photo when the remove box is
+     * ticked. Replacing always deletes the old file first, so swapping a photo
+     * repeatedly does not leave orphans behind on disk.
+     */
+    private function syncPhoto(Resume $resume, Request $request): void
+    {
+        if ($request->hasFile('photo')) {
+            $this->deletePhoto($resume);
+            $resume->photo = $request->file('photo')->store('resume-photos', 'public');
+
+            return;
+        }
+
+        if ($request->boolean('remove_photo')) {
+            $this->deletePhoto($resume);
+            $resume->photo = null;
+        }
+    }
+
+    private function deletePhoto(Resume $resume): void
+    {
+        if ($resume->photo) {
+            Storage::disk('public')->delete($resume->photo);
+        }
     }
 
     /**

@@ -18,7 +18,7 @@
             <a class="kh-bo__btn kh-bo__btn--ghost" href="{{ route('resumes.index') }}">Back to register</a>
         </header>
 
-        <form method="POST" action="{{ route('resumes.store') }}">
+        <form method="POST" action="{{ route('resumes.store') }}" enctype="multipart/form-data">
             @csrf
             @include('resumes._form', ['resume' => $resume])
         </form>

@@ -34,7 +34,13 @@
 
         <article class="kh-cv">
             <header class="kh-cv__head">
-                <span class="kh-cv__monogram" aria-hidden="true">{{ $resume->initials() }}</span>
+                <span @class(['kh-cv__monogram', 'kh-cv__monogram--photo' => $resume->photoUrl()]) aria-hidden="true">
+                    @if ($resume->photoUrl())
+                        <img src="{{ $resume->photoUrl() }}" alt="">
+                    @else
+                        {{ $resume->initials() }}
+                    @endif
+                </span>
                 <div>
                     <h2 class="kh-cv__name">{{ $resume->full_name }}</h2>
                     @if ($contact)

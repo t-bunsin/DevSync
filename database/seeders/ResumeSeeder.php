@@ -6,6 +6,7 @@ use App\Models\Resume;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * One sample resume, filled in end to end so every section of the register,
@@ -133,6 +134,37 @@ class ResumeSeeder extends Seeder
             ])
             ->save();
 
+        $this->installPhoto(Resume::where('email', self::EMAIL)->first());
+
         $this->command?->info('Seeded 1 resume for Olivia Martinez.');
+    }
+
+    /**
+     * Copies the bundled placeholder portrait onto the public disk, mirroring
+     * CompanySeeder::installArtwork(). Skipped when the resume already points
+     * at a file that exists, so a real upload survives a re-run.
+     *
+     * The asset is a generic silhouette rather than a photograph of a person —
+     * seed data ships with the repo, and a real face does not belong in it.
+     */
+    private function installPhoto(Resume $resume): void
+    {
+        if ($resume->photo && Storage::disk('public')->exists($resume->photo)) {
+            return;
+        }
+
+        $source = __DIR__ . '/assets/resume-photo.jpg';
+
+        if (! is_file($source)) {
+            $this->command?->warn("Seed asset missing: {$source}");
+
+            return;
+        }
+
+        $target = 'resume-photos/sample-resume-photo.jpg';
+
+        Storage::disk('public')->put($target, file_get_contents($source));
+
+        $resume->forceFill(['photo' => $target])->save();
     }
 }

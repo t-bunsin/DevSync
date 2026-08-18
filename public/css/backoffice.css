@@ -1120,3 +1120,15 @@ textarea.kh-bo__control {
     grid-template-columns: 1fr;
   }
 }
+
+.kh-cv__monogram--photo {
+  padding: 0;
+  overflow: hidden;
+  border-color: var(--kh-line);
+}
+
+.kh-cv__monogram img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

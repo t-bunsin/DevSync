@@ -33,6 +33,9 @@
             letter-spacing: 1px;
         }
         .monogram div { padding-top: 18px; }
+        /* dompdf has no object-fit, so the box is sized and the source is
+           expected to be roughly square; a portrait crop still reads fine. */
+        .photo { width: 54px; height: 54px; border: 1px solid #d9dde3; }
         .name { font-size: 25px; font-weight: normal; letter-spacing: 1px; margin: 0; }
         .contact { color: #6b7280; font-size: 8.5px; margin: 5px 0 0; }
 
@@ -62,12 +65,17 @@
         // Split into the two printed columns, longer half on the left.
         $skillColumns = array_chunk($skills, (int) ceil(count($skills) / 2) ?: 1);
         $languages = array_chunk($resume->section('languages'), 2);
+        $photo = $resume->photoDataUri();
     @endphp
 
     <table class="head">
         <tr>
             <td style="width: 74px;">
-                <table class="monogram"><tr><td><div>{{ $resume->initials() }}</div></td></tr></table>
+                @if ($photo)
+                    <img class="photo" src="{{ $photo }}" alt="">
+                @else
+                    <table class="monogram"><tr><td><div>{{ $resume->initials() }}</div></td></tr></table>
+                @endif
             </td>
             <td>
                 <h1 class="name">{{ strtoupper($resume->full_name) }}</h1>
