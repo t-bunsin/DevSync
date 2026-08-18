@@ -10,6 +10,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\JobPostController;
+use App\Http\Controllers\ResumeController;
 use Illuminate\Http\Request;
 
 
@@ -61,6 +62,10 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('job-posts', JobPostController::class)
         ->parameters(['job-posts' => 'jobPost']);
+
+    Route::get('/resumes/{resume}/download', [ResumeController::class, 'download'])
+        ->name('resumes.download');
+    Route::resource('resumes', ResumeController::class);
 
     // Index keeps the bare `companies` name that the admin shell already links to.
     Route::get('/companies', [CompaniesController::class, 'index'])->name('companies');

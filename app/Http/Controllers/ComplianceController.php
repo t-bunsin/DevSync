@@ -18,10 +18,19 @@ class ComplianceController extends Controller
 
     public function index(Request $request)
     {
+        $from = $this->dateInput($request->query('from'));
+        $to = $this->dateInput($request->query('to'));
+
+        // A backwards range would silently return nothing, so read it as given.
+        if ($from && $to && $from > $to) {
+            [$from, $to] = [$to, $from];
+        }
+
         $records = Compliance::query()
             ->with('verifier')
             ->status($request->query('status'))
             ->search($request->query('q'))
+            ->expiringBetween($from, $to)
             ->orderByDesc('created_at')
             ->get();
 
@@ -37,6 +46,8 @@ class ComplianceController extends Controller
             'counts' => $counts,
             'activeStatus' => $request->query('status'),
             'searchTerm' => $request->query('q'),
+            'fromDate' => $from,
+            'toDate' => $to,
         ]);
     }
 

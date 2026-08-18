@@ -295,9 +295,9 @@
                         </div>
                         <!-- Sidenav Accordion (Applications)-->
                         <!-- Applications Menu -->
-                        <a class="nav-link collapsed {{ request()->is('applications/*') || request()->routeIs('users', 'user.*', 'job-posts.*') || request()->is('user-management-*') ? 'kh-nav-parent-active' : '' }}"
+                        <a class="nav-link collapsed {{ request()->is('applications/*') || request()->routeIs('users', 'user.*', 'job-posts.*', 'resumes.*') || request()->is('user-management-*') ? 'kh-nav-parent-active' : '' }}"
                             href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseApps"
-                            aria-expanded="{{ request()->is('applications/*') || request()->routeIs('users', 'user.*', 'job-posts.*') || request()->is('user-management-*') ? 'true' : 'false' }}"
+                            aria-expanded="{{ request()->is('applications/*') || request()->routeIs('users', 'user.*', 'job-posts.*', 'resumes.*') || request()->is('user-management-*') ? 'true' : 'false' }}"
                             aria-controls="collapseApps">
                             <div class="nav-link-icon">
                                 <i data-feather="globe"></i>
@@ -306,7 +306,7 @@
                             <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
 
-                        <div class="collapse {{ request()->is('applications/*') || request()->routeIs('users', 'user.*', 'job-posts.*') || request()->is('user-management-*') ? 'show' : '' }}"
+                        <div class="collapse {{ request()->is('applications/*') || request()->routeIs('users', 'user.*', 'job-posts.*', 'resumes.*') || request()->is('user-management-*') ? 'show' : '' }}"
                             id="collapseApps" data-bs-parent="#accordionSidenav">
                             <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavAppsMenu">
 
@@ -347,6 +347,26 @@
                                             href="{{ route('job-posts.index') }}">Job Posts</a>
                                         <a class="nav-link {{ request()->routeIs('job-posts.create') ? 'active fw-bold' : '' }}"
                                             href="{{ route('job-posts.create') }}">Add Job Post</a>
+                                    </nav>
+                                </div>
+
+                                <!-- Resume Management Inside Applications -->
+                                <a class="nav-link collapsed {{ request()->routeIs('resumes.*') ? 'kh-nav-parent-active fw-bold' : '' }}"
+                                    href="javascript:void(0);" data-bs-toggle="collapse"
+                                    data-bs-target="#appsCollapseResumes"
+                                    aria-expanded="{{ request()->routeIs('resumes.*') ? 'true' : 'false' }}"
+                                    aria-controls="appsCollapseResumes">
+                                    Resume Management
+                                    <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                </a>
+
+                                <div class="collapse {{ request()->routeIs('resumes.*') ? 'show' : '' }}"
+                                    id="appsCollapseResumes" data-bs-parent="#accordionSidenavAppsMenu">
+                                    <nav class="sidenav-menu-nested nav">
+                                        <a class="nav-link {{ request()->routeIs('resumes.index') ? 'active fw-bold' : '' }}"
+                                            href="{{ route('resumes.index') }}">Resumes</a>
+                                        <a class="nav-link {{ request()->routeIs('resumes.create') ? 'active fw-bold' : '' }}"
+                                            href="{{ route('resumes.create') }}">Add Resume</a>
                                     </nav>
                                 </div>
 

@@ -13,11 +13,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Order matters: compliance needs a company, and the compliance
-        // sign-off needs an admin to attribute it to.
+        // Order matters: compliance needs a company, and both the compliance
+        // sign-off and the resume need an admin to attribute them to.
         $this->call(UserSeeder::class);
         $this->call(CompanySeeder::class);
         $this->call(JobPostSeeder::class);
         $this->call(ComplianceSeeder::class);
+        $this->call(ResumeSeeder::class);
     }
 }

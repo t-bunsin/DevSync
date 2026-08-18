@@ -10873,3 +10873,53 @@ Stack trace:
 [stacktrace]
 #0 {main}
 "} 
+[2026-08-18 15:12:25] local.ERROR: Undefined variable $errors (View: /Users/toengbunsin/Documents/development/DevSync/resources/views/resumes/_form.blade.php) (View: /Users/toengbunsin/Documents/development/DevSync/resources/views/resumes/_form.blade.php) {"userId":"01a01052-4ab8-730b-9ade-49825ce9edce","exception":"[object] (Illuminate\\View\\ViewException(code: 0): Undefined variable $errors (View: /Users/toengbunsin/Documents/development/DevSync/resources/views/resumes/_form.blade.php) (View: /Users/toengbunsin/Documents/development/DevSync/resources/views/resumes/_form.blade.php) at /Users/toengbunsin/Documents/development/DevSync/storage/framework/views/40542012f4ef31247b8a024f418ab432.php:16)
+[stacktrace]
+#0 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/Engines/PhpEngine.php(59): Illuminate\\View\\Engines\\CompilerEngine->handleViewException(Object(Illuminate\\View\\ViewException), 0)
+#1 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/Engines/CompilerEngine.php(74): Illuminate\\View\\Engines\\PhpEngine->evaluatePath('/Users/toengbun...', Array)
+#2 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/View.php(208): Illuminate\\View\\Engines\\CompilerEngine->get('/Users/toengbun...', Array)
+#3 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/View.php(191): Illuminate\\View\\View->getContents()
+#4 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/View.php(160): Illuminate\\View\\View->renderContents()
+#5 /private/tmp/claude-501/-Users-toengbunsin-Documents-development-DevSync/05c6776e-c9e1-40bd-ab64-c3ee50afb4d8/scratchpad/rows.php(9): Illuminate\\View\\View->render()
+#6 {main}
+
+[previous exception] [object] (Illuminate\\View\\ViewException(code: 0): Undefined variable $errors (View: /Users/toengbunsin/Documents/development/DevSync/resources/views/resumes/_form.blade.php) at /Users/toengbunsin/Documents/development/DevSync/storage/framework/views/40542012f4ef31247b8a024f418ab432.php:16)
+[stacktrace]
+#0 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/Engines/PhpEngine.php(59): Illuminate\\View\\Engines\\CompilerEngine->handleViewException(Object(ErrorException), 2)
+#1 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/Engines/CompilerEngine.php(74): Illuminate\\View\\Engines\\PhpEngine->evaluatePath('/Users/toengbun...', Array)
+#2 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/View.php(208): Illuminate\\View\\Engines\\CompilerEngine->get('/Users/toengbun...', Array)
+#3 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/View.php(191): Illuminate\\View\\View->getContents()
+#4 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/View.php(160): Illuminate\\View\\View->renderContents()
+#5 /Users/toengbunsin/Documents/development/DevSync/storage/framework/views/d2ba5a5aaa97db5c39e28a1c53480324.php(21): Illuminate\\View\\View->render()
+#6 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(123): require('/Users/toengbun...')
+#7 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(124): Illuminate\\Filesystem\\Filesystem::{closure:Illuminate\\Filesystem\\Filesystem::getRequire():120}()
+#8 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/Engines/PhpEngine.php(57): Illuminate\\Filesystem\\Filesystem->getRequire('/Users/toengbun...', Array)
+#9 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/Engines/CompilerEngine.php(74): Illuminate\\View\\Engines\\PhpEngine->evaluatePath('/Users/toengbun...', Array)
+#10 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/View.php(208): Illuminate\\View\\Engines\\CompilerEngine->get('/Users/toengbun...', Array)
+#11 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/View.php(191): Illuminate\\View\\View->getContents()
+#12 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/View.php(160): Illuminate\\View\\View->renderContents()
+#13 /private/tmp/claude-501/-Users-toengbunsin-Documents-development-DevSync/05c6776e-c9e1-40bd-ab64-c3ee50afb4d8/scratchpad/rows.php(9): Illuminate\\View\\View->render()
+#14 {main}
+
+[previous exception] [object] (ErrorException(code: 0): Undefined variable $errors at /Users/toengbunsin/Documents/development/DevSync/storage/framework/views/40542012f4ef31247b8a024f418ab432.php:16)
+[stacktrace]
+#0 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php(256): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleError(2, 'Undefined varia...', '/Users/toengbun...', 16)
+#1 /Users/toengbunsin/Documents/development/DevSync/storage/framework/views/40542012f4ef31247b8a024f418ab432.php(16): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->{closure:Illuminate\\Foundation\\Bootstrap\\HandleExceptions::forwardsTo():255}(2, 'Undefined varia...', '/Users/toengbun...', 16)
+#2 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(123): require('/Users/toengbun...')
+#3 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(124): Illuminate\\Filesystem\\Filesystem::{closure:Illuminate\\Filesystem\\Filesystem::getRequire():120}()
+#4 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/Engines/PhpEngine.php(57): Illuminate\\Filesystem\\Filesystem->getRequire('/Users/toengbun...', Array)
+#5 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/Engines/CompilerEngine.php(74): Illuminate\\View\\Engines\\PhpEngine->evaluatePath('/Users/toengbun...', Array)
+#6 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/View.php(208): Illuminate\\View\\Engines\\CompilerEngine->get('/Users/toengbun...', Array)
+#7 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/View.php(191): Illuminate\\View\\View->getContents()
+#8 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/View.php(160): Illuminate\\View\\View->renderContents()
+#9 /Users/toengbunsin/Documents/development/DevSync/storage/framework/views/d2ba5a5aaa97db5c39e28a1c53480324.php(21): Illuminate\\View\\View->render()
+#10 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(123): require('/Users/toengbun...')
+#11 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(124): Illuminate\\Filesystem\\Filesystem::{closure:Illuminate\\Filesystem\\Filesystem::getRequire():120}()
+#12 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/Engines/PhpEngine.php(57): Illuminate\\Filesystem\\Filesystem->getRequire('/Users/toengbun...', Array)
+#13 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/Engines/CompilerEngine.php(74): Illuminate\\View\\Engines\\PhpEngine->evaluatePath('/Users/toengbun...', Array)
+#14 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/View.php(208): Illuminate\\View\\Engines\\CompilerEngine->get('/Users/toengbun...', Array)
+#15 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/View.php(191): Illuminate\\View\\View->getContents()
+#16 /Users/toengbunsin/Documents/development/DevSync/vendor/laravel/framework/src/Illuminate/View/View.php(160): Illuminate\\View\\View->renderContents()
+#17 /private/tmp/claude-501/-Users-toengbunsin-Documents-development-DevSync/05c6776e-c9e1-40bd-ab64-c3ee50afb4d8/scratchpad/rows.php(9): Illuminate\\View\\View->render()
+#18 {main}
+"} 

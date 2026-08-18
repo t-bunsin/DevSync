@@ -82,6 +82,19 @@ class Compliance extends Model
         });
     }
 
+    /**
+     * Expiry window for the back office inquiry filter. A record with no
+     * expiry date is left out of a dated search — an open-ended document has
+     * no expiry to fall inside the range being asked about.
+     */
+    public function scopeExpiringBetween(Builder $query, ?string $from, ?string $to): Builder
+    {
+        return $query
+            ->when($from || $to, fn (Builder $q) => $q->whereNotNull('expires_on'))
+            ->when($from, fn (Builder $q) => $q->whereDate('expires_on', '>=', $from))
+            ->when($to, fn (Builder $q) => $q->whereDate('expires_on', '<=', $to));
+    }
+
     public function isVerified(): bool
     {
         return $this->status === self::STATUS_VERIFIED;

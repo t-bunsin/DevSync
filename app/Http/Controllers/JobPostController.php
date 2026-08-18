@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Company;
 use App\Models\Compliance;
 use App\Models\JobPost;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -57,22 +56,6 @@ class JobPostController extends Controller
             'fromDate' => $from,
             'toDate' => $to,
         ]);
-    }
-
-    /** Only a well-formed Y-m-d survives; anything else drops the filter. */
-    private function dateInput(mixed $value): ?string
-    {
-        $value = is_string($value) ? trim($value) : '';
-
-        if ($value === '') {
-            return null;
-        }
-
-        try {
-            return Carbon::createFromFormat('Y-m-d', $value)->toDateString();
-        } catch (\Throwable) {
-            return null;
-        }
     }
 
     public function create()
