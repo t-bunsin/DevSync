@@ -60,7 +60,7 @@
 
         $activities = [
             ['icon' => 'building', 'tone' => 'teal', 'title' => 'Tech Horizon submitted verification', 'meta' => 'Company review · just now', 'href' => route('companies')],
-            ['icon' => 'user-plus', 'tone' => 'blue', 'title' => '12 candidates completed their profiles', 'meta' => 'Candidate activity · 38 minutes ago', 'href' => route('users')],
+            ['icon' => 'user-plus', 'tone' => 'blue', 'title' => '12 candidates completed their profiles', 'meta' => 'Candidate activity · 38 minutes ago', 'href' => route('resumes.index')],
             ['icon' => 'check-circle', 'tone' => 'gold', 'title' => 'Product Designer reached its target', 'meta' => 'Hiring milestone · 2 hours ago', 'href' => route('companies')],
             ['icon' => 'briefcase', 'tone' => 'violet', 'title' => 'ABA Bank published a new role', 'meta' => 'New listing · today', 'href' => route('companies')],
         ];
@@ -174,7 +174,7 @@
                         <h2>Pipeline health</h2>
                         <p>Where candidates are right now.</p>
                     </div>
-                    <a href="{{ route('users') }}" aria-label="View all candidates"><i data-feather="arrow-up-right"></i></a>
+                    <a href="{{ route('resumes.index') }}" aria-label="View all candidates"><i data-feather="arrow-up-right"></i></a>
                 </header>
 
                 <div class="kh-pipeline__total"><div><strong>623</strong><span>active candidates</span></div><span class="kh-status-dot">On track</span></div>
@@ -194,7 +194,7 @@
             <article class="kh-panel kh-activity">
                 <header class="kh-panel__head">
                     <div><span class="kh-panel__kicker">Live feed</span><h2>Recent activity</h2></div>
-                    <a href="{{ route('users') }}" class="kh-text-button">View all <i data-feather="arrow-right"></i></a>
+                    <a href="{{ route('resumes.index') }}" class="kh-text-button">View all <i data-feather="arrow-right"></i></a>
                 </header>
                 <div class="kh-activity__list">
                     @foreach ($activities as $activity)

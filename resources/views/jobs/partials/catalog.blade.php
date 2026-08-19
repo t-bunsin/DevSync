@@ -163,10 +163,20 @@
                         <span id="detail-applicants">{{ $selectedJob['applicants'] }}</span>
                     </div>
 
-                    <button class="jf-btn jf-btn--apply js-apply-job" id="detail-apply-button" type="button"
-                        data-job-id="{{ $selectedJob['id'] }}">
-                        Apply for this role <i class="fas fa-arrow-right" aria-hidden="true"></i>
-                    </button>
+                    @auth
+                        <button class="jf-btn jf-btn--apply js-apply-job" id="detail-apply-button" type="button"
+                            data-job-id="{{ $selectedJob['id'] }}">
+                            Apply for this role <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                        </button>
+                    @else
+                        {{-- Applying needs an account; the gate route sorts that out. --}}
+                        <a class="jf-btn jf-btn--apply" id="detail-apply-button"
+                            href="{{ route('jobs.apply', $selectedJob['id']) }}"
+                            data-job-id="{{ $selectedJob['id'] }}"
+                            data-url-template="{{ route('jobs.apply', '__JOB__') }}">
+                            Register to apply <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                        </a>
+                    @endauth
                     <a class="jf-detail__page-link" id="detail-page-link"
                         href="{{ route('jobs.show', $selectedJob['id']) }}"
                         data-url-template="{{ route('jobs.show', '__JOB__') }}">
@@ -220,6 +230,7 @@
     </div>
 </section>
 
+@auth
 <dialog class="jf-apply-dialog" id="apply-dialog" aria-labelledby="apply-dialog-title">
     <button class="jf-dialog__close" type="button" data-close-dialog aria-label="Close application form">
         <i class="fas fa-xmark" aria-hidden="true"></i>
@@ -229,8 +240,10 @@
     <h2 id="apply-dialog-title">Apply for <span id="apply-job-title">this role</span></h2>
     <p>Leave your details and the hiring team can follow up. This demo does not send data to an employer.</p>
     <form id="apply-form">
-        <label>Full name<input name="name" type="text" autocomplete="name" required></label>
-        <label>Email address<input name="email" type="email" autocomplete="email" required></label>
+        <label>Full name<input name="name" type="text" autocomplete="name"
+                value="{{ auth()->user()->displayName() }}" required></label>
+        <label>Email address<input name="email" type="email" autocomplete="email"
+                value="{{ auth()->user()->email }}" required></label>
         <button class="jf-btn jf-btn--apply" type="submit">
             Create application draft <i class="fas fa-arrow-right" aria-hidden="true"></i>
         </button>
@@ -239,5 +252,6 @@
         <i class="fas fa-circle-check" aria-hidden="true"></i> Your application draft is ready.
     </p>
 </dialog>
+@endauth
 
 <script type="application/json" id="jobs-data">@json($jobs)</script>

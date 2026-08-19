@@ -262,6 +262,17 @@
   text-align: center;
 }
 
+/* The sign-in shortcut for guests who already have an account. */
+.jf-job-page__demo-note a {
+  color: rgba(231, 245, 245, 0.9);
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+.jf-job-page__demo-note a:hover {
+  color: #fff;
+}
+
 .jf-job-page__layout {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(280px, 340px);

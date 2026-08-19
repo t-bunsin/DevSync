@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Compliance;
 use App\Models\JobPost;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\View\View;
 
@@ -38,6 +40,34 @@ class JobController extends Controller
             'job' => $selectedJob,
             'relatedJobs' => $relatedJobs,
         ]);
+    }
+
+    /**
+     * The apply gate. Browsing stays open to everyone; sending an application
+     * needs an account, so a guest is parked at registration and returned to
+     * this job — with the form open — as soon as the account exists.
+     */
+    public function apply(string $job): RedirectResponse
+    {
+        $selectedJob = $this->catalog()->firstWhere('id', $job);
+
+        abort_unless($selectedJob, 404);
+
+        $target = route('jobs.show', $selectedJob['id']) . '?apply=1';
+
+        if (Auth::check()) {
+            return redirect()->to($target);
+        }
+
+        // Both the login and register controllers finish on this key, so the
+        // visitor lands back here whichever route they take.
+        session(['url.intended' => $target]);
+
+        return redirect()->route('register')->with('status', sprintf(
+            'Create a free account to apply for %s at %s.',
+            $selectedJob['title'],
+            $selectedJob['company'],
+        ));
     }
 
     /**

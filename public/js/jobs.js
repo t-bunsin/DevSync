@@ -78,14 +78,14 @@ document.addEventListener('DOMContentLoaded', () => {
         detailSaveButton,
         detailApplyButton,
         detailPageLink,
-        applyDialog,
-        applyForm,
-        applySuccess,
-        applyJobTitle,
-        closeDialogButton,
         jobsSection,
         ...Object.values(detailFields),
     ];
+
+    // Guests see a link to the apply gate where members see this dialog, so
+    // every part of it is optional from here on.
+    const hasApplyDialog = Boolean(applyDialog && applyForm && applySuccess
+        && applyJobTitle && closeDialogButton);
 
     if (cards.length === 0 || previewButtons.length !== cards.length || tabs.length === 0
         || requiredElements.some((element) => !element)) {
@@ -283,6 +283,14 @@ document.addEventListener('DOMContentLoaded', () => {
         detailFields.quickText.textContent = job.quick_apply.text;
         detailApplyButton.dataset.jobId = jobId;
         detailPageLink.href = detailPageLink.dataset.urlTemplate.replace('__JOB__', encodeURIComponent(jobId));
+
+        // Only the guest apply link carries a template; the member button posts
+        // nowhere and opens the dialog instead.
+        if (detailApplyButton.dataset.urlTemplate) {
+            detailApplyButton.href = detailApplyButton.dataset.urlTemplate
+                .replace('__JOB__', encodeURIComponent(jobId));
+        }
+
         positionDetail(jobId);
 
         renderFacts(job);
@@ -400,6 +408,10 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const openApplyDialog = (jobId) => {
+        if (!hasApplyDialog) {
+            return;
+        }
+
         const job = jobsById[jobId] || jobsById[activeJobId];
 
         applyJobTitle.textContent = job.title;
@@ -520,21 +532,23 @@ document.addEventListener('DOMContentLoaded', () => {
         button.addEventListener('click', () => openApplyDialog(button.dataset.jobId));
     });
 
-    closeDialogButton.addEventListener('click', () => applyDialog.close());
-    applyDialog.addEventListener('click', (event) => {
-        const bounds = applyDialog.getBoundingClientRect();
-        const isOutside = event.clientX < bounds.left || event.clientX > bounds.right
-            || event.clientY < bounds.top || event.clientY > bounds.bottom;
-        if (isOutside) {
-            applyDialog.close();
-        }
-    });
+    if (hasApplyDialog) {
+        closeDialogButton.addEventListener('click', () => applyDialog.close());
+        applyDialog.addEventListener('click', (event) => {
+            const bounds = applyDialog.getBoundingClientRect();
+            const isOutside = event.clientX < bounds.left || event.clientX > bounds.right
+                || event.clientY < bounds.top || event.clientY > bounds.bottom;
+            if (isOutside) {
+                applyDialog.close();
+            }
+        });
 
-    applyForm.addEventListener('submit', (event) => {
-        event.preventDefault();
-        applyForm.hidden = true;
-        applySuccess.hidden = false;
-    });
+        applyForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            applyForm.hidden = true;
+            applySuccess.hidden = false;
+        });
+    }
 
     let resizeFrame;
     window.addEventListener('resize', () => {

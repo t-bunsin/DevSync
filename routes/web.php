@@ -32,6 +32,12 @@ Route::get('/jobs/{job}', [JobController::class, 'show'])
     ->where('job', '[a-z0-9-]+')
     ->name('jobs.show');
 
+// Applying is the one candidate action that needs an account, so the button
+// always lands here first and this route decides where the visitor goes.
+Route::get('/jobs/{job}/apply', [JobController::class, 'apply'])
+    ->where('job', '[a-z0-9-]+')
+    ->name('jobs.apply');
+
 Route::get('/language/{locale}', function (Request $request, string $locale) {
     abort_unless(in_array($locale, ['en', 'kh'], true), 404);
 
@@ -52,9 +58,13 @@ Route::put('/profile', 'ProfileController@update')->name('profile.update');
 
 
 Route::middleware('auth')->group(function () {
-    Route::get('/users', [UserController::class, 'index'])->name('users');
-    Route::post('/users', [UserController::class, 'store'])->name('users.store');
-    Route::resource('user', UserController::class);
+    // Managing accounts is an administrator job. Everyone else is refused at
+    // the door rather than served a filtered directory.
+    Route::middleware('admin')->group(function () {
+        Route::get('/users', [UserController::class, 'index'])->name('users');
+        Route::post('/users', [UserController::class, 'store'])->name('users.store');
+        Route::resource('user', UserController::class);
+    });
 
     Route::post('/compliance/{compliance}/verify', [ComplianceController::class, 'verify'])
         ->name('compliance.verify');

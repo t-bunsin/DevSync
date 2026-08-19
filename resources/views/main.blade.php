@@ -328,29 +328,33 @@
     </section>
      <section class="jf-steps" id="how-it-works" aria-labelledby="steps-title">
         <div class="jf-shell">
-            <div class="jf-steps__heading">
-                <div>
-                    <span class="jf-kicker">How it works</span>
-                    <h2 id="steps-title">Find your dream job in {{ count($howItWorks) }} steps</h2>
+            <div class="jf-steps__panel">
+                <div class="jf-steps__heading">
+                    <div>
+                        <span class="jf-kicker">How it works</span>
+                        <h2 id="steps-title">Find your dream job in <em>{{ count($howItWorks) }} steps</em></h2>
+                    </div>
+                    <p>From a two-minute profile to a sent application — no account required until you apply.</p>
                 </div>
-                <p>From a two-minute profile to a sent application — no account required until you apply.</p>
+
+                <ol class="jf-steps__list">
+                    @foreach ($howItWorks as $index => $step)
+                        <li class="jf-step" style="--jf-step-index: {{ $index }}">
+                            <span class="jf-step__connector" aria-hidden="true"></span>
+
+                            <div class="jf-step__top">
+                                <span class="jf-step__number" aria-hidden="true">{{ $index + 1 }}</span>
+                                <span class="jf-step__icon" aria-hidden="true"><i class="fas {{ $step['icon'] }}"></i></span>
+                            </div>
+
+                            <h3>{{ $step['title'] }}</h3>
+                            <p>{{ $step['body'] }}</p>
+                            <span class="jf-step__note">{{ $step['note'] }}</span>
+                            <span class="jf-step__ghost" aria-hidden="true">{{ $index + 1 }}</span>
+                        </li>
+                    @endforeach
+                </ol>
             </div>
-
-            <ol class="jf-steps__list">
-                @foreach ($howItWorks as $index => $step)
-                    <li class="jf-step">
-                        <div class="jf-step__top">
-                            <span class="jf-step__number" aria-hidden="true">{{ $index + 1 }}</span>
-                            <span class="jf-step__rail" aria-hidden="true"></span>
-                            <span class="jf-step__icon" aria-hidden="true"><i class="fas {{ $step['icon'] }}"></i></span>
-                        </div>
-
-                        <h3>{{ $step['title'] }}</h3>
-                        <p>{{ $step['body'] }}</p>
-                        <span class="jf-step__note">{{ $step['note'] }}</span>
-                    </li>
-                @endforeach
-            </ol>
         </div>
     </section>
 

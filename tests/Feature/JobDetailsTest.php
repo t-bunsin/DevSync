@@ -46,10 +46,6 @@ class JobDetailsTest extends TestCase
             'detail-quick-apply',
             'detail-quick-title',
             'detail-quick-text',
-            'apply-dialog',
-            'apply-job-title',
-            'apply-form',
-            'apply-success',
             'jobs-data',
         ];
 
@@ -57,7 +53,9 @@ class JobDetailsTest extends TestCase
             $this->assertSame(1, substr_count($html, 'id="' . $id . '"'), "Expected #{$id} exactly once.");
         }
 
-        $this->assertSame(1, substr_count($html, 'data-close-dialog'));
+        // The application form is members-only; a guest gets the apply gate.
+        $this->assertSame(0, substr_count($html, 'data-close-dialog'));
+        $this->assertSame(0, substr_count($html, 'id="apply-form"'));
         $this->assertSame(3, substr_count($html, 'data-tab="'));
 
         foreach (config('jobs_demo') as $job) {

@@ -163,14 +163,26 @@
             updateSaveButton();
         });
 
+        // Guests get a link to the apply gate instead of this dialog, so none
+        // of the form markup is on the page for them.
         const openApplyDialog = () => {
+            if (!applyDialog || !applyForm) {
+                return;
+            }
+
             applyForm.hidden = false;
             applySuccess.hidden = true;
+            // Restores the account name and email the fields ship with.
             applyForm.reset();
             applyDialog.showModal();
         };
 
         applyButton?.addEventListener('click', openApplyDialog);
+
+        // Coming back from registration with ?apply=1 opens the form straight away.
+        if (applyButton?.hasAttribute('data-job-page-auto-open')) {
+            openApplyDialog();
+        }
         document.querySelector('[data-job-page-close]')?.addEventListener('click', () => applyDialog.close());
         applyDialog?.addEventListener('click', (event) => {
             const bounds = applyDialog.getBoundingClientRect();

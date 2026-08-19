@@ -165,7 +165,9 @@
                                             @endif
                                         </span>
                                         <div>
-                                            <span class="kh-bo__name">{{ $resume->full_name }}</span>
+                                            <span class="kh-bo__name">
+                                                <a class="kh-bo__name-link" href="{{ route('resumes.show', $resume) }}">{{ $resume->full_name }}</a>
+                                            </span>
                                             <span class="kh-bo__ref">{{ $resume->email ?: 'No email' }}</span>
                                         </div>
                                     </div>

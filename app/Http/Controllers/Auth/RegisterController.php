@@ -45,6 +45,15 @@ class RegisterController extends Controller
     }
 
     /**
+     * Registration normally ends on the dashboard, but a visitor who was sent
+     * here by the job apply gate goes back to the role they wanted.
+     */
+    protected function redirectTo()
+    {
+        return session()->pull('url.intended', $this->redirectTo);
+    }
+
+    /**
      * Get a validator for an incoming registration request.
      *
      * @param  array  $data

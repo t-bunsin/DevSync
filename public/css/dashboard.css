@@ -127,6 +127,14 @@ body.nav-fixed {
   font-weight: 700;
 }
 
+/* An uploaded photo fills the circle; without one the initials show through. */
+.kh-user-avatar__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
 .kh-user-avatar--large {
   width: 48px !important;
   min-width: 48px;

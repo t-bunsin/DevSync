@@ -44,7 +44,7 @@
             <div>
                 <strong>{{ __('ui.footer.account') }}</strong>
                 @auth
-                    <a href="{{ route('users') }}">{{ __('ui.actions.dashboard') }}</a>
+                    <a href="{{ url('/home') }}">{{ __('ui.actions.dashboard') }}</a>
                     <a href="{{ route('profile') }}">{{ __('ui.actions.profile') }}</a>
                 @else
                     <a href="{{ route('login') }}">{{ __('ui.actions.sign_in') }}</a>

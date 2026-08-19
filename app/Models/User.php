@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\HasApiTokens;
 
 /**
@@ -18,6 +20,18 @@ use Laravel\Sanctum\HasApiTokens;
 class User extends Authenticatable
 {
     use HasFactory, Notifiable, HasApiTokens, HasUuids;
+
+    /**
+     * Validation for an uploaded profile photo. Lives here so the rule the
+     * controller enforces is the same one the tests assert against.
+     */
+    public const PHOTO_RULES = [
+        'nullable',
+        'image',
+        'mimes:jpg,jpeg,png,webp',
+        'max:2048',
+        'dimensions:min_width=100,min_height=100',
+    ];
 
     public const STATUS_PENDING   = 'pending';
     public const STATUS_ACTIVE    = 'active';
@@ -86,6 +100,46 @@ class User extends Authenticatable
     // Roles
     // -----------------------------------------------------------------
 
+    /**
+     * Admin accounts are back-office identities: only another admin may see
+     * one. Everyone else browses a directory with them filtered out, which is
+     * why this is a query scope and not a view-level `@if` — hiding a row in
+     * Blade still leaves it reachable by URL.
+     */
+    public function scopeVisibleTo(Builder $query, ?self $viewer): Builder
+    {
+        if ($viewer?->isAdmin()) {
+            return $query;
+        }
+
+        return $query->whereDoesntHave('roles', fn (Builder $roles) => $roles->where('code', Role::ADMIN));
+    }
+
+    public function scopeWithRole(Builder $query, ?string $code): Builder
+    {
+        return $code
+            ? $query->whereHas('roles', fn (Builder $roles) => $roles->where('code', $code))
+            : $query;
+    }
+
+    /** Matches the fields the directory actually shows. */
+    public function scopeSearch(Builder $query, ?string $term): Builder
+    {
+        $term = trim((string) $term);
+
+        if ($term === '') {
+            return $query;
+        }
+
+        return $query->where(function (Builder $inner) use ($term) {
+            $inner->where('display_name', 'like', "%{$term}%")
+                ->orWhere('first_name', 'like', "%{$term}%")
+                ->orWhere('last_name', 'like', "%{$term}%")
+                ->orWhere('email', 'like', "%{$term}%")
+                ->orWhere('phone', 'like', "%{$term}%");
+        });
+    }
+
     public function hasRole(string $code): bool
     {
         return $this->roles->contains('code', $code);
@@ -151,6 +205,34 @@ class User extends Authenticatable
     public static function composeDisplayName(?string $first, ?string $last): ?string
     {
         return trim(trim((string) $first) . ' ' . trim((string) $last)) ?: null;
+    }
+
+    /**
+     * The column predates uploads and may still hold a full external URL, so
+     * anything already absolute is handed back untouched and only stored paths
+     * are resolved against the public disk.
+     *
+     * asset() rather than Storage::url(): the latter builds on APP_URL, which
+     * points at the production host and breaks every avatar when the app is
+     * served from anywhere else. Same call as Resume::photoUrl().
+     */
+    public function avatarUrl(): ?string
+    {
+        if (! $this->avatar_url) {
+            return null;
+        }
+
+        return str_starts_with($this->avatar_url, 'http://') || str_starts_with($this->avatar_url, 'https://')
+            ? $this->avatar_url
+            : asset('storage/' . $this->avatar_url);
+    }
+
+    /** True only for an upload still present on disk. */
+    public function hasUploadedAvatar(): bool
+    {
+        return $this->avatar_url
+            && ! str_starts_with($this->avatar_url, 'http')
+            && Storage::disk('public')->exists($this->avatar_url);
     }
 
     public function displayName(): string

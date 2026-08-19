@@ -79,15 +79,30 @@
                         <div><small>Interest</small><span>{{ $job['applicants'] }}</span></div>
                     </div>
 
-                    <button class="jf-btn jf-btn--apply" id="job-page-apply-button" type="button">
-                        Apply for this role <i class="fas fa-arrow-right" aria-hidden="true"></i>
-                    </button>
+                    @auth
+                        <button class="jf-btn jf-btn--apply" id="job-page-apply-button" type="button"
+                            @if (request()->boolean('apply')) data-job-page-auto-open @endif>
+                            Apply for this role <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                        </button>
+                    @else
+                        {{-- Applying needs an account; browsing does not. --}}
+                        <a class="jf-btn jf-btn--apply" href="{{ route('jobs.apply', $job['id']) }}">
+                            Register to apply <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                        </a>
+                    @endauth
                     <button class="jf-job-page__save" id="job-page-save-button" type="button"
                         data-job-id="{{ $job['id'] }}" aria-label="Save {{ $job['title'] }}" aria-pressed="false">
                         <i class="far fa-bookmark" aria-hidden="true"></i>
                         <span>Save job</span>
                     </button>
-                    <small class="jf-job-page__demo-note">Application drafts stay in this demo and are not sent automatically.</small>
+                    @auth
+                        <small class="jf-job-page__demo-note">Application drafts stay in this demo and are not sent automatically.</small>
+                    @else
+                        <small class="jf-job-page__demo-note">
+                            A free account is required to apply — it takes under two minutes.
+                            Already registered? <a href="{{ route('login') }}">Sign in</a>.
+                        </small>
+                    @endauth
                 </aside>
             </div>
 
@@ -307,6 +322,7 @@
         </div>
     </section>
 
+    @auth
     <dialog class="jf-apply-dialog" id="job-page-apply-dialog" aria-labelledby="job-page-dialog-title">
         <button class="jf-dialog__close" type="button" data-job-page-close aria-label="Close application form">
             <i class="fas fa-xmark" aria-hidden="true"></i>
@@ -316,8 +332,11 @@
         <h2 id="job-page-dialog-title">Apply for <span>{{ $job['title'] }}</span></h2>
         <p>Leave your details and prepare an application draft for {{ $job['company'] }}. This demo does not send data to the employer.</p>
         <form id="job-page-apply-form">
-            <label>Full name<input name="name" type="text" autocomplete="name" required></label>
-            <label>Email address<input name="email" type="email" autocomplete="email" required></label>
+            {{-- Prefilled from the account the visitor had to create to get here. --}}
+            <label>Full name<input name="name" type="text" autocomplete="name"
+                    value="{{ auth()->user()->displayName() }}" required></label>
+            <label>Email address<input name="email" type="email" autocomplete="email"
+                    value="{{ auth()->user()->email }}" required></label>
             <button class="jf-btn jf-btn--apply" type="submit">
                 Create application draft <i class="fas fa-arrow-right" aria-hidden="true"></i>
             </button>
@@ -326,6 +345,7 @@
             <i class="fas fa-circle-check" aria-hidden="true"></i> Your application draft is ready.
         </p>
     </dialog>
+    @endauth
 
     <script type="application/json" id="job-page-data">@json($job)</script>
 @endsection

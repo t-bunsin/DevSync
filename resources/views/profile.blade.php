@@ -1,157 +1,182 @@
 @extends('layouts.admin')
 
+@section('title', 'My profile | KH-WORKS Admin')
+
+@push('styles')
+    <link href="{{ asset('css/backoffice.css') }}?v={{ filemtime(public_path('css/backoffice.css')) }}" rel="stylesheet" />
+@endpush
+
 @section('main-content')
-    <!-- Page Heading -->
-    {{-- <h1 class="container-xl px-4 mt-4">{{ __('Profile') }}</h1>
-     --}}
-     <header class="page-header page-header-compact page-header-light border-bottom bg-white mb-4">
-        <div class="container-xl px-4">
-            <div class="page-header-content">
-                <div class="row align-items-center justify-content-between pt-3">
-                    <div class="col-auto mb-3">
-                        <h1 class="page-header-title">
-                            <div class="page-header-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>
-                            Account Settings - Profile
-                        </h1>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>
-    
-    @if (session('success'))
-        <div class="alert alert-success border-left-success alert-dismissible fade show" role="alert">
-            {{ session('success') }}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-    @endif
+    @php
+        $user = Auth::user();
+        $primaryRole = $user->primaryRole();
+    @endphp
 
-    @if ($errors->any())
-        <div class="alert alert-danger border-left-danger" role="alert">
-            <ul class="pl-4 my-2">
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-
-    <div class="row">
-
-        <div class="col-lg-4 order-lg-2">
-
-            <div class="card shadow mb-4">
-                <div class="card-profile-image mt-4">
-                    <figure class="rounded-circle avatar avatar font-weight-bold" style="font-size: 60px; height: 180px; width: 180px;" data-initial="{{ mb_substr(Auth::user()->initials(), 0, 1) }}"></figure>
-                </div>
-                <div class="card-body">
-
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="text-center">
-                                <h5 class="font-weight-bold">{{ Auth::user()->displayName() }}</h5>
-                                <p>Administrator</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="card-profile-stats">
-                                <span class="heading">22</span>
-                                <span class="description">Friends</span>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="card-profile-stats">
-                                <span class="heading">10</span>
-                                <span class="description">Photos</span>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="card-profile-stats">
-                                <span class="heading">89</span>
-                                <span class="description">Comments</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    <div class="kh-bo">
+        <header class="kh-bo__head">
+            <div>
+                <span class="kh-bo__kicker">Account</span>
+                <h1>My profile</h1>
+                <p>Your photo, contact details, and password.</p>
             </div>
 
-        </div>
+            <a class="kh-bo__btn kh-bo__btn--ghost" href="{{ url('/home') }}">Back to dashboard</a>
+        </header>
 
-        <div class="col-lg-8 order-lg-1">
-
-            <div class="card shadow mb-4">
-
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">My Account</h6>
-                </div>
-
-                <div class="card-body">
-
-                    <form>
-                        <!-- Form Group (username)-->
-                        <div class="mb-3">
-                            <label class="small mb-1" for="inputUsername">Username (how your name will appear to other users on the site)</label>
-                            <input class="form-control" id="inputUsername" type="text" placeholder="Enter your username" value="username">
-                        </div>
-                        <!-- Form Row-->
-                        <div class="row gx-3 mb-3">
-                            <!-- Form Group (first name)-->
-                            <div class="col-md-6">
-                                <label class="small mb-1" for="inputFirstName">First name</label>
-                                <input class="form-control" id="inputFirstName" type="text" placeholder="Enter your first name" value="Valerie">
-                            </div>
-                            <!-- Form Group (last name)-->
-                            <div class="col-md-6">
-                                <label class="small mb-1" for="inputLastName">Last name</label>
-                                <input class="form-control" id="inputLastName" type="text" placeholder="Enter your last name" value="Luna">
-                            </div>
-                        </div>
-                        <!-- Form Row        -->
-                        <div class="row gx-3 mb-3">
-                            <!-- Form Group (organization name)-->
-                            <div class="col-md-6">
-                                <label class="small mb-1" for="inputOrgName">Organization name</label>
-                                <input class="form-control" id="inputOrgName" type="text" placeholder="Enter your organization name" value="Start Bootstrap">
-                            </div>
-                            <!-- Form Group (location)-->
-                            <div class="col-md-6">
-                                <label class="small mb-1" for="inputLocation">Location</label>
-                                <input class="form-control" id="inputLocation" type="text" placeholder="Enter your location" value="San Francisco, CA">
-                            </div>
-                        </div>
-                        <!-- Form Group (email address)-->
-                        <div class="mb-3">
-                            <label class="small mb-1" for="inputEmailAddress">Email address</label>
-                            <input class="form-control" id="inputEmailAddress" type="email" placeholder="Enter your email address" value="name@example.com">
-                        </div>
-                        <!-- Form Row-->
-                        <div class="row gx-3 mb-3">
-                            <!-- Form Group (phone number)-->
-                            <div class="col-md-6">
-                                <label class="small mb-1" for="inputPhone">Phone number</label>
-                                <input class="form-control" id="inputPhone" type="tel" placeholder="Enter your phone number" value="555-123-4567">
-                            </div>
-                            <!-- Form Group (birthday)-->
-                            <div class="col-md-6">
-                                <label class="small mb-1" for="inputBirthday">Birthday</label>
-                                <input class="form-control" id="inputBirthday" type="text" name="birthday" placeholder="Enter your birthday" value="06/10/1988">
-                            </div>
-                        </div>
-                        <!-- Save changes button-->
-                        <button class="btn btn-primary" type="button">Save changes</button>
-                    </form>
-
-                </div>
-
+        @if (session('success'))
+            <div class="kh-bo__flash" role="status">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                    stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M20 6L9 17l-5-5" />
+                </svg>
+                <span>{{ session('success') }}</span>
             </div>
+        @endif
 
-        </div>
+        @if ($errors->any())
+            <div class="kh-bo__errors" role="alert">
+                <strong>Please check the highlighted fields.</strong>
+                <ul>
+                    @foreach ($errors->all() as $message)
+                        <li>{{ $message }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
 
+        <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data">
+            @csrf
+            @method('PUT')
+
+            <div class="kh-bo__form-card">
+                <div class="kh-bo__grid">
+                    <div class="kh-bo__section-label">
+                        Photo
+                        <span>Shown on your account menu and in the user directory.</span>
+                    </div>
+
+                    <div class="kh-bo__field kh-bo__field--wide">
+                        <span class="kh-bo__label">Profile photo</span>
+                        <div class="kh-bo__logo-field">
+                            <span class="kh-bo__logo-preview" aria-hidden="true">
+                                @if ($user->avatarUrl())
+                                    <img src="{{ $user->avatarUrl() }}" alt="">
+                                @else
+                                    {{ $user->initials() }}
+                                @endif
+                            </span>
+                            <div class="kh-bo__field" style="flex: 1;">
+                                <input @class(['kh-bo__control', 'is-invalid' => $errors->has('photo')])
+                                    id="photo" name="photo" type="file" accept="image/png,image/jpeg,image/webp">
+                                <span class="kh-bo__hint">
+                                    JPG, PNG or WebP, at least 100 x 100 pixels and up to 2 MB.
+                                    Without one your initials are used.
+                                </span>
+
+                                @if ($user->avatar_url)
+                                    <label class="kh-bo__checkbox">
+                                        <input type="checkbox" name="remove_photo" value="1">
+                                        Remove the current photo
+                                    </label>
+                                @endif
+
+                                @error('photo')
+                                    <span class="kh-bo__error">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="kh-bo__section-label">
+                        Details
+                        <span>
+                            Signed in as {{ $primaryRole?->name_en ?? 'a member' }}.
+                            Roles are managed by an administrator.
+                        </span>
+                    </div>
+
+                    <div class="kh-bo__field">
+                        <label class="kh-bo__label" for="first_name">
+                            First name <span class="kh-bo__required" aria-hidden="true">*</span>
+                        </label>
+                        <input @class(['kh-bo__control', 'is-invalid' => $errors->has('first_name')])
+                            id="first_name" name="first_name" type="text" maxlength="80" required
+                            value="{{ old('first_name', $user->first_name) }}">
+                        @error('first_name')
+                            <span class="kh-bo__error">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div class="kh-bo__field">
+                        <label class="kh-bo__label" for="last_name">
+                            Last name <span class="kh-bo__required" aria-hidden="true">*</span>
+                        </label>
+                        <input @class(['kh-bo__control', 'is-invalid' => $errors->has('last_name')])
+                            id="last_name" name="last_name" type="text" maxlength="80" required
+                            value="{{ old('last_name', $user->last_name) }}">
+                        @error('last_name')
+                            <span class="kh-bo__error">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div class="kh-bo__field">
+                        <label class="kh-bo__label" for="email">
+                            Email <span class="kh-bo__required" aria-hidden="true">*</span>
+                        </label>
+                        <input @class(['kh-bo__control', 'is-invalid' => $errors->has('email')])
+                            id="email" name="email" type="email" maxlength="255" required
+                            autocomplete="email" value="{{ old('email', $user->email) }}">
+                        @error('email')
+                            <span class="kh-bo__error">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div class="kh-bo__field">
+                        <label class="kh-bo__label" for="phone">Phone</label>
+                        <input @class(['kh-bo__control', 'is-invalid' => $errors->has('phone')])
+                            id="phone" name="phone" type="tel" maxlength="30"
+                            autocomplete="tel" value="{{ old('phone', $user->phone) }}">
+                        @error('phone')
+                            <span class="kh-bo__error">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div class="kh-bo__section-label">
+                        Password
+                        <span>Leave these blank to keep your current password.</span>
+                    </div>
+
+                    <div class="kh-bo__field">
+                        <label class="kh-bo__label" for="current_password">Current password</label>
+                        <input @class(['kh-bo__control', 'is-invalid' => $errors->has('current_password')])
+                            id="current_password" name="current_password" type="password" autocomplete="current-password">
+                        @error('current_password')
+                            <span class="kh-bo__error">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div class="kh-bo__field">
+                        <label class="kh-bo__label" for="new_password">New password</label>
+                        <input @class(['kh-bo__control', 'is-invalid' => $errors->has('new_password')])
+                            id="new_password" name="new_password" type="password" autocomplete="new-password">
+                        <span class="kh-bo__hint">At least 8 characters.</span>
+                        @error('new_password')
+                            <span class="kh-bo__error">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div class="kh-bo__field">
+                        <label class="kh-bo__label" for="new_password_confirmation">Confirm new password</label>
+                        <input class="kh-bo__control" id="new_password_confirmation"
+                            name="new_password_confirmation" type="password" autocomplete="new-password">
+                    </div>
+                </div>
+
+                <div class="kh-bo__form-actions">
+                    <a class="kh-bo__btn kh-bo__btn--ghost" href="{{ url('/home') }}">Cancel</a>
+                    <button class="kh-bo__btn" type="submit">Save changes</button>
+                </div>
+            </div>
+        </form>
     </div>
-
 @endsection

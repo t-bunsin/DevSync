@@ -40,6 +40,7 @@
         $adminUser = auth()->user();
         $adminFullName = $adminUser?->displayName() ?? 'Administrator';
         $adminInitial = $adminUser ? mb_substr($adminUser->initials(), 0, 1) : 'A';
+        $adminAvatar = $adminUser?->avatarUrl();
     @endphp
     <nav class="topnav navbar navbar-expand shadow justify-content-between justify-content-sm-start navbar-light bg-white"
         id="sidenavAccordion">
@@ -51,7 +52,7 @@
         <!-- * * Tip * * You can use text or an image for your navbar brand.-->
         <!-- * * * * * * When using an image, we recommend the SVG format.-->
         <!-- * * * * * * Dimensions: Maximum height: 32px, maximum width: 240px-->
-        <a class="navbar-brand kh-admin-brand pe-3 ps-4 ps-lg-2" href="{{ route('users') }}">
+        <a class="navbar-brand kh-admin-brand pe-3 ps-4 ps-lg-2" href="{{ url('/home') }}">
             <span class="kh-admin-brand__mark"><i class="fas fa-briefcase"></i></span>
             <span>KH-<strong>WORKS</strong></span>
         </a>
@@ -127,7 +128,7 @@
                             <div class="dropdown-notifications-item-content-text">Tech Horizon submitted its company verification.</div>
                         </div>
                     </a>
-                    <a class="dropdown-item dropdown-notifications-item" href="{{ route('users') }}">
+                    <a class="dropdown-item dropdown-notifications-item" href="{{ route('resumes.index') }}">
                         <div class="dropdown-notifications-item-icon bg-info"><i data-feather="bar-chart"></i></div>
                         <div class="dropdown-notifications-item-content">
                             <div class="dropdown-notifications-item-content-details">38 minutes ago</div>
@@ -150,7 +151,7 @@
                             <div class="dropdown-notifications-item-content-text">ABA Bank published a new retail role.</div>
                         </div>
                     </a>
-                    <a class="dropdown-item dropdown-notifications-footer" href="{{ route('users') }}">Open workspace</a>
+                    <a class="dropdown-item dropdown-notifications-footer" href="{{ url('/home') }}">Open workspace</a>
                 </div>
             </li>
             <!-- Messages Dropdown-->
@@ -178,32 +179,44 @@
                             <div class="dropdown-notifications-item-content-details">ABA Bank · 1h</div>
                         </div>
                     </a>
-                    <a class="dropdown-item dropdown-notifications-item" href="{{ route('users') }}">
+                    <a class="dropdown-item dropdown-notifications-item" href="{{ route('resumes.index') }}">
                         <span class="dropdown-notifications-item-img kh-message-avatar kh-message-avatar--gold">AC</span>
                         <div class="dropdown-notifications-item-content">
                             <div class="dropdown-notifications-item-content-text">The design portfolio shortlist has been updated.</div>
                             <div class="dropdown-notifications-item-content-details">Angkor Creative · 3h</div>
                         </div>
                     </a>
-                    <a class="dropdown-item dropdown-notifications-item" href="{{ route('users') }}">
+                    <a class="dropdown-item dropdown-notifications-item" href="{{ route('resumes.index') }}">
                         <span class="dropdown-notifications-item-img kh-message-avatar kh-message-avatar--violet">ML</span>
                         <div class="dropdown-notifications-item-content">
                             <div class="dropdown-notifications-item-content-text">Seven new candidates are available for screening.</div>
                             <div class="dropdown-notifications-item-content-details">Matching team · Today</div>
                         </div>
                     </a>
-                    <a class="dropdown-item dropdown-notifications-footer" href="{{ route('users') }}">View candidates</a>
+                    <a class="dropdown-item dropdown-notifications-footer" href="{{ route('resumes.index') }}">View candidates</a>
                 </div>
             </li>
             <!-- User Dropdown-->
             <li class="nav-item dropdown no-caret dropdown-user me-3 me-lg-4">
                 <a class="btn btn-icon btn-transparent-dark dropdown-toggle kh-user-avatar" id="navbarDropdownUserImage"
                     href="javascript:void(0);" role="button" data-bs-toggle="dropdown" aria-haspopup="true"
-                    aria-expanded="false" aria-label="Open account menu">{{ $adminInitial }}</a>
+                    aria-expanded="false" aria-label="Open account menu">
+                    @if ($adminAvatar)
+                        <img class="kh-user-avatar__img" src="{{ $adminAvatar }}" alt="">
+                    @else
+                        {{ $adminInitial }}
+                    @endif
+                </a>
                 <div class="dropdown-menu dropdown-menu-end border-0 shadow animated--fade-in-up"
                     aria-labelledby="navbarDropdownUserImage">
                     <h6 class="dropdown-header d-flex align-items-center">
-                        <span class="dropdown-user-img kh-user-avatar kh-user-avatar--large">{{ $adminInitial }}</span>
+                        <span class="dropdown-user-img kh-user-avatar kh-user-avatar--large">
+                            @if ($adminAvatar)
+                                <img class="kh-user-avatar__img" src="{{ $adminAvatar }}" alt="">
+                            @else
+                                {{ $adminInitial }}
+                            @endif
+                        </span>
                         <div class="dropdown-user-details">
                             <div class="dropdown-user-details-name">{{ $adminFullName }}</div>
                             <div class="dropdown-user-details-email">{{ $adminUser?->email ?? 'admin@khworks.com' }}</div>
@@ -319,6 +332,9 @@
                             id="collapseApps" data-bs-parent="#accordionSidenav">
                             <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavAppsMenu">
 
+                                {{-- Account management is admin-only, so the link is hidden
+                                     from everyone else rather than 403ing on click. --}}
+                                @if ($adminUser?->isAdmin())
                                 <!-- User Management Menu Inside Applications -->
                                 <a class="nav-link collapsed {{ request()->routeIs('users', 'user.*') || request()->is('user-management-*') ? 'kh-nav-parent-active fw-bold' : '' }}"
                                     href="javascript:void(0);" data-bs-toggle="collapse"
@@ -333,11 +349,12 @@
                                     id="appsCollapseUserManagement" data-bs-parent="#accordionSidenavAppsMenu">
                                     <nav class="sidenav-menu-nested nav">
                                         <a class="nav-link {{ request()->is('users') ? 'active fw-bold' : '' }}"
-                                            href="{{ route('users') }}">Users List</a>
+                                            href="{{ route('resumes.index') }}">Users List</a>
                                         <a class="nav-link {{ request()->routeIs('user.create') ? 'active fw-bold' : '' }}"
                                             href="{{ route('user.create') }}">Add New User</a>
                                     </nav>
                                 </div>
+                                @endif
 
                                 <!-- Job Post Management Inside Applications -->
                                 <a class="nav-link collapsed {{ request()->routeIs('job-posts.*') ? 'kh-nav-parent-active fw-bold' : '' }}"

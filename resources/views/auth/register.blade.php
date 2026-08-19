@@ -82,6 +82,14 @@
                     <p>Choose how you want to use KH-WORKS, then fill in your details.</p>
                 </header>
 
+                {{-- Set by the job apply gate so the visitor knows why they are here. --}}
+                @if (session('status'))
+                    <div class="jf-auth__alert jf-auth__alert--success" role="status">
+                        <i class="fas fa-circle-check" aria-hidden="true"></i>
+                        <div><span>{{ session('status') }}</span></div>
+                    </div>
+                @endif
+
                 @if ($errors->any())
                     <div class="jf-auth__alert" role="alert">
                         <i class="fas fa-circle-exclamation" aria-hidden="true"></i>
