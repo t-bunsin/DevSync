@@ -30,21 +30,22 @@
 
 .kh-bill__period {
   display: inline-flex;
+  gap: 4px;
   padding: 4px;
-  margin-bottom: 22px;
-  background: var(--kh-surface);
+  margin-bottom: 24px;
+  background: transparent;
   border: 1px solid var(--kh-line);
   border-radius: 999px;
 }
 
 .kh-bill__period button {
-  padding: 8px 18px;
+  padding: 9px 20px;
   color: var(--kh-muted);
   background: transparent;
   border: 0;
   border-radius: 999px;
-  font-size: 0.82rem;
-  font-weight: 600;
+  font-size: 0.83rem;
+  font-weight: 700;
   cursor: pointer;
   transition: background 150ms ease, color 150ms ease;
 }
@@ -70,58 +71,73 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  padding: 24px;
+  padding: 30px 26px 26px;
   background: var(--kh-surface);
   border: 1px solid var(--kh-line);
-  border-radius: 18px;
+  border-radius: var(--kh-radius-lg);
+  transition: border-color 200ms ease;
+}
+
+.kh-bill__plan:hover {
+  border-color: var(--kh-muted);
 }
 
 .kh-bill__plan--featured {
-  border-color: var(--kh-ocean);
-  box-shadow: 0 0 0 1px var(--kh-ocean);
+  border: 1.5px solid var(--kh-teal);
 }
 
 .kh-bill__plan--current {
-  border-color: var(--bo-blue, var(--kh-ocean));
+  border: 1.5px solid var(--kh-blue);
 }
 
 .kh-bill__plan-badge {
   position: absolute;
-  top: -11px;
-  right: 20px;
-  padding: 4px 12px;
+  top: 0;
+  right: 22px;
+  transform: translateY(-50%);
+  padding: 5px 12px;
   color: #fff;
   background: var(--kh-ocean);
   border-radius: 999px;
-  font-size: 0.68rem;
+  font-size: 0.62rem;
   font-weight: 700;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.kh-bill__plan--current .kh-bill__plan-badge {
+  background: var(--kh-blue);
 }
 
 .kh-bill__plan-name {
-  margin: 0 0 4px;
-  font-size: 1.05rem;
+  margin: 0;
+  color: var(--kh-muted);
+  font-size: 0.72rem;
   font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
 
 .kh-bill__plan-price {
-  margin: 0;
+  margin: 12px 0 0;
   font-size: 1.9rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
 }
 
 .kh-bill__plan-price span {
   color: var(--kh-muted);
-  font-size: 0.85rem;
-  font-weight: 500;
+  font-size: 0.84rem;
+  font-weight: 600;
 }
 
 .kh-bill__plan-note {
-  margin: 2px 0 14px;
+  margin: 4px 0 14px;
   color: var(--kh-muted);
-  font-size: 0.78rem;
+  font-size: 0.76rem;
+  font-weight: 600;
 }
 
 .kh-bill__plan-blurb {
@@ -133,7 +149,8 @@
 .kh-bill__plan-features {
   flex: 1;
   margin: 0 0 20px;
-  padding: 0;
+  padding: 18px 0 0;
+  border-top: 1px solid var(--kh-line);
   list-style: none;
 }
 
@@ -142,10 +159,12 @@
   align-items: flex-start;
   gap: 8px;
   padding: 6px 0;
+  color: var(--kh-muted);
   font-size: 0.82rem;
 }
 
 .kh-bill__plan-features li.is-highlight {
+  color: var(--kh-ink);
   font-weight: 700;
 }
 
