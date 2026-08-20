@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 
 class JobPost extends Model
@@ -97,6 +98,41 @@ class JobPost extends Model
     public function authorLabel(): string
     {
         return $this->author?->displayName() ?: 'Unknown';
+    }
+
+    /** Every application received for this post, newest first when ordered. */
+    public function applications(): HasMany
+    {
+        return $this->hasMany(JobApplication::class);
+    }
+
+    /**
+     * How many candidates applied.
+     *
+     * Real application rows are the answer whenever there are any. The
+     * `applicants` column stays as the manual figure a post can be seeded
+     * with — it is what the public pages showed before applications were
+     * recorded, and imported posts still carry one — so it is only used
+     * while the inbox is empty.
+     *
+     * Reads `applications_count` when the caller eager-loaded it with
+     * withCount(), and falls back to a query so a bare model is still right.
+     */
+    public function applicantCount(): int
+    {
+        return (int) ($this->applications_count ?? $this->applications()->count());
+    }
+
+    /** True once at least one candidate has actually applied. */
+    public function hasApplications(): bool
+    {
+        return $this->applicantCount() > 0;
+    }
+
+    /** The figure the public job pages print, real count first. */
+    public function displayApplicantCount(): int
+    {
+        return $this->hasApplications() ? $this->applicantCount() : (int) $this->applicants;
     }
 
     public function scopePublished(Builder $query): Builder
@@ -274,7 +310,7 @@ class JobPost extends Model
             'deadline' => $this->deadlineLabel(),
             'posted' => $this->postedLabel(),
             'posted_days' => $this->postedDays(),
-            'applicants' => $this->applicants . ' ' . Str::plural('applicant', $this->applicants),
+            'applicants' => $this->displayApplicantCount() . ' ' . Str::plural('applicant', $this->displayApplicantCount()),
             'featured' => (bool) $this->featured,
             'highlighted' => (bool) $this->highlighted,
             'logo' => $this->logo ?: 'default',

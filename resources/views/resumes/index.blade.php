@@ -33,7 +33,6 @@
 
         <header class="kh-bo__head">
             <div>
-                <span class="kh-bo__kicker">Back office</span>
                 <h1>Resumes</h1>
                 <p>Register and maintain the candidate CVs held on the platform.</p>
             </div>

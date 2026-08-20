@@ -344,19 +344,53 @@
         <span class="jf-dialog__icon"><i class="fas fa-paper-plane" aria-hidden="true"></i></span>
         <p class="jf-kicker">Quick application</p>
         <h2 id="job-page-dialog-title">Apply for <span>{{ $job['title'] }}</span></h2>
-        <p>Leave your details and prepare an application draft for {{ $job['company'] }}. This demo does not send data to the employer.</p>
-        <form id="job-page-apply-form">
+        <p>
+            Leave your details and {{ $job['company'] }} receives your application.
+            @if ($ownResume)
+                Your resume on file is attached automatically.
+            @else
+                A CV is required — attach one below.
+            @endif
+        </p>
+        {{-- A real POST: this is what puts the candidate in the employer's
+             Applications inbox and makes the back office count move. --}}
+        <form id="job-page-apply-form" method="POST" action="{{ route('jobs.apply.store', $job['id']) }}">
+            @csrf
             {{-- Prefilled from the account the visitor had to create to get here. --}}
             <label>Full name<input name="name" type="text" autocomplete="name"
                     value="{{ auth()->user()->displayName() }}" required></label>
             <label>Email address<input name="email" type="email" autocomplete="email"
                     value="{{ auth()->user()->email }}" required></label>
+            <label><span>Phone <span class="jf-hint">(optional)</span></span><input name="phone" type="tel" autocomplete="tel"
+                    value="{{ auth()->user()->phone }}"></label>
+            <label><span>Message <span class="jf-hint">(optional)</span></span><textarea name="message" rows="3"
+                    placeholder="Why you are a good fit for this role."></textarea></label>
+            {{-- A CV is required to apply. Candidates who already built a resume
+                 in the dashboard have one attached for them; everyone else
+                 uploads a file here, or follows the link and builds one. --}}
+            @if ($ownResume)
+                <p class="jf-dialog__note">
+                    <i class="fas fa-file-lines" aria-hidden="true"></i>
+                    Your resume <strong>{{ $ownResume->full_name }}</strong> is attached automatically.
+                </p>
+                <label><span>Attach a different CV <span class="jf-hint">(optional)</span></span><input name="cv" type="file"
+                        accept=".pdf,.doc,.docx"></label>
+            @else
+                <label><span>Your CV <span class="jf-hint">(PDF or Word, up to 5 MB)</span></span><input name="cv" type="file"
+                        accept=".pdf,.doc,.docx" required></label>
+                <p class="jf-dialog__note">
+                    <i class="fas fa-circle-info" aria-hidden="true"></i>
+                    No CV to hand? <a href="{{ route('resumes.create') }}">Build one in your dashboard</a>
+                    and it is attached to every application you send.
+                </p>
+            @endif
             <button class="jf-btn jf-btn--apply" type="submit">
-                Create application draft <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                Send application <i class="fas fa-arrow-right" aria-hidden="true"></i>
             </button>
         </form>
+        <p class="jf-dialog__error" id="job-page-apply-error" role="alert" hidden></p>
         <p class="jf-dialog__success" id="job-page-apply-success" role="status" hidden>
-            <i class="fas fa-circle-check" aria-hidden="true"></i> Your application draft is ready.
+            <i class="fas fa-circle-check" aria-hidden="true"></i> Your application was sent.
         </p>
     </dialog>
     @endauth

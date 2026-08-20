@@ -9,8 +9,10 @@ use App\Http\Controllers\CompaniesController;
 use App\Http\Controllers\ComplianceController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\JobApplicationController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\JobPostController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ResumeController;
 use Illuminate\Http\Request;
 
@@ -38,6 +40,13 @@ Route::get('/jobs/{job}', [JobController::class, 'show'])
 Route::get('/jobs/{job}/apply', [JobController::class, 'apply'])
     ->where('job', '[a-z0-9-]+')
     ->name('jobs.apply');
+
+// The apply form itself. Auth is enforced here too, not just on the gate above,
+// so the application can only ever be attributed to a real account.
+Route::post('/jobs/{job}/apply', [JobController::class, 'storeApplication'])
+    ->where('job', '[a-z0-9-]+')
+    ->middleware('auth')
+    ->name('jobs.apply.store');
 
 Route::get('/language/{locale}', function (Request $request, string $locale) {
     abort_unless(in_array($locale, ['en', 'kh'], true), 404);
@@ -70,6 +79,10 @@ Route::prefix('admin')->group(function () {
     Route::post('/account-billing/payway/callback', [BillingController::class, 'paywayCallback'])->name('account-billing.payway.callback');
 
     Route::middleware('auth')->group(function () {
+        // The Activity center bell: polled by the admin shell for new arrivals.
+        Route::get('/notifications', [NotificationController::class, 'feed'])->name('notifications.feed');
+        Route::post('/notifications/read', [NotificationController::class, 'markRead'])->name('notifications.read');
+
         // Managing accounts is an administrator job. Everyone else is refused at
         // the door rather than served a filtered directory.
         Route::middleware('admin')->group(function () {
@@ -84,6 +97,16 @@ Route::prefix('admin')->group(function () {
 
         Route::resource('job-posts', JobPostController::class)
             ->parameters(['job-posts' => 'jobPost']);
+
+        // The candidates behind the Applications count on the job post list.
+        Route::get('/job-posts/{jobPost}/applications', [JobApplicationController::class, 'index'])
+            ->name('job-posts.applications');
+        Route::get('/job-applications/{application}/cv', [JobApplicationController::class, 'downloadCv'])
+            ->name('job-applications.cv');
+        Route::patch('/job-applications/{application}', [JobApplicationController::class, 'update'])
+            ->name('job-applications.update');
+        Route::delete('/job-applications/{application}', [JobApplicationController::class, 'destroy'])
+            ->name('job-applications.destroy');
 
         Route::get('/resumes/{resume}/download', [ResumeController::class, 'download'])
             ->name('resumes.download');

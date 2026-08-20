@@ -44,6 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const applyDialog = explorer.querySelector('#apply-dialog');
     const applyForm = explorer.querySelector('#apply-form');
     const applySuccess = explorer.querySelector('#apply-success');
+    const applyError = explorer.querySelector('#apply-error');
     const applyJobTitle = explorer.querySelector('#apply-job-title');
     const closeDialogButton = explorer.querySelector('[data-close-dialog]');
     const jobsSection = explorer.querySelector('#jobs');
@@ -540,8 +541,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const job = jobsById[jobId] || jobsById[activeJobId];
 
         applyJobTitle.textContent = job.title;
+        // The dialog is shared by every card, so the action is pointed at the
+        // role being applied for each time it opens.
+        applyForm.action = (applyForm.dataset.applyTemplate || '').replace(':job', encodeURIComponent(job.id));
         applyForm.hidden = false;
         applySuccess.hidden = true;
+
+        if (applyError) {
+            applyError.hidden = true;
+        }
+
         applyForm.reset();
         applyDialog.showModal();
     };
@@ -668,10 +677,43 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        applyForm.addEventListener('submit', (event) => {
+        // Posts the application to the selected role. Mirrors the job detail
+        // page — see public/js/job-show.js.
+        applyForm.addEventListener('submit', async (event) => {
             event.preventDefault();
-            applyForm.hidden = true;
-            applySuccess.hidden = false;
+
+            const submitButton = applyForm.querySelector('button[type="submit"]');
+
+            if (applyError) {
+                applyError.hidden = true;
+            }
+            submitButton?.setAttribute('disabled', 'disabled');
+
+            try {
+                const response = await fetch(applyForm.action, {
+                    method: 'POST',
+                    headers: { Accept: 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+                    body: new FormData(applyForm),
+                });
+
+                const payload = await response.json().catch(() => ({}));
+
+                if (!response.ok) {
+                    const fieldError = Object.values(payload.errors || {})[0]?.[0];
+
+                    throw new Error(fieldError || payload.message || 'Your application could not be sent.');
+                }
+
+                applyForm.hidden = true;
+                applySuccess.hidden = false;
+            } catch (error) {
+                if (applyError) {
+                    applyError.textContent = error.message;
+                    applyError.hidden = false;
+                }
+            } finally {
+                submitButton?.removeAttribute('disabled');
+            }
         });
     }
 

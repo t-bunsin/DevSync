@@ -18,7 +18,6 @@
 
         <header class="kh-bo__head">
             <div>
-                <span class="kh-bo__kicker">Back office</span>
                 <h1>Add job post</h1>
                 <p>Publish it and it appears on the homepage explorer and the jobs directory.</p>
             </div>

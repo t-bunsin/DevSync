@@ -7,6 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="KH-WORKS administration workspace" />
     <meta name="author" content="KH-WORKS" />
+    {{-- Read by js/admin-notifications.js when it marks the bell read. --}}
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
     <meta name="theme-color" id="admin-theme-color" content="#ffffff" />
     <script>
         (() => {
@@ -110,47 +112,28 @@
                     </form>
                 </div>
             </li>
-            <!-- Alerts Dropdown-->
-            <li class="nav-item dropdown no-caret d-none d-sm-block me-3 dropdown-notifications">
-                <a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownAlerts"
+            <!-- Alerts Dropdown: real activity, polled by js/admin-notifications.js -->
+            @php
+                $khNotifications = \App\Http\Controllers\NotificationController::latestFor(auth()->user());
+                $khUnread = auth()->user()?->unreadNotifications()->count() ?? 0;
+            @endphp
+            <li class="nav-item dropdown no-caret d-none d-sm-block me-3 dropdown-notifications" data-kh-notifications
+                data-feed-url="{{ route('notifications.feed') }}"
+                data-read-url="{{ route('notifications.read') }}">
+                <a class="btn btn-icon btn-transparent-dark dropdown-toggle kh-notify__toggle" id="navbarDropdownAlerts"
                     href="javascript:void(0);" role="button" data-bs-toggle="dropdown" aria-haspopup="true"
-                    aria-expanded="false" aria-label="Open notifications"><i data-feather="bell"></i></a>
+                    aria-expanded="false" aria-label="Open notifications"><i data-feather="bell"></i>
+                    <span class="kh-notify__badge" data-kh-badge @if ($khUnread === 0) hidden @endif>{{ $khUnread > 9 ? '9+' : $khUnread }}</span>
+                </a>
                 <div class="dropdown-menu dropdown-menu-end border-0 shadow animated--fade-in-up"
                     aria-labelledby="navbarDropdownAlerts">
                     <h6 class="dropdown-header dropdown-notifications-header">
                         <i class="me-2" data-feather="bell"></i>
                         Activity center
                     </h6>
-                    <a class="dropdown-item dropdown-notifications-item" href="{{ route('companies') }}">
-                        <div class="dropdown-notifications-item-icon bg-warning"><i data-feather="activity"></i></div>
-                        <div class="dropdown-notifications-item-content">
-                            <div class="dropdown-notifications-item-content-details">Just now</div>
-                            <div class="dropdown-notifications-item-content-text">Tech Horizon submitted its company verification.</div>
-                        </div>
-                    </a>
-                    <a class="dropdown-item dropdown-notifications-item" href="{{ route('resumes.index') }}">
-                        <div class="dropdown-notifications-item-icon bg-info"><i data-feather="bar-chart"></i></div>
-                        <div class="dropdown-notifications-item-content">
-                            <div class="dropdown-notifications-item-content-details">38 minutes ago</div>
-                            <div class="dropdown-notifications-item-content-text">12 candidates completed their profiles.</div>
-                        </div>
-                    </a>
-                    <a class="dropdown-item dropdown-notifications-item" href="{{ route('companies') }}">
-                        <div class="dropdown-notifications-item-icon bg-danger"><i
-                                class="fas fa-exclamation-triangle"></i></div>
-                        <div class="dropdown-notifications-item-content">
-                            <div class="dropdown-notifications-item-content-details">2 hours ago</div>
-                            <div class="dropdown-notifications-item-content-text">12 candidate reviews have been waiting over 48 hours.</div>
-                        </div>
-                    </a>
-                    <a class="dropdown-item dropdown-notifications-item" href="{{ route('companies') }}">
-                        <div class="dropdown-notifications-item-icon bg-success"><i data-feather="user-plus"></i>
-                        </div>
-                        <div class="dropdown-notifications-item-content">
-                            <div class="dropdown-notifications-item-content-details">Today</div>
-                            <div class="dropdown-notifications-item-content-text">ABA Bank published a new retail role.</div>
-                        </div>
-                    </a>
+                    <div data-kh-notification-items>
+                        @include('partials.notification-items', ['notifications' => $khNotifications])
+                    </div>
                     <a class="dropdown-item dropdown-notifications-footer" href="{{ route('home') }}">Open workspace</a>
                 </div>
             </li>
@@ -676,6 +659,7 @@
     @if (request()->routeIs('companies'))
         <script src="{{ asset('js/app.js') }}"></script>
     @endif
+    <script src="{{ asset('js/admin-notifications.js') }}?v={{ filemtime(public_path('js/admin-notifications.js')) }}" defer></script>
     @stack('scripts')
 </body>
 

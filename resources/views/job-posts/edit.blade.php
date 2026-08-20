@@ -18,7 +18,6 @@
 
         <header class="kh-bo__head">
             <div>
-                <span class="kh-bo__kicker">Back office</span>
                 <h1>{{ $post->title }}</h1>
                 <p>
                     {{ $post->company }} · {{ $post->location }}

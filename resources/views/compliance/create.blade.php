@@ -18,7 +18,6 @@
 
         <header class="kh-bo__head">
             <div>
-                <span class="kh-bo__kicker">Back office</span>
                 <h1>Add compliance record</h1>
                 <p>Register a licence or certificate so it can be reviewed and signed off.</p>
             </div>

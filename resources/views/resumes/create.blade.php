@@ -18,7 +18,6 @@
 
         <header class="kh-bo__head">
             <div>
-                <span class="kh-bo__kicker">Back office</span>
                 <h1>Add resume</h1>
                 <p>Register a candidate CV so it can be searched and shortlisted.</p>
             </div>

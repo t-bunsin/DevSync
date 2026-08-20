@@ -23,7 +23,6 @@
 
         <header class="kh-bo__head">
             <div>
-                <span class="kh-bo__kicker">Back office</span>
                 <h1>Resume preview</h1>
                 <p>How this record reads once printed.</p>
             </div>

@@ -18,7 +18,6 @@
 
         <header class="kh-bo__head">
             <div>
-                <span class="kh-bo__kicker">Back office</span>
                 <h1>{{ $resume->full_name }}</h1>
                 <p>
                     {{ $resume->headline ?: 'No headline' }}

@@ -21,7 +21,6 @@
 
         <header class="kh-bo__head">
             <div>
-                <span class="kh-bo__kicker">Back office</span>
                 <h1>Companies</h1>
                 <p>Employers on the platform, the licences they hold, and the roles they advertise.</p>
             </div>

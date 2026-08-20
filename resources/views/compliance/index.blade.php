@@ -32,7 +32,6 @@
 
         <header class="kh-bo__head">
             <div>
-                <span class="kh-bo__kicker">Back office</span>
                 <h1>Compliance</h1>
                 <p>Track the licences and certificates each employer has to hold, and sign them off.</p>
             </div>

@@ -27,7 +27,6 @@
 
         <header class="kh-bo__head">
             <div>
-                <span class="kh-bo__kicker">Back office</span>
                 <h1>{{ $post->title }}</h1>
                 <p>
                     {{ $post->company }}
@@ -112,7 +111,19 @@
 
                             <div>
                                 <dt>Applicants</dt>
-                                <dd>{{ $job['applicants'] }}</dd>
+                                <dd>
+                                    {{ $job['applicants'] }}
+                                    {{-- The recorded applications, which is what the figure
+                                         above counts once anyone has actually applied. --}}
+                                    <a class="kh-bo__ref" href="{{ route('job-posts.applications', $post) }}">
+                                        @if ($post->hasApplications())
+                                            View {{ number_format($post->applicantCount()) }}
+                                            {{ \Illuminate\Support\Str::plural('application', $post->applicantCount()) }}
+                                        @else
+                                            No applications recorded yet
+                                        @endif
+                                    </a>
+                                </dd>
                             </div>
                         </dl>
                     </div>

@@ -33,6 +33,9 @@ class JobPostController extends Controller
                 'complianceRecords as verified_compliance_count' => fn ($records) => $records
                     ->where('status', Compliance::STATUS_VERIFIED),
             ])])
+            // One grouped count for the whole page rather than a query per row,
+            // which is what fills the Applications column.
+            ->withCount('applications')
             ->search($request->query('q'))
             ->postedBetween($from, $to)
             ->when(
@@ -88,7 +91,7 @@ class JobPostController extends Controller
 
     public function show(JobPost $jobPost)
     {
-        $jobPost->load(['employer', 'author']);
+        $jobPost->load(['employer', 'author'])->loadCount('applications');
 
         return view('job-posts.show', ['post' => $jobPost]);
     }

@@ -18,7 +18,6 @@
 
         <header class="kh-bo__head">
             <div>
-                <span class="kh-bo__kicker">Back office</span>
                 <h1>Add company</h1>
                 <p>Register an employer so job posts and compliance records can be filed against it.</p>
             </div>

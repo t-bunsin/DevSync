@@ -30,6 +30,7 @@
         const applyDialog = document.getElementById('job-page-apply-dialog');
         const applyForm = document.getElementById('job-page-apply-form');
         const applySuccess = document.getElementById('job-page-apply-success');
+        const applyError = document.getElementById('job-page-apply-error');
         const shareButton = document.getElementById('job-page-share-button');
         const shareStatus = document.getElementById('job-page-share-status');
         const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -172,6 +173,10 @@
 
             applyForm.hidden = false;
             applySuccess.hidden = true;
+
+            if (applyError) {
+                applyError.hidden = true;
+            }
             // Restores the account name and email the fields ship with.
             applyForm.reset();
             applyDialog.showModal();
@@ -194,10 +199,44 @@
             }
         });
 
-        applyForm?.addEventListener('submit', (event) => {
+        // Posts the application without leaving the job page. The form carries a
+        // real action and method, so a browser that never reaches this handler
+        // still submits it the ordinary way.
+        applyForm?.addEventListener('submit', async (event) => {
             event.preventDefault();
-            applyForm.hidden = true;
-            applySuccess.hidden = false;
+
+            const submitButton = applyForm.querySelector('button[type="submit"]');
+
+            if (applyError) {
+                applyError.hidden = true;
+            }
+            submitButton?.setAttribute('disabled', 'disabled');
+
+            try {
+                const response = await fetch(applyForm.action, {
+                    method: 'POST',
+                    headers: { Accept: 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+                    body: new FormData(applyForm),
+                });
+
+                const payload = await response.json().catch(() => ({}));
+
+                if (!response.ok) {
+                    const fieldError = Object.values(payload.errors || {})[0]?.[0];
+
+                    throw new Error(fieldError || payload.message || 'Your application could not be sent.');
+                }
+
+                applyForm.hidden = true;
+                applySuccess.hidden = false;
+            } catch (error) {
+                if (applyError) {
+                    applyError.textContent = error.message;
+                    applyError.hidden = false;
+                }
+            } finally {
+                submitButton?.removeAttribute('disabled');
+            }
         });
 
         const copyPageUrl = async () => {

@@ -4,6 +4,8 @@ namespace Database\Seeders;
 
 use App\Models\Company;
 use App\Models\JobPost;
+use App\Models\Role;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 /**
@@ -13,6 +15,9 @@ use Illuminate\Database\Seeder;
  * post module existed; seeding them gives a new install a populated site that
  * is actually editable in the back office.
  *
+ * Attributed to an admin where one exists, so the back office list names a
+ * real registrant instead of "Unknown" — same call as ResumeSeeder.
+ *
  * Keyed on the slug through updateOrCreate, so re-running it refreshes the
  * three defaults instead of duplicating them, and leaves any other post alone.
  */
@@ -21,6 +26,7 @@ class JobPostSeeder extends Seeder
     public function run(): void
     {
         $demo = config('jobs_demo', []);
+        $admin = User::whereHas('roles', fn ($query) => $query->where('code', Role::ADMIN))->first();
 
         if ($demo === []) {
             $this->command?->warn('config/jobs_demo.php is empty — no job posts seeded.');
@@ -31,7 +37,7 @@ class JobPostSeeder extends Seeder
         foreach ($demo as $job) {
             $company = $this->company($job['company']);
 
-            JobPost::updateOrCreate(
+            $post = JobPost::updateOrCreate(
                 ['slug' => $job['id']],
                 [
                     'company_id' => $company->id,
@@ -63,6 +69,15 @@ class JobPostSeeder extends Seeder
                     'quick_apply_text' => $job['quick_apply']['text'] ?? null,
                 ]
             );
+
+            /*
+             * Set separately, and only when empty: `created_by` is kept out of
+             * $fillable so a crafted request cannot claim authorship, and a post
+             * that already names someone keeps them when this is re-run.
+             */
+            if ($admin && $post->created_by === null) {
+                $post->forceFill(['created_by' => $admin->id])->save();
+            }
         }
 
         $this->command?->info('Seeded ' . count($demo) . ' job posts.');

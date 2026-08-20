@@ -370,6 +370,11 @@
   object-fit: cover;
 }
 
+/* People, not companies: the candidate rows use a circular tile. */
+.kh-bo__logo--round {
+  border-radius: 50%;
+}
+
 .kh-bo__name {
   display: flex;
   align-items: center;
@@ -1165,4 +1170,443 @@ textarea.kh-bo__control {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+/* Applications count
+   ------------------------------------------------------------------
+   The clickable figure in the job post table's Applications column. Reads as
+   a number first and a link second, so a busy column still scans. */
+.kh-bo__count {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 11px;
+  color: var(--kh-ocean);
+  background: color-mix(in srgb, var(--kh-ocean) 11%, transparent);
+  border: 1px solid color-mix(in srgb, var(--kh-ocean) 26%, transparent);
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.kh-bo__count svg {
+  width: 14px;
+  height: 14px;
+}
+
+.kh-bo__count:hover,
+.kh-bo__count:focus-visible {
+  color: #fff;
+  background: var(--kh-ocean);
+  border-color: var(--kh-ocean);
+}
+
+/* An empty inbox is still a link — it is where the first application lands. */
+.kh-bo__count--empty {
+  color: var(--kh-muted);
+  background: transparent;
+  border-color: var(--kh-line);
+}
+
+/* Application dialog
+   ------------------------------------------------------------------
+   The candidate list is a table like every other register; each row's detail
+   and review controls open in this dialog instead. Two panels: what the
+   candidate sent on the left, what the employer decides on the right, with a
+   header and an action bar framing them. Opened by js/backoffice-modal.js. */
+.kh-bo__modal {
+  width: min(860px, calc(100vw - 32px));
+  max-height: min(88vh, 820px);
+  padding: 0;
+  overflow: hidden;
+  color: var(--kh-ink);
+  background: var(--kh-surface);
+  border: 1px solid var(--kh-line);
+  border-radius: 20px;
+  box-shadow: 0 30px 70px rgba(4, 22, 38, 0.28);
+}
+
+.kh-bo__modal::backdrop {
+  background: rgba(6, 24, 40, 0.5);
+  backdrop-filter: blur(2px);
+}
+
+/* Header
+   -------- */
+.kh-bo__modal-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 20px;
+  background: color-mix(in srgb, var(--kh-ocean) 6%, transparent);
+  border-bottom: 1px solid var(--kh-line);
+}
+
+.kh-bo__modal-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  overflow: hidden;
+  color: var(--kh-ocean);
+  background: var(--kh-surface);
+  border: 1px solid color-mix(in srgb, var(--kh-ocean) 30%, transparent);
+  border-radius: 50%;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.kh-bo__modal-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Takes the slack so the badge and close button sit at the far edge. */
+.kh-bo__modal-heading {
+  flex: 1;
+  min-width: 0;
+}
+
+.kh-bo__modal-heading h2 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.kh-bo__modal-heading p {
+  margin: 2px 0 0;
+  color: var(--kh-muted);
+  font-size: 0.78rem;
+}
+
+.kh-bo__modal-heading .kh-bo__ref {
+  display: inline;
+  margin-left: 6px;
+}
+
+.kh-bo__modal-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  color: var(--kh-muted);
+  background: var(--kh-surface);
+  border: 1px solid var(--kh-line);
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.kh-bo__modal-close svg {
+  width: 16px;
+  height: 16px;
+}
+
+.kh-bo__modal-close:hover {
+  color: var(--bo-danger);
+  border-color: color-mix(in srgb, var(--bo-danger) 40%, var(--kh-line));
+}
+
+/* Body: two panels split by a rule, scrolling together.
+   -------- */
+.kh-bo__modal-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  overflow-y: auto;
+  max-height: calc(88vh - 150px);
+}
+
+.kh-bo__modal-panel {
+  padding: 18px 20px 20px;
+}
+
+.kh-bo__modal-panel--review {
+  background: color-mix(in srgb, var(--kh-ink) 2.5%, transparent);
+  border-left: 1px solid var(--kh-line);
+}
+
+.kh-bo__modal-legend {
+  margin: 0 0 12px;
+  color: var(--kh-muted);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* Contact rows
+   -------- */
+.kh-bo__contact {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.kh-bo__contact li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 9px 0;
+  border-bottom: 1px dashed var(--kh-line);
+  font-size: 0.83rem;
+  overflow-wrap: anywhere;
+}
+
+.kh-bo__contact li:last-child {
+  border-bottom: 0;
+}
+
+.kh-bo__contact svg {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: var(--kh-ocean);
+}
+
+/* The candidate's own words, set apart from the fields around them. */
+.kh-bo__quote {
+  margin: 14px 0 0;
+  padding: 12px 14px;
+  background: color-mix(in srgb, var(--kh-ocean) 5%, transparent);
+  border-left: 3px solid color-mix(in srgb, var(--kh-ocean) 45%, transparent);
+  border-radius: 0 12px 12px 0;
+  font-size: 0.83rem;
+  line-height: 1.6;
+  white-space: pre-line;
+}
+
+.kh-bo__quote-empty {
+  margin: 14px 0 0;
+}
+
+/* Status pipeline
+   -------- */
+.kh-bo__pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0 0 16px;
+  padding: 0;
+  border: 0;
+}
+
+.kh-bo__pills .kh-bo__label {
+  width: 100%;
+  margin-bottom: 8px;
+  padding: 0;
+}
+
+.kh-bo__pill {
+  --pill: var(--kh-muted);
+
+  cursor: pointer;
+}
+
+/* Kept in the layout rather than display:none, so it stays focusable and the
+   keyboard can walk the group. */
+.kh-bo__pill input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.kh-bo__pill span {
+  display: inline-flex;
+  padding: 6px 12px;
+  color: var(--kh-muted);
+  background: transparent;
+  border: 1px solid var(--kh-line);
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  transition: color 140ms ease, background 140ms ease, border-color 140ms ease;
+}
+
+.kh-bo__pill:hover span {
+  color: var(--pill);
+  border-color: color-mix(in srgb, var(--pill) 45%, var(--kh-line));
+}
+
+.kh-bo__pill input:checked + span {
+  color: #fff;
+  background: var(--pill);
+  border-color: var(--pill);
+}
+
+.kh-bo__pill input:focus-visible + span {
+  outline: 3px solid color-mix(in srgb, var(--pill) 30%, transparent);
+  outline-offset: 1px;
+}
+
+.kh-bo__pill--amber { --pill: var(--bo-amber); }
+.kh-bo__pill--blue { --pill: var(--bo-blue); }
+.kh-bo__pill--teal { --pill: var(--kh-ocean); }
+.kh-bo__pill--danger { --pill: var(--bo-danger); }
+
+/* Action bar
+   -------- */
+.kh-bo__modal-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 20px;
+  background: color-mix(in srgb, var(--kh-ink) 3%, transparent);
+  border-top: 1px solid var(--kh-line);
+}
+
+.kh-bo__modal-foot-actions {
+  display: flex;
+  gap: 10px;
+}
+
+@media (max-width: 767.98px) {
+  .kh-bo__modal-body {
+    grid-template-columns: 1fr;
+  }
+
+  .kh-bo__modal-panel--review {
+    border-left: 0;
+    border-top: 1px solid var(--kh-line);
+  }
+}
+
+
+/* Dense table
+   ------------------------------------------------------------------
+   The job post list carries nine columns since Applications joined it, which
+   is more than the shared size fits: "Phnom Penh, Cambodia" broke onto three
+   lines and the row still overflowed into a horizontal scroll. Smaller type
+   and tighter cells put the whole row back on one screen. Only that list opts
+   in — the shorter registers read better at the standard size. */
+.kh-bo__table--dense {
+  font-size: 0.78rem;
+}
+
+.kh-bo__table--dense th {
+  padding: 10px 12px;
+  font-size: 0.63rem;
+  letter-spacing: 0.05em;
+}
+
+.kh-bo__table--dense td {
+  padding: 11px 12px;
+}
+
+.kh-bo__table--dense .kh-bo__ref {
+  font-size: 0.68rem;
+}
+
+.kh-bo__table--dense .kh-bo__identity {
+  gap: 10px;
+  min-width: 0;
+}
+
+.kh-bo__table--dense .kh-bo__logo {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  font-size: 0.7rem;
+}
+
+.kh-bo__table--dense .kh-bo__status {
+  padding: 4px 9px;
+  font-size: 0.66rem;
+}
+
+.kh-bo__table--dense .kh-bo__count {
+  padding: 4px 9px;
+  font-size: 0.75rem;
+}
+
+.kh-bo__table--dense .kh-bo__action {
+  width: 30px;
+  height: 30px;
+}
+
+.kh-bo__table--dense .kh-bo__actions {
+  gap: 5px;
+}
+
+.kh-bo__table--dense .kh-bo__posted {
+  font-size: 0.74rem;
+}
+
+/* Values short enough to belong on one line. Wrapping these is what pushed
+   the rows to three lines tall in the first place. */
+.kh-bo__nowrap {
+  white-space: nowrap;
+}
+
+/* Location and job type are given a ceiling rather than a nowrap: they break
+   onto a second line, which the row already has room for, instead of holding
+   the widest column in the table open. The ceiling is what keeps the break at
+   two tidy lines rather than the three-line stack a squeezed column produced. */
+.kh-bo__table--dense .kh-bo__cell-location {
+  max-width: 118px;
+}
+
+.kh-bo__table--dense .kh-bo__cell-type {
+  max-width: 96px;
+}
+
+/* The role cell has the longest content in the row — title, badges, company
+   and slug — so the reference line is allowed to trail off rather than force
+   the column wider. */
+.kh-bo__table--dense .kh-bo__identity {
+  max-width: 270px;
+}
+
+.kh-bo__table--dense .kh-bo__identity > div {
+  min-width: 0;
+}
+
+.kh-bo__table--dense .kh-bo__identity .kh-bo__ref {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Badges wrap under the title rather than pushing the row's own text out of
+   the cell and over the next column. */
+.kh-bo__table--dense .kh-bo__name {
+  flex-wrap: wrap;
+  row-gap: 4px;
+}
+
+/* The author email is the one long value with no natural break, so it is
+   given a ceiling instead of a nowrap. */
+.kh-bo__truncate {
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.kh-bo__truncate .kh-bo__ref {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Under about a 1400px window the nine columns need the last of the slack —
+   tighter cells and a shorter role column — to stay off a scrollbar. */
+@media (max-width: 1400px) {
+  .kh-bo__table--dense th,
+  .kh-bo__table--dense td {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .kh-bo__table--dense .kh-bo__identity {
+    max-width: 240px;
+  }
 }

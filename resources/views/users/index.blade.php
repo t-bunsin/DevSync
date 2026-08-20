@@ -32,7 +32,6 @@
 
         <header class="kh-bo__head">
             <div>
-                <span class="kh-bo__kicker">Back office</span>
                 <h1>Users</h1>
                 <p>Search, review, and manage every registered account.</p>
             </div>

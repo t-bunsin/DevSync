@@ -22,7 +22,6 @@
 
         <header class="kh-bo__head">
             <div>
-                <span class="kh-bo__kicker">Back office</span>
                 <h1>Job posts</h1>
                 <p>Write the roles that appear on the public jobs pages.</p>
             </div>
@@ -143,7 +142,7 @@
             </div>
 
             <div class="kh-bo__table-wrap">
-                <table class="kh-bo__table">
+                <table class="kh-bo__table kh-bo__table--dense">
                     <thead>
                         <tr>
                             <th scope="col">Role</th>
@@ -151,6 +150,7 @@
                             <th scope="col">Type</th>
                             <th scope="col">Registered</th>
                             <th scope="col">Status</th>
+                            <th scope="col">Applications</th>
                             <th scope="col">Posted</th>
                             <th scope="col">Post by</th>
                             <th scope="col"><span class="visually-hidden">Actions</span></th>
@@ -191,10 +191,10 @@
                                     </div>
                                 </td>
 
-                                <td>{{ $post->location }}</td>
-                                <td>{{ $post->type }} · {{ $post->mode }}</td>
+                                <td class="kh-bo__cell-location">{{ $post->location }}</td>
+                                <td class="kh-bo__cell-type">{{ $post->type }} · {{ $post->mode }}</td>
 
-                                <td>
+                                <td class="kh-bo__nowrap">
                                     @if ($post->created_at)
                                         {{ $post->created_at->format('d M Y') }}
                                     @else
@@ -205,6 +205,30 @@
                                 <td>
                                     <span class="kh-bo__status kh-bo__status--{{ $post->status === 'published' ? 'verified' : ($post->status === 'draft' ? 'pending' : 'rejected') }}">
                                         {{ ucfirst($post->status) }}
+                                    </span>
+                                </td>
+
+                                {{-- Candidates who actually applied. The number links
+                                     through to the rows it is counting. --}}
+                                <td class="kh-bo__nowrap">
+                                    @php($applicants = $post->applicantCount())
+                                    <a class="kh-bo__count{{ $applicants === 0 ? ' kh-bo__count--empty' : '' }}"
+                                        href="{{ route('job-posts.applications', $post) }}"
+                                        title="Open the candidates who applied for {{ $post->title }}">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                            <path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 00-3-3.87" /><path d="M16 3.13a4 4 0 010 7.75" />
+                                        </svg>
+                                        {{ number_format($applicants) }}
+                                        <span class="visually-hidden">
+                                            {{ \Illuminate\Support\Str::plural('application', $applicants) }} for {{ $post->title }}
+                                        </span>
+                                    </a>
+                                    <span class="kh-bo__ref">
+                                        @if ($applicants === 0)
+                                            No candidates
+                                        @else
+                                            {{ \Illuminate\Support\Str::plural('candidate', $applicants) }} applied
+                                        @endif
                                     </span>
                                 </td>
 
@@ -219,7 +243,7 @@
                                     @endif
                                 </td>
 
-                                <td>
+                                <td class="kh-bo__truncate">
                                     @if ($post->author)
                                         {{ $post->author->displayName() }}
                                         <span class="kh-bo__ref">{{ $post->author->email }}</span>
@@ -263,7 +287,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="8">
+                                <td colspan="9">
                                     <div class="kh-bo__empty">
                                         <strong>No job posts</strong>
                                         <span>
