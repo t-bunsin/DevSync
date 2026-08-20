@@ -209,3 +209,124 @@
 .kh-bill__processing i {
   color: var(--kh-ocean);
 }
+
+/* KHQR pay screen
+   ------------------------------------------------------------------ */
+.kh-pay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 360px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.kh-pay > [data-live] {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.kh-pay__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  margin-bottom: 16px;
+  color: var(--kh-ocean);
+  background: color-mix(in srgb, var(--kh-ocean) 12%, transparent);
+  border-radius: 999px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.kh-pay__badge svg {
+  width: 14px;
+  height: 14px;
+}
+
+.kh-pay__expiry {
+  margin: 10px 0 0;
+  color: var(--kh-muted);
+  font-size: 0.78rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.kh-pay__expired {
+  margin: 16px 0 0;
+  color: var(--kh-muted);
+  font-size: 0.85rem;
+}
+
+.kh-pay__expired a {
+  color: var(--kh-ocean);
+  font-weight: 600;
+}
+
+.kh-pay__qr {
+  width: 100%;
+  max-width: 260px;
+  padding: 12px;
+  background: #fff;
+  border: 1px solid var(--kh-line);
+  border-radius: 14px;
+}
+
+.kh-pay__missing {
+  color: var(--kh-muted);
+  font-size: 0.85rem;
+}
+
+.kh-pay__deeplink {
+  width: 100%;
+  justify-content: center;
+  margin-top: 18px;
+}
+
+.kh-pay__stores-label {
+  margin: 16px 0 6px;
+  color: var(--kh-muted);
+  font-size: 0.76rem;
+}
+
+.kh-pay__stores {
+  display: flex;
+  gap: 10px;
+}
+
+.kh-pay__stores a {
+  color: var(--kh-ocean);
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.kh-pay__stores a:hover {
+  text-decoration: underline;
+}
+
+.kh-pay__waiting {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 22px 0 0;
+  color: var(--kh-muted);
+  font-size: 0.83rem;
+}
+
+.kh-pay__waiting i {
+  color: var(--kh-ocean);
+}
+
+.kh-pay__failed {
+  margin: 22px 0 0;
+  color: var(--bo-danger, #c0392b);
+  font-size: 0.83rem;
+}
+
+.kh-pay__failed a {
+  color: inherit;
+  font-weight: 600;
+}

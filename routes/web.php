@@ -65,6 +65,7 @@ Route::prefix('admin')->group(function () {
     Route::get('/account-billing/checkout', [BillingController::class, 'checkout'])->name('account-billing.checkout');
     Route::post('/account-billing/pay', [BillingController::class, 'pay'])->name('account-billing.pay');
     Route::get('/account-billing/payway/return', [BillingController::class, 'paywayReturn'])->name('account-billing.payway.return');
+    Route::get('/account-billing/payway/status', [BillingController::class, 'paywayStatus'])->name('account-billing.payway.status');
     // No 'auth' middleware: PayWay calls this server-to-server with no session. Also excluded from CSRF — see VerifyCsrfToken.
     Route::post('/account-billing/payway/callback', [BillingController::class, 'paywayCallback'])->name('account-billing.payway.callback');
 

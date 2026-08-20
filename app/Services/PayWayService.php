@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\User;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 
 /**
@@ -46,6 +47,17 @@ class PayWayService
     public function purchaseUrl(): string
     {
         return rtrim(config('payway.base_url'), '/') . '/api/payment-gateway/v1/payments/purchase';
+    }
+
+    /**
+     * Calls PayWay's purchase API server-side and returns the decoded JSON —
+     * that response (qrString/qrImage/abapay_deeplink, or a rejection like
+     * "Wrong Hash") is meant to be read and acted on, not handed to the
+     * browser to land on directly.
+     */
+    public function purchase(array $fields): array
+    {
+        return Http::asForm()->post($this->purchaseUrl(), $fields)->json() ?? [];
     }
 
     /** A transaction id PayWay will echo back on its callback, so we know which subscription it's for. */

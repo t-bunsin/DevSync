@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Subscription;
 use App\Services\PayWayService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -52,9 +53,11 @@ class BillingController extends Controller
 
     /**
      * Confirms the order. A free plan has nothing to charge, so it activates
-     * immediately; anything else creates a 'pending' subscription and hands
-     * the browser an auto-submitting form to PayWay's hosted checkout —
-     * PayWay decides whether the payment actually succeeded, not this app.
+     * immediately; anything else calls PayWay's purchase API server-side and,
+     * once PayWay accepts it, shows the returned KHQR code — the pay view
+     * then polls paywayStatus() until the callback below confirms or rejects
+     * the payment. PayWay decides whether the payment actually succeeded,
+     * not this app.
      */
     public function pay(Request $request): View|RedirectResponse
     {
@@ -91,6 +94,19 @@ class BillingController extends Controller
         }
 
         $tranId = $this->payWay->generateTranId();
+        $fields = $this->payWay->purchaseFields($tranId, $amount, $plan['name'], $user);
+        $response = $this->payWay->purchase($fields);
+
+        // "00" is PayWay's success code; anything else (wrong hash, invalid
+        // field, ...) means no session was actually opened on their end, so
+        // nothing is recorded here — a pending row with a tran_id PayWay
+        // never issued would just be a dead end for the callback to find.
+        if (($response['status']['code'] ?? null) !== '00') {
+            Log::warning('PayWay purchase request rejected', ['tran_id' => $tranId, 'response' => $response]);
+
+            return redirect()->route('account-billing.checkout', $validated)
+                ->withErrors(['payment' => $response['status']['message'] ?? 'PayWay rejected the payment request. Please try again.']);
+        }
 
         Subscription::updateOrCreate(
             ['user_id' => $user->id],
@@ -106,9 +122,29 @@ class BillingController extends Controller
         );
 
         return view('account-billing.pay', [
-            'purchaseUrl' => $this->payWay->purchaseUrl(),
-            'fields' => $this->payWay->purchaseFields($tranId, $amount, $plan['name'], $user),
+            'tranId' => $tranId,
+            'qrImage' => $response['qrImage'] ?? null,
+            'deeplink' => $response['abapay_deeplink'] ?? null,
+            'appStore' => $response['app_store'] ?? null,
+            'playStore' => $response['play_store'] ?? null,
+            // PayWay's response carries no expiry of its own, so this is a
+            // fixed window we impose client-side — not something read back
+            // from PayWay. Measured from now (request time), not page load,
+            // so a slow render or a refresh still reflects real time left.
+            'expiresAt' => now()->addMinutes(5)->timestamp,
         ]);
+    }
+
+    /** Polled by the QR page so it can move on once the callback below confirms or rejects the payment. */
+    public function paywayStatus(Request $request): JsonResponse
+    {
+        $validated = $request->validate(['tran_id' => ['required', 'string']]);
+
+        $subscription = Subscription::where('tran_id', $validated['tran_id'])
+            ->where('user_id', Auth::id())
+            ->first();
+
+        return response()->json(['status' => $subscription?->status ?? 'not_found']);
     }
 
     /**

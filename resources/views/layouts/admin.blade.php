@@ -362,7 +362,7 @@
                                     data-bs-target="#appsCollapseJobPosts"
                                     aria-expanded="{{ request()->routeIs('job-posts.*') ? 'true' : 'false' }}"
                                     aria-controls="appsCollapseJobPosts">
-                                    Job Post Management
+                                    Job Management
                                     <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                                 </a>
 
@@ -396,7 +396,7 @@
                                     </nav>
                                 </div>
 
-                                <!-- Nested Sidenav Accordion (Apps -> Posts Management)-->
+                                <!-- Nested Sidenav Accordion (Apps -> Posts Management)
                                 <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse"
                                     data-bs-target="#appsCollapsePostsManagement" aria-expanded="false"
                                     aria-controls="appsCollapsePostsManagement">
@@ -411,7 +411,7 @@
                                         <a class="nav-link" href="blog-management-edit-post.html">Edit Post</a>
                                         <a class="nav-link" href="blog-management-posts-admin.html">Posts Admin</a>
                                     </nav>
-                                </div>
+                                </div>-->
                             </nav>
                         </div>
                         <!-- Sidenav Accordion (Companies)-->
