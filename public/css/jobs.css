@@ -1877,6 +1877,13 @@ body.jf-body::selection {
   padding: 26px 30px 30px;
 }
 
+/* Job details/Company tabs hide the sidebar (nothing on it belongs to
+   those tabs), so the article takes the row instead of leaving a blank
+   column where Role details/Quick apply used to be. */
+.jf-detail__body--full {
+  grid-template-columns: minmax(0, 1fr);
+}
+
 .jf-detail__article h3 {
   margin: 0 0 11px;
   color: var(--jf-ink);
@@ -1926,6 +1933,151 @@ body.jf-body::selection {
   font-family: "Font Awesome 6 Free";
   font-size: 0.62rem;
   font-weight: 900;
+}
+
+/* Job details tab: Requirements renders first (the shared #detail-* fields),
+   this is the Job description stacked underneath it. */
+.jf-detail__secondary {
+  margin-top: 22px;
+  padding-top: 20px;
+  border-top: 1px dashed var(--jf-line);
+}
+
+/* Company tab
+   ------------------------------------------------------------------
+   Kept quiet on purpose: a name, a one-line tagline, an address, and
+   plain expandable text — no grids, no icon badges, no card chrome. */
+.jf-detail__company-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 10px;
+}
+
+.jf-detail__company-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  overflow: hidden;
+  color: var(--jf-ink-soft);
+  border: 1px solid var(--jf-line);
+  border-radius: 10px;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+
+.jf-detail__company-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.jf-detail__company-head strong {
+  color: var(--jf-ink);
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.jf-detail__company-tagline,
+.jf-detail__company-address {
+  margin: 0 0 6px;
+  color: var(--jf-ink-soft);
+  font-size: 0.8rem;
+  line-height: 1.6;
+}
+
+.jf-detail__company-address {
+  margin-bottom: 18px;
+}
+
+.jf-detail__company-address a {
+  color: var(--jf-teal-dark);
+  text-decoration: none;
+}
+
+.jf-detail__company-address a:hover {
+  text-decoration: underline;
+}
+
+.jf-detail__company-item {
+  padding: 14px 0;
+  border-top: 1px solid var(--jf-line);
+}
+
+.jf-detail__company-item summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  color: var(--jf-ink);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  list-style: none;
+}
+
+.jf-detail__company-item summary::-webkit-details-marker {
+  display: none;
+}
+
+.jf-detail__company-item summary i {
+  color: var(--jf-ink-soft);
+  font-size: 0.65rem;
+  transition: transform 180ms ease;
+}
+
+.jf-detail__company-item[open] summary i {
+  transform: rotate(180deg);
+}
+
+.jf-detail__company-item > div {
+  margin-top: 10px;
+  color: var(--jf-ink-soft);
+  font-size: 0.8rem;
+  line-height: 1.65;
+}
+
+.jf-detail__company-item > div p {
+  margin: 0 0 10px;
+}
+
+.jf-detail__company-item > div p:last-child,
+.jf-detail__company-item > div .jf-detail__company-list:last-child {
+  margin-bottom: 0;
+}
+
+.jf-detail__company-list {
+  margin: 0 0 10px;
+  padding: 0;
+  list-style: none;
+}
+
+.jf-detail__company-list li {
+  position: relative;
+  margin: 0 0 6px;
+  padding-left: 16px;
+}
+
+.jf-detail__company-list li:last-child {
+  margin-bottom: 0;
+}
+
+.jf-detail__company-list li::before {
+  content: "";
+  position: absolute;
+  top: 0.6em;
+  left: 2px;
+  width: 4px;
+  height: 4px;
+  background: var(--jf-teal-dark);
+  border-radius: 50%;
+}
+
+.jf-detail__company-empty {
+  color: var(--jf-ink-soft);
+  font-size: 0.82rem;
 }
 
 .jf-detail__sidebar {

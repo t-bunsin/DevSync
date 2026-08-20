@@ -187,27 +187,43 @@
                 <div class="jf-tabs" role="tablist" aria-label="Job information">
                     <button class="jf-tab is-active" id="job-tab-description" type="button" data-tab="description"
                         role="tab" aria-selected="true" aria-controls="detail-panel-content" tabindex="0">Overview</button>
-                    <button class="jf-tab" id="job-tab-requirements" type="button" data-tab="requirements"
-                        role="tab" aria-selected="false" aria-controls="detail-panel-content" tabindex="-1">Requirements</button>
-                    <button class="jf-tab" id="job-tab-job-description" type="button" data-tab="job_description"
-                        role="tab" aria-selected="false" aria-controls="detail-panel-content" tabindex="-1">Job description</button>
+                    <button class="jf-tab" id="job-tab-job-details" type="button" data-tab="job_details"
+                        role="tab" aria-selected="false" aria-controls="detail-panel-content" tabindex="-1">Job details</button>
+                    <button class="jf-tab" id="job-tab-company" type="button" data-tab="company"
+                        role="tab" aria-selected="false" aria-controls="detail-panel-content" tabindex="-1">Company</button>
                 </div>
 
                 <div class="jf-detail__body">
                     <div class="jf-detail__article" id="detail-panel-content" role="tabpanel"
                         aria-labelledby="job-tab-description" aria-live="polite" tabindex="0">
-                        <h3 id="detail-section-title">{{ $selectedJob['tabs']['description']['title'] }}</h3>
-                        <p id="detail-section-body">{{ $selectedJob['tabs']['description']['body'] }}</p>
-                        <h4 id="detail-list-title">{{ $selectedJob['tabs']['description']['list_title'] }}</h4>
-                        <ul id="detail-list" class="jf-detail__list">
-                            @foreach ($selectedJob['tabs']['description']['list'] as $item)
-                                <li>{{ $item }}</li>
-                            @endforeach
-                        </ul>
+                        <div id="detail-text-view">
+                            <h3 id="detail-section-title">{{ $selectedJob['tabs']['description']['title'] }}</h3>
+                            <p id="detail-section-body">{{ $selectedJob['tabs']['description']['body'] }}</p>
+                            <h4 id="detail-list-title">{{ $selectedJob['tabs']['description']['list_title'] }}</h4>
+                            <ul id="detail-list" class="jf-detail__list">
+                                @foreach ($selectedJob['tabs']['description']['list'] as $item)
+                                    <li>{{ $item }}</li>
+                                @endforeach
+                            </ul>
+
+                            {{-- Filled in only for the combined Job details tab, which
+                                 stacks Requirements and Job description together. --}}
+                            <div class="jf-detail__secondary" id="detail-secondary-group" hidden>
+                                <h4 id="detail-secondary-title"></h4>
+                                <p id="detail-secondary-body"></p>
+                                <h4 id="detail-secondary-list-title"></h4>
+                                <ul id="detail-secondary-list" class="jf-detail__list"></ul>
+                            </div>
+                        </div>
+
+                        {{-- Company tab content — built client-side by jobs.js from
+                             the same employer fields the full job page's Company tab
+                             uses (logo, details, address, profile sections). --}}
+                        <div id="detail-company-view" hidden></div>
                     </div>
 
                     <div class="jf-detail__sidebar">
-                        <div class="jf-side-card">
+                        <div class="jf-side-card" id="detail-role-card">
                             <span>Role details</span>
                             <div id="detail-facts" class="jf-facts">
                                 @foreach ($selectedJob['detail_items'] as $item)

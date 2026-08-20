@@ -25,6 +25,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const boardGrid = explorer.querySelector('.jf-board__grid');
     const detail = explorer.querySelector('.jf-detail');
     const detailPanel = explorer.querySelector('#detail-panel-content');
+    const detailBody = explorer.querySelector('.jf-detail__body');
+    const detailSidebar = explorer.querySelector('.jf-detail__sidebar');
     const tabs = Array.from(explorer.querySelectorAll('.jf-tab'));
     const filterChips = Array.from(explorer.querySelectorAll('.jf-search-chip'));
     const jobCount = explorer.querySelector('#job-count');
@@ -62,9 +64,17 @@ document.addEventListener('DOMContentLoaded', () => {
         listTitle: explorer.querySelector('#detail-list-title'),
         list: explorer.querySelector('#detail-list'),
         facts: explorer.querySelector('#detail-facts'),
+        roleCard: explorer.querySelector('#detail-role-card'),
         quickApply: explorer.querySelector('#detail-quick-apply'),
         quickTitle: explorer.querySelector('#detail-quick-title'),
         quickText: explorer.querySelector('#detail-quick-text'),
+        textView: explorer.querySelector('#detail-text-view'),
+        secondaryGroup: explorer.querySelector('#detail-secondary-group'),
+        secondaryTitle: explorer.querySelector('#detail-secondary-title'),
+        secondaryBody: explorer.querySelector('#detail-secondary-body'),
+        secondaryListTitle: explorer.querySelector('#detail-secondary-list-title'),
+        secondaryList: explorer.querySelector('#detail-secondary-list'),
+        companyView: explorer.querySelector('#detail-company-view'),
     };
 
     const requiredElements = [
@@ -110,6 +120,26 @@ document.addEventListener('DOMContentLoaded', () => {
         .replace(/[^a-z0-9\s+-]/g, ' ')
         .replace(/\s+/g, ' ')
         .trim();
+
+    const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
+    }[char]));
+
+    // Employer-authored prose: blank lines start a new paragraph; a block
+    // whose lines all start with "- " renders as a bulleted list instead.
+    // Mirrors the same rule jobs/show.blade.php applies server-side — text
+    // saved from a Windows browser textarea comes back as \r\n, so normalize
+    // line endings first the way PHP's \R already does for that side.
+    const renderParagraphs = (body) => String(body || '').replace(/\r\n|\r/g, '\n').trim().split(/\n{2,}/).map((block) => {
+        const lines = block.split(/\n/).map((line) => line.trim()).filter((line) => line !== '');
+        const isList = lines.length > 0 && lines.every((line) => line.startsWith('- '));
+
+        if (isList) {
+            return `<ul class="jf-detail__company-list">${lines.map((line) => `<li>${escapeHtml(line.slice(2))}</li>`).join('')}</ul>`;
+        }
+
+        return `<p>${escapeHtml(block.trim()).replace(/\n/g, '<br>')}</p>`;
+    }).join('');
 
     const urlFilterControls = () => [
         ['q', titleInput],
@@ -221,10 +251,94 @@ document.addEventListener('DOMContentLoaded', () => {
         `).join('');
     };
 
+    // Same employer fields the full job page's Company tab renders from
+    // (see jobs/show.blade.php) — built as one HTML string here since this
+    // panel has no server-rendered markup of its own to toggle. Kept
+    // deliberately plain: a tagline sentence and quiet expandable text
+    // instead of label/value grids and icon badges.
+    const renderCompany = (job) => {
+        const details = Object.values(job.company_details || {}).filter(Boolean);
+        const sections = job.company_sections || [];
+
+        const taglineHtml = details.length
+            ? `<p class="jf-detail__company-tagline">${details.map(escapeHtml).join(' &middot; ')}</p>`
+            : '';
+
+        const addressHtml = job.company_address ? `
+            <p class="jf-detail__company-address">
+                ${escapeHtml(job.company_address)}
+                ${job.company_website ? ` &middot; <a href="${escapeHtml(job.company_website)}" target="_blank" rel="noopener noreferrer">${escapeHtml(job.company_website.replace(/^https?:\/\//, ''))}</a>` : ''}
+            </p>
+        ` : '';
+
+        const sectionsHtml = sections.map((section, index) => `
+            <details class="jf-detail__company-item" ${index === 0 ? 'open' : ''}>
+                <summary>
+                    ${escapeHtml(section.title)}
+                    <i class="fas fa-chevron-down" aria-hidden="true"></i>
+                </summary>
+                <div>
+                    ${renderParagraphs(section.body)}
+                </div>
+            </details>
+        `).join('');
+
+        // Same mark as <x-verified-badge :show-label="false" /> — inline here
+        // since this view is built in JS rather than Blade.
+        const verifiedBadge = job.company_verified ? `
+            <span class="kh-verified">
+                <svg class="kh-verified__mark" width="16" height="16" viewBox="0 0 24 24" role="img" aria-label="Verified employer">
+                    <path fill="#1d9bf0" d="M12 1.5l2.42 1.77 2.99-.05.9 2.86 2.44 1.73-1.03 2.81 1.03 2.81-2.44 1.73-.9 2.86-2.99-.05L12 22.5l-2.42-1.77-2.99.05-.9-2.86-2.44-1.73L4.28 12.6 3.25 9.79l2.44-1.73.9-2.86 2.99.05L12 1.5z" />
+                    <path fill="none" stroke="#ffffff" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" d="M8.2 12.3l2.6 2.6 5-5.2" />
+                </svg>
+            </span>
+        ` : '';
+
+        detailFields.companyView.innerHTML = `
+            <div class="jf-detail__company-head">
+                <span class="jf-detail__company-logo">
+                    ${job.company_logo_url ? `<img src="${escapeHtml(job.company_logo_url)}" alt="">` : '<i class="fas fa-building" aria-hidden="true"></i>'}
+                </span>
+                <strong>${escapeHtml(job.company)}</strong>
+                ${verifiedBadge}
+            </div>
+            ${taglineHtml}
+            ${addressHtml}
+            ${sectionsHtml}
+            ${(!taglineHtml && !addressHtml && !sectionsHtml) ? '<p class="jf-detail__company-empty">This employer has not added a company profile yet.</p>' : ''}
+        `;
+    };
+
     const renderTab = (job, animate = true) => {
+        const isCompany = activeTab === 'company';
+        const isJobDetails = activeTab === 'job_details';
+        const isOverview = activeTab === 'description';
+
+        detailFields.textView.hidden = isCompany;
+        detailFields.companyView.hidden = !isCompany;
+        detailFields.roleCard.hidden = !isOverview;
+        detailFields.quickApply.hidden = !isOverview;
+
+        // Role details/Quick apply only live on Overview, so the sidebar
+        // column would otherwise sit there empty on the other two tabs —
+        // collapse it and let the article use the full width instead.
+        detailSidebar?.toggleAttribute('hidden', !isOverview);
+        detailBody?.classList.toggle('jf-detail__body--full', !isOverview);
+
+        if (isCompany) {
+            renderCompany(job);
+
+            if (animate) {
+                replayAnimation(detailPanel);
+            }
+
+            return;
+        }
+
         // Falls back rather than throwing: a panel key that no longer exists
         // used to leave the previous tab's content on screen.
-        const panel = job.tabs[activeTab] || job.tabs.description;
+        const primaryKey = isJobDetails ? 'requirements' : activeTab;
+        const panel = job.tabs[primaryKey] || job.tabs.description;
 
         if (!panel) {
             return;
@@ -234,7 +348,18 @@ document.addEventListener('DOMContentLoaded', () => {
         detailFields.sectionBody.textContent = panel.body;
         detailFields.listTitle.textContent = panel.list_title;
         detailFields.list.innerHTML = panel.list.map((item) => `<li>${item}</li>`).join('');
-        detailFields.quickApply.hidden = activeTab !== 'description';
+
+        // Job details combines Requirements (above) with Job description
+        // (here) so they read as one tab instead of two near-empty ones.
+        const secondaryPanel = isJobDetails ? job.tabs.job_description : null;
+        detailFields.secondaryGroup.hidden = !secondaryPanel;
+
+        if (secondaryPanel) {
+            detailFields.secondaryTitle.textContent = secondaryPanel.title;
+            detailFields.secondaryBody.textContent = secondaryPanel.body;
+            detailFields.secondaryListTitle.textContent = secondaryPanel.list_title;
+            detailFields.secondaryList.innerHTML = secondaryPanel.list.map((item) => `<li>${item}</li>`).join('');
+        }
 
         if (animate) {
             replayAnimation(detailPanel);

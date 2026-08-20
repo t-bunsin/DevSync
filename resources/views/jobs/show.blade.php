@@ -191,9 +191,23 @@
                                     </summary>
 
                                     <div class="jf-cprofile-item__body">
-                                        {{-- Employer-authored prose: blank lines start a new paragraph. --}}
+                                        {{-- Employer-authored prose: blank lines start a new
+                                             paragraph; a block whose lines all start with "- "
+                                             renders as a bulleted list instead. --}}
                                         @foreach (preg_split('/\R{2,}/', trim($section['body'])) as $paragraph)
-                                            <p>{!! nl2br(e($paragraph)) !!}</p>
+                                            @php
+                                                $lines = array_filter(array_map('trim', preg_split('/\R/', trim($paragraph))), fn ($line) => $line !== '');
+                                                $isList = count($lines) > 0 && collect($lines)->every(fn ($line) => str_starts_with($line, '- '));
+                                            @endphp
+                                            @if ($isList)
+                                                <ul class="jf-cprofile-item__list">
+                                                    @foreach ($lines as $line)
+                                                        <li>{{ substr($line, 2) }}</li>
+                                                    @endforeach
+                                                </ul>
+                                            @else
+                                                <p>{!! nl2br(e($paragraph)) !!}</p>
+                                            @endif
                                         @endforeach
                                     </div>
                                 </details>
