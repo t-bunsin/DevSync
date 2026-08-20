@@ -17,9 +17,17 @@
     @endphp
 
     <div class="kh-bo">
+        <nav class="kh-bo__breadcrumb" aria-label="Breadcrumb">
+            <a href="{{ route('home') }}">Back office</a>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6" /></svg>
+            <a href="{{ route('job-posts.index') }}">Job posts</a>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6" /></svg>
+            <span aria-current="page">{{ $post->title }}</span>
+        </nav>
+
         <header class="kh-bo__head">
             <div>
-                <span class="kh-bo__kicker">Back office · Job post</span>
+                <span class="kh-bo__kicker">Back office</span>
                 <h1>{{ $post->title }}</h1>
                 <p>
                     {{ $post->company }}

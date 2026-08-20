@@ -22,6 +22,40 @@
   color: var(--kh-ink);
 }
 
+/* Breadcrumb
+   ------------------------------------------------------------------ */
+.kh-bo__breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 14px;
+  color: var(--kh-muted);
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.kh-bo__breadcrumb a {
+  color: var(--kh-muted);
+  text-decoration: none;
+  transition: color 160ms ease;
+}
+
+.kh-bo__breadcrumb a:hover {
+  color: var(--kh-ocean);
+}
+
+.kh-bo__breadcrumb [aria-current="page"] {
+  color: var(--kh-ink);
+  font-weight: 700;
+}
+
+.kh-bo__breadcrumb svg {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+  opacity: 0.6;
+}
+
 /* Header
    ------------------------------------------------------------------ */
 .kh-bo__head {

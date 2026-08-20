@@ -96,6 +96,11 @@ class User extends Authenticatable
         return $this->hasOne(EmployerProfile::class, 'user_id');
     }
 
+    public function subscription(): HasOne
+    {
+        return $this->hasOne(Subscription::class);
+    }
+
     // -----------------------------------------------------------------
     // Roles
     // -----------------------------------------------------------------

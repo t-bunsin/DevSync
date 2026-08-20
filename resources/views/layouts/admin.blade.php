@@ -52,7 +52,7 @@
         <!-- * * Tip * * You can use text or an image for your navbar brand.-->
         <!-- * * * * * * When using an image, we recommend the SVG format.-->
         <!-- * * * * * * Dimensions: Maximum height: 32px, maximum width: 240px-->
-        <a class="navbar-brand kh-admin-brand pe-3 ps-4 ps-lg-2" href="{{ url('/home') }}">
+        <a class="navbar-brand kh-admin-brand pe-3 ps-4 ps-lg-2" href="{{ route('home') }}">
             <span class="kh-admin-brand__mark"><i class="fas fa-briefcase"></i></span>
             <span>KH-<strong>WORKS</strong></span>
         </a>
@@ -151,7 +151,7 @@
                             <div class="dropdown-notifications-item-content-text">ABA Bank published a new retail role.</div>
                         </div>
                     </a>
-                    <a class="dropdown-item dropdown-notifications-footer" href="{{ url('/home') }}">Open workspace</a>
+                    <a class="dropdown-item dropdown-notifications-footer" href="{{ route('home') }}">Open workspace</a>
                 </div>
             </li>
             <!-- Messages Dropdown-->
@@ -292,21 +292,21 @@
                         <div class="collapse" id="collapsePages" data-bs-parent="#accordionSidenav">
                             <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPagesMenu">
                                 <!-- Nested Sidenav Accordion (Pages -> Account)-->
-                                <a class="nav-link collapsed {{ setActive(['account-profile', 'account-billing', 'account-security', 'account-notifications']) }}"
+                                <a class="nav-link collapsed {{ setActive(['account-profile', 'admin/account-billing', 'admin/account-billing/*', 'account-security', 'account-notifications']) }}"
                                     href="javascript:void(0);" data-bs-toggle="collapse"
                                     data-bs-target="#pagesCollapseAccount"
-                                    aria-expanded="{{ request()->is('account-*') ? 'true' : 'false' }}"
+                                    aria-expanded="{{ request()->is('account-*', 'admin/account-billing*') ? 'true' : 'false' }}"
                                     aria-controls="pagesCollapseAccount">
                                     Account
                                     <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                                 </a>
-                                <div class="collapse {{ request()->is('account-*') ? 'show' : '' }}"
+                                <div class="collapse {{ request()->is('account-*', 'admin/account-billing*') ? 'show' : '' }}"
                                     id="pagesCollapseAccount" data-bs-parent="#accordionSidenavPagesMenu">
                                     <nav class="sidenav-menu-nested nav">
                                         <a class="nav-link {{ setActive('account-profile') }}"
                                             href="{{ url('account-profile') }}">Profile</a>
-                                        <a class="nav-link {{ setActive('account-billing') }}"
-                                            href="{{ url('account-billing') }}">Billing</a>
+                                        <a class="nav-link {{ setActive(['admin/account-billing', 'admin/account-billing/*']) }}"
+                                            href="{{ url('admin/account-billing') }}">Billing</a>
                                         <a class="nav-link {{ setActive('account-security') }}"
                                             href="{{ url('account-security') }}">Security</a>
                                         <a class="nav-link {{ setActive('account-notifications') }}"
@@ -348,7 +348,7 @@
                                 <div class="collapse {{ request()->routeIs('users', 'user.*') || request()->is('user-management-*') ? 'show' : '' }}"
                                     id="appsCollapseUserManagement" data-bs-parent="#accordionSidenavAppsMenu">
                                     <nav class="sidenav-menu-nested nav">
-                                        <a class="nav-link {{ request()->is('users') ? 'active fw-bold' : '' }}"
+                                        <a class="nav-link {{ request()->is('admin/users') ? 'active fw-bold' : '' }}"
                                             href="{{ route('resumes.index') }}">Users List</a>
                                         <a class="nav-link {{ request()->routeIs('user.create') ? 'active fw-bold' : '' }}"
                                             href="{{ route('user.create') }}">Add New User</a>

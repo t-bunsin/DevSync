@@ -19,8 +19,12 @@ use Illuminate\Support\Facades\DB;
 |       -> MAX(CASE WHEN ur.is_primary THEN r.code END), the standard-SQL
 |          spelling of the same aggregate filter.
 |
-| GROUP BY u.id is legal under ONLY_FULL_GROUP_BY because MySQL 8 recognises
-| the other selected columns as functionally dependent on the primary key.
+| GROUP BY u.id alone is legal under ONLY_FULL_GROUP_BY on MySQL 8, which
+| recognises the other selected columns as functionally dependent on the
+| primary key. MariaDB does not extend that exception to views, so the
+| other u.* columns are wrapped in MAX() — a no-op here since each is
+| already single-valued per u.id, and it works unchanged on MySQL 8 too.
+| (ANY_VALUE() would read better but isn't available before MariaDB 10.5.)
 */
 return new class extends Migration
 {
@@ -32,11 +36,11 @@ return new class extends Migration
             CREATE VIEW `v_user_access` AS
             SELECT
                 u.id,
-                u.email,
-                u.phone,
-                u.display_name,
-                u.status,
-                u.preferred_locale,
+                MAX(u.email) AS email,
+                MAX(u.phone) AS phone,
+                MAX(u.display_name) AS display_name,
+                MAX(u.status) AS status,
+                MAX(u.preferred_locale) AS preferred_locale,
                 GROUP_CONCAT(r.code ORDER BY r.sort_order SEPARATOR ',') AS roles,
                 MAX(CASE WHEN ur.is_primary THEN r.code END) AS primary_role
             FROM users u

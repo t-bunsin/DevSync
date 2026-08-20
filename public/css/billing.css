@@ -1,0 +1,211 @@
+/*
+ * KH-WORKS — account billing (kh-bill).
+ *
+ * Plan-picker and checkout for /account-billing. Built on the --kh-* tokens
+ * and .kh-bo__card/.kh-bo__btn primitives from backoffice.css, so it reads
+ * as the same back-office rather than a bolted-on page.
+ */
+
+.kh-bill__current {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 22px;
+  margin-bottom: 22px;
+  background: var(--kh-surface);
+  border: 1px solid var(--kh-line);
+  border-radius: 16px;
+}
+
+.kh-bill__current strong {
+  display: block;
+  font-size: 1.05rem;
+}
+
+.kh-bill__current span {
+  color: var(--kh-muted);
+  font-size: 0.8rem;
+}
+
+.kh-bill__period {
+  display: inline-flex;
+  padding: 4px;
+  margin-bottom: 22px;
+  background: var(--kh-surface);
+  border: 1px solid var(--kh-line);
+  border-radius: 999px;
+}
+
+.kh-bill__period button {
+  padding: 8px 18px;
+  color: var(--kh-muted);
+  background: transparent;
+  border: 0;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 150ms ease, color 150ms ease;
+}
+
+.kh-bill__period button[aria-pressed="true"] {
+  color: #fff;
+  background: var(--kh-ocean);
+}
+
+.kh-bill__period button span {
+  margin-left: 6px;
+  opacity: 0.85;
+  font-weight: 700;
+}
+
+.kh-bill__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 18px;
+}
+
+.kh-bill__plan {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  background: var(--kh-surface);
+  border: 1px solid var(--kh-line);
+  border-radius: 18px;
+}
+
+.kh-bill__plan--featured {
+  border-color: var(--kh-ocean);
+  box-shadow: 0 0 0 1px var(--kh-ocean);
+}
+
+.kh-bill__plan--current {
+  border-color: var(--bo-blue, var(--kh-ocean));
+}
+
+.kh-bill__plan-badge {
+  position: absolute;
+  top: -11px;
+  right: 20px;
+  padding: 4px 12px;
+  color: #fff;
+  background: var(--kh-ocean);
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.kh-bill__plan-name {
+  margin: 0 0 4px;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.kh-bill__plan-price {
+  margin: 0;
+  font-size: 1.9rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.kh-bill__plan-price span {
+  color: var(--kh-muted);
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.kh-bill__plan-note {
+  margin: 2px 0 14px;
+  color: var(--kh-muted);
+  font-size: 0.78rem;
+}
+
+.kh-bill__plan-blurb {
+  margin: 0 0 16px;
+  color: var(--kh-muted);
+  font-size: 0.83rem;
+}
+
+.kh-bill__plan-features {
+  flex: 1;
+  margin: 0 0 20px;
+  padding: 0;
+  list-style: none;
+}
+
+.kh-bill__plan-features li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 6px 0;
+  font-size: 0.82rem;
+}
+
+.kh-bill__plan-features li.is-highlight {
+  font-weight: 700;
+}
+
+.kh-bill__plan-features i {
+  margin-top: 3px;
+  color: var(--kh-ocean);
+  font-size: 0.75rem;
+}
+
+.kh-bill__plan-select {
+  width: 100%;
+  text-align: center;
+  justify-content: center;
+}
+
+/* Checkout / mock processing
+   ------------------------------------------------------------------ */
+.kh-bill__checkout {
+  max-width: 520px;
+}
+
+.kh-bill__summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 0;
+  border-bottom: 1px dashed var(--kh-line);
+}
+
+.kh-bill__summary:last-of-type {
+  border-bottom: 0;
+}
+
+.kh-bill__summary span:first-child {
+  color: var(--kh-muted);
+  font-size: 0.83rem;
+}
+
+.kh-bill__summary strong {
+  font-size: 0.95rem;
+}
+
+.kh-bill__total {
+  padding-top: 16px;
+  font-size: 1.2rem;
+}
+
+.kh-bill__processing {
+  display: none;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 0 0;
+  color: var(--kh-muted);
+  font-size: 0.83rem;
+}
+
+.kh-bill__processing.is-active {
+  display: flex;
+}
+
+.kh-bill__processing i {
+  color: var(--kh-ocean);
+}

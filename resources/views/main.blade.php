@@ -176,66 +176,22 @@
 
     @php
         // Annual billing is the monthly rate less this much, so a price change
-        // only ever has to be made in one place: the 'monthly' key below.
-        $annualDiscount = 0.20;
+        // only ever has to be made in one place: config/plans.php.
+        $annualDiscount = config('plans.annual_discount');
 
-        // Listed cheapest first, left to right.
-        $plans = [
-            [
-                'id' => 'revenue-share',
-                'name' => 'Revenue Share',
-                'monthly' => 0,
-                'blurb' => 'For a new board finding its first employers.',
-                'cta' => 'Start free',
-                'href' => route('register'),
-                'featured' => false,
-                'features' => [
-                    ['label' => '25% Revenue Share', 'highlight' => true],
-                    ['label' => '1 Job Board', 'highlight' => false],
-                    ['label' => 'Unlimited Pageviews', 'highlight' => false],
-                    ['label' => 'Email Support', 'highlight' => false],
-                    ['label' => 'Custom Domains', 'highlight' => false],
-                    ['label' => '2 Custom Pages', 'highlight' => false],
-                    ['label' => 'Employer Profiles & Directory', 'highlight' => false],
-                ],
-            ],
-            [
-                'id' => 'single-site',
-                'name' => 'Single Site',
-                'monthly' => 99,
-                'blurb' => 'For one board with steady traffic and hiring.',
-                'cta' => 'Choose Single Site',
-                'href' => route('register'),
-                'featured' => true,
-                'features' => [
-                    ['label' => 'No Revenue Share', 'highlight' => true],
-                    ['label' => '1 Job Board', 'highlight' => false],
-                    ['label' => '40,000 Pageviews / Month', 'highlight' => false],
-                    ['label' => 'Email Support', 'highlight' => false],
-                    ['label' => 'Custom Domains', 'highlight' => false],
-                    ['label' => 'Unlimited Custom Pages and Blogs', 'highlight' => false],
-                    ['label' => 'Employer Profiles & Directory', 'highlight' => false],
-                ],
-            ],
-            [
-                'id' => 'multi-site',
-                'name' => 'Multi Site',
-                'monthly' => 249,
-                'blurb' => 'For agencies running several boards at once.',
-                'cta' => 'Talk to sales',
-                'href' => route('contact'),
-                'featured' => false,
-                'features' => [
-                    ['label' => 'No Revenue Share', 'highlight' => true],
-                    ['label' => '3 Job Boards', 'highlight' => false],
-                    ['label' => '150,000 Pageviews / Month', 'highlight' => false],
-                    ['label' => 'Email & Phone Support', 'highlight' => false],
-                    ['label' => 'Custom Domains', 'highlight' => false],
-                    ['label' => 'Unlimited Custom Pages and Blogs', 'highlight' => false],
-                    ['label' => 'Employer Profiles & Directory', 'highlight' => false],
-                ],
-            ],
+        // Tier facts (name, price, features) live in config/plans.php, shared
+        // with the account billing "choose a package" step. The marketing CTA
+        // and href are specific to this page, so they're attached here.
+        $ctas = [
+            'revenue-share' => ['cta' => 'Start free', 'href' => route('register')],
+            'single-site' => ['cta' => 'Choose Single Site', 'href' => route('register')],
+            'multi-site' => ['cta' => 'Talk to sales', 'href' => route('contact')],
         ];
+
+        $plans = array_map(
+            fn (array $plan) => [...$plan, ...$ctas[$plan['id']]],
+            config('plans.tiers')
+        );
 
         // Both billing periods are derived here rather than typed twice, so the
         // annual column can never drift out of step with the monthly one.

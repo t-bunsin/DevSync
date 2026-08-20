@@ -56,7 +56,7 @@
                 </div>
 
                 @auth
-                    <a class="jf-btn jf-btn--ghost" href="{{ url('/home') }}">
+                    <a class="jf-btn jf-btn--ghost" href="{{ route('home') }}">
                         <i class="fas fa-chart-line"></i>
                         <span>{{ __('ui.actions.dashboard') }}</span>
                     </a>
