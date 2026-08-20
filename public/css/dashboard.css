@@ -1715,32 +1715,95 @@ body.nav-fixed {
   font-weight: 700;
 }
 
-/* Activity center badge
+/* Activity center
    ------------------------------------------------------------------
-   The unread count on the topbar bell. Positioned on the button itself so it
-   rides with the icon in both the light and dark admin themes. */
+   The bell in the topbar and its dropdown. The sb-admin theme sizes this list
+   for one-line alerts at 0.9rem, which cut every arrival off mid-sentence
+   ("Toeng Bunsin applied for Software…"). Everything here is scoped to our
+   bell, and matches the theme's own selector depth where it has to win. */
+
+/* The unread count. Small and tucked inside the button's edge, with a ring in
+   the topbar colour so it reads as a badge rather than a blob stuck on top. */
 .kh-notify__toggle {
   position: relative;
 }
 
 .kh-notify__badge {
   position: absolute;
-  top: 2px;
-  right: 2px;
-  min-width: 17px;
-  padding: 0 4px;
+  top: 3px;
+  right: 3px;
+  min-width: 15px;
+  height: 15px;
+  padding: 0 3px;
   color: #fff;
-  background: #dc3545;
+  background: #e02424;
   border-radius: 999px;
-  font-size: 0.62rem;
+  box-shadow: 0 0 0 2px var(--kh-surface, #fff);
+  font-size: 0.58rem;
   font-weight: 700;
-  line-height: 17px;
+  line-height: 15px;
+  letter-spacing: -0.01em;
   text-align: center;
   pointer-events: none;
 }
 
 .kh-notify__badge[hidden] {
   display: none;
+}
+
+/* A width of its own, so the sentence has somewhere to go. */
+[data-kh-notifications].dropdown-notifications .dropdown-menu {
+  width: 20.5rem;
+  max-width: calc(100vw - 1.5rem);
+}
+
+[data-kh-notifications].dropdown-notifications .dropdown-menu .dropdown-notifications-header {
+  padding-top: 0.8rem;
+  padding-bottom: 0.8rem;
+  font-size: 0.78rem;
+}
+
+/* Tighter rows: the theme's 1rem padding and 2.5rem avatar were sized for
+   four demo lines, and left room for barely three real ones. */
+[data-kh-notifications].dropdown-notifications .dropdown-menu .dropdown-notifications-item {
+  padding-top: 0.7rem;
+  padding-bottom: 0.7rem;
+}
+
+[data-kh-notifications].dropdown-notifications .dropdown-menu .dropdown-notifications-item .dropdown-notifications-item-icon {
+  height: 2rem;
+  width: 2rem;
+  margin-right: 0.75rem;
+}
+
+[data-kh-notifications].dropdown-notifications .dropdown-menu .dropdown-notifications-item .dropdown-notifications-item-icon svg {
+  height: 0.75rem;
+  width: 0.75rem;
+}
+
+[data-kh-notifications].dropdown-notifications .dropdown-menu .dropdown-notifications-item .dropdown-notifications-item-content .dropdown-notifications-item-content-details {
+  font-size: 0.65rem;
+  letter-spacing: 0.01em;
+}
+
+/* Activity lines are a sentence, not a label: they wrap, at a size that fits
+   the whole thing in two rows. */
+[data-kh-notifications].dropdown-notifications .dropdown-menu .dropdown-notifications-item .dropdown-notifications-item-content .dropdown-notifications-item-content-text {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  max-width: none;
+  margin-top: 1px;
+  overflow: hidden;
+  white-space: normal;
+  font-size: 0.79rem;
+  line-height: 1.4;
+}
+
+[data-kh-notifications].dropdown-notifications .dropdown-menu .dropdown-notifications-footer {
+  padding-top: 0.65rem;
+  padding-bottom: 0.65rem;
+  font-size: 0.74rem;
 }
 
 /* An unread row is marked down the edge rather than tinted, so the dropdown
@@ -1751,19 +1814,4 @@ body.nav-fixed {
 
 .kh-notify__empty {
   white-space: normal;
-}
-
-/* The theme clips each line to one row with an ellipsis, which cut the role
-   name off every arrival ("Sokha Chan applied for UI/U…"). Activity lines are
-   a sentence, so they wrap instead — capped at two rows so a long job title
-   cannot push the dropdown open. */
-/* The full chain, matching the theme's own selector: a shorter one loses on
-   specificity no matter which file loads last. */
-[data-kh-notifications].dropdown-notifications .dropdown-menu .dropdown-notifications-item .dropdown-notifications-item-content .dropdown-notifications-item-content-text {
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  max-width: 15rem;
-  white-space: normal;
-  line-height: 1.4;
 }
