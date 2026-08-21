@@ -24,8 +24,13 @@ class JobApplicationController extends Controller
         $this->middleware('auth');
     }
 
+    /** Rows per page on the applications list, matching the job posts list. */
+    private const PER_PAGE = 5;
+
     public function index(Request $request, JobPost $jobPost): View
     {
+        abort_unless($request->user()->isAdmin() || $jobPost->created_by === $request->user()->id, 403);
+
         $jobPost->load('employer');
 
         $from = $this->dateInput($request->query('from'));
@@ -44,7 +49,8 @@ class JobApplicationController extends Controller
             ->appliedBetween($from, $to)
             ->orderByDesc('applied_at')
             ->orderByDesc('id')
-            ->get();
+            ->paginate(self::PER_PAGE)
+            ->withQueryString();
 
         // Off every application for this post, so the tiles keep their meaning
         // under a filter — the same call the job post list makes.
@@ -73,6 +79,8 @@ class JobApplicationController extends Controller
      */
     public function downloadCv(JobApplication $application): StreamedResponse
     {
+        $this->authorizeOwner($application);
+
         abort_unless($application->cv_path && Storage::disk('local')->exists($application->cv_path), 404);
 
         return Storage::disk('local')->download(
@@ -84,6 +92,8 @@ class JobApplicationController extends Controller
     /** Moves one application along the pipeline, and keeps the private note. */
     public function update(Request $request, JobApplication $application): RedirectResponse
     {
+        $this->authorizeOwner($application);
+
         $validated = $request->validate([
             'status' => ['required', Rule::in(JobApplication::statuses())],
             'note' => 'nullable|string|max:2000',
@@ -98,6 +108,8 @@ class JobApplicationController extends Controller
 
     public function destroy(JobApplication $application): RedirectResponse
     {
+        $this->authorizeOwner($application);
+
         $postId = $application->job_post_id;
         $name = $application->full_name;
 
@@ -106,5 +118,13 @@ class JobApplicationController extends Controller
         return redirect()
             ->route('job-posts.applications', $postId)
             ->withSuccess("The application from {$name} was deleted.");
+    }
+
+    /** Admin may touch any application; everyone else only their own post's. */
+    private function authorizeOwner(JobApplication $application): void
+    {
+        $viewer = request()->user();
+
+        abort_unless($viewer->isAdmin() || $application->jobPost->created_by === $viewer->id, 403);
     }
 }

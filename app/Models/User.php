@@ -166,6 +166,21 @@ class User extends Authenticatable
         return $this->hasRole(Role::EMPLOYER);
     }
 
+    public function isEmployee(): bool
+    {
+        return $this->hasRole(Role::EMPLOYEE);
+    }
+
+    /** Where this role lands after login/registration. */
+    public function homeRouteName(): string
+    {
+        return match (true) {
+            $this->isAdmin() => 'users',
+            $this->isEmployer() => 'job-posts.index',
+            default => 'my-applications',
+        };
+    }
+
     /**
      * Replace this user's roles, marking one of them primary. Kept here so the
      * "exactly one primary" rule the database enforces is written in one place.

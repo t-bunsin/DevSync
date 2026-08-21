@@ -26,12 +26,22 @@
                 <p>Write the roles that appear on the public jobs pages.</p>
             </div>
 
-            <a class="kh-bo__btn" href="{{ route('job-posts.create') }}">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
-                    <path d="M12 5v14M5 12h14" />
-                </svg>
-                Add job post
-            </a>
+            <div class="kh-bo__head-actions">
+                <a class="kh-bo__btn kh-bo__btn--ghost"
+                    href="{{ route('job-posts.export', array_filter(['status' => $activeStatus, 'q' => $searchTerm, 'from' => $fromDate, 'to' => $toDate])) }}">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M12 3v12" /><path d="M7 10l5 5 5-5" /><path d="M4 21h16" />
+                    </svg>
+                    Export to Excel
+                </a>
+
+                <a class="kh-bo__btn" href="{{ route('job-posts.create') }}">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                        <path d="M12 5v14M5 12h14" />
+                    </svg>
+                    Add job post
+                </a>
+            </div>
         </header>
 
         @if (session('success'))
@@ -305,6 +315,8 @@
                     </tbody>
                 </table>
             </div>
+
+            @include('partials.kh-bo-pagination', ['paginator' => $posts])
         </section>
     </div>
 @endsection

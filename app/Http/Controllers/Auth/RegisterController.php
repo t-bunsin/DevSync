@@ -45,12 +45,14 @@ class RegisterController extends Controller
     }
 
     /**
-     * Registration normally ends on the dashboard, but a visitor who was sent
-     * here by the job apply gate goes back to the role they wanted.
+     * Registration normally ends on the role's own landing page, but a
+     * visitor who was sent here by the job apply gate goes back to the job
+     * they wanted. RegistersUsers logs the new user in before this runs, so
+     * auth()->user() is already the account just created.
      */
     protected function redirectTo()
     {
-        return session()->pull('url.intended', $this->redirectTo);
+        return session()->pull('url.intended', route(auth()->user()->homeRouteName()));
     }
 
     /**

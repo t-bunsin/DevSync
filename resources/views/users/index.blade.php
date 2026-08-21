@@ -281,6 +281,8 @@
                     </tbody>
                 </table>
             </div>
+
+            @include('partials.kh-bo-pagination', ['paginator' => $users])
         </section>
     </div>
 @endsection

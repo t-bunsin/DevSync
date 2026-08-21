@@ -12,6 +12,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\JobApplicationController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\JobPostController;
+use App\Http\Controllers\MyApplicationsController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ResumeController;
 use Illuminate\Http\Request;
@@ -83,6 +84,10 @@ Route::prefix('admin')->group(function () {
         Route::get('/notifications', [NotificationController::class, 'feed'])->name('notifications.feed');
         Route::post('/notifications/read', [NotificationController::class, 'markRead'])->name('notifications.read');
 
+        // The candidate's own list — self-scoped by user_id in the controller,
+        // so no role middleware is needed beyond being signed in.
+        Route::get('/my-applications', [MyApplicationsController::class, 'index'])->name('my-applications');
+
         // Managing accounts is an administrator job. Everyone else is refused at
         // the door rather than served a filtered directory.
         Route::middleware('admin')->group(function () {
@@ -91,30 +96,43 @@ Route::prefix('admin')->group(function () {
             Route::resource('user', UserController::class);
         });
 
-        Route::post('/compliance/{compliance}/verify', [ComplianceController::class, 'verify'])
-            ->name('compliance.verify');
-        Route::resource('compliance', ComplianceController::class);
+        // Admin-only: not part of any role's day-to-day menu.
+        Route::middleware('admin')->group(function () {
+            Route::post('/compliance/{compliance}/verify', [ComplianceController::class, 'verify'])
+                ->name('compliance.verify');
+            Route::resource('compliance', ComplianceController::class);
 
-        Route::resource('job-posts', JobPostController::class)
-            ->parameters(['job-posts' => 'jobPost']);
+            Route::get('/resumes/{resume}/download', [ResumeController::class, 'download'])
+                ->name('resumes.download');
+            Route::resource('resumes', ResumeController::class);
 
-        // The candidates behind the Applications count on the job post list.
-        Route::get('/job-posts/{jobPost}/applications', [JobApplicationController::class, 'index'])
-            ->name('job-posts.applications');
-        Route::get('/job-applications/{application}/cv', [JobApplicationController::class, 'downloadCv'])
-            ->name('job-applications.cv');
-        Route::patch('/job-applications/{application}', [JobApplicationController::class, 'update'])
-            ->name('job-applications.update');
-        Route::delete('/job-applications/{application}', [JobApplicationController::class, 'destroy'])
-            ->name('job-applications.destroy');
+            // Everything but the directory listing: employer gets read access
+            // to the list below, but only admin may create/edit/delete companies.
+            Route::resource('companies', CompaniesController::class)->except(['index']);
+        });
 
-        Route::get('/resumes/{resume}/download', [ResumeController::class, 'download'])
-            ->name('resumes.download');
-        Route::resource('resumes', ResumeController::class);
+        // Employer manages their own job posts and the applications to them;
+        // admin passes through every 'role:' gate regardless of the list.
+        Route::middleware('role:employer')->group(function () {
+            // Ahead of the resource route: /job-posts/{jobPost} would otherwise
+            // swallow /job-posts/export and try to bind "export" as a post id.
+            Route::get('/job-posts/export', [JobPostController::class, 'export'])->name('job-posts.export');
+            Route::resource('job-posts', JobPostController::class)
+                ->parameters(['job-posts' => 'jobPost']);
 
-        // Index keeps the bare `companies` name that the admin shell already links to.
-        Route::get('/companies', [CompaniesController::class, 'index'])->name('companies');
-        Route::resource('companies', CompaniesController::class)->except(['index']);
+            // The candidates behind the Applications count on the job post list.
+            Route::get('/job-posts/{jobPost}/applications', [JobApplicationController::class, 'index'])
+                ->name('job-posts.applications');
+            Route::get('/job-applications/{application}/cv', [JobApplicationController::class, 'downloadCv'])
+                ->name('job-applications.cv');
+            Route::patch('/job-applications/{application}', [JobApplicationController::class, 'update'])
+                ->name('job-applications.update');
+            Route::delete('/job-applications/{application}', [JobApplicationController::class, 'destroy'])
+                ->name('job-applications.destroy');
+
+            // Index keeps the bare `companies` name that the admin shell already links to.
+            Route::get('/companies', [CompaniesController::class, 'index'])->name('companies');
+        });
     });
 });
 

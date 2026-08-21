@@ -5,8 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Company;
 use App\Models\Compliance;
 use App\Models\JobPost;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class JobPostController extends Controller
 {
@@ -15,38 +19,23 @@ class JobPostController extends Controller
         $this->middleware('auth');
     }
 
+    /** Rows per page on the job posts list, matching the applications list. */
+    private const PER_PAGE = 5;
+
     public function index(Request $request)
     {
-        $from = $this->dateInput($request->query('from'));
-        $to = $this->dateInput($request->query('to'));
+        [$query, $from, $to] = $this->filteredQuery($request);
 
-        // A backwards range would silently return nothing, so read it as given.
-        if ($from && $to && $from > $to) {
-            [$from, $to] = [$to, $from];
-        }
-
-        $posts = JobPost::query()
-            // The count travels with the employer so every row resolves its
-            // verification badge without a query per company. Same idiom as
-            // JobController::catalog().
-            ->with(['author', 'employer' => fn ($query) => $query->withCount([
-                'complianceRecords as verified_compliance_count' => fn ($records) => $records
-                    ->where('status', Compliance::STATUS_VERIFIED),
-            ])])
-            // One grouped count for the whole page rather than a query per row,
-            // which is what fills the Applications column.
-            ->withCount('applications')
-            ->search($request->query('q'))
-            ->postedBetween($from, $to)
-            ->when(
-                in_array($request->query('status'), JobPost::statuses(), true),
-                fn ($query) => $query->where('status', $request->query('status'))
-            )
+        $posts = $query
             ->orderByDesc('created_at')
-            ->get();
+            ->paginate(self::PER_PAGE)
+            ->withQueryString();
 
-        // Off the whole table, so the tiles keep their meaning under a filter.
+        // Off the whole table, so the tiles keep their meaning under a filter
+        // — but still an employer's own posts only, or the tiles would count
+        // every other employer's rows too.
         $counts = JobPost::query()
+            ->when(! $request->user()->isAdmin(), fn (Builder $q) => $q->where('created_by', $request->user()->id))
             ->selectRaw('status, COUNT(*) as total')
             ->groupBy('status')
             ->pluck('total', 'status');
@@ -59,6 +48,100 @@ class JobPostController extends Controller
             'fromDate' => $from,
             'toDate' => $to,
         ]);
+    }
+
+    /**
+     * Every row matching the current filters, laid out one per line for a
+     * spreadsheet instead of a page — same query as the index, without the
+     * paging so the export always covers the whole filtered set.
+     */
+    public function export(Request $request): StreamedResponse
+    {
+        [$query] = $this->filteredQuery($request);
+
+        $posts = $query->orderByDesc('created_at')->get();
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Job posts');
+
+        $headings = ['Title', 'Company', 'Location', 'Type', 'Mode', 'Status', 'Applications', 'Registered', 'Post by'];
+        $sheet->fromArray($headings, null, 'A1');
+        $sheet->getStyle('A1:' . $sheet->getHighestColumn() . '1')->getFont()->setBold(true);
+
+        $row = 2;
+        foreach ($posts as $post) {
+            // Strict null comparison: fromArray()'s default `!= $nullValue`
+            // check is loose, so an application count of 0 reads as "equal to
+            // null" and silently drops the cell.
+            $sheet->fromArray([
+                $post->title,
+                $post->company,
+                $post->location,
+                $post->type,
+                $post->mode,
+                ucfirst($post->status),
+                $post->applications_count,
+                optional($post->created_at)->format('Y-m-d H:i'),
+                $post->author?->email ?: 'Unknown',
+            ], null, 'A' . $row, true);
+            $row++;
+        }
+
+        foreach (range('A', $sheet->getHighestColumn()) as $column) {
+            $sheet->getColumnDimension($column)->setAutoSize(true);
+        }
+
+        $filename = 'job-posts-' . now()->format('Y-m-d-His') . '.xlsx';
+
+        return new StreamedResponse(function () use ($spreadsheet) {
+            (new Xlsx($spreadsheet))->save('php://output');
+        }, 200, [
+            'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+        ]);
+    }
+
+    /**
+     * The search/status/date filters shared by the index page and the export,
+     * so the spreadsheet always matches what's on screen. Returns the bounds
+     * alongside the query since the index view echoes them back into the
+     * filter inputs.
+     */
+    private function filteredQuery(Request $request): array
+    {
+        $from = $this->dateInput($request->query('from'));
+        $to = $this->dateInput($request->query('to'));
+
+        // A backwards range would silently return nothing, so read it as given.
+        if ($from && $to && $from > $to) {
+            [$from, $to] = [$to, $from];
+        }
+
+        $query = JobPost::query()
+            // The count travels with the employer so every row resolves its
+            // verification badge without a query per company. Same idiom as
+            // JobController::catalog().
+            ->with(['author', 'employer' => fn ($q) => $q->withCount([
+                'complianceRecords as verified_compliance_count' => fn ($records) => $records
+                    ->where('status', Compliance::STATUS_VERIFIED),
+            ])])
+            // One grouped count for the whole page rather than a query per row,
+            // which is what fills the Applications column.
+            ->withCount('applications')
+            ->search($request->query('q'))
+            ->postedBetween($from, $to)
+            ->when(
+                in_array($request->query('status'), JobPost::statuses(), true),
+                fn (Builder $q) => $q->where('status', $request->query('status'))
+            )
+            // Employer sees only their own posts; admin sees everything.
+            ->when(
+                ! $request->user()->isAdmin(),
+                fn (Builder $q) => $q->where('created_by', $request->user()->id)
+            );
+
+        return [$query, $from, $to];
     }
 
     public function create()
@@ -91,6 +174,8 @@ class JobPostController extends Controller
 
     public function show(JobPost $jobPost)
     {
+        $this->authorizeOwner($jobPost);
+
         $jobPost->load(['employer', 'author'])->loadCount('applications');
 
         return view('job-posts.show', ['post' => $jobPost]);
@@ -98,6 +183,8 @@ class JobPostController extends Controller
 
     public function edit(JobPost $jobPost)
     {
+        $this->authorizeOwner($jobPost);
+
         return view('job-posts.edit', [
             'post' => $jobPost,
             'companies' => Company::approved()->orderBy('name')->get(),
@@ -106,6 +193,8 @@ class JobPostController extends Controller
 
     public function update(Request $request, JobPost $jobPost)
     {
+        $this->authorizeOwner($jobPost);
+
         $validated = $this->validated($request);
 
         $jobPost->fill($validated);
@@ -128,12 +217,20 @@ class JobPostController extends Controller
 
     public function destroy(JobPost $jobPost)
     {
+        $this->authorizeOwner($jobPost);
+
         $title = $jobPost->title;
         $jobPost->delete();
 
         return redirect()
             ->route('job-posts.index')
             ->withSuccess("“{$title}” was deleted.");
+    }
+
+    /** Admin may touch any post; everyone else only the one they created. */
+    private function authorizeOwner(JobPost $jobPost): void
+    {
+        abort_unless(request()->user()->isAdmin() || $jobPost->created_by === request()->user()->id, 403);
     }
 
     private function validated(Request $request): array

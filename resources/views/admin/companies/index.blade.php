@@ -25,12 +25,14 @@
                 <p>Employers on the platform, the licences they hold, and the roles they advertise.</p>
             </div>
 
-            <a class="kh-bo__btn" href="{{ route('companies.create') }}">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
-                    <path d="M12 5v14M5 12h14" />
-                </svg>
-                Add company
-            </a>
+            @if (auth()->user()?->isAdmin())
+                <a class="kh-bo__btn" href="{{ route('companies.create') }}">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                        <path d="M12 5v14M5 12h14" />
+                    </svg>
+                    Add company
+                </a>
+            @endif
         </header>
 
         @if (session('success'))
@@ -187,26 +189,28 @@
                                 </td>
 
                                 <td>
-                                    <div class="kh-bo__actions">
-                                        <a class="kh-bo__action" href="{{ route('companies.edit', $company) }}"
-                                            title="Edit company" aria-label="Edit {{ $company->name }}">
-                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                                <path d="M12 20h9" /><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z" />
-                                            </svg>
-                                        </a>
-
-                                        <form method="POST" action="{{ route('companies.destroy', $company) }}"
-                                            onsubmit="return confirm('Delete {{ addslashes($company->name) }}? This cannot be undone.');">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button class="kh-bo__action kh-bo__action--danger" type="submit"
-                                                title="Delete company" aria-label="Delete {{ $company->name }}">
+                                    @if (auth()->user()?->isAdmin())
+                                        <div class="kh-bo__actions">
+                                            <a class="kh-bo__action" href="{{ route('companies.edit', $company) }}"
+                                                title="Edit company" aria-label="Edit {{ $company->name }}">
                                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                                    <path d="M3 6h18" /><path d="M8 6V4h8v2" /><path d="M19 6l-1 14H6L5 6" />
+                                                    <path d="M12 20h9" /><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z" />
                                                 </svg>
-                                            </button>
-                                        </form>
-                                    </div>
+                                            </a>
+
+                                            <form method="POST" action="{{ route('companies.destroy', $company) }}"
+                                                onsubmit="return confirm('Delete {{ addslashes($company->name) }}? This cannot be undone.');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button class="kh-bo__action kh-bo__action--danger" type="submit"
+                                                    title="Delete company" aria-label="Delete {{ $company->name }}">
+                                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                                        <path d="M3 6h18" /><path d="M8 6V4h8v2" /><path d="M19 6l-1 14H6L5 6" />
+                                                    </svg>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    @endif
                                 </td>
                             </tr>
                         @empty

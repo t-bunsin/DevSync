@@ -211,7 +211,8 @@
                                                 @if ($application->resume)
                                                     <a class="kh-bo__name-link" href="{{ route('resumes.show', $application->resume) }}">{{ $application->full_name }}</a>
                                                 @else
-                                                    {{ $application->full_name }}
+                                                    <button class="kh-bo__name-link kh-bo__name-link--button" type="button"
+                                                        data-bo-modal-open="application-{{ $application->id }}">{{ $application->full_name }}</button>
                                                 @endif
                                             </span>
                                             <span class="kh-bo__ref">{{ $application->email }}</span>
@@ -306,6 +307,7 @@
                 </table>
             </div>
 
+            @include('partials.kh-bo-pagination', ['paginator' => $applications])
         </section>
 
         {{-- One dialog per row: the candidate on the left, the employer's own

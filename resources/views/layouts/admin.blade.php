@@ -298,6 +298,10 @@
                                 </div>
                             </nav>
                         </div>
+                        {{-- Every child of this accordion is either admin-only or
+                             admin+employer, so an employee has nothing to see inside
+                             it — hide the whole accordion rather than leave it empty. --}}
+                        @if ($adminUser?->isAdmin() || $adminUser?->isEmployer())
                         <!-- Sidenav Accordion (Applications)-->
                         <!-- Applications Menu -->
                         <a class="nav-link collapsed {{ request()->is('applications/*') || request()->routeIs('users', 'user.*', 'job-posts.*', 'resumes.*') || request()->is('user-management-*') ? 'kh-nav-parent-active' : '' }}"
@@ -359,6 +363,7 @@
                                     </nav>
                                 </div>
 
+                                @if ($adminUser?->isAdmin())
                                 <!-- Resume Management Inside Applications -->
                                 <a class="nav-link collapsed {{ request()->routeIs('resumes.*') ? 'kh-nav-parent-active fw-bold' : '' }}"
                                     href="javascript:void(0);" data-bs-toggle="collapse"
@@ -378,6 +383,7 @@
                                             href="{{ route('resumes.create') }}">Add Resume</a>
                                     </nav>
                                 </div>
+                                @endif
 
                                 <!-- Nested Sidenav Accordion (Apps -> Posts Management)
                                 <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse"
@@ -397,6 +403,11 @@
                                 </div>-->
                             </nav>
                         </div>
+                        @endif
+                        {{-- Every child of this accordion is either admin-only or
+                             admin+employer, so an employee has nothing to see inside
+                             it — hide the whole accordion rather than leave it empty. --}}
+                        @if ($adminUser?->isAdmin() || $adminUser?->isEmployer())
                         <!-- Sidenav Accordion (Companies)-->
                         <a class="nav-link collapsed {{ request()->routeIs('compliance.*', 'companies', 'companies.*') ? 'kh-nav-parent-active' : '' }}"
                             href="javascript:void(0);" data-bs-toggle="collapse"
@@ -411,6 +422,7 @@
                             id="collapseFlows" data-bs-parent="#accordionSidenav">
                             <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavCompaniesMenu">
 
+                                @if ($adminUser?->isAdmin())
                                 <!-- Compliance Menu Inside Companies -->
                                 <a class="nav-link collapsed {{ request()->routeIs('compliance.*') ? 'kh-nav-parent-active fw-bold' : '' }}"
                                     href="javascript:void(0);" data-bs-toggle="collapse"
@@ -430,6 +442,7 @@
                                             href="{{ route('compliance.create') }}">Add Record</a>
                                     </nav>
                                 </div>
+                                @endif
 
                                 <!-- Company Directory Inside Companies -->
                                 <a class="nav-link collapsed {{ request()->routeIs('companies', 'companies.*') ? 'kh-nav-parent-active fw-bold' : '' }}"
@@ -446,12 +459,25 @@
                                     <nav class="sidenav-menu-nested nav">
                                         <a class="nav-link {{ request()->routeIs('companies') ? 'active fw-bold' : '' }}"
                                             href="{{ route('companies') }}">All Companies</a>
+                                        @if ($adminUser?->isAdmin())
                                         <a class="nav-link {{ request()->routeIs('companies.create') ? 'active fw-bold' : '' }}"
                                             href="{{ route('companies.create') }}">Add Company</a>
+                                        @endif
                                     </nav>
                                 </div>
                             </nav>
                         </div>
+                        @endif
+                        {{-- Employee's sidebar is otherwise Dashboards + Account only
+                             (Applications/Companies both hide entirely above), so this
+                             stands alone rather than nesting in either accordion. --}}
+                        @if ($adminUser?->isEmployee())
+                        <a class="nav-link {{ request()->routeIs('my-applications') ? 'active fw-bold' : '' }}"
+                            href="{{ route('my-applications') }}">
+                            <div class="nav-link-icon"><i data-feather="file-text"></i></div>
+                            My Applications
+                        </a>
+                        @endif
                         <!-- Sidenav Heading (UI Toolkit)-->
                         <div class="sidenav-menu-heading">UI Toolkit</div>
                         <!-- Sidenav Accordion (Layout)-->

@@ -280,7 +280,9 @@
                                 @endif
                             </dl>
 
-                            <a class="kh-bo__btn kh-bo__btn--ghost" href="{{ route('companies.edit', $employer) }}">Open company profile</a>
+                            @if (auth()->user()?->isAdmin())
+                                <a class="kh-bo__btn kh-bo__btn--ghost" href="{{ route('companies.edit', $employer) }}">Open company profile</a>
+                            @endif
                         @endif
                     </div>
                 </section>

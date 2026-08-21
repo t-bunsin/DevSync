@@ -76,7 +76,7 @@
 
 .kh-bo__head h1 {
   margin: 6px 0 0;
-  font-size: clamp(1.6rem, 2.6vw, 2.2rem);
+  font-size: clamp(1.3rem, 2vw, 1.7rem);
   font-weight: 600;
   letter-spacing: -0.045em;
 }
@@ -263,6 +263,85 @@
 .kh-bo__filter.is-active {
   color: #fff;
   background: var(--kh-ocean);
+}
+
+.kh-bo__pagination {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 22px;
+  border-top: 1px solid var(--kh-line);
+}
+
+.kh-bo__pagination-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  color: var(--kh-ink);
+  background: var(--kh-surface);
+  border: 1px solid var(--kh-line);
+  border-radius: 999px;
+  text-decoration: none;
+  flex: none;
+}
+
+.kh-bo__pagination-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.kh-bo__pagination-btn:hover:not(.is-disabled) {
+  border-color: var(--kh-ocean);
+  color: var(--kh-ocean);
+}
+
+.kh-bo__pagination-btn.is-disabled {
+  color: var(--kh-muted);
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.kh-bo__pagination-pages {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.kh-bo__pagination-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 32px;
+  padding: 0 6px;
+  color: var(--kh-muted);
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.kh-bo__pagination-page:hover {
+  color: var(--kh-ink);
+}
+
+.kh-bo__pagination-page.is-active {
+  color: #fff;
+  background: var(--kh-ocean);
+}
+
+.kh-bo__pagination-ellipsis {
+  padding: 0 4px;
+  color: var(--kh-muted);
+}
+
+.kh-bo__pagination-summary {
+  margin-left: auto;
+  color: var(--kh-muted);
+  font-size: 0.78rem;
+  white-space: nowrap;
 }
 
 .kh-bo__search {
@@ -831,6 +910,14 @@ textarea.kh-bo__control {
 .kh-bo__name-link:hover {
   color: var(--kh-ocean);
   text-decoration: underline;
+}
+
+.kh-bo__name-link--button {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
 }
 
 /* Responsive

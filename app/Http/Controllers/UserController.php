@@ -12,6 +12,9 @@ use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
+    /** Rows per page on the user directory, matching the other back-office lists. */
+    private const PER_PAGE = 5;
+
     public function index(Request $request)
     {
         $viewer = $request->user();
@@ -37,7 +40,8 @@ class UserController extends Controller
             ->when($from, fn ($query) => $query->whereDate('created_at', '>=', $from))
             ->when($to, fn ($query) => $query->whereDate('created_at', '<=', $to))
             ->orderBy('created_at')
-            ->get();
+            ->paginate(self::PER_PAGE)
+            ->withQueryString();
 
         // Counted off everything this viewer may see rather than the filtered
         // set, so the tiles keep their meaning under a filter.

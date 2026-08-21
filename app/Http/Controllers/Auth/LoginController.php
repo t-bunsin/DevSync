@@ -61,10 +61,9 @@ class LoginController extends Controller
     // Attempt login, honouring the "remember me" checkbox
     if (Auth::attempt($credentials, $request->boolean('remember'))) {
         $request->session()->regenerate();
-        // Follows RouteServiceProvider::HOME like the rest of the auth
-        // controllers; it used to hardcode the resource route '/user', which
-        // renders the same screen under a second URL.
-        return redirect()->intended(RouteServiceProvider::HOME);
+        // Per-role landing page: RouteServiceProvider::HOME ('/admin/users')
+        // is admin-only, so anyone else needs somewhere that won't 403 them.
+        return redirect()->intended(route($user->homeRouteName()));
     }
 
     // If user exists but password wrong
