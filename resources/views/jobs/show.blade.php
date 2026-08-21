@@ -80,10 +80,16 @@
                     </div>
 
                     @auth
-                        <button class="jf-btn jf-btn--apply" id="job-page-apply-button" type="button"
-                            @if (request()->boolean('apply')) data-job-page-auto-open @endif>
-                            Apply for this role <i class="fas fa-arrow-right" aria-hidden="true"></i>
-                        </button>
+                        @if (! empty($job['already_applied']))
+                            <button class="jf-btn jf-btn--apply is-applied" type="button" disabled>
+                                <i class="fas fa-check" aria-hidden="true"></i> Already applied
+                            </button>
+                        @else
+                            <button class="jf-btn jf-btn--apply" id="job-page-apply-button" type="button"
+                                @if (request()->boolean('apply')) data-job-page-auto-open @endif>
+                                Apply for this role <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                            </button>
+                        @endif
                     @else
                         {{-- Applying needs an account; browsing does not. --}}
                         <a class="jf-btn jf-btn--apply" href="{{ route('jobs.apply', $job['id']) }}">
@@ -112,12 +118,9 @@
                         <button class="jf-tab is-active" id="job-tab-description" type="button"
                             data-job-page-tab="description" role="tab" aria-selected="true"
                             aria-controls="job-page-panel">Overview</button>
-                        <button class="jf-tab" id="job-tab-job-description" type="button"
-                            data-job-page-tab="job_description" role="tab" aria-selected="false"
-                            aria-controls="job-page-panel">Job description</button>
                         <button class="jf-tab" id="job-tab-requirements" type="button"
                             data-job-page-tab="requirements" role="tab" aria-selected="false"
-                            aria-controls="job-page-panel">Requirements</button>
+                            aria-controls="job-page-panel">Job Details</button>
                         <button class="jf-tab" id="job-tab-company" type="button"
                             data-job-page-tab="company" role="tab" aria-selected="false"
                             aria-controls="job-page-panel">Company</button>
@@ -214,9 +217,10 @@
                             @endforeach
                         </div>
 
-                        {{-- The JS-driven panel: Overview, Job description and
-                             Requirements all render through it. Hidden only on the
-                             Company tab, which shows the employer profile above. --}}
+                        {{-- The JS-driven panel: Overview and the combined Job
+                             description & Requirements tab both render through it.
+                             Hidden only on the Company tab, which shows the
+                             employer profile above. --}}
                         <div id="job-page-main-block">
                             <span class="jf-kicker" id="job-page-kicker">Role overview</span>
                             <h2 id="job-page-section-title">{{ $job['tabs']['description']['title'] }}</h2>
@@ -227,6 +231,15 @@
                                     <li>{{ $item }}</li>
                                 @endforeach
                             </ul>
+
+                            {{-- Populated only on the combined tab, where the former
+                                 Job description panel renders beneath Requirements. --}}
+                            <div class="jf-job-page__secondary-panel" id="job-page-secondary-block" hidden>
+                                <h2 id="job-page-section-title-2"></h2>
+                                <p id="job-page-section-body-2"></p>
+                                <h3 id="job-page-list-title-2"></h3>
+                                <ul class="jf-detail__list" id="job-page-list-2"></ul>
+                            </div>
                         </div>
 
                         {{-- What the employer offers. Static, shown on the

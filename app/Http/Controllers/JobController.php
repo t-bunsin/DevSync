@@ -247,7 +247,7 @@ class JobController extends Controller
     private function catalog(): Collection
     {
         if (! Schema::hasTable('job_posts')) {
-            return collect(config('jobs_demo', []));
+            return $this->withAppliedFlag(collect(config('jobs_demo', [])));
         }
 
         $posts = JobPost::query()
@@ -263,7 +263,40 @@ class JobController extends Controller
             ->get()
             ->map(fn (JobPost $post) => $post->toCatalogArray());
 
-        return $posts->isNotEmpty() ? $posts : collect(config('jobs_demo', []));
+        $jobs = $posts->isNotEmpty() ? $posts : collect(config('jobs_demo', []));
+
+        return $this->withAppliedFlag($jobs);
+    }
+
+    /**
+     * Marks every job the signed-in candidate has already applied to, so the
+     * apply button can be disabled instead of inviting a second application.
+     */
+    private function withAppliedFlag(Collection $jobs): Collection
+    {
+        $appliedSlugs = $this->appliedJobSlugs();
+
+        return $jobs->map(fn (array $job) => $job + [
+            'already_applied' => in_array($job['id'], $appliedSlugs, true),
+        ]);
+    }
+
+    private function appliedJobSlugs(): array
+    {
+        $user = Auth::user();
+
+        if (! $user || ! Schema::hasTable('job_applications')) {
+            return [];
+        }
+
+        return JobApplication::query()
+            ->where('user_id', $user->getKey())
+            ->with('jobPost:id,slug')
+            ->get()
+            ->pluck('jobPost.slug')
+            ->filter()
+            ->values()
+            ->all();
     }
 
     /**

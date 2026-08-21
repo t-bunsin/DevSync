@@ -1812,6 +1812,23 @@ body.jf-body::selection {
   background: #ffcc7b;
 }
 
+.jf-btn--apply.is-applied,
+.jf-btn--apply:disabled {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: rgba(236, 247, 247, 0.66);
+  background: rgba(255, 255, 255, 0.08);
+  cursor: not-allowed;
+}
+
+.jf-btn--apply.is-applied:hover,
+.jf-btn--apply:disabled:hover {
+  color: rgba(236, 247, 247, 0.66);
+  background: rgba(255, 255, 255, 0.08);
+}
+
 .jf-detail__page-link {
   display: inline-flex;
   align-items: center;

@@ -354,6 +354,18 @@
   font-size: 0.68rem;
 }
 
+/* Job description & Requirements tab: the former Job description panel
+   rendered beneath Requirements, set off with a divider. */
+.jf-job-page__secondary-panel[hidden] {
+  display: none;
+}
+
+.jf-job-page__secondary-panel {
+  margin-top: 30px;
+  padding-top: 28px;
+  border-top: 1px solid var(--jf-line);
+}
+
 .jf-job-page__sidebar {
   display: grid;
   gap: 14px;

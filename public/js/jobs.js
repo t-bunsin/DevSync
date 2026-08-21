@@ -417,6 +417,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 .replace('__JOB__', encodeURIComponent(jobId));
         }
 
+        // Only the member button (a <button>) can be disabled this way — a
+        // guest can never already have applied, since applying needs an account.
+        if (detailApplyButton.tagName === 'BUTTON') {
+            const alreadyApplied = Boolean(job.already_applied);
+            detailApplyButton.disabled = alreadyApplied;
+            detailApplyButton.classList.toggle('is-applied', alreadyApplied);
+            detailApplyButton.innerHTML = alreadyApplied
+                ? '<i class="fas fa-check" aria-hidden="true"></i> Already applied'
+                : 'Apply for this role <i class="fas fa-arrow-right" aria-hidden="true"></i>';
+        }
+
         positionDetail(jobId);
 
         renderFacts(job);
@@ -662,8 +673,16 @@ document.addEventListener('DOMContentLoaded', () => {
         link.addEventListener('click', () => renderJob(link.dataset.viewJob));
     });
 
-    explorer.querySelectorAll('.js-apply-job').forEach((button) => {
-        button.addEventListener('click', () => openApplyDialog(button.dataset.jobId));
+    // Bound once on the single detail-apply-button node rather than by class:
+    // the button starts disabled (no "js-apply-job" class) when the initially
+    // selected job was already applied to, and a delegated-by-class listener
+    // would never attach to it if it queried the DOM before that state changed.
+    detailApplyButton.addEventListener('click', () => {
+        if (detailApplyButton.tagName !== 'BUTTON' || detailApplyButton.disabled) {
+            return;
+        }
+
+        openApplyDialog(detailApplyButton.dataset.jobId);
     });
 
     if (hasApplyDialog) {

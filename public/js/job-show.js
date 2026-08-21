@@ -15,6 +15,11 @@
         const sectionBody = document.getElementById('job-page-section-body');
         const listTitle = document.getElementById('job-page-list-title');
         const list = document.getElementById('job-page-list');
+        const secondaryBlock = document.getElementById('job-page-secondary-block');
+        const sectionTitle2 = document.getElementById('job-page-section-title-2');
+        const sectionBody2 = document.getElementById('job-page-section-body-2');
+        const listTitle2 = document.getElementById('job-page-list-title-2');
+        const list2 = document.getElementById('job-page-list-2');
         const companyHeader = document.getElementById('job-page-company-header');
         const companyProfile = document.getElementById('job-page-company-profile');
         const mainBlock = document.getElementById('job-page-main-block');
@@ -22,8 +27,13 @@
         const kicker = document.getElementById('job-page-kicker');
         const kickerLabels = {
             description: 'Role overview',
-            job_description: 'Job description',
-            requirements: 'What we look for',
+            requirements: 'Job details',
+        };
+
+        const toListItem = (text) => {
+            const item = document.createElement('li');
+            item.textContent = text;
+            return item;
         };
         const saveButton = document.getElementById('job-page-save-button');
         const applyButton = document.getElementById('job-page-apply-button');
@@ -69,7 +79,15 @@
 
         const renderTab = (tab) => {
             const tabName = tab.dataset.jobPageTab;
-            const tabContent = job.tabs[tabName];
+
+            // The Requirements tab now also carries the former Job description
+            // panel: the two render stacked, description first. Either one may
+            // be missing on a half-completed post, so only what exists is shown.
+            const panels = tabName === 'requirements'
+                ? [job.tabs.job_description, job.tabs.requirements].filter(Boolean)
+                : [job.tabs[tabName]].filter(Boolean);
+            const tabContent = panels[0];
+            const secondaryContent = panels[1];
 
             // The Company tab has no authored panel of its own — it shows the
             // employer profile — so it must not bail out here.
@@ -114,11 +132,19 @@
             sectionTitle.textContent = tabContent.title;
             sectionBody.textContent = tabContent.body;
             listTitle.textContent = tabContent.list_title;
-            list.replaceChildren(...tabContent.list.map((text) => {
-                const item = document.createElement('li');
-                item.textContent = text;
-                return item;
-            }));
+            list.replaceChildren(...tabContent.list.map(toListItem));
+
+            if (secondaryBlock) {
+                secondaryBlock.hidden = !secondaryContent;
+            }
+
+            if (secondaryContent) {
+                sectionTitle2.textContent = secondaryContent.title;
+                sectionBody2.textContent = secondaryContent.body;
+                listTitle2.textContent = secondaryContent.list_title;
+                list2.replaceChildren(...secondaryContent.list.map(toListItem));
+            }
+
             panel.setAttribute('aria-labelledby', tab.id);
 
             if (!prefersReducedMotion) {

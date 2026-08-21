@@ -164,10 +164,17 @@
                     </div>
 
                     @auth
-                        <button class="jf-btn jf-btn--apply js-apply-job" id="detail-apply-button" type="button"
-                            data-job-id="{{ $selectedJob['id'] }}">
-                            Apply for this role <i class="fas fa-arrow-right" aria-hidden="true"></i>
-                        </button>
+                        @if (! empty($selectedJob['already_applied']))
+                            <button class="jf-btn jf-btn--apply is-applied" id="detail-apply-button" type="button"
+                                data-job-id="{{ $selectedJob['id'] }}" disabled>
+                                <i class="fas fa-check" aria-hidden="true"></i> Already applied
+                            </button>
+                        @else
+                            <button class="jf-btn jf-btn--apply js-apply-job" id="detail-apply-button" type="button"
+                                data-job-id="{{ $selectedJob['id'] }}">
+                                Apply for this role <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                            </button>
+                        @endif
                     @else
                         {{-- Applying needs an account; the gate route sorts that out. --}}
                         <a class="jf-btn jf-btn--apply" id="detail-apply-button"

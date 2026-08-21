@@ -183,10 +183,13 @@ class JobApplication extends Model
         }
     }
 
-    /** The candidate's own photo when they have a resume on file. */
+    /**
+     * The candidate's own photo: their resume photo when they built one,
+     * otherwise the avatar on their account.
+     */
     public function photoUrl(): ?string
     {
-        return $this->resume?->photoUrl();
+        return $this->resume?->photoUrl() ?? $this->candidate?->avatarUrl();
     }
 
     public function appliedAgo(): string

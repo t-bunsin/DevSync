@@ -15,8 +15,8 @@ class UserSeeder extends Seeder
             [
                 'first_name' => 'bunsin',
                 'last_name' => 'toeng',
-                'display_name' => 'bunsin toeng',
-                'phone' => '1234567890',
+                'display_name' => 'Administrator',
+                'phone' => '+855 12 345 678',
                 'status' => User::STATUS_ACTIVE,
                 'preferred_locale' => 'en',
                 'password_hash' => '12345678',   // hashed by the model cast
