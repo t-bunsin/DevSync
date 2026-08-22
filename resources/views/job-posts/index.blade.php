@@ -27,20 +27,24 @@
             </div>
 
             <div class="kh-bo__head-actions">
-                <a class="kh-bo__btn kh-bo__btn--ghost"
-                    href="{{ route('job-posts.export', array_filter(['status' => $activeStatus, 'q' => $searchTerm, 'from' => $fromDate, 'to' => $toDate])) }}">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <path d="M12 3v12" /><path d="M7 10l5 5 5-5" /><path d="M4 21h16" />
-                    </svg>
-                    Export to Excel
-                </a>
+                @if (auth()->user()?->hasPermission(\App\Models\Permission::JOB_DOWNLOAD))
+                    <a class="kh-bo__btn kh-bo__btn--ghost"
+                        href="{{ route('job-posts.export', array_filter(['status' => $activeStatus, 'q' => $searchTerm, 'from' => $fromDate, 'to' => $toDate])) }}">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M12 3v12" /><path d="M7 10l5 5 5-5" /><path d="M4 21h16" />
+                        </svg>
+                        Export to Excel
+                    </a>
+                @endif
 
-                <a class="kh-bo__btn" href="{{ route('job-posts.create') }}">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
-                        <path d="M12 5v14M5 12h14" />
-                    </svg>
-                    Add job post
-                </a>
+                @if (auth()->user()?->hasPermission(\App\Models\Permission::JOB_CREATE))
+                    <a class="kh-bo__btn" href="{{ route('job-posts.create') }}">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                            <path d="M12 5v14M5 12h14" />
+                        </svg>
+                        Add job post
+                    </a>
+                @endif
             </div>
         </header>
 
@@ -274,24 +278,28 @@
                                             </a>
                                         @endif
 
-                                        <a class="kh-bo__action" href="{{ route('job-posts.edit', $post) }}"
-                                            title="Edit post" aria-label="Edit {{ $post->title }}">
-                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                                <path d="M12 20h9" /><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z" />
-                                            </svg>
-                                        </a>
-
-                                        <form method="POST" action="{{ route('job-posts.destroy', $post) }}"
-                                            onsubmit="return confirm('Delete “{{ addslashes($post->title) }}”? This cannot be undone.');">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button class="kh-bo__action kh-bo__action--danger" type="submit"
-                                                title="Delete post" aria-label="Delete {{ $post->title }}">
+                                        @if (auth()->user()?->hasPermission(\App\Models\Permission::JOB_EDIT))
+                                            <a class="kh-bo__action" href="{{ route('job-posts.edit', $post) }}"
+                                                title="Edit post" aria-label="Edit {{ $post->title }}">
                                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                                    <path d="M3 6h18" /><path d="M8 6V4h8v2" /><path d="M19 6l-1 14H6L5 6" />
+                                                    <path d="M12 20h9" /><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z" />
                                                 </svg>
-                                            </button>
-                                        </form>
+                                            </a>
+                                        @endif
+
+                                        @if (auth()->user()?->hasPermission(\App\Models\Permission::JOB_DELETE))
+                                            <form method="POST" action="{{ route('job-posts.destroy', $post) }}"
+                                                onsubmit="return confirm('Delete “{{ addslashes($post->title) }}”? This cannot be undone.');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button class="kh-bo__action kh-bo__action--danger" type="submit"
+                                                    title="Delete post" aria-label="Delete {{ $post->title }}">
+                                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                                        <path d="M3 6h18" /><path d="M8 6V4h8v2" /><path d="M19 6l-1 14H6L5 6" />
+                                                    </svg>
+                                                </button>
+                                            </form>
+                                        @endif
                                     </div>
                                 </td>
                             </tr>

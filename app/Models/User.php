@@ -172,6 +172,17 @@ class User extends Authenticatable
     }
 
     /**
+     * Admin always passes — same rule as every other admin check in this app
+     * (see JobPostController::authorizeOwner()) — so the job-posts permission
+     * matrix only has real effect on the employer row.
+     */
+    public function hasPermission(string $code): bool
+    {
+        return $this->isAdmin()
+            || $this->roles->loadMissing('permissions')->flatMap->permissions->contains('code', $code);
+    }
+
+    /**
      * The Company record this employer belongs to. There is no FK for this —
      * employerProfile only keeps the free-text name typed at registration
      * (see RegisterController::resolveCompany) — so the two are matched the

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Company;
 use App\Models\Compliance;
 use App\Models\JobPost;
+use App\Models\Permission;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -57,6 +58,8 @@ class JobPostController extends Controller
      */
     public function export(Request $request): StreamedResponse
     {
+        abort_unless($request->user()->hasPermission(Permission::JOB_DOWNLOAD), 403);
+
         [$query] = $this->filteredQuery($request);
 
         $posts = $query->orderByDesc('created_at')->get();
@@ -146,6 +149,8 @@ class JobPostController extends Controller
 
     public function create()
     {
+        abort_unless(request()->user()->hasPermission(Permission::JOB_CREATE), 403);
+
         return view('job-posts.create', [
             'post' => new JobPost(),
             'companies' => $this->selectableCompanies(request()->user()),
@@ -154,6 +159,8 @@ class JobPostController extends Controller
 
     public function store(Request $request)
     {
+        abort_unless($request->user()->hasPermission(Permission::JOB_CREATE), 403);
+
         $validated = $this->validated($request);
 
         $post = new JobPost($validated);
@@ -183,7 +190,7 @@ class JobPostController extends Controller
 
     public function edit(JobPost $jobPost)
     {
-        $this->authorizeOwner($jobPost);
+        $this->authorizeOwner($jobPost, Permission::JOB_EDIT);
 
         return view('job-posts.edit', [
             'post' => $jobPost,
@@ -193,7 +200,7 @@ class JobPostController extends Controller
 
     public function update(Request $request, JobPost $jobPost)
     {
-        $this->authorizeOwner($jobPost);
+        $this->authorizeOwner($jobPost, Permission::JOB_EDIT);
 
         $validated = $this->validated($request);
 
@@ -217,7 +224,7 @@ class JobPostController extends Controller
 
     public function destroy(JobPost $jobPost)
     {
-        $this->authorizeOwner($jobPost);
+        $this->authorizeOwner($jobPost, Permission::JOB_DELETE);
 
         $title = $jobPost->title;
         $jobPost->delete();
@@ -227,10 +234,17 @@ class JobPostController extends Controller
             ->withSuccess("“{$title}” was deleted.");
     }
 
-    /** Admin may touch any post; everyone else only the one they created. */
-    private function authorizeOwner(JobPost $jobPost): void
+    /**
+     * Admin may touch any post; everyone else only the one they created — and,
+     * when $permission is given, only if their role has also been granted it
+     * (see the Roles page's job-post permission matrix).
+     */
+    private function authorizeOwner(JobPost $jobPost, ?string $permission = null): void
     {
-        abort_unless(request()->user()->isAdmin() || $jobPost->created_by === request()->user()->id, 403);
+        $user = request()->user();
+
+        abort_unless($user->isAdmin() || $jobPost->created_by === $user->id, 403);
+        abort_if($permission && ! $user->hasPermission($permission), 403);
     }
 
     /**
@@ -288,6 +302,13 @@ class JobPostController extends Controller
         ]);
 
         $this->authorizeCompany($request->user(), $validated['company_id']);
+
+        // Featured placement is an admin call (see FeaturedJobController) —
+        // strip it here too, since the form only hides the checkbox from
+        // everyone else rather than actually stopping a raw POST.
+        if (! $request->user()->isAdmin()) {
+            unset($validated['featured']);
+        }
 
         return $validated;
     }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Permission;
 use App\Models\Resume;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -12,6 +13,13 @@ use Illuminate\Validation\Rule;
 
 class ResumeController extends Controller
 {
+    private const ANY_RESUME_PERMISSION = [
+        Permission::RESUME_CREATE,
+        Permission::RESUME_EDIT,
+        Permission::RESUME_DELETE,
+        Permission::RESUME_DOWNLOAD,
+    ];
+
     public function __construct()
     {
         $this->middleware('auth');
@@ -19,6 +27,8 @@ class ResumeController extends Controller
 
     public function index(Request $request)
     {
+        $this->authorizeAny();
+
         $from = $this->dateInput($request->query('from'));
         $to = $this->dateInput($request->query('to'));
 
@@ -55,6 +65,8 @@ class ResumeController extends Controller
 
     public function create()
     {
+        abort_unless(request()->user()->hasPermission(Permission::RESUME_CREATE), 403);
+
         return view('resumes.create', [
             'resume' => new Resume(),
         ]);
@@ -67,6 +79,8 @@ class ResumeController extends Controller
      */
     public function store(Request $request)
     {
+        abort_unless($request->user()->hasPermission(Permission::RESUME_CREATE), 403);
+
         $resume = new Resume($this->validated($request));
 
         $this->fillSections($resume, $request);
@@ -81,6 +95,8 @@ class ResumeController extends Controller
 
     public function show(Resume $resume)
     {
+        $this->authorizeAny();
+
         return view('resumes.show', [
             'resume' => $resume->load('author'),
         ]);
@@ -93,6 +109,8 @@ class ResumeController extends Controller
      */
     public function download(Resume $resume)
     {
+        abort_unless(request()->user()->hasPermission(Permission::RESUME_DOWNLOAD), 403);
+
         $filename = Str::slug($resume->full_name) ?: 'resume';
 
         return Pdf::loadView('resumes.pdf', ['resume' => $resume])
@@ -102,6 +120,8 @@ class ResumeController extends Controller
 
     public function edit(Resume $resume)
     {
+        abort_unless(request()->user()->hasPermission(Permission::RESUME_EDIT), 403);
+
         return view('resumes.edit', [
             'resume' => $resume,
         ]);
@@ -109,6 +129,8 @@ class ResumeController extends Controller
 
     public function update(Request $request, Resume $resume)
     {
+        abort_unless($request->user()->hasPermission(Permission::RESUME_EDIT), 403);
+
         $resume->fill($this->validated($request));
 
         $this->fillSections($resume, $request);
@@ -122,6 +144,8 @@ class ResumeController extends Controller
 
     public function destroy(Resume $resume)
     {
+        abort_unless(request()->user()->hasPermission(Permission::RESUME_DELETE), 403);
+
         $name = $resume->full_name;
 
         $this->deletePhoto($resume);
@@ -130,6 +154,21 @@ class ResumeController extends Controller
         return redirect()
             ->route('resumes.index')
             ->withSuccess("The resume for {$name} was deleted.");
+    }
+
+    /**
+     * The list and detail pages have no dedicated permission of their own —
+     * holding any one resume.* permission is enough to browse, same as an
+     * employer with any job.* permission can browse job posts.
+     */
+    private function authorizeAny(): void
+    {
+        $user = request()->user();
+
+        abort_unless(
+            collect(self::ANY_RESUME_PERMISSION)->contains(fn ($code) => $user->hasPermission($code)),
+            403
+        );
     }
 
     /**

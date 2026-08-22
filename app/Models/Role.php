@@ -37,6 +37,11 @@ class Role extends Model
             ->withPivot(['is_primary', 'granted_by', 'granted_at']);
     }
 
+    public function permissions(): BelongsToMany
+    {
+        return $this->belongsToMany(Permission::class, 'role_permissions');
+    }
+
     /**
      * Label in the viewer's locale, falling back to English when no Khmer
      * name is present.

@@ -189,10 +189,19 @@
         </div>
 
         <div class="kh-bo__field kh-bo__field--wide">
-            <label class="kh-bo__checkbox">
-                <input type="checkbox" name="featured" value="1" @checked(old('featured', $post->featured))>
-                Featured — sorted to the top of the jobs list
-            </label>
+            @if (auth()->user()?->isAdmin())
+                <label class="kh-bo__checkbox">
+                    <input type="checkbox" name="featured" value="1" @checked(old('featured', $post->featured))>
+                    Featured — sorted to the top of the jobs list
+                </label>
+            @elseif ($post->exists)
+                <span class="kh-bo__hint">
+                    Featured placement is curated by admin, not set here.
+                    @if ($post->featured)
+                        This post is currently featured.
+                    @endif
+                </span>
+            @endif
             <label class="kh-bo__checkbox">
                 <input type="checkbox" name="highlighted" value="1" @checked(old('highlighted', $post->highlighted))>
                 Spotlight — the role the explorer opens on (only one post can hold this)

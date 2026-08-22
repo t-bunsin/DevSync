@@ -347,26 +347,40 @@
                                 @endif
 
                                 <!-- Job Post Management Inside Applications -->
-                                <a class="nav-link collapsed {{ request()->routeIs('job-posts.*') ? 'kh-nav-parent-active fw-bold' : '' }}"
+                                <a class="nav-link collapsed {{ request()->routeIs('job-posts.*', 'featured-jobs*') ? 'kh-nav-parent-active fw-bold' : '' }}"
                                     href="javascript:void(0);" data-bs-toggle="collapse"
                                     data-bs-target="#appsCollapseJobPosts"
-                                    aria-expanded="{{ request()->routeIs('job-posts.*') ? 'true' : 'false' }}"
+                                    aria-expanded="{{ request()->routeIs('job-posts.*', 'featured-jobs*') ? 'true' : 'false' }}"
                                     aria-controls="appsCollapseJobPosts">
                                     Job Management
                                     <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                                 </a>
 
-                                <div class="collapse {{ request()->routeIs('job-posts.*') ? 'show' : '' }}"
+                                <div class="collapse {{ request()->routeIs('job-posts.*', 'featured-jobs*') ? 'show' : '' }}"
                                     id="appsCollapseJobPosts" data-bs-parent="#accordionSidenavAppsMenu">
                                     <nav class="sidenav-menu-nested nav">
                                         <a class="nav-link {{ request()->routeIs('job-posts.index') ? 'active fw-bold' : '' }}"
                                             href="{{ route('job-posts.index') }}">Job Posts</a>
+                                        @if ($adminUser?->hasPermission(\App\Models\Permission::JOB_CREATE))
                                         <a class="nav-link {{ request()->routeIs('job-posts.create') ? 'active fw-bold' : '' }}"
                                             href="{{ route('job-posts.create') }}">Add Job Post</a>
+                                        @endif
+                                        @if ($adminUser?->isAdmin())
+                                        <a class="nav-link {{ request()->routeIs('featured-jobs*') ? 'active fw-bold' : '' }}"
+                                            href="{{ route('featured-jobs') }}">Featured Jobs</a>
+                                        @endif
                                     </nav>
                                 </div>
 
-                                @if ($adminUser?->isAdmin())
+                                @php
+                                    $canSeeResumes = collect([
+                                        \App\Models\Permission::RESUME_CREATE,
+                                        \App\Models\Permission::RESUME_EDIT,
+                                        \App\Models\Permission::RESUME_DELETE,
+                                        \App\Models\Permission::RESUME_DOWNLOAD,
+                                    ])->contains(fn ($code) => $adminUser?->hasPermission($code));
+                                @endphp
+                                @if ($canSeeResumes)
                                 <!-- Resume Management Inside Applications -->
                                 <a class="nav-link collapsed {{ request()->routeIs('resumes.*') ? 'kh-nav-parent-active fw-bold' : '' }}"
                                     href="javascript:void(0);" data-bs-toggle="collapse"
@@ -382,8 +396,10 @@
                                     <nav class="sidenav-menu-nested nav">
                                         <a class="nav-link {{ request()->routeIs('resumes.index') ? 'active fw-bold' : '' }}"
                                             href="{{ route('resumes.index') }}">Resumes</a>
+                                        @if ($adminUser?->hasPermission(\App\Models\Permission::RESUME_CREATE))
                                         <a class="nav-link {{ request()->routeIs('resumes.create') ? 'active fw-bold' : '' }}"
                                             href="{{ route('resumes.create') }}">Add Resume</a>
+                                        @endif
                                     </nav>
                                 </div>
                                 @endif
@@ -526,6 +542,13 @@
                                 @endforeach
                             </nav>
                         </div>
+
+                        <!-- Sidenav Link (User Role & Permission) -->
+                        <a class="nav-link {{ request()->routeIs('roles') ? 'active fw-bold' : '' }}"
+                            href="{{ route('roles') }}">
+                            <div class="nav-link-icon"><i data-feather="shield"></i></div>
+                            User Role &amp; Permission
+                        </a>
                         @endif
                     </div>
                 </div>

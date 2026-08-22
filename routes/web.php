@@ -9,6 +9,7 @@ use App\Http\Controllers\CompaniesController;
 use App\Http\Controllers\ComplianceController;
 use App\Http\Controllers\ComponentController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\FeaturedJobController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\JobApplicationController;
 use App\Http\Controllers\JobController;
@@ -16,6 +17,7 @@ use App\Http\Controllers\JobPostController;
 use App\Http\Controllers\MyApplicationsController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ResumeController;
+use App\Http\Controllers\RoleController;
 use Illuminate\Http\Request;
 
 
@@ -103,10 +105,6 @@ Route::prefix('admin')->group(function () {
                 ->name('compliance.verify');
             Route::resource('compliance', ComplianceController::class);
 
-            Route::get('/resumes/{resume}/download', [ResumeController::class, 'download'])
-                ->name('resumes.download');
-            Route::resource('resumes', ResumeController::class);
-
             // Everything but the directory listing: employer gets read access
             // to the list below, but only admin may create/edit/delete companies.
             Route::resource('companies', CompaniesController::class)->except(['index']);
@@ -121,6 +119,15 @@ Route::prefix('admin')->group(function () {
             Route::get('/components/{type}/{component}/edit', [ComponentController::class, 'edit'])->name('components.edit');
             Route::put('/components/{type}/{component}', [ComponentController::class, 'update'])->name('components.update');
             Route::delete('/components/{type}/{component}', [ComponentController::class, 'destroy'])->name('components.destroy');
+
+            // Roles directory + the job post permission matrix, one page (RoleController).
+            Route::get('/roles', [RoleController::class, 'index'])->name('roles');
+            Route::patch('/roles/permissions', [RoleController::class, 'updatePermissions'])->name('roles.permissions.update');
+
+            // Curates the 'featured' flag on job posts — an admin call, not
+            // something the employer-facing job post form exposes anymore.
+            Route::get('/featured-jobs', [FeaturedJobController::class, 'index'])->name('featured-jobs');
+            Route::patch('/featured-jobs/{jobPost}', [FeaturedJobController::class, 'toggle'])->name('featured-jobs.toggle');
         });
 
         // Employer manages their own job posts and the applications to them;
@@ -144,6 +151,13 @@ Route::prefix('admin')->group(function () {
 
             // Index keeps the bare `companies` name that the admin shell already links to.
             Route::get('/companies', [CompaniesController::class, 'index'])->name('companies');
+
+            // Resumes used to be admin-only at the route level; now the route
+            // just requires employer-or-admin, and ResumeController checks the
+            // resume.* permission for each action (see RoleController).
+            Route::get('/resumes/{resume}/download', [ResumeController::class, 'download'])
+                ->name('resumes.download');
+            Route::resource('resumes', ResumeController::class);
         });
     });
 });
