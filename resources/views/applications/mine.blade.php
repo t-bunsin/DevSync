@@ -8,7 +8,7 @@
 
 @section('main-content')
     @php
-        $total = $applications->count();
+        $total = $applications->total();
     @endphp
 
     <div class="kh-bo">
@@ -25,11 +25,44 @@
             </div>
         </header>
 
+        @if (session('success'))
+            <div class="kh-bo__flash" role="status">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                    stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M20 6L9 17l-5-5" />
+                </svg>
+                <span>{{ session('success') }}</span>
+            </div>
+        @endif
+
         <section class="kh-bo__card">
             <div class="kh-bo__card-head">
                 <div>
                     <h2>Applications</h2>
-                    <p>{{ $total }} {{ \Illuminate\Support\Str::plural('application', $total) }} shown.</p>
+                    <p>
+                        {{ $total }} {{ \Illuminate\Support\Str::plural('application', $total) }}
+                        {{ $isFiltered ? 'match this search.' : 'shown.' }}
+                    </p>
+                </div>
+
+                <div class="kh-bo__tools">
+                    <form class="kh-bo__search" method="GET" action="{{ route('my-applications') }}" role="search">
+                        <input type="search" name="q" value="{{ $searchTerm }}"
+                            placeholder="Search job or company" aria-label="Search your applications">
+
+                        <div class="kh-bo__range">
+                            <input type="date" name="from" value="{{ $fromDate }}"
+                                aria-label="Applied from date" title="Applied from date">
+                            <span aria-hidden="true">–</span>
+                            <input type="date" name="to" value="{{ $toDate }}"
+                                aria-label="Applied to date" title="Applied to date">
+                        </div>
+
+                        <button class="kh-bo__btn kh-bo__btn--ghost" type="submit">Search</button>
+                        @if ($isFiltered)
+                            <a class="kh-bo__btn kh-bo__btn--ghost" href="{{ route('my-applications') }}">Clear</a>
+                        @endif
+                    </form>
                 </div>
             </div>
 
@@ -40,6 +73,7 @@
                             <th scope="col">Job</th>
                             <th scope="col">Applied</th>
                             <th scope="col">Status</th>
+                            <th scope="col"><span class="visually-hidden">Actions</span></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -52,14 +86,18 @@
                                 <td>
                                     <div>
                                         <span class="kh-bo__name">
-                                            @if ($post)
-                                                <a class="kh-bo__name-link" href="{{ route('jobs.show', $post->slug) }}" target="_blank" rel="noopener">{{ $post->title }}</a>
-                                            @else
-                                                <span class="kh-bo__ref">Job post removed</span>
-                                            @endif
+                                            {{-- Straight to this application's own page, not the public
+                                                 posting: what the candidate wants here is their submission
+                                                 and where it stands. --}}
+                                            <a class="kh-bo__name-link" href="{{ route('my-applications.show', $application) }}">
+                                                {{ $post?->title ?? 'Job post removed' }}
+                                            </a>
                                         </span>
                                         @if ($post)
                                             <span class="kh-bo__ref">{{ $post->company }}</span>
+                                        @endif
+                                        @if ($application->candidate_message)
+                                            <span class="kh-bo__ref">Message from the employer</span>
                                         @endif
                                     </div>
                                 </td>
@@ -73,16 +111,54 @@
                                     <span class="kh-bo__status kh-bo__status--{{ $application->statusTone() }}">
                                         {{ ucfirst($application->status) }}
                                     </span>
+
+                                    @if ($decidedAt = $application->decidedAt())
+                                        <span class="kh-bo__ref">
+                                            {{ $application->decisionLabel() }} {{ $decidedAt->format('d M Y') }}
+                                        </span>
+                                    @endif
+                                </td>
+
+                                <td>
+                                    <div class="kh-bo__actions">
+                                        <a class="kh-bo__action" href="{{ route('my-applications.show', $application) }}"
+                                            title="View application" aria-label="View your application for {{ $post?->title ?? 'this job' }}">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                                <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z" /><circle cx="12" cy="12" r="3" />
+                                            </svg>
+                                        </a>
+
+                                        @if ($application->isCancellable())
+                                            <form method="POST" action="{{ route('my-applications.cancel', $application) }}"
+                                                onsubmit="return confirm('Withdraw your application for “{{ addslashes($post?->title ?? 'this job') }}”? You can apply again later.');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button class="kh-bo__action kh-bo__action--danger" type="submit"
+                                                    title="Withdraw application" aria-label="Withdraw your application for {{ $post?->title ?? 'this job' }}">
+                                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                                        <circle cx="12" cy="12" r="9" /><path d="M15 9l-6 6M9 9l6 6" />
+                                                    </svg>
+                                                </button>
+                                            </form>
+                                        @endif
+                                    </div>
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="3">
+                                <td colspan="4">
                                     <div class="kh-bo__empty">
-                                        <strong>No applications yet</strong>
-                                        <span>
-                                            Browse <a href="{{ route('jobs.index') }}">open roles</a> and apply — they'll show up here.
-                                        </span>
+                                        @if ($isFiltered)
+                                            <strong>Nothing matches that search</strong>
+                                            <span>
+                                                <a href="{{ route('my-applications') }}">Clear it</a> to see every application.
+                                            </span>
+                                        @else
+                                            <strong>No applications yet</strong>
+                                            <span>
+                                                Browse <a href="{{ route('jobs.index') }}">open roles</a> and apply — they'll show up here.
+                                            </span>
+                                        @endif
                                     </div>
                                 </td>
                             </tr>

@@ -27,10 +27,12 @@ class JobApplication extends Model
         'message',
         'status',
         'note',
+        'candidate_message',
     ];
 
     protected $casts = [
         'applied_at' => 'datetime',
+        'status_changed_at' => 'datetime',
     ];
 
     /** The formats an uploaded CV may take, and its ceiling in kilobytes. */
@@ -134,11 +136,69 @@ class JobApplication extends Model
      * shows — `applied_at`, falling back to `created_at` for any row written
      * before that stamp existed. Both bounds are inclusive and independent.
      */
+    /**
+     * The candidate's own list searches the job, not themselves — every row
+     * there is already theirs, so full_name/email (what scopeSearch reads)
+     * would match everything or nothing.
+     */
+    public function scopeSearchJob(Builder $query, ?string $term): Builder
+    {
+        $term = trim((string) $term);
+
+        if ($term === '') {
+            return $query;
+        }
+
+        return $query->whereHas('jobPost', function (Builder $post) use ($term) {
+            $post->where('title', 'like', "%{$term}%")
+                ->orWhere('company', 'like', "%{$term}%")
+                ->orWhere('location', 'like', "%{$term}%");
+        });
+    }
+
     public function scopeAppliedBetween(Builder $query, ?string $from, ?string $to): Builder
     {
         return $query
             ->when($from, fn (Builder $q) => $q->whereRaw('DATE(COALESCE(applied_at, created_at)) >= ?', [$from]))
             ->when($to, fn (Builder $q) => $q->whereRaw('DATE(COALESCE(applied_at, created_at)) <= ?', [$to]));
+    }
+
+    /**
+     * Whether the candidate may still withdraw. Only while the row is
+     * untouched: once an employer has moved it along the pipeline they have
+     * read it and acted, and pulling it out from under them would rewrite
+     * their inbox. Withdrawing deletes the row (and its CV, via booted()),
+     * which is what "cancel" means here — there is no cancelled state in the
+     * pipeline for an employer to have to read.
+     */
+    /**
+     * When the employer last moved this row, and what they moved it to — the
+     * pair the candidate's page reads as "Accepted on 12 Aug". Null while the
+     * row is still 'new', because nobody has decided anything yet.
+     */
+    public function decidedAt(): ?\Illuminate\Support\Carbon
+    {
+        return $this->status === self::STATUS_NEW ? null : $this->status_changed_at;
+    }
+
+    /**
+     * How to introduce that date. Every step is worth naming, not just the two
+     * end states: "Shortlisted on" tells a candidate as much as "Accepted on".
+     */
+    public function decisionLabel(): ?string
+    {
+        return match ($this->status) {
+            self::STATUS_REVIEWING => 'Opened',
+            self::STATUS_SHORTLISTED => 'Shortlisted',
+            self::STATUS_HIRED => 'Accepted',
+            self::STATUS_REJECTED => 'Rejected',
+            default => null,
+        };
+    }
+
+    public function isCancellable(): bool
+    {
+        return $this->status === self::STATUS_NEW;
     }
 
     /** Two letters for the avatar tile, mirroring Resume::initials(). */

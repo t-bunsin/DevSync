@@ -90,6 +90,9 @@ Route::prefix('admin')->group(function () {
         // The candidate's own list — self-scoped by user_id in the controller,
         // so no role middleware is needed beyond being signed in.
         Route::get('/my-applications', [MyApplicationsController::class, 'index'])->name('my-applications');
+        Route::get('/my-applications/{application}', [MyApplicationsController::class, 'show'])->name('my-applications.show');
+        // Withdrawing deletes the row, so it is a DELETE — see JobApplication::isCancellable().
+        Route::delete('/my-applications/{application}', [MyApplicationsController::class, 'destroy'])->name('my-applications.cancel');
 
         // Managing accounts is an administrator job. Everyone else is refused at
         // the door rather than served a filtered directory.
@@ -144,6 +147,8 @@ Route::prefix('admin')->group(function () {
                 ->name('job-posts.applications');
             Route::get('/job-applications/{application}/cv', [JobApplicationController::class, 'downloadCv'])
                 ->name('job-applications.cv');
+            Route::get('/job-applications/{application}', [JobApplicationController::class, 'show'])
+                ->name('job-applications.show');
             Route::patch('/job-applications/{application}', [JobApplicationController::class, 'update'])
                 ->name('job-applications.update');
             Route::delete('/job-applications/{application}', [JobApplicationController::class, 'destroy'])

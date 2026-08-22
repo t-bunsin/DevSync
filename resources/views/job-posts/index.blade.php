@@ -226,6 +226,7 @@
                                      through to the rows it is counting. --}}
                                 <td class="kh-bo__nowrap">
                                     @php($applicants = $post->applicantCount())
+                                    @if (auth()->user()?->hasPermission(\App\Models\Permission::APPLICATION_VIEW))
                                     <a class="kh-bo__count{{ $applicants === 0 ? ' kh-bo__count--empty' : '' }}"
                                         href="{{ route('job-posts.applications', $post) }}"
                                         title="Open the candidates who applied for {{ $post->title }}">
@@ -237,6 +238,11 @@
                                             {{ \Illuminate\Support\Str::plural('application', $applicants) }} for {{ $post->title }}
                                         </span>
                                     </a>
+                                    @else
+                                        {{-- Without application.view the count still reads, but
+                                             there is nowhere for it to lead. --}}
+                                        <span class="kh-bo__count kh-bo__count--empty">{{ number_format($applicants) }}</span>
+                                    @endif
                                     <span class="kh-bo__ref">
                                         @if ($applicants === 0)
                                             No candidates

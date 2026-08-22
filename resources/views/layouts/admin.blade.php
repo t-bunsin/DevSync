@@ -339,13 +339,19 @@
                                     id="appsCollapseUserManagement" data-bs-parent="#accordionSidenavAppsMenu">
                                     <nav class="sidenav-menu-nested nav">
                                         <a class="nav-link {{ request()->is('admin/users') ? 'active fw-bold' : '' }}"
-                                            href="{{ route('resumes.index') }}">Users List</a>
+                                            href="{{ route('user.index') }}">Users List</a>
                                         <a class="nav-link {{ request()->routeIs('user.create') ? 'active fw-bold' : '' }}"
                                             href="{{ route('user.create') }}">Add New User</a>
                                     </nav>
                                 </div>
                                 @endif
 
+                                @php
+                                    $canSeeJobPosts = $adminUser?->hasPermission(\App\Models\Permission::JOB_VIEW);
+                                @endphp
+                                {{-- Featured Jobs lives in this group and is admin-only, so the
+                                     group survives an admin switching job.view off. --}}
+                                @if ($canSeeJobPosts || $adminUser?->isAdmin())
                                 <!-- Job Post Management Inside Applications -->
                                 <a class="nav-link collapsed {{ request()->routeIs('job-posts.*', 'featured-jobs*') ? 'kh-nav-parent-active fw-bold' : '' }}"
                                     href="javascript:void(0);" data-bs-toggle="collapse"
@@ -359,8 +365,10 @@
                                 <div class="collapse {{ request()->routeIs('job-posts.*', 'featured-jobs*') ? 'show' : '' }}"
                                     id="appsCollapseJobPosts" data-bs-parent="#accordionSidenavAppsMenu">
                                     <nav class="sidenav-menu-nested nav">
+                                        @if ($canSeeJobPosts)
                                         <a class="nav-link {{ request()->routeIs('job-posts.index') ? 'active fw-bold' : '' }}"
                                             href="{{ route('job-posts.index') }}">Job Posts</a>
+                                        @endif
                                         @if ($adminUser?->hasPermission(\App\Models\Permission::JOB_CREATE))
                                         <a class="nav-link {{ request()->routeIs('job-posts.create') ? 'active fw-bold' : '' }}"
                                             href="{{ route('job-posts.create') }}">Add Job Post</a>
@@ -371,16 +379,9 @@
                                         @endif
                                     </nav>
                                 </div>
+                                @endif
 
-                                @php
-                                    $canSeeResumes = collect([
-                                        \App\Models\Permission::RESUME_CREATE,
-                                        \App\Models\Permission::RESUME_EDIT,
-                                        \App\Models\Permission::RESUME_DELETE,
-                                        \App\Models\Permission::RESUME_DOWNLOAD,
-                                    ])->contains(fn ($code) => $adminUser?->hasPermission($code));
-                                @endphp
-                                @if ($canSeeResumes)
+                                @if ($adminUser?->hasPermission(\App\Models\Permission::RESUME_VIEW))
                                 <!-- Resume Management Inside Applications -->
                                 <a class="nav-link collapsed {{ request()->routeIs('resumes.*') ? 'kh-nav-parent-active fw-bold' : '' }}"
                                     href="javascript:void(0);" data-bs-toggle="collapse"

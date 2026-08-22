@@ -25,6 +25,8 @@ class JobPostController extends Controller
 
     public function index(Request $request)
     {
+        abort_unless($request->user()->hasPermission(Permission::JOB_VIEW), 403);
+
         [$query, $from, $to] = $this->filteredQuery($request);
 
         $posts = $query
@@ -181,7 +183,7 @@ class JobPostController extends Controller
 
     public function show(JobPost $jobPost)
     {
-        $this->authorizeOwner($jobPost);
+        $this->authorizeOwner($jobPost, Permission::JOB_VIEW);
 
         $jobPost->load(['employer', 'author'])->loadCount('applications');
 

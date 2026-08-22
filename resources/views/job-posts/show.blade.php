@@ -115,6 +115,7 @@
                                     {{ $job['applicants'] }}
                                     {{-- The recorded applications, which is what the figure
                                          above counts once anyone has actually applied. --}}
+                                    @if (auth()->user()?->hasPermission(\App\Models\Permission::APPLICATION_VIEW))
                                     <a class="kh-bo__ref" href="{{ route('job-posts.applications', $post) }}">
                                         @if ($post->hasApplications())
                                             View {{ number_format($post->applicantCount()) }}
@@ -123,6 +124,7 @@
                                             No applications recorded yet
                                         @endif
                                     </a>
+                                    @endif
                                 </dd>
                             </div>
                         </dl>

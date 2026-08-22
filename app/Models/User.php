@@ -172,14 +172,17 @@ class User extends Authenticatable
     }
 
     /**
-     * Admin always passes — same rule as every other admin check in this app
-     * (see JobPostController::authorizeOwner()) — so the job-posts permission
-     * matrix only has real effect on the employer row.
+     * Reads the matrix and nothing else. Admin used to short-circuit to true
+     * here, which made the Administrator row on the User Role & Permission
+     * page decorative; it no longer does, so an admin holds exactly the codes
+     * granted to their role (seeded as "all of them" by every permission
+     * migration). Area-level access is a separate question and still answered
+     * by isAdmin() — see EnsureUserIsAdmin — so an admin who switches their
+     * own permissions off can always reach that page to switch them back on.
      */
     public function hasPermission(string $code): bool
     {
-        return $this->isAdmin()
-            || $this->roles->loadMissing('permissions')->flatMap->permissions->contains('code', $code);
+        return $this->roles->loadMissing('permissions')->flatMap->permissions->contains('code', $code);
     }
 
     /**

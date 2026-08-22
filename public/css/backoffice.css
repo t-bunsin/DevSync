@@ -349,7 +349,8 @@
   gap: 6px;
 }
 
-.kh-bo__search input {
+.kh-bo__search input,
+.kh-bo__search select {
   min-width: 190px;
   padding: 9px 13px;
   color: var(--kh-ink);
@@ -359,10 +360,32 @@
   font-size: 0.8rem;
 }
 
-.kh-bo__search input:focus {
+.kh-bo__search input:focus,
+.kh-bo__search select:focus {
   outline: 3px solid color-mix(in srgb, var(--kh-ocean) 26%, transparent);
   outline-offset: 1px;
   border-color: var(--kh-ocean);
+}
+
+/* A status picker needs less room than a search box, and its own caret —
+   appearance:none drops the platform one along with the platform padding. */
+.kh-bo__search select {
+  min-width: 0;
+  width: 11rem;
+  padding-right: 30px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236b8190' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 14px;
+  appearance: none;
+  cursor: pointer;
+}
+
+/* The caret ships as a fixed-colour SVG, so the dark theme gets a lighter one
+   rather than a near-invisible slate arrow. */
+html[data-admin-theme="dark"] .kh-bo__search select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%239eb0b8' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  color-scheme: dark;
 }
 
 /* Posted-date inquiry range: two date fields reading as one control. */
@@ -704,6 +727,13 @@ textarea.kh-bo__control {
   font-size: 0.74rem;
 }
 
+/* Marks a field that is published outside the hiring team — worth more than
+   the muted grey a neutral hint gets, so nobody types candidly by mistake. */
+.kh-bo__hint--warn {
+  color: var(--bo-amber);
+  font-weight: 600;
+}
+
 .kh-bo__error {
   color: var(--bo-danger);
   font-size: 0.75rem;
@@ -832,6 +862,257 @@ textarea.kh-bo__control {
   margin-top: 0;
 }
 
+/* --rows zeroes the top margin for sidebars that open straight onto a fact
+   list; when prose comes first it still needs the gap back. */
+.kh-bo__prose + .kh-bo__facts--rows {
+  margin-top: 14px;
+}
+
+/* Sidebar cards on the candidate's application page
+   ------------------------------------------------------------------
+   Two jobs the plain fact list did badly: identifying who applied, and
+   making a six-item spec scannable. Both lean on the same icon tile so the
+   two cards read as one column. --kh-* tokens, so both themes come free. */
+
+.kh-bo__idhead {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--kh-line);
+}
+
+.kh-bo__idhead-avatar {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 46px;
+  height: 46px;
+  overflow: hidden;
+  color: #fff;
+  background: linear-gradient(140deg, var(--kh-ocean), color-mix(in srgb, var(--kh-ocean) 55%, #000));
+  border-radius: 14px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.kh-bo__idhead-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.kh-bo__idhead-body {
+  min-width: 0;
+}
+
+.kh-bo__idhead-body strong {
+  display: block;
+  font-size: 0.98rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.kh-bo__idhead-body a,
+.kh-bo__idhead-body span {
+  display: block;
+  color: var(--kh-muted);
+  font-size: 0.8rem;
+  overflow-wrap: anywhere;
+}
+
+/* Icon + label + value rows. */
+.kh-bo__speclist {
+  display: grid;
+  gap: 2px;
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.kh-bo__specrow {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px 0;
+}
+
+.kh-bo__specrow > svg {
+  flex: 0 0 auto;
+  width: 16px;
+  height: 16px;
+  margin-top: 2px;
+  color: var(--kh-muted);
+  stroke-width: 1.8;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.kh-bo__specrow-body {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.kh-bo__specrow-label {
+  display: block;
+  color: var(--kh-muted);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.kh-bo__specrow-value {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.88rem;
+  overflow-wrap: anywhere;
+}
+
+/* The CV reads as an attachment, not a sentence. */
+.kh-bo__filechip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 4px;
+  padding: 6px 10px;
+  color: var(--kh-ink);
+  background: color-mix(in srgb, var(--kh-ink) 4%, transparent);
+  border: 1px solid var(--kh-line);
+  border-radius: 10px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.kh-bo__filechip svg {
+  flex: 0 0 auto;
+  width: 14px;
+  height: 14px;
+  color: var(--bo-blue);
+}
+
+/* What the candidate wrote, set apart as the quote it is. */
+.kh-bo__quote {
+  margin: 4px 0 0;
+  padding: 10px 12px;
+  color: var(--kh-ink);
+  background: color-mix(in srgb, var(--kh-ocean) 5%, transparent);
+  border-left: 3px solid color-mix(in srgb, var(--kh-ocean) 45%, transparent);
+  border-radius: 0 10px 10px 0;
+  font-size: 0.85rem;
+  line-height: 1.55;
+}
+
+/* The job spec: two tiles per row, one per fact. */
+.kh-bo__specgrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin: 14px 0 0;
+}
+
+.kh-bo__spectile {
+  padding: 10px;
+  background: color-mix(in srgb, var(--kh-ink) 2.5%, transparent);
+  border: 1px solid var(--kh-line);
+  border-radius: 12px;
+}
+
+.kh-bo__spectile--wide {
+  grid-column: 1 / -1;
+}
+
+.kh-bo__spectile-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--kh-muted);
+  font-size: 0.67rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.kh-bo__spectile-head svg {
+  flex: 0 0 auto;
+  width: 13px;
+  height: 13px;
+  stroke-width: 1.9;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.kh-bo__spectile strong {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.88rem;
+  font-weight: 650;
+  overflow-wrap: anywhere;
+}
+
+/* A deadline inside five days is the one fact worth colouring. */
+.kh-bo__spectile--urgent {
+  background: color-mix(in srgb, var(--bo-amber) 9%, transparent);
+  border-color: color-mix(in srgb, var(--bo-amber) 32%, var(--kh-line));
+}
+
+.kh-bo__spectile--urgent .kh-bo__spectile-head,
+.kh-bo__spectile--urgent strong {
+  color: var(--bo-amber);
+}
+
+@media (max-width: 1180px) {
+  /* The side column goes full width here, so the tiles can spread out. */
+  .kh-bo__specgrid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  }
+}
+
+/* Label and value on one line — "Name : Toeng Bunsin" — instead of the
+   stacked small-caps label the default draws. Reads as a record of what was
+   submitted rather than a dashboard of separate figures. */
+.kh-bo__facts.kh-bo__facts--inline > div {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.kh-bo__facts.kh-bo__facts--inline dt {
+  flex: 0 0 auto;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+.kh-bo__facts.kh-bo__facts--inline dt::after {
+  content: " :";
+}
+
+.kh-bo__facts.kh-bo__facts--inline dd {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+}
+
+/* A long value (a message, a pasted address) keeps the label on the first
+   line and wraps under itself rather than pushing the row wide. */
+@media (max-width: 420px) {
+  .kh-bo__facts.kh-bo__facts--inline > div {
+    display: block;
+  }
+
+  .kh-bo__facts--inline dd {
+    margin-top: 2px;
+  }
+}
+
 .kh-bo__facts dt {
   color: var(--kh-muted);
   font-size: 0.72rem;
@@ -848,6 +1129,100 @@ textarea.kh-bo__control {
 
 .kh-bo__facts dd .kh-bo__ref {
   margin-top: 2px;
+}
+
+/* Pipeline trail on the candidate's application page: which step the row sits
+   on, and what it has already passed. Tones match JobApplication::statusTones()
+   so the current step reads the same colour the employer's review control uses.
+   Both themes come from the --kh-* tokens, same as the rest of this file. */
+.kh-bo__steps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.kh-bo__steps li {
+  display: flex;
+  align-items: center;
+  flex: 1 1 auto;
+  gap: 8px;
+  color: var(--kh-muted);
+  font-size: 0.78rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Connector, drawn by the step it leads into so the first one has none. */
+.kh-bo__steps li + li::before {
+  content: "";
+  flex: 1 1 14px;
+  min-width: 14px;
+  height: 2px;
+  background: var(--kh-line);
+}
+
+.kh-bo__steps li > span {
+  flex: 0 0 auto;
+  width: 10px;
+  height: 10px;
+  background: var(--kh-line);
+  border-radius: 50%;
+}
+
+.kh-bo__steps li.is-done {
+  color: var(--kh-ink);
+}
+
+.kh-bo__steps li.is-done > span {
+  background: var(--kh-muted);
+}
+
+.kh-bo__steps li.is-current {
+  color: var(--kh-ink);
+  font-weight: 700;
+}
+
+.kh-bo__steps li.is-current > span {
+  width: 12px;
+  height: 12px;
+  background: var(--bo-blue);
+  box-shadow: 0 0 0 4px rgba(29, 155, 240, 0.18);
+}
+
+.kh-bo__steps li.is-current[data-tone="neutral"] > span {
+  background: var(--kh-muted);
+  box-shadow: 0 0 0 4px rgba(107, 129, 144, 0.18);
+}
+
+.kh-bo__steps li.is-current[data-tone="amber"] > span {
+  background: var(--bo-amber);
+  box-shadow: 0 0 0 4px rgba(183, 121, 31, 0.18);
+}
+
+.kh-bo__steps li.is-current[data-tone="teal"] > span {
+  background: #0f9b8e;
+  box-shadow: 0 0 0 4px rgba(15, 155, 142, 0.18);
+}
+
+.kh-bo__steps li.is-current[data-tone="danger"] > span {
+  background: var(--bo-danger);
+  box-shadow: 0 0 0 4px rgba(192, 57, 43, 0.18);
+}
+
+@media (max-width: 640px) {
+  /* Stacked: the connectors have no room to read as a trail. */
+  .kh-bo__steps {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .kh-bo__steps li + li::before {
+    display: none;
+  }
 }
 
 .kh-bo__eyebrow {
@@ -1416,6 +1791,17 @@ textarea.kh-bo__control {
 .kh-bo__modal-panel--review {
   background: color-mix(in srgb, var(--kh-ink) 2.5%, transparent);
   border-left: 1px solid var(--kh-line);
+}
+
+/* A form whose fields stack in normal flow rather than in a gapped grid —
+   the candidate review, which runs a fieldset and two textareas down one
+   column. Grid forms space themselves and must not pick this up. */
+.kh-bo__stackform .kh-bo__field + .kh-bo__field {
+  margin-top: 16px;
+}
+
+.kh-bo__stackform .kh-bo__pills {
+  margin-bottom: 14px;
 }
 
 .kh-bo__modal-legend {

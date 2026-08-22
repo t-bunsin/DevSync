@@ -13,13 +13,6 @@ use Illuminate\Validation\Rule;
 
 class ResumeController extends Controller
 {
-    private const ANY_RESUME_PERMISSION = [
-        Permission::RESUME_CREATE,
-        Permission::RESUME_EDIT,
-        Permission::RESUME_DELETE,
-        Permission::RESUME_DOWNLOAD,
-    ];
-
     public function __construct()
     {
         $this->middleware('auth');
@@ -27,7 +20,7 @@ class ResumeController extends Controller
 
     public function index(Request $request)
     {
-        $this->authorizeAny();
+        $this->authorizeView();
 
         $from = $this->dateInput($request->query('from'));
         $to = $this->dateInput($request->query('to'));
@@ -95,7 +88,7 @@ class ResumeController extends Controller
 
     public function show(Resume $resume)
     {
-        $this->authorizeAny();
+        $this->authorizeView();
 
         return view('resumes.show', [
             'resume' => $resume->load('author'),
@@ -157,18 +150,13 @@ class ResumeController extends Controller
     }
 
     /**
-     * The list and detail pages have no dedicated permission of their own —
-     * holding any one resume.* permission is enough to browse, same as an
-     * employer with any job.* permission can browse job posts.
+     * Browsing is its own grant. It used to be implied by holding any one
+     * resume.* code, which meant "download only" still handed over the whole
+     * list; resume.view now says so explicitly.
      */
-    private function authorizeAny(): void
+    private function authorizeView(): void
     {
-        $user = request()->user();
-
-        abort_unless(
-            collect(self::ANY_RESUME_PERMISSION)->contains(fn ($code) => $user->hasPermission($code)),
-            403
-        );
+        abort_unless(request()->user()->hasPermission(Permission::RESUME_VIEW), 403);
     }
 
     /**
