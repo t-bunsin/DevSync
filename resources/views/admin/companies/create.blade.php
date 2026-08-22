@@ -25,6 +25,25 @@
             <a class="kh-bo__btn kh-bo__btn--ghost" href="{{ route('companies') }}">Back to companies</a>
         </header>
 
+
+        @if (session('success'))
+            <div class="kh-bo__flash" role="status">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                    stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M20 6L9 17l-5-5" />
+                </svg>
+                <span>{{ session('success') }}</span>
+            </div>
+        @endif
+
+        @if ($errors->any())
+            <div class="kh-bo__errors" role="alert">
+                @foreach ($errors->all() as $message)
+                    <div>{{ $message }}</div>
+                @endforeach
+            </div>
+        @endif
+
         <form method="POST" action="{{ route('companies.store') }}" enctype="multipart/form-data">
             @csrf
             @include('admin.companies._form', ['company' => $company])

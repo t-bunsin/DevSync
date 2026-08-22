@@ -111,18 +111,40 @@
             @error('employee_count') <span class="kh-bo__error">{{ $message }}</span> @enderror
         </div>
 
+        {{-- Status is the platform's verification decision, so an employer sees
+             where they stand but cannot set it. CompaniesController::validated()
+             drops the field for them too — this is presentation, not the gate. --}}
         <div class="kh-bo__field">
-            <label class="kh-bo__label" for="status">Status <span class="kh-bo__required" aria-hidden="true">*</span></label>
-            <select @class(['kh-bo__control', 'is-invalid' => $errors->has('status')]) id="status" name="status" required>
-                @foreach (\App\Models\Company::statuses() as $status)
-                    <option value="{{ $status }}"
-                        @selected(old('status', $company->status ?? \App\Models\Company::STATUS_APPROVED) === $status)>
-                        {{ ucfirst($status) }}
-                    </option>
-                @endforeach
-            </select>
-            <span class="kh-bo__hint">Only approved companies can be picked when posting a job or signing up.</span>
-            @error('status') <span class="kh-bo__error">{{ $message }}</span> @enderror
+            <label class="kh-bo__label" for="status">
+                Status
+                @if (auth()->user()?->isAdmin())
+                    <span class="kh-bo__required" aria-hidden="true">*</span>
+                @endif
+            </label>
+
+            @if (auth()->user()?->isAdmin())
+                <select @class(['kh-bo__control', 'is-invalid' => $errors->has('status')]) id="status" name="status" required>
+                    @foreach (\App\Models\Company::statuses() as $status)
+                        <option value="{{ $status }}"
+                            @selected(old('status', $company->status ?? \App\Models\Company::STATUS_APPROVED) === $status)>
+                            {{ ucfirst($status) }}
+                        </option>
+                    @endforeach
+                </select>
+                <span class="kh-bo__hint">Only approved companies can be picked when posting a job or signing up.</span>
+                @error('status') <span class="kh-bo__error">{{ $message }}</span> @enderror
+            @else
+                @php($current = $company->status ?? \App\Models\Company::STATUS_PENDING)
+                <p>
+                    <span @class([
+                        'kh-bo__status',
+                        'kh-bo__status--verified' => $current === \App\Models\Company::STATUS_APPROVED,
+                        'kh-bo__status--rejected' => $current === \App\Models\Company::STATUS_REJECTED,
+                        'kh-bo__status--pending' => $current === \App\Models\Company::STATUS_PENDING,
+                    ])>{{ ucfirst($current) }}</span>
+                </p>
+                <span class="kh-bo__hint">Set by KH-WORKS when your company is reviewed. Only approved companies appear to job seekers.</span>
+            @endif
         </div>
 
         <div class="kh-bo__field">

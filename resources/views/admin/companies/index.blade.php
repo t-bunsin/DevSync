@@ -185,15 +185,20 @@
                                 </td>
 
                                 <td>
-                                    @if (auth()->user()?->isAdmin())
+                                    {{-- An employer sees the whole directory but may only act on
+                                         the company they belong to; admin acts on any of them. --}}
+                                    @php($canEdit = auth()->user()?->isAdmin() || $company->id === $ownCompanyId)
+                                    @if ($canEdit)
                                         <div class="kh-bo__actions">
                                             <a class="kh-bo__action" href="{{ route('companies.edit', $company) }}"
-                                                title="Edit company" aria-label="Edit {{ $company->name }}">
+                                                title="{{ auth()->user()?->isAdmin() ? 'Edit company' : 'Edit your company' }}"
+                                                aria-label="Edit {{ $company->name }}">
                                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                                     <path d="M12 20h9" /><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z" />
                                                 </svg>
                                             </a>
 
+                                            @if (auth()->user()?->isAdmin())
                                             <form method="POST" action="{{ route('companies.destroy', $company) }}"
                                                 onsubmit="return confirm('Delete {{ addslashes($company->name) }}? This cannot be undone.');">
                                                 @csrf
@@ -205,6 +210,7 @@
                                                     </svg>
                                                 </button>
                                             </form>
+                                            @endif
                                         </div>
                                     @endif
                                 </td>

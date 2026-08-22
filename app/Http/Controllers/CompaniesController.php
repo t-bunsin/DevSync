@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Company;
+use App\Models\EmployerProfile;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -47,6 +48,9 @@ class CompaniesController extends Controller
             'counts' => $counts,
             'activeStatus' => $request->query('status'),
             'searchTerm' => $request->query('q'),
+            // Decides which rows offer an Edit action; null for an admin, who
+            // may edit every row regardless.
+            'ownCompanyId' => $ownCompanyId,
         ]);
     }
 
@@ -83,6 +87,8 @@ class CompaniesController extends Controller
 
     public function edit(Company $company)
     {
+        $this->authorizeManage($company);
+
         $company->loadCount(['jobPosts', 'complianceRecords']);
 
         return view('admin.companies.edit', compact('company'));
@@ -90,6 +96,14 @@ class CompaniesController extends Controller
 
     public function update(Request $request, Company $company)
     {
+        $this->authorizeManage($company);
+
+        // Captured before fill(), so the rename below can find the profiles
+        // that still point at the old name.
+        $originalName = $company->name;
+
+        // validated() drops `status` for an employer, so fill() cannot set it
+        // even if the field is posted by hand.
         $company->fill($this->validated($request));
         $company->slug = Company::makeSlug($request->input('name'), $company->id);
 
@@ -111,13 +125,21 @@ class CompaniesController extends Controller
 
         $company->save();
 
-        // Both tables keep a denormalised copy of the name for display, so a
-        // rename has to be pushed out to them.
+        // Three tables keep a copy of the name, so a rename has to be pushed out
+        // to all of them. employer_profiles is the load-bearing one: it is not
+        // display text but the only link between an employer and their company
+        // (User::ownCompany() matches on it), so leaving it stale locks the
+        // employer out of the record they just renamed.
         $company->jobPosts()->update(['company' => $company->name]);
         $company->complianceRecords()->update(['name' => $company->name]);
 
+        if ($originalName !== $company->name) {
+            EmployerProfile::whereRaw('LOWER(company_name) = ?', [mb_strtolower($originalName)])
+                ->update(['company_name' => $company->name]);
+        }
+
         return redirect()
-            ->route('companies')
+            ->route($request->user()->isAdmin() ? 'companies' : 'companies.edit', $request->user()->isAdmin() ? [] : $company)
             ->withSuccess("{$company->name} was updated.");
     }
 
@@ -155,15 +177,37 @@ class CompaniesController extends Controller
             ->withSuccess("{$name} was deleted.");
     }
 
+    /**
+     * An employer may edit the company they belong to, and nothing else. There
+     * is no FK between the two — User::ownCompany() matches the free-text name
+     * from registration — so the comparison goes through that lookup rather
+     * than a column on the row.
+     */
+    private function authorizeManage(Company $company): void
+    {
+        $user = request()->user();
+
+        abort_unless($user->isAdmin() || $company->is($user->ownCompany()), 403);
+    }
+
+    /**
+     * `status` is the platform's verification decision, not the company's own
+     * claim about itself, so the rule — and therefore the field — exists only
+     * for an admin. Without it in the returned array, fill() leaves the column
+     * alone however the form was submitted.
+     */
     private function validated(Request $request): array
     {
-        return $request->validate([
+        $statusRule = $request->user()->isAdmin()
+            ? ['status' => ['required', Rule::in(Company::statuses())]]
+            : [];
+
+        return $request->validate($statusRule + [
             'name' => 'required|string|max:255',
             'registration_no' => 'nullable|string|max:120',
             'employer_type' => ['nullable', Rule::in(Company::employerTypes())],
             'industry' => ['nullable', Rule::in(Company::industries())],
             'employee_count' => ['nullable', Rule::in(Company::employeeRanges())],
-            'status' => ['required', Rule::in(Company::statuses())],
             'email' => 'nullable|email|max:255',
             'phone' => 'nullable|string|max:50',
             'website' => 'nullable|url|max:255',

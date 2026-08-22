@@ -108,9 +108,11 @@ Route::prefix('admin')->group(function () {
                 ->name('compliance.verify');
             Route::resource('compliance', ComplianceController::class);
 
-            // Everything but the directory listing: employer gets read access
-            // to the list below, but only admin may create/edit/delete companies.
-            Route::resource('companies', CompaniesController::class)->except(['index']);
+            // Creating and deleting companies stays an admin call. Editing does
+            // not: an employer may edit their own record, so edit/update live in
+            // the employer group below and CompaniesController checks ownership.
+            Route::resource('companies', CompaniesController::class)
+                ->only(['create', 'store', 'destroy']);
 
             // The Location/Department/Job type lists behind the job post form
             // (see JobPost::locationOptions()/departmentOptions()/types()).
@@ -156,6 +158,13 @@ Route::prefix('admin')->group(function () {
 
             // Index keeps the bare `companies` name that the admin shell already links to.
             Route::get('/companies', [CompaniesController::class, 'index'])->name('companies');
+
+            // Employer-or-admin at the route; CompaniesController::authorizeManage()
+            // narrows it to the employer's own company, and keeps `status` an
+            // admin-only field so nobody approves themselves.
+            Route::get('/companies/{company}', [CompaniesController::class, 'show'])->name('companies.show');
+            Route::get('/companies/{company}/edit', [CompaniesController::class, 'edit'])->name('companies.edit');
+            Route::put('/companies/{company}', [CompaniesController::class, 'update'])->name('companies.update');
 
             // Resumes used to be admin-only at the route level; now the route
             // just requires employer-or-admin, and ResumeController checks the
