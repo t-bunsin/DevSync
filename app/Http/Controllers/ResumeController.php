@@ -20,7 +20,11 @@ class ResumeController extends Controller
 
     public function index(Request $request)
     {
-        $this->authorizeView();
+        $candidate = $request->user()->isCandidateOnly();
+
+        if (! $candidate) {
+            $this->authorizeView();
+        }
 
         $from = $this->dateInput($request->query('from'));
         $to = $this->dateInput($request->query('to'));
@@ -32,6 +36,7 @@ class ResumeController extends Controller
 
         $resumes = Resume::query()
             ->with('author')
+            ->when($candidate, fn ($query) => $query->where('created_by', $request->user()->id))
             ->status($request->query('status'))
             ->search($request->query('q'))
             ->when($from, fn ($query) => $query->whereDate('created_at', '>=', $from))
@@ -42,6 +47,7 @@ class ResumeController extends Controller
         // Counted off the whole table, not the filtered set, so the tiles do
         // not change meaning when a filter is applied.
         $counts = Resume::query()
+            ->when($candidate, fn ($query) => $query->where('created_by', $request->user()->id))
             ->selectRaw('status, COUNT(*) as total')
             ->groupBy('status')
             ->pluck('total', 'status');
@@ -53,12 +59,21 @@ class ResumeController extends Controller
             'searchTerm' => $request->query('q'),
             'fromDate' => $from,
             'toDate' => $to,
+            'isCandidate' => $candidate,
+            // What the row actions may offer. A candidate's list holds only
+            // their own rows, so ownership is already true for every row here.
+            'can' => [
+                'create' => $candidate || $request->user()->hasPermission(Permission::RESUME_CREATE),
+                'edit' => $candidate || $request->user()->hasPermission(Permission::RESUME_EDIT),
+                'download' => $candidate || $request->user()->hasPermission(Permission::RESUME_DOWNLOAD),
+                'delete' => ! $candidate && $request->user()->hasPermission(Permission::RESUME_DELETE),
+            ],
         ]);
     }
 
     public function create()
     {
-        abort_unless(request()->user()->hasPermission(Permission::RESUME_CREATE), 403);
+        $this->authorizeAction(Permission::RESUME_CREATE);
 
         return view('resumes.create', [
             'resume' => new Resume(),
@@ -72,7 +87,7 @@ class ResumeController extends Controller
      */
     public function store(Request $request)
     {
-        abort_unless($request->user()->hasPermission(Permission::RESUME_CREATE), 403);
+        $this->authorizeAction(Permission::RESUME_CREATE);
 
         $resume = new Resume($this->validated($request));
 
@@ -88,7 +103,7 @@ class ResumeController extends Controller
 
     public function show(Resume $resume)
     {
-        $this->authorizeView();
+        $this->authorizeAction(Permission::RESUME_VIEW, $resume);
 
         return view('resumes.show', [
             'resume' => $resume->load('author'),
@@ -102,7 +117,7 @@ class ResumeController extends Controller
      */
     public function download(Resume $resume)
     {
-        abort_unless(request()->user()->hasPermission(Permission::RESUME_DOWNLOAD), 403);
+        $this->authorizeAction(Permission::RESUME_DOWNLOAD, $resume);
 
         $filename = Str::slug($resume->full_name) ?: 'resume';
 
@@ -113,7 +128,7 @@ class ResumeController extends Controller
 
     public function edit(Resume $resume)
     {
-        abort_unless(request()->user()->hasPermission(Permission::RESUME_EDIT), 403);
+        $this->authorizeAction(Permission::RESUME_EDIT, $resume);
 
         return view('resumes.edit', [
             'resume' => $resume,
@@ -122,7 +137,7 @@ class ResumeController extends Controller
 
     public function update(Request $request, Resume $resume)
     {
-        abort_unless($request->user()->hasPermission(Permission::RESUME_EDIT), 403);
+        $this->authorizeAction(Permission::RESUME_EDIT, $resume);
 
         $resume->fill($this->validated($request));
 
@@ -137,7 +152,7 @@ class ResumeController extends Controller
 
     public function destroy(Resume $resume)
     {
-        abort_unless(request()->user()->hasPermission(Permission::RESUME_DELETE), 403);
+        $this->authorizeAction(Permission::RESUME_DELETE, $resume);
 
         $name = $resume->full_name;
 
@@ -150,13 +165,35 @@ class ResumeController extends Controller
     }
 
     /**
-     * Browsing is its own grant. It used to be implied by holding any one
-     * resume.* code, which meant "download only" still handed over the whole
-     * list; resume.view now says so explicitly.
+     * Browsing the register is its own grant. It used to be implied by holding
+     * any one resume.* code, which meant "download only" still handed over the
+     * whole list; resume.view now says so explicitly.
      */
     private function authorizeView(): void
     {
         abort_unless(request()->user()->hasPermission(Permission::RESUME_VIEW), 403);
+    }
+
+    /**
+     * Two ways in, and only two: a job seeker acting on a resume they wrote,
+     * or anyone else holding the permission that action needs. Passing no
+     * $resume asks about the area rather than a row — create, for instance,
+     * where a candidate is always writing their own.
+     */
+    private function authorizeAction(string $permission, ?Resume $resume = null): void
+    {
+        $user = request()->user();
+
+        if ($user->isCandidateOnly()) {
+            abort_unless($resume === null || $resume->created_by === $user->id, 403);
+
+            // Deleting is not an owner action here: the register keeps the row.
+            abort_if($permission === Permission::RESUME_DELETE, 403);
+
+            return;
+        }
+
+        abort_unless($user->hasPermission($permission), 403);
     }
 
     /**

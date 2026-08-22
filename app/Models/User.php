@@ -172,6 +172,20 @@ class User extends Authenticatable
     }
 
     /**
+     * A job seeker with no back-office standing: not an admin, not an employer.
+     *
+     * The distinction matters wherever a screen serves both the register and
+     * the person's own row — the resumes area does. Their own resume is theirs
+     * by ownership, the way My Applications is, so it does not wait on an admin
+     * switching resume.* on for the Job seeker role; those switches govern
+     * everyone else's resumes.
+     */
+    public function isCandidateOnly(): bool
+    {
+        return $this->isEmployee() && ! $this->isAdmin() && ! $this->isEmployer();
+    }
+
+    /**
      * Reads the matrix and nothing else. Admin used to short-circuit to true
      * here, which made the Administrator row on the User Role & Permission
      * page decorative; it no longer does, so an admin holds exactly the codes

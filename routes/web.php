@@ -87,6 +87,17 @@ Route::prefix('admin')->group(function () {
         Route::get('/notifications', [NotificationController::class, 'feed'])->name('notifications.feed');
         Route::post('/notifications/read', [NotificationController::class, 'markRead'])->name('notifications.read');
 
+        /*
+         | Resumes are signed-in-only at the route, because the area serves two
+         | different people: an employer or admin working the register, gated
+         | per action by the resume.* permissions, and a job seeker working the
+         | one resume they wrote, gated by ownership. ResumeController tells
+         | them apart with User::isCandidateOnly() and scopes accordingly.
+         */
+        Route::get('/resumes/{resume}/download', [ResumeController::class, 'download'])
+            ->name('resumes.download');
+        Route::resource('resumes', ResumeController::class);
+
         // The candidate's own list — self-scoped by user_id in the controller,
         // so no role middleware is needed beyond being signed in.
         Route::get('/my-applications', [MyApplicationsController::class, 'index'])->name('my-applications');
@@ -166,12 +177,7 @@ Route::prefix('admin')->group(function () {
             Route::get('/companies/{company}/edit', [CompaniesController::class, 'edit'])->name('companies.edit');
             Route::put('/companies/{company}', [CompaniesController::class, 'update'])->name('companies.update');
 
-            // Resumes used to be admin-only at the route level; now the route
-            // just requires employer-or-admin, and ResumeController checks the
-            // resume.* permission for each action (see RoleController).
-            Route::get('/resumes/{resume}/download', [ResumeController::class, 'download'])
-                ->name('resumes.download');
-            Route::resource('resumes', ResumeController::class);
+
         });
     });
 });

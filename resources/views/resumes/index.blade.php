@@ -28,21 +28,25 @@
         <nav class="kh-bo__breadcrumb" aria-label="Breadcrumb">
             <a href="{{ route('home') }}">Back office</a>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6" /></svg>
-            <span aria-current="page">Resumes</span>
+            <span aria-current="page">{{ $isCandidate ? 'My Resume' : 'Resumes' }}</span>
         </nav>
 
         <header class="kh-bo__head">
             <div>
-                <h1>Resumes</h1>
-                <p>Register and maintain the candidate CVs held on the platform.</p>
+                <h1>{{ $isCandidate ? 'My Resume' : 'Resumes' }}</h1>
+                <p>
+                    {{ $isCandidate
+                        ? 'The CV employers see when you apply. Only you can edit it.'
+                        : 'Register and maintain the candidate CVs held on the platform.' }}
+                </p>
             </div>
 
-            @if (auth()->user()?->hasPermission(\App\Models\Permission::RESUME_CREATE))
+            @if ($can['create'])
                 <a class="kh-bo__btn" href="{{ route('resumes.create') }}">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
                         <path d="M12 5v14M5 12h14" />
                     </svg>
-                    Add resume
+                    {{ $isCandidate ? 'Create my resume' : 'Add resume' }}
                 </a>
             @endif
         </header>
@@ -206,7 +210,7 @@
 
                                 <td>
                                     <div class="kh-bo__actions">
-                                        @if (auth()->user()?->hasPermission(\App\Models\Permission::RESUME_DOWNLOAD))
+                                        @if ($can['download'])
                                             <a class="kh-bo__action" href="{{ route('resumes.download', $resume) }}"
                                                 title="Download PDF" aria-label="Download {{ $resume->full_name }} as PDF">
                                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -222,7 +226,7 @@
                                             </svg>
                                         </a>
 
-                                        @if (auth()->user()?->hasPermission(\App\Models\Permission::RESUME_EDIT))
+                                        @if ($can['edit'])
                                             <a class="kh-bo__action" href="{{ route('resumes.edit', $resume) }}"
                                                 title="Edit resume" aria-label="Edit {{ $resume->full_name }}">
                                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -231,7 +235,7 @@
                                             </a>
                                         @endif
 
-                                        @if (auth()->user()?->hasPermission(\App\Models\Permission::RESUME_DELETE))
+                                        @if ($can['delete'])
                                             <form method="POST" action="{{ route('resumes.destroy', $resume) }}"
                                                 onsubmit="return confirm('Delete the resume for {{ addslashes($resume->full_name) }}? This cannot be undone.');">
                                                 @csrf

@@ -301,10 +301,11 @@
                                 </div>
                             </nav>
                         </div>
-                        {{-- Every child of this accordion is either admin-only or
-                             admin+employer, so an employee has nothing to see inside
-                             it — hide the whole accordion rather than leave it empty. --}}
-                        @if ($adminUser?->isAdmin() || $adminUser?->isEmployer())
+                        {{-- Each child gates itself; this only asks whether anything
+                             is left to show. A job seeker sees exactly one entry —
+                             Resume Management, holding their own resume — while User
+                             and Job Management stay hidden from them. --}}
+                        @if ($adminUser?->isAdmin() || $adminUser?->isEmployer() || $adminUser?->isCandidateOnly())
                         <!-- Sidenav Accordion (Applications)-->
                         <!-- Applications Menu -->
                         <a class="nav-link collapsed {{ request()->is('applications/*') || request()->routeIs('users', 'user.*', 'job-posts.*', 'resumes.*') || request()->is('user-management-*') ? 'kh-nav-parent-active' : '' }}"
@@ -381,7 +382,9 @@
                                 </div>
                                 @endif
 
-                                @if ($adminUser?->hasPermission(\App\Models\Permission::RESUME_VIEW))
+                                {{-- A job seeker reaches this area for their own resume, which is
+                                     theirs by ownership rather than by a granted permission. --}}
+                                @if ($adminUser?->hasPermission(\App\Models\Permission::RESUME_VIEW) || $adminUser?->isCandidateOnly())
                                 <!-- Resume Management Inside Applications -->
                                 <a class="nav-link collapsed {{ request()->routeIs('resumes.*') ? 'kh-nav-parent-active fw-bold' : '' }}"
                                     href="javascript:void(0);" data-bs-toggle="collapse"
@@ -396,10 +399,10 @@
                                     id="appsCollapseResumes" data-bs-parent="#accordionSidenavAppsMenu">
                                     <nav class="sidenav-menu-nested nav">
                                         <a class="nav-link {{ request()->routeIs('resumes.index') ? 'active fw-bold' : '' }}"
-                                            href="{{ route('resumes.index') }}">Resumes</a>
-                                        @if ($adminUser?->hasPermission(\App\Models\Permission::RESUME_CREATE))
+                                            href="{{ route('resumes.index') }}">{{ $adminUser?->isCandidateOnly() ? 'My Resume' : 'Resumes' }}</a>
+                                        @if ($adminUser?->hasPermission(\App\Models\Permission::RESUME_CREATE) || $adminUser?->isCandidateOnly())
                                         <a class="nav-link {{ request()->routeIs('resumes.create') ? 'active fw-bold' : '' }}"
-                                            href="{{ route('resumes.create') }}">Add Resume</a>
+                                            href="{{ route('resumes.create') }}">{{ $adminUser?->isCandidateOnly() ? 'Create Resume' : 'Add Resume' }}</a>
                                         @endif
                                     </nav>
                                 </div>
