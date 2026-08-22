@@ -134,13 +134,13 @@
                          one Search applies the status, the term and the dates
                          together, instead of the status jumping on click. --}}
                     <form class="kh-bo__search" method="GET" action="{{ route('job-posts.applications', $post) }}" role="search">
-                        <select name="status" aria-label="Filter by status" title="Filter by status">
-                            @foreach ($filters as $value => $label)
-                                <option value="{{ $value }}" @selected((string) $activeStatus === (string) $value)>
-                                    {{ $value === '' ? 'All statuses' : $label }}
-                                </option>
-                            @endforeach
-                        </select>
+                        @include('partials.kh-bo-filter-select', [
+                            'name' => 'status',
+                            'options' => $filters,
+                            'active' => $activeStatus,
+                            'label' => 'Filter by status',
+                            'allLabel' => 'All statuses',
+                        ])
 
                         <input type="search" name="q" value="{{ $searchTerm }}"
                             placeholder="Search name or email" aria-label="Search applications">

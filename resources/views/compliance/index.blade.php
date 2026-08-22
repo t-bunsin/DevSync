@@ -112,19 +112,15 @@
                 </div>
 
                 <div class="kh-bo__tools">
-                    <div class="kh-bo__filters">
-                        @foreach ($filters as $value => $label)
-                            <a class="kh-bo__filter{{ (string) $activeStatus === (string) $value ? ' is-active' : '' }}"
-                                href="{{ route('compliance.index', array_filter(['status' => $value, 'q' => $searchTerm, 'from' => $fromDate, 'to' => $toDate])) }}">
-                                {{ $label }}
-                            </a>
-                        @endforeach
-                    </div>
-
                     <form class="kh-bo__search" method="GET" action="{{ route('compliance.index') }}" role="search">
-                        @if ($activeStatus)
-                            <input type="hidden" name="status" value="{{ $activeStatus }}">
-                        @endif
+                        @include('partials.kh-bo-filter-select', [
+                            'name' => 'status',
+                            'options' => $filters,
+                            'active' => $activeStatus,
+                            'label' => 'Filter by status',
+                            'allLabel' => 'All statuses',
+                        ])
+
                         <input type="search" name="q" value="{{ $searchTerm }}"
                             placeholder="Search name or reference" aria-label="Search compliance records">
 

@@ -99,19 +99,15 @@
                 </div>
 
                 <div class="kh-bo__tools">
-                    <div class="kh-bo__filters">
-                        @foreach ($filters as $value => $label)
-                            <a class="kh-bo__filter{{ (string) $activeStatus === (string) $value ? ' is-active' : '' }}"
-                                href="{{ route('companies', array_filter(['status' => $value, 'q' => $searchTerm])) }}">
-                                {{ $label }}
-                            </a>
-                        @endforeach
-                    </div>
-
                     <form class="kh-bo__search" method="GET" action="{{ route('companies') }}" role="search">
-                        @if ($activeStatus)
-                            <input type="hidden" name="status" value="{{ $activeStatus }}">
-                        @endif
+                        @include('partials.kh-bo-filter-select', [
+                            'name' => 'status',
+                            'options' => $filters,
+                            'active' => $activeStatus,
+                            'label' => 'Filter by status',
+                            'allLabel' => 'All statuses',
+                        ])
+
                         <input type="search" name="q" value="{{ $searchTerm }}"
                             placeholder="Search name or registration" aria-label="Search companies">
                         <button class="kh-bo__btn kh-bo__btn--ghost" type="submit">Search</button>

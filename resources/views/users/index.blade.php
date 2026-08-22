@@ -113,23 +113,15 @@
                 </div>
 
                 <div class="kh-bo__tools">
-                    <div class="kh-bo__filters">
-                        <a class="kh-bo__filter{{ $activeRole ? '' : ' is-active' }}"
-                            href="{{ route('users', array_filter(['q' => $searchTerm, 'from' => $fromDate, 'to' => $toDate])) }}">
-                            All
-                        </a>
-                        @foreach ($roles as $role)
-                            <a class="kh-bo__filter{{ $activeRole === $role->code ? ' is-active' : '' }}"
-                                href="{{ route('users', array_filter(['role' => $role->code, 'q' => $searchTerm, 'from' => $fromDate, 'to' => $toDate])) }}">
-                                {{ $role->name_en }}
-                            </a>
-                        @endforeach
-                    </div>
-
                     <form class="kh-bo__search" method="GET" action="{{ route('users') }}" role="search">
-                        @if ($activeRole)
-                            <input type="hidden" name="role" value="{{ $activeRole }}">
-                        @endif
+                        @include('partials.kh-bo-filter-select', [
+                            'name' => 'role',
+                            'options' => ['' => 'All'] + $roles->pluck('name_en', 'code')->all(),
+                            'active' => $activeRole,
+                            'label' => 'Filter by role',
+                            'allLabel' => 'All roles',
+                        ])
+
                         <input type="search" name="q" value="{{ $searchTerm }}"
                             placeholder="Search name or email" aria-label="Search users">
 
