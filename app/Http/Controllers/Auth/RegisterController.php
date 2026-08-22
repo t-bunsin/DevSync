@@ -8,7 +8,9 @@ use App\Models\Company;
 use App\Models\EmployerProfile;
 use App\Models\Role;
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -45,14 +47,25 @@ class RegisterController extends Controller
     }
 
     /**
-     * Registration normally ends on the role's own landing page, but a
-     * visitor who was sent here by the job apply gate goes back to the job
-     * they wanted. RegistersUsers logs the new user in before this runs, so
-     * auth()->user() is already the account just created.
+     * Registering no longer signs anyone in. The account exists but is unusable
+     * until the code mailed to the address is entered, which is the whole point
+     * of the step — an address nobody can read is not an account anyone owns.
+     *
+     * Overrides RegistersUsers::register(), which would log the user straight
+     * in. `url.intended` is left in the session untouched: a visitor sent here
+     * by the job apply gate still lands back on that job, one screen later.
      */
-    protected function redirectTo()
+    public function register(Request $request)
     {
-        return session()->pull('url.intended', route(auth()->user()->homeRouteName()));
+        $this->validator($request->all())->validate();
+
+        event(new Registered($user = $this->create($request->all())));
+
+        EmailVerificationCodeController::start($request, $user);
+
+        return redirect()
+            ->route('verification.code')
+            ->withSuccess('We sent a 6-digit code to ' . $user->email . '.');
     }
 
     /**

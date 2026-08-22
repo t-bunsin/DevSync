@@ -567,6 +567,59 @@ body.jf-auth-body {
   font-size: 0.72rem;
 }
 
+/* The one-time code field: wide, spaced digits so a six-character string
+   reads as a code to copy against, not as ordinary text. */
+.jf-auth__field input.jf-auth__code {
+  padding-block: 16px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 0.42em;
+  text-align: center;
+  /* letter-spacing pads the right of the last glyph, which pushes the whole
+     string visually left; half of it back as padding re-centres it. */
+  text-indent: 0.42em;
+}
+
+.jf-auth__field input.jf-auth__code::placeholder {
+  color: #cbd8dc;
+  letter-spacing: 0.42em;
+}
+
+/* Resend sits between the form and the footer: a sentence with a button in it,
+   not a second call to action competing with Confirm. */
+.jf-auth__resend {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 16px;
+  color: var(--jf-auth-ink-soft);
+  font-size: 0.82rem;
+  text-align: center;
+}
+
+.jf-auth__resend button {
+  padding: 0;
+  color: var(--jf-auth-ocean);
+  background: none;
+  border: 0;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.jf-auth__resend button:hover:not(:disabled) {
+  text-decoration: underline;
+}
+
+.jf-auth__resend button:disabled {
+  color: var(--jf-auth-ink-soft);
+  opacity: 0.65;
+  cursor: default;
+}
+
 .jf-auth__error {
   color: #9a3131;
   font-size: 0.73rem;

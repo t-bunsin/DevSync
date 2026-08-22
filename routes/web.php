@@ -190,6 +190,23 @@ Route::post('/contact', [ContactController::class, 'send'])->name('contact.send'
 
 // use App\Http\Controllers\AuthController;
 
+/*
+| Registration's second step. Guest-only, because it stands between having an
+| account and being signed in — and rate limited on top of the per-code
+| ceilings in EmailVerificationCode, which count guesses per account while
+| these count requests per IP.
+*/
+Route::middleware('guest')->group(function () {
+    Route::get('/verify-code', [App\Http\Controllers\Auth\EmailVerificationCodeController::class, 'show'])
+        ->name('verification.code');
+    Route::post('/verify-code', [App\Http\Controllers\Auth\EmailVerificationCodeController::class, 'verify'])
+        ->middleware('throttle:10,1')
+        ->name('verification.code.verify');
+    Route::post('/verify-code/resend', [App\Http\Controllers\Auth\EmailVerificationCodeController::class, 'resend'])
+        ->middleware('throttle:5,10')
+        ->name('verification.code.resend');
+});
+
 Route::get('/login', [App\Http\Controllers\Auth\LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [App\Http\Controllers\Auth\LoginController::class, 'login']);
 Route::post('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');

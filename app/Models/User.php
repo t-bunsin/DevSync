@@ -171,6 +171,17 @@ class User extends Authenticatable
         return $this->hasRole(Role::EMPLOYEE);
     }
 
+    public function emailVerificationCode(): HasOne
+    {
+        return $this->hasOne(EmailVerificationCode::class);
+    }
+
+    /** Registration is only finished once the mailed code has been entered. */
+    public function hasVerifiedEmail(): bool
+    {
+        return $this->email_verified_at !== null;
+    }
+
     /**
      * A job seeker with no back-office standing: not an admin, not an employer.
      *
