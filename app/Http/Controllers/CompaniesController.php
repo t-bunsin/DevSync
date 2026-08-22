@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Company;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -17,9 +18,16 @@ class CompaniesController extends Controller
 
     public function index(Request $request)
     {
+        $user = $request->user();
+
+        // Admin browses the whole directory; an employer only ever sees the
+        // one company tied to their account (see User::ownCompany()).
+        $ownCompanyId = $user->isAdmin() ? null : $user->ownCompany()?->id;
+
         $companies = Company::query()
             ->withCount(['jobPosts', 'complianceRecords'])
             ->with(['complianceRecords' => fn ($q) => $q->select('id', 'company_id', 'status')])
+            ->when(! $user->isAdmin(), fn (Builder $query) => $query->where('id', $ownCompanyId ?? 0))
             ->search($request->query('q'))
             ->when(
                 in_array($request->query('status'), Company::statuses(), true),
@@ -29,6 +37,7 @@ class CompaniesController extends Controller
             ->get();
 
         $counts = Company::query()
+            ->when(! $user->isAdmin(), fn (Builder $query) => $query->where('id', $ownCompanyId ?? 0))
             ->selectRaw('status, COUNT(*) as total')
             ->groupBy('status')
             ->pluck('total', 'status');

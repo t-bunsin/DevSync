@@ -148,7 +148,7 @@ class JobPostController extends Controller
     {
         return view('job-posts.create', [
             'post' => new JobPost(),
-            'companies' => Company::approved()->orderBy('name')->get(),
+            'companies' => $this->selectableCompanies(request()->user()),
         ]);
     }
 
@@ -187,7 +187,7 @@ class JobPostController extends Controller
 
         return view('job-posts.edit', [
             'post' => $jobPost,
-            'companies' => Company::approved()->orderBy('name')->get(),
+            'companies' => $this->selectableCompanies(request()->user()),
         ]);
     }
 
@@ -233,12 +233,34 @@ class JobPostController extends Controller
         abort_unless(request()->user()->isAdmin() || $jobPost->created_by === request()->user()->id, 403);
     }
 
+    /**
+     * Admin picks from the whole approved directory; an employer may only
+     * hire under their own company (see User::ownCompany()), so that's the
+     * one option they get — or none, if their company isn't approved yet.
+     */
+    private function selectableCompanies($user)
+    {
+        if ($user->isAdmin()) {
+            return Company::approved()->orderBy('name')->get();
+        }
+
+        $own = $user->ownCompany();
+
+        return ($own && $own->isApproved()) ? collect([$own]) : collect();
+    }
+
+    /** Blocks a non-admin from posting under a company that isn't their own, even by editing the request directly. */
+    private function authorizeCompany($user, string $companyId): void
+    {
+        abort_unless($user->isAdmin() || $user->ownCompany()?->id === (int) $companyId, 403);
+    }
+
     private function validated(Request $request): array
     {
-        return $request->validate([
+        $validated = $request->validate([
             'title' => 'required|string|max:255',
             'company_id' => 'required|exists:companies,id',
-            'location' => 'required|string|max:255',
+            'location' => ['required', 'string', 'max:255', Rule::in(JobPost::locationOptions())],
             'slug' => 'nullable|string|max:255|regex:/^[a-z0-9-]+$/',
             'salary' => 'nullable|string|max:255',
             'short_salary' => 'nullable|string|max:255',
@@ -246,7 +268,7 @@ class JobPostController extends Controller
             'type' => ['required', Rule::in(JobPost::types())],
             'mode' => ['required', Rule::in(JobPost::modes())],
             'experience' => 'nullable|string|max:60',
-            'department' => 'nullable|string|max:80',
+            'department' => ['nullable', 'string', 'max:80', Rule::in(JobPost::departmentOptions())],
             'deadline' => 'nullable|date',
             'applicants' => 'nullable|integer|min:0|max:1000000',
             'logo' => ['required', Rule::in(JobPost::logos())],
@@ -261,7 +283,13 @@ class JobPostController extends Controller
         ], [
             'company_id.required' => 'Choose which company is hiring.',
             'slug.regex' => 'The URL slug may only use lowercase letters, numbers and hyphens.',
+            'location.in' => 'Choose a location from the list.',
+            'department.in' => 'Choose a department from the list.',
         ]);
+
+        $this->authorizeCompany($request->user(), $validated['company_id']);
+
+        return $validated;
     }
 
     /**

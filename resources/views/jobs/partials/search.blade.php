@@ -38,9 +38,9 @@
                         <i class="fas fa-briefcase" aria-hidden="true"></i>
                         <select id="{{ $directoryStyle ? 'job-mode-select' : 'job-type-select' }}" aria-label="Job type">
                             <option value="all">All job types</option>
-                            <option value="full-time">Full-time</option>
-                            <option value="part-time">Part-time</option>
-                            <option value="contract">Contract</option>
+                            @foreach (\App\Models\JobPost::types() as $jobType)
+                                <option value="{{ $jobType }}">{{ $jobType }}</option>
+                            @endforeach
                         </select>
                         <i class="fas fa-chevron-down jf-search__chevron" aria-hidden="true"></i>
                     </span>
@@ -52,9 +52,9 @@
                         <i class="fas fa-location-dot" aria-hidden="true"></i>
                         <select id="job-location-input" aria-label="Location">
                             <option value="all">All locations</option>
-                            <option value="phnom penh">Phnom Penh</option>
-                            <option value="siem reap">Siem Reap</option>
-                            <option value="remote">Remote</option>
+                            @foreach (\App\Models\JobPost::locationOptions() as $jobLocation)
+                                <option value="{{ $jobLocation }}">{{ $jobLocation }}</option>
+                            @endforeach
                         </select>
                         <i class="fas fa-chevron-down jf-search__chevron" aria-hidden="true"></i>
                     </span>
@@ -67,9 +67,9 @@
                             <i class="fas fa-layer-group" aria-hidden="true"></i>
                             <select id="job-category-select" aria-label="Department">
                                 <option value="all">All departments</option>
-                                <option value="engineering">Engineering</option>
-                                <option value="product design">Product Design</option>
-                                <option value="retail banking">Retail Banking</option>
+                                @foreach (\App\Models\JobPost::departmentOptions() as $jobDepartment)
+                                    <option value="{{ $jobDepartment }}">{{ $jobDepartment }}</option>
+                                @endforeach
                             </select>
                             <i class="fas fa-chevron-down jf-search__chevron" aria-hidden="true"></i>
                         </span>

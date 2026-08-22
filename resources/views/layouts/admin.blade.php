@@ -203,6 +203,9 @@
                         <div class="dropdown-user-details">
                             <div class="dropdown-user-details-name">{{ $adminFullName }}</div>
                             <div class="dropdown-user-details-email">{{ $adminUser?->email ?? 'admin@khworks.com' }}</div>
+                            @if ($adminUser?->primaryRole())
+                                <span class="badge bg-primary-soft text-primary mt-1">{{ $adminUser->primaryRole()->label() }}</span>
+                            @endif
                         </div>
                     </h6>
                     <div class="dropdown-divider"></div>
@@ -478,141 +481,52 @@
                             My Applications
                         </a>
                         @endif
-                        <!-- Sidenav Heading (UI Toolkit)-->
-                        <div class="sidenav-menu-heading">UI Toolkit</div>
-                        <!-- Sidenav Accordion (Layout)-->
-                        <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse"
-                            data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
-                            <div class="nav-link-icon"><i data-feather="layout"></i></div>
-                            Layout
-                            <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                        </a>
-                        <div class="collapse" id="collapseLayouts" data-bs-parent="#accordionSidenav">
-                            <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavLayout">
-                                <!-- Nested Sidenav Accordion (Layout -> Navigation)-->
-                                <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse"
-                                    data-bs-target="#collapseLayoutSidenavVariations" aria-expanded="false"
-                                    aria-controls="collapseLayoutSidenavVariations">
-                                    Navigation
-                                    <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                                </a>
-                                <div class="collapse" id="collapseLayoutSidenavVariations"
-                                    data-bs-parent="#accordionSidenavLayout">
-                                    <nav class="sidenav-menu-nested nav">
-                                        <a class="nav-link" href="layout-static.html">Static Sidenav</a>
-                                        <a class="nav-link" href="layout-dark.html">Dark Sidenav</a>
-                                        <a class="nav-link" href="layout-rtl.html">RTL Layout</a>
-                                    </nav>
-                                </div>
-                                <!-- Nested Sidenav Accordion (Layout -> Container Options)-->
-                                <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse"
-                                    data-bs-target="#collapseLayoutContainers" aria-expanded="false"
-                                    aria-controls="collapseLayoutContainers">
-                                    Container Options
-                                    <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                                </a>
-                                <div class="collapse" id="collapseLayoutContainers"
-                                    data-bs-parent="#accordionSidenavLayout">
-                                    <nav class="sidenav-menu-nested nav">
-                                        <a class="nav-link" href="layout-boxed.html">Boxed Layout</a>
-                                        <a class="nav-link" href="layout-fluid.html">Fluid Layout</a>
-                                    </nav>
-                                </div>
-                                <!-- Nested Sidenav Accordion (Layout -> Page Headers)-->
-                                <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse"
-                                    data-bs-target="#collapseLayoutsPageHeaders" aria-expanded="false"
-                                    aria-controls="collapseLayoutsPageHeaders">
-                                    Page Headers
-                                    <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                                </a>
-                                <div class="collapse" id="collapseLayoutsPageHeaders"
-                                    data-bs-parent="#accordionSidenavLayout">
-                                    <nav class="sidenav-menu-nested nav">
-                                        <a class="nav-link" href="header-simplified.html">Simplified</a>
-                                        <a class="nav-link" href="header-compact.html">Compact</a>
-                                        <a class="nav-link" href="header-overlap.html">Content Overlap</a>
-                                        <a class="nav-link" href="header-breadcrumbs.html">Breadcrumbs</a>
-                                        <a class="nav-link" href="header-light.html">Light</a>
-                                    </nav>
-                                </div>
-                                <!-- Nested Sidenav Accordion (Layout -> Starter Layouts)-->
-                                <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse"
-                                    data-bs-target="#collapseLayoutsStarterTemplates" aria-expanded="false"
-                                    aria-controls="collapseLayoutsStarterTemplates">
-                                    Starter Layouts
-                                    <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                                </a>
-                                <div class="collapse" id="collapseLayoutsStarterTemplates"
-                                    data-bs-parent="#accordionSidenavLayout">
-                                    <nav class="sidenav-menu-nested nav">
-                                        <a class="nav-link" href="starter-default.html">Default</a>
-                                        <a class="nav-link" href="starter-minimal.html">Minimal</a>
-                                    </nav>
-                                </div>
-                            </nav>
-                        </div>
-                        <!-- Sidenav Accordion (Components)-->
-                        <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse"
-                            data-bs-target="#collapseComponents" aria-expanded="false"
-                            aria-controls="collapseComponents">
+                        @if ($adminUser?->isAdmin())
+                        <!-- Sidenav Heading (Settings)-->
+                        <div class="sidenav-menu-heading">Settings</div>
+                        <!-- Sidenav Accordion (Component)-->
+                        <a class="nav-link collapsed {{ request()->routeIs('components.*') ? 'kh-nav-parent-active' : '' }}"
+                            href="javascript:void(0);" data-bs-toggle="collapse"
+                            data-bs-target="#collapseComponent"
+                            aria-expanded="{{ request()->routeIs('components.*') ? 'true' : 'false' }}"
+                            aria-controls="collapseComponent">
                             <div class="nav-link-icon"><i data-feather="package"></i></div>
-                            Components
+                            Component
                             <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
-                        <div class="collapse" id="collapseComponents" data-bs-parent="#accordionSidenav">
-                            <nav class="sidenav-menu-nested nav">
-                                <a class="nav-link" href="alerts.html">Alerts</a>
-                                <a class="nav-link" href="avatars.html">Avatars</a>
-                                <a class="nav-link" href="badges.html">Badges</a>
-                                <a class="nav-link" href="buttons.html">Buttons</a>
-                                <a class="nav-link" href="cards.html">
-                                    Cards
-                                    <span class="badge bg-primary-soft text-primary ms-auto">Updated</span>
-                                </a>
-                                <a class="nav-link" href="dropdowns.html">Dropdowns</a>
-                                <a class="nav-link" href="forms.html">
-                                    Forms
-                                    <span class="badge bg-primary-soft text-primary ms-auto">Updated</span>
-                                </a>
-                                <a class="nav-link" href="modals.html">Modals</a>
-                                <a class="nav-link" href="navigation.html">Navigation</a>
-                                <a class="nav-link" href="progress.html">Progress</a>
-                                <a class="nav-link" href="step.html">Step</a>
-                                <a class="nav-link" href="timeline.html">Timeline</a>
-                                <a class="nav-link" href="toasts.html">Toasts</a>
-                                <a class="nav-link" href="tooltips.html">Tooltips</a>
+                        <div class="collapse {{ request()->routeIs('components.*') ? 'show' : '' }}"
+                            id="collapseComponent" data-bs-parent="#accordionSidenav">
+                            <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavComponentMenu">
+                                @foreach ([
+                                    'locations' => 'Locations',
+                                    'departments' => 'Departments',
+                                    'job-types' => 'Job Types',
+                                ] as $componentType => $componentLabel)
+                                    @php
+                                        $componentActive = request()->routeIs('components.*') && request()->route('type') === $componentType;
+                                        $componentCollapseId = 'componentCollapse' . \Illuminate\Support\Str::studly($componentType);
+                                    @endphp
+                                    <a class="nav-link collapsed {{ $componentActive ? 'kh-nav-parent-active fw-bold' : '' }}"
+                                        href="javascript:void(0);" data-bs-toggle="collapse"
+                                        data-bs-target="#{{ $componentCollapseId }}"
+                                        aria-expanded="{{ $componentActive ? 'true' : 'false' }}"
+                                        aria-controls="{{ $componentCollapseId }}">
+                                        {{ $componentLabel }}
+                                        <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                    </a>
+                                    <div class="collapse {{ $componentActive ? 'show' : '' }}"
+                                        id="{{ $componentCollapseId }}" data-bs-parent="#accordionSidenavComponentMenu">
+                                        <nav class="sidenav-menu-nested nav">
+                                            <a class="nav-link {{ request()->routeIs('components.index') && request()->route('type') === $componentType ? 'active fw-bold' : '' }}"
+                                                href="{{ route('components.index', $componentType) }}">All {{ $componentLabel }}</a>
+                                            <a class="nav-link {{ request()->routeIs('components.create') && request()->route('type') === $componentType ? 'active fw-bold' : '' }}"
+                                                href="{{ route('components.create', $componentType) }}">Add {{ \Illuminate\Support\Str::singular($componentLabel) }}</a>
+                                        </nav>
+                                    </div>
+                                @endforeach
                             </nav>
                         </div>
-                        <!-- Sidenav Accordion (Utilities)-->
-                        <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse"
-                            data-bs-target="#collapseUtilities" aria-expanded="false"
-                            aria-controls="collapseUtilities">
-                            <div class="nav-link-icon"><i data-feather="tool"></i></div>
-                            Utilities
-                            <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                        </a>
-                        <div class="collapse" id="collapseUtilities" data-bs-parent="#accordionSidenav">
-                            <nav class="sidenav-menu-nested nav">
-                                <a class="nav-link" href="animations.html">Animations</a>
-                                <a class="nav-link" href="background.html">Background</a>
-                                <a class="nav-link" href="borders.html">Borders</a>
-                                <a class="nav-link" href="lift.html">Lift</a>
-                                <a class="nav-link" href="shadows.html">Shadows</a>
-                                <a class="nav-link" href="typography.html">Typography</a>
-                            </nav>
-                        </div>
-                        <!-- Sidenav Heading (Addons)-->
-                        <div class="sidenav-menu-heading">Plugins</div>
-                        <!-- Sidenav Link (Charts)-->
-                        <a class="nav-link" href="charts.html">
-                            <div class="nav-link-icon"><i data-feather="bar-chart"></i></div>
-                            Charts
-                        </a>
-                        <!-- Sidenav Link (Tables)-->
-                        <a class="nav-link" href="tables.html">
-                            <div class="nav-link-icon"><i data-feather="filter"></i></div>
-                            Tables
-                        </a>
+                        @endif
                     </div>
                 </div>
                 <!-- Sidenav Footer-->

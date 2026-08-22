@@ -7,6 +7,7 @@ use App\Http\Controllers\BillingController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CompaniesController;
 use App\Http\Controllers\ComplianceController;
+use App\Http\Controllers\ComponentController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\JobApplicationController;
@@ -109,6 +110,17 @@ Route::prefix('admin')->group(function () {
             // Everything but the directory listing: employer gets read access
             // to the list below, but only admin may create/edit/delete companies.
             Route::resource('companies', CompaniesController::class)->except(['index']);
+
+            // The Location/Department/Job type lists behind the job post form
+            // (see JobPost::locationOptions()/departmentOptions()/types()).
+            // {type} is one of locations|departments|job-types — a resource
+            // route per type would just be the same six lines three times over.
+            Route::get('/components/{type}', [ComponentController::class, 'index'])->name('components.index');
+            Route::get('/components/{type}/create', [ComponentController::class, 'create'])->name('components.create');
+            Route::post('/components/{type}', [ComponentController::class, 'store'])->name('components.store');
+            Route::get('/components/{type}/{component}/edit', [ComponentController::class, 'edit'])->name('components.edit');
+            Route::put('/components/{type}/{component}', [ComponentController::class, 'update'])->name('components.update');
+            Route::delete('/components/{type}/{component}', [ComponentController::class, 'destroy'])->name('components.destroy');
         });
 
         // Employer manages their own job posts and the applications to them;

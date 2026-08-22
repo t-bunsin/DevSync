@@ -58,17 +58,28 @@
                 @endforeach
             </select>
             <span class="kh-bo__hint">
-                Only approved companies appear here.
-                <a href="{{ route('companies.create') }}">Add a company</a> if it is missing.
+                @if (auth()->user()?->isAdmin())
+                    Only approved companies appear here.
+                    <a href="{{ route('companies.create') }}">Add a company</a> if it is missing.
+                @else
+                    Only your own company appears here. If it's missing, your company profile may still be pending approval.
+                @endif
             </span>
             @error('company_id') <span class="kh-bo__error">{{ $message }}</span> @enderror
         </div>
 
         <div class="kh-bo__field">
             <label class="kh-bo__label" for="location">Location <span class="kh-bo__required" aria-hidden="true">*</span></label>
-            <input @class(['kh-bo__control', 'is-invalid' => $errors->has('location')])
-                id="location" name="location" type="text" maxlength="255" required
-                value="{{ old('location', $post->location) }}" placeholder="e.g. Phnom Penh, Cambodia">
+            <select @class(['kh-bo__control', 'is-invalid' => $errors->has('location')])
+                id="location" name="location" required>
+                <option value="">Choose a location…</option>
+                @foreach (\App\Models\JobPost::locationOptions() as $location)
+                    <option value="{{ $location }}" @selected(old('location', $post->location) === $location)>{{ $location }}</option>
+                @endforeach
+            </select>
+            <span class="kh-bo__hint">
+                Managed under <a href="{{ route('components.index', 'locations') }}">Component</a>.
+            </span>
             @error('location') <span class="kh-bo__error">{{ $message }}</span> @enderror
         </div>
 
@@ -88,6 +99,9 @@
                     <option value="{{ $type }}" @selected(old('type', $post->type ?? 'Full-time') === $type)>{{ $type }}</option>
                 @endforeach
             </select>
+            <span class="kh-bo__hint">
+                Managed under <a href="{{ route('components.index', 'job-types') }}">Component</a>.
+            </span>
         </div>
 
         <div class="kh-bo__field">
@@ -107,8 +121,16 @@
 
         <div class="kh-bo__field">
             <label class="kh-bo__label" for="department">Department</label>
-            <input class="kh-bo__control" id="department" name="department" type="text" maxlength="80"
-                value="{{ old('department', $post->department) }}" placeholder="e.g. Engineering">
+            <select @class(['kh-bo__control', 'is-invalid' => $errors->has('department')]) id="department" name="department">
+                <option value="">None</option>
+                @foreach (\App\Models\JobPost::departmentOptions() as $department)
+                    <option value="{{ $department }}" @selected(old('department', $post->department) === $department)>{{ $department }}</option>
+                @endforeach
+            </select>
+            <span class="kh-bo__hint">
+                Managed under <a href="{{ route('components.index', 'departments') }}">Component</a>.
+            </span>
+            @error('department') <span class="kh-bo__error">{{ $message }}</span> @enderror
         </div>
 
         <div class="kh-bo__field">

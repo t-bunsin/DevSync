@@ -63,14 +63,32 @@ class JobPost extends Model
         return [self::STATUS_DRAFT, self::STATUS_PUBLISHED, self::STATUS_CLOSED];
     }
 
+    /**
+     * Selectable job types, curated by admin under Component. This column
+     * stays plain text (see the create_job_types_table migration), so an
+     * existing post's type survives untouched even if it's later renamed or
+     * deactivated here — only the form's option list changes.
+     */
     public static function types(): array
     {
-        return ['Full-time', 'Part-time', 'Contract', 'Internship', 'Temporary'];
+        return JobType::active()->orderBy('name')->pluck('name')->all();
     }
 
     public static function modes(): array
     {
         return ['On-site', 'Remote', 'Hybrid'];
+    }
+
+    /** Selectable locations, curated by admin under Component. Same relationship to this column as types() has to `type`. */
+    public static function locationOptions(): array
+    {
+        return Location::active()->orderBy('name')->pluck('name')->all();
+    }
+
+    /** Selectable departments, curated by admin under Component. Same relationship to this column as types() has to `type`. */
+    public static function departmentOptions(): array
+    {
+        return Department::active()->orderBy('name')->pluck('name')->all();
     }
 
     /** Keywords the job views switch on to pick the card artwork. */

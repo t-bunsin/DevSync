@@ -171,6 +171,23 @@ class User extends Authenticatable
         return $this->hasRole(Role::EMPLOYEE);
     }
 
+    /**
+     * The Company record this employer belongs to. There is no FK for this —
+     * employerProfile only keeps the free-text name typed at registration
+     * (see RegisterController::resolveCompany) — so the two are matched the
+     * same case-insensitive way registration does.
+     */
+    public function ownCompany(): ?Company
+    {
+        $name = trim((string) $this->employerProfile?->company_name);
+
+        if ($name === '') {
+            return null;
+        }
+
+        return Company::whereRaw('LOWER(name) = ?', [mb_strtolower($name)])->first();
+    }
+
     /** Where this role lands after login/registration. */
     public function homeRouteName(): string
     {
