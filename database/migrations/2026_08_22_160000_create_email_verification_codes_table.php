@@ -32,8 +32,8 @@ return new class extends Migration
             $table->char('user_id', 36);
             $table->string('code_hash');
             $table->unsignedTinyInteger('attempts')->default(0);
-            $table->timestamp('expires_at');
-            $table->timestamp('sent_at');
+            $table->timestamp('expires_at')->useCurrent();
+            $table->timestamp('sent_at')->useCurrent();
             $table->timestamps();
 
             $table->unique('user_id');
