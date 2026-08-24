@@ -15,9 +15,9 @@ use Illuminate\View\View;
  * The step between "registered" and "signed in": prove the address.
  *
  * Who is verifying comes from the session, never from the request, so the
- * screen can only ever act on the account this browser just registered with
- * or just tried to sign into. Without that, the code form would be an oracle
- * for guessing against any address someone cared to type.
+ * screen can only ever act on the account this browser just registered with.
+ * Without that, the code form would be an oracle for guessing against any
+ * address someone cared to type.
  */
 class EmailVerificationCodeController extends Controller
 {
@@ -39,7 +39,7 @@ class EmailVerificationCodeController extends Controller
     public function show(Request $request): View|RedirectResponse
     {
         if (! $user = $this->pendingUser($request)) {
-            return redirect()->route('login');
+            return redirect()->route('register');
         }
 
         return view('auth.verify-code', [
@@ -51,7 +51,7 @@ class EmailVerificationCodeController extends Controller
     public function verify(Request $request): RedirectResponse
     {
         if (! $user = $this->pendingUser($request)) {
-            return redirect()->route('login');
+            return redirect()->route('register');
         }
 
         $request->validate(['code' => ['required', 'digits:6']]);
@@ -77,7 +77,7 @@ class EmailVerificationCodeController extends Controller
     public function resend(Request $request): RedirectResponse
     {
         if (! $user = $this->pendingUser($request)) {
-            return redirect()->route('login');
+            return redirect()->route('register');
         }
 
         // The row's own clock, not the throttle middleware's: the middleware

@@ -58,22 +58,8 @@ class LoginController extends Controller
             ]);
     }
 
-    // An unverified account is checked before the password is judged, so the
-    // answer never depends on the password being right — and no code is mailed
-    // to an address someone else is guessing at.
-    if (! $user->hasVerifiedEmail()) {
-        if (! Auth::validate($credentials)) {
-            return back()
-                ->withInput($request->only('email', 'remember'))
-                ->withErrors(['password' => 'Incorrect password.']);
-        }
-
-        EmailVerificationCodeController::start($request, $user);
-
-        return redirect()
-            ->route('verification.code')
-            ->withSuccess('Please confirm your email first. We sent a new code to ' . $user->email . '.');
-    }
+    // Signing in does not check the email code: that step belongs to
+    // registration only, so an account that skipped it still gets in here.
 
     // Attempt login, honouring the "remember me" checkbox
     if (Auth::attempt($credentials, $request->boolean('remember'))) {

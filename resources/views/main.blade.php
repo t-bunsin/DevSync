@@ -172,7 +172,9 @@
         ];
     @endphp
 
-   @include('jobs.partials.catalog')
+   {{-- A plain grid of cards here: the landing page has no detail panel, so
+        every card links straight through to its job page. --}}
+   @include('jobs.partials.catalog', ['interactive' => false])
 
     @php
         // Annual billing is the monthly rate less this much, so a price change
