@@ -101,26 +101,76 @@ body.jf-body::selection {
 }
 
 .jf-brand__mark-main {
+  position: relative;
+  overflow: hidden;
   border-radius: 14px;
-  background: linear-gradient(145deg, var(--jf-ocean), var(--jf-navy));
-  box-shadow: 0 10px 22px rgba(11, 38, 56, 0.18);
+  background: linear-gradient(145deg, var(--jf-teal), var(--jf-navy));
+  box-shadow: 0 10px 22px rgba(11, 38, 56, 0.22);
   font-size: 1.05rem;
 }
 
-.jf-brand__mark-badge {
-  width: 17px;
-  height: 17px;
-  color: var(--jf-ocean);
-  font-size: 0.48rem;
+/* A soft sheen in the tile's corner, the way lacquer catches light — this
+   is what stands in for the old star badge. */
+.jf-brand__mark-main::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 28% 22%, rgba(255, 255, 255, 0.45), transparent 55%);
 }
 
-.jf-brand__text,
-.jf-brand__text span {
+.jf-brand__mark-main i {
+  position: relative;
+}
+
+/* Separates the mark from the wordmark the way a lockup's keyline does. */
+.jf-brand__divider {
+  width: 1px;
+  height: 26px;
+  background: rgba(11, 38, 56, 0.22);
+}
+
+.jf-brand__text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
   color: var(--jf-ink);
 }
 
-.jf-brand__text span {
-  color: var(--jf-ocean);
+.jf-brand__word {
+  line-height: 1;
+}
+
+.jf-brand__word span {
+  background: linear-gradient(120deg, var(--jf-teal), var(--jf-ocean));
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+/* The lockup's tagline, ruled on both sides. Sized off the wordmark rather
+   than the root so it stays proportional when the brand scales down. */
+.jf-brand__tagline {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--jf-ink-soft);
+  font-size: 0.5rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.jf-brand__tagline::before,
+.jf-brand__tagline::after {
+  content: "";
+  flex: 1;
+  min-width: 8px;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.42;
 }
 
 .jf-header__menu {
@@ -2706,13 +2756,24 @@ html[data-theme="dark"] .jf-header {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.22);
 }
 
-html[data-theme="dark"] .jf-brand__text,
-html[data-theme="dark"] .jf-brand__text span {
+html[data-theme="dark"] .jf-brand__text {
   color: #f1f7f7;
 }
 
-html[data-theme="dark"] .jf-brand__text span {
-  color: #76d6d1;
+html[data-theme="dark"] .jf-brand__word span {
+  background: linear-gradient(120deg, #76d6d1, #4ea8c9);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+html[data-theme="dark"] .jf-brand__tagline {
+  color: #8fa6ae;
+}
+
+html[data-theme="dark"] .jf-brand__divider {
+  background: rgba(255, 255, 255, 0.16);
 }
 
 html[data-theme="dark"] .jf-nav a {
@@ -3319,6 +3380,10 @@ html[data-theme="dark"] .jf-dialog__note {
   .jf-brand__mark {
     width: 40px;
     height: 40px;
+  }
+
+  .jf-brand__tagline {
+    display: none;
   }
 
   .jf-nav,

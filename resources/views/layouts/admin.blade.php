@@ -55,7 +55,8 @@
         <!-- * * * * * * When using an image, we recommend the SVG format.-->
         <!-- * * * * * * Dimensions: Maximum height: 32px, maximum width: 240px-->
         <a class="navbar-brand kh-admin-brand pe-3 ps-4 ps-lg-2" href="{{ route('home') }}">
-            <span class="kh-admin-brand__mark"><i class="fas fa-briefcase"></i></span>
+            <span class="kh-admin-brand__mark"><i class="fas fa-briefcase" aria-hidden="true"></i></span>
+            <span class="kh-admin-brand__divider" aria-hidden="true"></span>
             <span>KH-<strong>WORKS</strong></span>
         </a>
         <!-- Navbar Search Input-->

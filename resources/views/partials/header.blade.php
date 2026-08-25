@@ -4,13 +4,14 @@
         <a class="jf-brand" href="{{ url('/') }}">
             <span class="jf-brand__mark">
                 <span class="jf-brand__mark-main">
-                    <i class="fas fa-briefcase"></i>
-                </span>
-                <span class="jf-brand__mark-badge">
-                    <i class="fas fa-star"></i>
+                    <i class="fas fa-briefcase" aria-hidden="true"></i>
                 </span>
             </span>
-            <span class="jf-brand__text">KH-<span>WORKS</span></span>
+            <span class="jf-brand__divider" aria-hidden="true"></span>
+            <span class="jf-brand__text">
+                <span class="jf-brand__word">KH-<span>WORKS</span></span>
+                <span class="jf-brand__tagline">Build your dream job</span>
+            </span>
         </a>
 
         <div class="jf-header__menu" id="jf-header-menu">

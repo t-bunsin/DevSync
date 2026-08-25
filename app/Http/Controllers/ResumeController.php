@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Permission;
 use App\Models\Resume;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
@@ -22,9 +23,7 @@ class ResumeController extends Controller
     {
         $candidate = $request->user()->isCandidateOnly();
 
-        if (! $candidate) {
-            $this->authorizeView();
-        }
+        $this->authorizeView();
 
         $from = $this->dateInput($request->query('from'));
         $to = $this->dateInput($request->query('to'));
@@ -61,11 +60,12 @@ class ResumeController extends Controller
             'toDate' => $to,
             'isCandidate' => $candidate,
             // What the row actions may offer. A candidate's list holds only
-            // their own rows, so ownership is already true for every row here.
+            // their own rows, so ownership is already true for every row here
+            // and the grant is all that is left to ask about.
             'can' => [
-                'create' => $candidate || $request->user()->hasPermission(Permission::RESUME_CREATE),
-                'edit' => $candidate || $request->user()->hasPermission(Permission::RESUME_EDIT),
-                'download' => $candidate || $request->user()->hasPermission(Permission::RESUME_DOWNLOAD),
+                'create' => $request->user()->hasPermission(Permission::RESUME_CREATE),
+                'edit' => $request->user()->hasPermission(Permission::RESUME_EDIT),
+                'download' => $request->user()->hasPermission(Permission::RESUME_DOWNLOAD),
                 'delete' => ! $candidate && $request->user()->hasPermission(Permission::RESUME_DELETE),
             ],
         ]);
@@ -96,9 +96,7 @@ class ResumeController extends Controller
         $resume->created_by = Auth::id();
         $resume->save();
 
-        return redirect()
-            ->route('resumes.index')
-            ->withSuccess("The resume for {$resume->full_name} was registered.");
+        return $this->afterWrite("The resume for {$resume->full_name} was registered.");
     }
 
     public function show(Resume $resume)
@@ -145,9 +143,7 @@ class ResumeController extends Controller
         $this->syncPhoto($resume, $request);
         $resume->save();
 
-        return redirect()
-            ->route('resumes.index')
-            ->withSuccess("The resume for {$resume->full_name} was updated.");
+        return $this->afterWrite("The resume for {$resume->full_name} was updated.");
     }
 
     public function destroy(Resume $resume)
@@ -159,9 +155,7 @@ class ResumeController extends Controller
         $this->deletePhoto($resume);
         $resume->delete();
 
-        return redirect()
-            ->route('resumes.index')
-            ->withSuccess("The resume for {$name} was deleted.");
+        return $this->afterWrite("The resume for {$name} was deleted.");
     }
 
     /**
@@ -175,10 +169,27 @@ class ResumeController extends Controller
     }
 
     /**
-     * Two ways in, and only two: a job seeker acting on a resume they wrote,
-     * or anyone else holding the permission that action needs. Passing no
-     * $resume asks about the area rather than a row — create, for instance,
-     * where a candidate is always writing their own.
+     * Back to the register, unless the writer may not browse it — resume.create
+     * and resume.view are separate grants, so "may add one, may not read the
+     * list" is a real combination and must not land on a 403.
+     */
+    private function afterWrite(string $message): RedirectResponse
+    {
+        $user = request()->user();
+
+        $route = $user->hasPermission(Permission::RESUME_VIEW)
+            ? 'resumes.index'
+            : $user->homeRouteName();
+
+        return redirect()->route($route)->withSuccess($message);
+    }
+
+    /**
+     * Every caller needs the permission for the action. A job seeker needs it
+     * *and* has to own the row — ownership used to stand in for the grant,
+     * which left the resume.* switches on the Job Seeker role doing nothing.
+     * Passing no $resume asks about the area rather than a row — create, for
+     * instance, where a candidate is always writing their own.
      */
     private function authorizeAction(string $permission, ?Resume $resume = null): void
     {
@@ -189,10 +200,11 @@ class ResumeController extends Controller
 
             // Deleting is not an owner action here: the register keeps the row.
             abort_if($permission === Permission::RESUME_DELETE, 403);
-
-            return;
         }
 
+        // Ownership narrows what a candidate may touch; it no longer replaces
+        // the grant. Switching resume.view off on the Job Seeker role now
+        // closes their own resume too, which is what the switch says it does.
         abort_unless($user->hasPermission($permission), 403);
     }
 

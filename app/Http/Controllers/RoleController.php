@@ -16,7 +16,9 @@ use Illuminate\Support\Collection;
  * admin included — User::hasPermission() no longer waves admins through —
  * but which *areas* a role may enter is still fixed in code (route
  * middleware, User::isAdmin()/isEmployer()/isEmployee()), which is why a job
- * seeker's grants sit dormant until a route admits the role.
+ * seeker's job post and applicant inbox grants sit dormant until a route
+ * admits the role. Their resume grants are not dormant: resumes are
+ * signed-in-only at the route, so ResumeController reads them.
  */
 class RoleController extends Controller
 {
@@ -53,14 +55,14 @@ class RoleController extends Controller
         ],
         Role::EMPLOYEE => [
             'tone' => 'info',
-            'text' => 'Grants are saved, but job posts, resumes and the applicant inbox all sit behind the role:employer route middleware, which turns a job seeker away before these switches are read. Set them up now if you like — they start applying the moment a route admits this role.',
+            'text' => 'The resume switches are live: resumes are signed-in-only at the route, so a job seeker reaches ResumeController and is measured against these grants on top of owning the resume (deleting stays refused either way). Job posts and the applicant inbox sit behind the role:employer route middleware, which turns a job seeker away before those switches are read — set them up now if you like, they start applying the moment a route admits this role.',
         ],
     ];
 
     private const ENFORCEMENT = [
         Role::ADMIN => "The 'admin' middleware and User::isAdmin() checks throughout the app. Every back-office area stays reachable, but what an admin may do inside job posts, resumes and the applicant inbox is now these switches.",
         Role::EMPLOYER => "The 'role:employer' route middleware, narrowed further by the switches below (plus per-record ownership checks for job posts and the applicant inbox).",
-        Role::EMPLOYEE => 'No admin access yet — every module below sits behind role:employer, so a job seeker is stopped at the route before these switches are consulted.',
+        Role::EMPLOYEE => 'No admin access yet. Resumes are the exception: they are signed-in-only at the route, so the resume switches below decide what a job seeker may do with their own resume. Job posts and the applicant inbox sit behind role:employer, which stops a job seeker before those switches are consulted.',
     ];
 
     public function __construct()

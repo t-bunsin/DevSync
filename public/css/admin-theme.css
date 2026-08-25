@@ -117,7 +117,11 @@ html[data-admin-theme="dark"] .kh-admin-brand {
 }
 
 html[data-admin-theme="dark"] .kh-admin-brand strong {
-  color: #83ded8;
+  background: linear-gradient(120deg, #76d6d1, #4ea8c9);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
 }
 
 html[data-admin-theme="dark"] .kh-view-site {

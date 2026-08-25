@@ -41,7 +41,7 @@
             <div>
                 <span class="kh-bo__kicker">Account</span>
                 <h1>Billing</h1>
-                <p>Choose the package that fits your job board.</p>
+                <p>Choose the package that fits your job board. Change or cancel whenever you like.</p>
             </div>
 
             <a class="kh-bo__btn kh-bo__btn--ghost" href="{{ route('home') }}">Back to dashboard</a>
@@ -80,61 +80,87 @@
         @endif
 
         <div class="kh-bill" data-period="monthly">
-            <div class="kh-bill__period" data-billing-toggle>
-                <button type="button" data-period="monthly" aria-pressed="true">Monthly</button>
-                <button type="button" data-period="annual" aria-pressed="false">
-                    Annual<span>Save {{ round($annualDiscount * 100) }}%</span>
-                </button>
+            <div class="kh-bill__intro">
+                <span class="kh-bill__intro-kicker">Choose your plan</span>
+                <h2>Simple pricing, powerful features</h2>
+                <p>Select the package that fits your job board.</p>
+
+                <div class="kh-bill__period" data-billing-toggle role="group" aria-label="Billing period">
+                    <button type="button" data-period="monthly" aria-pressed="true">Monthly</button>
+                    <button type="button" data-period="annual" aria-pressed="false">
+                        Annual<span>Save {{ round($annualDiscount * 100) }}%</span>
+                    </button>
+                </div>
             </div>
 
             <div class="kh-bill__grid">
                 @foreach ($tiers as $plan)
                     @php $isCurrent = $subscription?->status === 'active' && $subscription->plan_id === $plan['id']; @endphp
 
+                    {{-- Each tier carries its own accent, so the icon, ticks and
+                         button all pick up one colour per card. --}}
                     <article @class([
                         'kh-bill__plan',
+                        'kh-bill__plan--' . $plan['tone'],
                         'kh-bill__plan--featured' => $plan['featured'],
                         'kh-bill__plan--current' => $isCurrent,
                     ])>
                         @if ($isCurrent)
-                            <span class="kh-bill__plan-badge">Current plan</span>
+                            <span class="kh-bill__plan-badge">
+                                <i class="fas fa-circle-check" aria-hidden="true"></i> Current plan
+                            </span>
                         @elseif ($plan['featured'])
-                            <span class="kh-bill__plan-badge">Most popular</span>
+                            <span class="kh-bill__plan-badge">
+                                <i class="far fa-star" aria-hidden="true"></i> Most popular
+                            </span>
                         @endif
 
-                        <h3 class="kh-bill__plan-name">{{ $plan['name'] }}</h3>
+                        <div class="kh-bill__plan-head">
+                            <span class="kh-bill__plan-icon" aria-hidden="true">
+                                <i class="fas {{ $plan['icon'] }}"></i>
+                            </span>
+                            <div>
+                                <h3 class="kh-bill__plan-name">{{ $plan['name'] }}</h3>
+                                <p class="kh-bill__plan-tagline">{{ $plan['tagline'] }}</p>
+                            </div>
+                        </div>
 
                         <p class="kh-bill__plan-price">
-                            <span data-amount data-monthly="{{ $plan['amounts']['monthly']['price'] }}"
+                            <span class="kh-bill__plan-amount" data-amount
+                                data-monthly="{{ $plan['amounts']['monthly']['price'] }}"
                                 data-annual="{{ $plan['amounts']['annual']['price'] }}">{{ $plan['amounts']['monthly']['price'] }}</span>
-                            <span>/month</span>
+                            <span class="kh-bill__plan-cycle">/ month</span>
                         </p>
+
+                        <p class="kh-bill__plan-blurb">{{ $plan['blurb'] }}</p>
 
                         <p class="kh-bill__plan-note" data-amount data-monthly="{{ $plan['amounts']['monthly']['note'] }}"
                             data-annual="{{ $plan['amounts']['annual']['note'] }}">{{ $plan['amounts']['monthly']['note'] }}</p>
 
-                        <p class="kh-bill__plan-blurb">{{ $plan['blurb'] }}</p>
+                        <p class="kh-bill__plan-included">What's included</p>
 
                         <ul class="kh-bill__plan-features">
                             @foreach ($plan['features'] as $feature)
                                 <li @class(['is-highlight' => $feature['highlight']])>
-                                    <i class="fas fa-check" aria-hidden="true"></i>
+                                    <span class="kh-bill__plan-tick" aria-hidden="true"><i class="fas fa-check"></i></span>
                                     <span>{{ $feature['label'] }}</span>
                                 </li>
                             @endforeach
                         </ul>
 
-                        <a @class([
-                            'kh-bo__btn',
-                            'kh-bill__plan-select',
-                            'kh-bo__btn--ghost' => ! $plan['featured'] && ! $isCurrent,
-                        ]) data-plan-select
+                        <a class="kh-bill__plan-select" data-plan-select
                             href="{{ route('account-billing.checkout', ['plan_id' => $plan['id'], 'billing_period' => 'monthly']) }}">
                             {{ $isCurrent ? 'Change billing period' : 'Select ' . $plan['name'] }}
+                            <i class="fas fa-arrow-right" aria-hidden="true"></i>
                         </a>
                     </article>
                 @endforeach
             </div>
+
+            <p class="kh-bill__foot">
+                <i class="fas fa-shield-halved" aria-hidden="true"></i>
+                Secure payment by PayWay &middot; No setup fee &middot; Cancel any time
+            </p>
         </div>
     </div>
 @endsection

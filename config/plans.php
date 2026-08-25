@@ -10,7 +10,9 @@
 | of two hand-typed arrays drifting apart.
 |
 | Page-specific bits (marketing CTA/href, billing "select" button) are added
-| by whichever view renders these, not stored here.
+| by whichever view renders these, not stored here. The tagline, icon and
+| tone below are plan identity rather than page furniture, so both grids
+| can badge the same tier the same way.
 */
 return [
     // Applied to the monthly price to get the annual (per-month) price.
@@ -22,7 +24,10 @@ return [
             'id' => 'revenue-share',
             'name' => 'Revenue Share',
             'monthly' => 0,
+            'tagline' => 'Perfect for a first board',
             'blurb' => 'For a new board finding its first employers.',
+            'icon' => 'fa-house',
+            'tone' => 'ocean',
             'featured' => false,
             'features' => [
                 ['label' => '25% Revenue Share', 'highlight' => true],
@@ -38,7 +43,10 @@ return [
             'id' => 'single-site',
             'name' => 'Single Site',
             'monthly' => 1,
+            'tagline' => 'Ideal for growing boards',
             'blurb' => 'For one board with steady traffic and hiring.',
+            'icon' => 'fa-rocket',
+            'tone' => 'teal',
             'featured' => true,
             'features' => [
                 ['label' => 'No Revenue Share', 'highlight' => true],
@@ -54,7 +62,10 @@ return [
             'id' => 'multi-site',
             'name' => 'Multi Site',
             'monthly' => 1,
+            'tagline' => 'For agencies & enterprises',
             'blurb' => 'For agencies running several boards at once.',
+            'icon' => 'fa-building',
+            'tone' => 'violet',
             'featured' => false,
             'features' => [
                 ['label' => 'No Revenue Share', 'highlight' => true],

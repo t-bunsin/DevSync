@@ -11,16 +11,17 @@
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  padding: 18px 22px;
+  padding: 16px 20px;
   margin-bottom: 22px;
-  background: var(--kh-surface);
-  border: 1px solid var(--kh-line);
+  background: color-mix(in srgb, var(--kh-ocean) 7%, var(--kh-surface));
+  border: 1px solid color-mix(in srgb, var(--kh-ocean) 24%, var(--kh-line));
   border-radius: 16px;
 }
 
 .kh-bill__current strong {
   display: block;
-  font-size: 1.05rem;
+  font-size: 1.02rem;
+  letter-spacing: -0.02em;
 }
 
 .kh-bill__current span {
@@ -28,156 +29,431 @@
   font-size: 0.8rem;
 }
 
+/* Section intro + period switch
+   ------------------------------------------------------------------ */
+.kh-bill__intro {
+  margin-bottom: 34px;
+  text-align: center;
+}
+
+.kh-bill__intro-kicker {
+  display: block;
+  color: var(--kh-teal);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+}
+
+.kh-bill__intro h2 {
+  margin: 12px 0 0;
+  color: var(--kh-ink);
+  font-size: clamp(1.7rem, 3vw, 2.5rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+}
+
+.kh-bill__intro > p {
+  margin: 8px 0 0;
+  color: var(--kh-muted);
+  font-size: 0.95rem;
+}
+
 .kh-bill__period {
   display: inline-flex;
   gap: 4px;
   padding: 4px;
-  margin-bottom: 24px;
-  background: transparent;
+  margin-top: 22px;
+  background: color-mix(in srgb, var(--kh-ink) 5%, var(--kh-surface));
   border: 1px solid var(--kh-line);
   border-radius: 999px;
 }
 
 .kh-bill__period button {
-  padding: 9px 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 18px;
   color: var(--kh-muted);
   background: transparent;
   border: 0;
   border-radius: 999px;
-  font-size: 0.83rem;
+  font-size: 0.8rem;
   font-weight: 700;
   cursor: pointer;
-  transition: background 150ms ease, color 150ms ease;
+  transition: background 160ms ease, color 160ms ease, box-shadow 160ms ease;
+}
+
+.kh-bill__period button:hover {
+  color: var(--kh-ink);
 }
 
 .kh-bill__period button[aria-pressed="true"] {
   color: #fff;
   background: var(--kh-ocean);
+  box-shadow: 0 6px 14px color-mix(in srgb, var(--kh-ocean) 32%, transparent);
 }
 
+/* The saving reads as its own chip so it does not compete with the label. */
 .kh-bill__period button span {
-  margin-left: 6px;
-  opacity: 0.85;
+  padding: 2px 7px;
+  color: var(--kh-ocean);
+  background: color-mix(in srgb, var(--kh-ocean) 13%, transparent);
+  border-radius: 999px;
+  font-size: 0.66rem;
   font-weight: 700;
+  letter-spacing: 0.02em;
 }
 
+.kh-bill__period button[aria-pressed="true"] span {
+  color: var(--kh-navy);
+  background: var(--kh-gold);
+}
+
+/* Plan cards
+   ------------------------------------------------------------------ */
 .kh-bill__grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 18px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  align-items: stretch;
+  gap: 24px;
 }
 
+/* One accent per tier drives the icon, the ticks and the button, so a card
+   reads as a single colour rather than three unrelated ones. */
 .kh-bill__plan {
+  --kh-plan-accent: var(--kh-ocean);
+
   position: relative;
   display: flex;
   flex-direction: column;
-  padding: 30px 26px 26px;
+  padding: 30px 28px 28px;
   background: var(--kh-surface);
   border: 1px solid var(--kh-line);
-  border-radius: var(--kh-radius-lg);
-  transition: border-color 200ms ease;
+  border-radius: 24px;
+  box-shadow: 0 10px 30px color-mix(in srgb, var(--kh-navy) 6%, transparent);
+  transition: border-color 200ms ease, box-shadow 200ms ease, transform 200ms ease;
+}
+
+.kh-bill__plan--teal {
+  --kh-plan-accent: var(--kh-teal);
+}
+
+.kh-bill__plan--violet {
+  --kh-plan-accent: var(--kh-violet);
 }
 
 .kh-bill__plan:hover {
-  border-color: var(--kh-muted);
+  border-color: color-mix(in srgb, var(--kh-plan-accent) 45%, var(--kh-line));
+  box-shadow: 0 18px 40px color-mix(in srgb, var(--kh-navy) 12%, transparent);
+  transform: translateY(-3px);
 }
 
+/* The featured tier keeps the light card but wears the accent: a 2px ring,
+   a mint wash and a solid button. */
 .kh-bill__plan--featured {
-  border: 1.5px solid var(--kh-teal);
+  background:
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--kh-plan-accent) 9%, var(--kh-surface)),
+      color-mix(in srgb, var(--kh-plan-accent) 3%, var(--kh-surface)));
+  border: 2px solid var(--kh-plan-accent);
+  box-shadow: 0 18px 44px color-mix(in srgb, var(--kh-plan-accent) 22%, transparent);
+}
+
+.kh-bill__plan--featured:hover {
+  border-color: var(--kh-plan-accent);
+  box-shadow: 0 24px 54px color-mix(in srgb, var(--kh-plan-accent) 30%, transparent);
 }
 
 .kh-bill__plan--current {
-  border: 1.5px solid var(--kh-blue);
+  --kh-plan-accent: var(--kh-blue);
+
+  border: 2px solid var(--kh-blue);
 }
 
 .kh-bill__plan-badge {
   position: absolute;
   top: 0;
-  right: 22px;
+  right: 26px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
   transform: translateY(-50%);
-  padding: 5px 12px;
+  padding: 8px 16px;
   color: #fff;
   background: var(--kh-ocean);
   border-radius: 999px;
-  font-size: 0.62rem;
+  box-shadow: 0 8px 18px color-mix(in srgb, var(--kh-ocean) 34%, transparent);
+  font-size: 0.78rem;
   font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  letter-spacing: -0.01em;
   white-space: nowrap;
+}
+
+.kh-bill__plan-badge i {
+  font-size: 0.76rem;
 }
 
 .kh-bill__plan--current .kh-bill__plan-badge {
   background: var(--kh-blue);
 }
 
+.kh-bill__plan-head {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  min-height: 62px;
+}
+
+.kh-bill__plan-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 56px;
+  height: 56px;
+  color: var(--kh-plan-accent);
+  background: color-mix(in srgb, var(--kh-plan-accent) 12%, transparent);
+  border-radius: 50%;
+  font-size: 1.35rem;
+}
+
 .kh-bill__plan-name {
   margin: 0;
+  color: var(--kh-ink);
+  font-size: 1.45rem;
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1.15;
+}
+
+.kh-bill__plan-tagline {
+  margin: 3px 0 0;
   color: var(--kh-muted);
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  font-size: 0.84rem;
 }
 
 .kh-bill__plan-price {
-  margin: 12px 0 0;
-  font-size: 1.9rem;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: 22px 0 0;
+  color: var(--kh-ink);
+}
+
+.kh-bill__plan-amount {
+  font-size: 2.7rem;
   font-weight: 800;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.05em;
+  line-height: 1;
   font-variant-numeric: tabular-nums;
 }
 
-.kh-bill__plan-price span {
+.kh-bill__plan-cycle {
   color: var(--kh-muted);
-  font-size: 0.84rem;
-  font-weight: 600;
-}
-
-.kh-bill__plan-note {
-  margin: 4px 0 14px;
-  color: var(--kh-muted);
-  font-size: 0.76rem;
+  font-size: 1rem;
   font-weight: 600;
 }
 
 .kh-bill__plan-blurb {
-  margin: 0 0 16px;
+  margin: 14px 0 0;
   color: var(--kh-muted);
-  font-size: 0.83rem;
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.kh-bill__plan-note {
+  margin: 8px 0 0;
+  color: var(--kh-plan-accent);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.kh-bill__plan-included {
+  margin: 22px 0 0;
+  padding-top: 22px;
+  border-top: 1px solid var(--kh-line);
+  color: var(--kh-ink);
+  font-size: 0.98rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.kh-bill__plan--featured .kh-bill__plan-included {
+  border-top-color: color-mix(in srgb, var(--kh-plan-accent) 28%, transparent);
 }
 
 .kh-bill__plan-features {
   flex: 1;
-  margin: 0 0 20px;
-  padding: 18px 0 0;
-  border-top: 1px solid var(--kh-line);
+  margin: 14px 0 24px;
+  padding: 0;
   list-style: none;
 }
 
 .kh-bill__plan-features li {
   display: flex;
   align-items: flex-start;
-  gap: 8px;
+  gap: 11px;
   padding: 6px 0;
-  color: var(--kh-muted);
-  font-size: 0.82rem;
+  color: var(--kh-ink);
+  font-size: 0.92rem;
+  line-height: 1.5;
 }
 
 .kh-bill__plan-features li.is-highlight {
-  color: var(--kh-ink);
   font-weight: 700;
 }
 
-.kh-bill__plan-features i {
-  margin-top: 3px;
-  color: var(--kh-ocean);
-  font-size: 0.75rem;
+/* A filled disc keeps the ticks reading as one column beside the labels. */
+.kh-bill__plan-tick {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  color: #fff;
+  background: var(--kh-plan-accent);
+  border-radius: 50%;
+  font-size: 0.63rem;
 }
 
+/* Buttons sit on the card's own accent: outlined for the side tiers, solid
+   for the featured one. */
 .kh-bill__plan-select {
-  width: 100%;
-  text-align: center;
+  display: inline-flex;
+  align-items: center;
   justify-content: center;
+  gap: 9px;
+  width: 100%;
+  margin-top: auto;
+  padding: 15px 20px;
+  color: var(--kh-plan-accent);
+  background: transparent;
+  border: 1.5px solid color-mix(in srgb, var(--kh-plan-accent) 55%, transparent);
+  border-radius: 14px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  text-align: center;
+  text-decoration: none;
+  transition: color 180ms ease, background 180ms ease, border-color 180ms ease,
+    box-shadow 180ms ease, transform 180ms ease;
+}
+
+.kh-bill__plan-select i {
+  font-size: 0.8rem;
+  transition: transform 200ms ease;
+}
+
+.kh-bill__plan-select:hover {
+  color: var(--kh-plan-accent);
+  background: color-mix(in srgb, var(--kh-plan-accent) 9%, transparent);
+  border-color: var(--kh-plan-accent);
+  transform: translateY(-1px);
+}
+
+.kh-bill__plan-select:hover i {
+  transform: translateX(3px);
+}
+
+.kh-bill__plan-select:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--kh-plan-accent) 30%, transparent);
+  outline-offset: 3px;
+}
+
+.kh-bill__plan--featured .kh-bill__plan-select {
+  color: #fff;
+  background: linear-gradient(135deg, var(--kh-ocean), color-mix(in srgb, var(--kh-teal) 65%, var(--kh-ocean)));
+  border-color: transparent;
+  box-shadow: 0 12px 26px color-mix(in srgb, var(--kh-ocean) 32%, transparent);
+}
+
+.kh-bill__plan--featured .kh-bill__plan-select:hover {
+  color: #fff;
+  box-shadow: 0 16px 32px color-mix(in srgb, var(--kh-ocean) 40%, transparent);
+}
+
+.kh-bill__foot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 28px 0 0;
+  color: var(--kh-muted);
+  font-size: 0.8rem;
+}
+
+.kh-bill__foot i {
+  color: var(--kh-ocean);
+}
+
+/* The featured tier only steps forward where there is room for three
+   columns; stacked, every card sits on the same plane. */
+@media (min-width: 1040px) {
+  .kh-bill__plan--featured {
+    transform: scale(1.03);
+    z-index: 1;
+  }
+
+  .kh-bill__plan--featured:hover {
+    transform: scale(1.03) translateY(-3px);
+  }
+}
+
+@media (max-width: 600px) {
+  .kh-bill__plan {
+    padding: 26px 22px 24px;
+  }
+
+  .kh-bill__plan-head {
+    min-height: 0;
+  }
+
+  .kh-bill__plan-icon {
+    width: 48px;
+    height: 48px;
+    font-size: 1.15rem;
+  }
+
+  .kh-bill__plan-name {
+    font-size: 1.25rem;
+  }
+
+  .kh-bill__plan-amount {
+    font-size: 2.2rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kh-bill__plan,
+  .kh-bill__plan-select,
+  .kh-bill__plan-select i {
+    transition: none;
+  }
+
+  .kh-bill__plan:hover,
+  .kh-bill__plan-select:hover {
+    transform: none;
+  }
+}
+
+/* Dark back office: same shapes, tuned so the mint featured wash and the
+   white cards do not blow out against the near-black canvas. */
+html[data-admin-theme="dark"] .kh-bill__plan {
+  background: color-mix(in srgb, var(--kh-ink) 4%, var(--kh-surface));
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.32);
+}
+
+html[data-admin-theme="dark"] .kh-bill__plan--featured {
+  background: linear-gradient(180deg,
+    color-mix(in srgb, var(--kh-plan-accent) 16%, var(--kh-surface)),
+    color-mix(in srgb, var(--kh-plan-accent) 5%, var(--kh-surface)));
+  box-shadow: 0 20px 44px rgba(0, 0, 0, 0.45);
+}
+
+html[data-admin-theme="dark"] .kh-bill__plan-features li {
+  color: color-mix(in srgb, var(--kh-ink) 88%, transparent);
 }
 
 /* Checkout / mock processing
