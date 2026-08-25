@@ -171,6 +171,22 @@
             @error('website') <span class="kh-bo__error">{{ $message }}</span> @enderror
         </div>
 
+        <div class="kh-bo__field">
+            <label class="kh-bo__label" for="facebook">Facebook</label>
+            <input @class(['kh-bo__control', 'is-invalid' => $errors->has('facebook')])
+                id="facebook" name="facebook" type="url" maxlength="255"
+                value="{{ old('facebook', $company->facebook) }}" placeholder="https://facebook.com/company">
+            @error('facebook') <span class="kh-bo__error">{{ $message }}</span> @enderror
+        </div>
+
+        <div class="kh-bo__field">
+            <label class="kh-bo__label" for="linkedin">LinkedIn</label>
+            <input @class(['kh-bo__control', 'is-invalid' => $errors->has('linkedin')])
+                id="linkedin" name="linkedin" type="url" maxlength="255"
+                value="{{ old('linkedin', $company->linkedin) }}" placeholder="https://linkedin.com/company/company">
+            @error('linkedin') <span class="kh-bo__error">{{ $message }}</span> @enderror
+        </div>
+
         <div class="kh-bo__field kh-bo__field--wide">
             <label class="kh-bo__label" for="address">Address</label>
             <input @class(['kh-bo__control', 'is-invalid' => $errors->has('address')])

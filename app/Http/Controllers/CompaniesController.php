@@ -211,6 +211,8 @@ class CompaniesController extends Controller
             'email' => 'nullable|email|max:255',
             'phone' => 'nullable|string|max:50',
             'website' => 'nullable|url|max:255',
+            'facebook' => 'nullable|url|max:255',
+            'linkedin' => 'nullable|url|max:255',
             'address' => 'nullable|string|max:255',
             'description' => 'nullable|string|max:2000',
             'vision_mission' => 'nullable|string|max:6000',
@@ -221,6 +223,8 @@ class CompaniesController extends Controller
             'cover' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
         ], [
             'website.url' => 'The website must be a full URL, including https://.',
+            'facebook.url' => 'The Facebook link must be a full URL, including https://.',
+            'linkedin.url' => 'The LinkedIn link must be a full URL, including https://.',
             'logo.max' => 'The logo must be 2 MB or smaller.',
             'cover.max' => 'The cover image must be 4 MB or smaller.',
         ]);

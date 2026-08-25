@@ -29,6 +29,8 @@ class Company extends Model
         'logo',
         'cover',
         'website',
+        'facebook',
+        'linkedin',
         'email',
         'phone',
         'address',
