@@ -8,71 +8,102 @@
 @endpush
 
 @section('main-content')
-    <div class="kh-bo">
-        <nav class="kh-bo__breadcrumb" aria-label="Breadcrumb">
-            <a href="{{ route('home') }}">Back office</a>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6" /></svg>
-            <a href="{{ route('account-billing') }}">Billing</a>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6" /></svg>
-            <span aria-current="page">Scan to pay</span>
-        </nav>
+    {{-- Laid out like a KHQR merchant standee: patterned card, tagline,
+         bracketed code, KHQR mark at the foot. The bank logo, merchant name
+         and merchant ID from that format are deliberately absent — this is a
+         one-off payment for a signed-in account, not a standing merchant
+         placard. The QR comes from our server-side purchase call. --}}
+    <div class="kh-payq" role="dialog" aria-modal="true" aria-labelledby="kh-payq-title"
+        data-tran-id="{{ $tranId }}"
+        data-status-url="{{ route('account-billing.payway.status') }}"
+        data-success-url="{{ route('account-billing.payway.return') }}"
+        data-cancel-url="{{ route('account-billing') }}"
+        data-expires-at="{{ $expiresAt }}"
+        data-window="{{ 5 * 60 }}">
 
-        <header class="kh-bo__head">
-            <div>
-                <span class="kh-bo__kicker">Account</span>
-                <h1>Scan to pay</h1>
-                <p>Open your banking app and scan the KHQR code to finish paying.</p>
-            </div>
-        </header>
+        <div class="kh-payq__dialog">
+            <span class="kh-payq__rule kh-payq__rule--top" aria-hidden="true"></span>
 
-        <div class="kh-bo__form-card kh-pay" data-tran-id="{{ $tranId }}"
-            data-status-url="{{ route('account-billing.payway.status') }}"
-            data-success-url="{{ route('account-billing.payway.return') }}"
-            data-checkout-url="{{ route('account-billing') }}"
-            data-expires-at="{{ $expiresAt }}">
+            <div class="kh-payq__sheet">
+                <header class="kh-payq__head">
+                    <span class="kh-payq__timer">
+                        <svg class="kh-payq__ring" viewBox="0 0 36 36" aria-hidden="true">
+                            <circle class="kh-payq__ring-track" cx="18" cy="18" r="16" />
+                            <circle class="kh-payq__ring-fill" cx="18" cy="18" r="16" data-ring />
+                        </svg>
+                        <span class="kh-payq__countdown" data-expiry>5:00</span>
+                    </span>
 
-            <div class="kh-pay__badge">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" /><rect x="3" y="14" width="7" height="7" /><path d="M14 14h3v3h-3zM20 14v.01M14 20h.01M17 17h3v3h-3z" /></svg>
-                Bakong KHQR
-            </div>
+                    <a class="kh-payq__close" href="{{ route('account-billing') }}" aria-label="Cancel this payment">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
+                    </a>
+                </header>
 
-            <div data-live>
-                @if ($qrImage)
-                    <img class="kh-pay__qr" src="{{ $qrImage }}" alt="KHQR code — scan with your banking app to pay">
-                @else
-                    <p class="kh-pay__missing">PayWay didn't return a QR code for this payment. Please try again.</p>
-                @endif
+                <p class="kh-payq__tagline" id="kh-payq-title">Scan. Pay. Done.</p>
 
-                <p class="kh-pay__expiry" data-expiry></p>
-
-                @if ($deeplink)
-                    <a class="kh-bo__btn kh-pay__deeplink" href="{{ $deeplink }}">Open ABA Mobile</a>
-                @endif
-
-                @if ($appStore || $playStore)
-                    <p class="kh-pay__stores-label">Don't have the app yet?</p>
-                    <div class="kh-pay__stores">
-                        @if ($appStore)
-                            <a href="{{ $appStore }}" target="_blank" rel="noopener">App Store</a>
-                        @endif
-                        @if ($playStore)
-                            <a href="{{ $playStore }}" target="_blank" rel="noopener">Google Play</a>
-                        @endif
-                    </div>
-                @endif
-
-                <p class="kh-pay__waiting" data-waiting>
-                    <i class="fas fa-circle-notch fa-spin" aria-hidden="true"></i>
-                    Waiting for payment confirmation&hellip;
+                <p class="kh-payq__amount">
+                    <span class="kh-payq__figure">{{ number_format($amount, 2) }}</span>
+                    <span class="kh-payq__currency">USD</span>
                 </p>
-                <p class="kh-pay__failed" data-failed hidden>
-                    That payment didn't go through. <a href="{{ route('account-billing') }}">Try again</a>.
-                </p>
+
+                <div data-live>
+                    @if ($qrImage)
+                        <div class="kh-payq__frame">
+                            <span class="kh-payq__corner kh-payq__corner--tl" aria-hidden="true"></span>
+                            <span class="kh-payq__corner kh-payq__corner--tr" aria-hidden="true"></span>
+                            <span class="kh-payq__corner kh-payq__corner--bl" aria-hidden="true"></span>
+                            <span class="kh-payq__corner kh-payq__corner--br" aria-hidden="true"></span>
+                            <img class="kh-payq__qr" src="{{ $qrImage }}" alt="KHQR code — scan with your banking app to pay">
+                        </div>
+                    @else
+                        <p class="kh-payq__missing">PayWay didn't return a QR code for this payment. Please try again.</p>
+                    @endif
+
+                    <p class="kh-payq__plan">{{ $planName }}</p>
+
+                    @if ($deeplink)
+                        <a class="kh-payq__deeplink" href="{{ $deeplink }}">Open ABA Mobile</a>
+                    @endif
+
+                    <p class="kh-payq__waiting" data-waiting>
+                        <i class="fas fa-circle-notch fa-spin" aria-hidden="true"></i>
+                        Waiting for payment confirmation&hellip;
+                    </p>
+
+                    <p class="kh-payq__failed" data-failed hidden>
+                        That payment didn't go through. <a href="{{ route('account-billing') }}">Try again</a>.
+                    </p>
+
+                    @if ($appStore || $playStore)
+                        <p class="kh-payq__stores">
+                            Don't have the app?
+                            @if ($appStore)
+                                <a href="{{ $appStore }}" target="_blank" rel="noopener">App Store</a>
+                            @endif
+                            @if ($playStore)
+                                <a href="{{ $playStore }}" target="_blank" rel="noopener">Google Play</a>
+                            @endif
+                        </p>
+                    @endif
+                </div>
+
+                <div class="kh-payq__expired-panel" data-expired hidden>
+                    <p class="kh-payq__expired-icon" aria-hidden="true"><i class="fas fa-clock"></i></p>
+                    <p class="kh-payq__expired-text">This code has expired.</p>
+                    <a class="kh-payq__deeplink" href="{{ route('account-billing') }}">Start a new payment</a>
+                </div>
+
+                <footer class="kh-payq__foot">
+                    <span class="kh-payq__member">
+                        <span>Member of</span>
+                        <strong>KHQR</strong>
+                    </span>
+                </footer>
+
+                <span class="kh-payq__swoosh" aria-hidden="true"></span>
             </div>
 
-            <p class="kh-pay__expired" data-expired hidden>
-                This code has expired. <a href="{{ route('account-billing') }}">Start a new payment</a>.
-            </p>
+            <span class="kh-payq__rule kh-payq__rule--bottom" aria-hidden="true"></span>
         </div>
     </div>
 @endsection
@@ -80,18 +111,29 @@
 @push('scripts')
     <script>
         (() => {
-            const card = document.querySelector('.kh-pay');
-            if (!card) return;
+            const modal = document.querySelector('.kh-payq');
+            if (!modal) return;
 
-            const tranId = card.dataset.tranId;
-            const statusUrl = card.dataset.statusUrl;
-            const successUrl = card.dataset.successUrl;
-            const expiresAt = Number(card.dataset.expiresAt) * 1000;
-            const live = card.querySelector('[data-live]');
-            const expiryLabel = card.querySelector('[data-expiry]');
-            const waiting = card.querySelector('[data-waiting]');
-            const failed = card.querySelector('[data-failed]');
-            const expired = card.querySelector('[data-expired]');
+            const tranId = modal.dataset.tranId;
+            const statusUrl = modal.dataset.statusUrl;
+            const successUrl = modal.dataset.successUrl;
+            const expiresAt = Number(modal.dataset.expiresAt) * 1000;
+            const windowSeconds = Number(modal.dataset.window);
+
+            const live = modal.querySelector('[data-live]');
+            const timer = modal.querySelector('.kh-payq__timer');
+            const expiryLabel = modal.querySelector('[data-expiry]');
+            const ring = modal.querySelector('[data-ring]');
+            const waiting = modal.querySelector('[data-waiting]');
+            const failed = modal.querySelector('[data-failed]');
+            const expired = modal.querySelector('[data-expired]');
+
+            // Circumference of r=16, so stroke-dashoffset can be driven as a
+            // straight fraction of time remaining.
+            const circumference = 2 * Math.PI * 16;
+            if (ring) {
+                ring.style.strokeDasharray = `${circumference}`;
+            }
 
             let pollTimer = null;
             let expiredAlready = false;
@@ -130,13 +172,20 @@
                     if (pollTimer) clearTimeout(pollTimer);
                     live.hidden = true;
                     expired.hidden = false;
+                    // A countdown beside "expired" reads as a contradiction.
+                    if (timer) timer.hidden = true;
                     return;
                 }
 
                 const totalSeconds = Math.ceil(remainingMs / 1000);
                 const minutes = Math.floor(totalSeconds / 60);
                 const seconds = totalSeconds % 60;
-                expiryLabel.textContent = `Expires in ${minutes}:${String(seconds).padStart(2, '0')}`;
+                expiryLabel.textContent = `${minutes}:${String(seconds).padStart(2, '0')}`;
+
+                if (ring) {
+                    const spent = 1 - Math.min(1, totalSeconds / windowSeconds);
+                    ring.style.strokeDashoffset = `${circumference * spent}`;
+                }
 
                 setTimeout(tickCountdown, 1000);
             };

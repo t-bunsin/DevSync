@@ -15,9 +15,9 @@ use Illuminate\View\View;
 
 /**
  * Account billing: choose a package (config/plans.php), confirm, then pay
- * through ABA PayWay's Bakong/KHQR checkout. See PayWayService for the
- * caveats on the hash formula this was built against — it hasn't been
- * verified against PayWay's official docs or a live sandbox call.
+ * through ABA PayWay's Bakong/KHQR checkout. The purchase leg is confirmed
+ * working against PayWay's sandbox; the callback signature that gates
+ * activation is not yet verified — see PayWayService for both.
  */
 class BillingController extends Controller
 {
@@ -46,7 +46,7 @@ class BillingController extends Controller
         return view('account-billing.checkout', [
             'plan' => $plan,
             'billingPeriod' => $validated['billing_period'],
-            'amount' => $this->amountFor($plan, $validated['billing_period']),
+            'pricing' => $this->pricing($plan, $validated['billing_period']),
             'payWayConfigured' => $this->payWay->configured(),
         ]);
     }
@@ -67,7 +67,8 @@ class BillingController extends Controller
         ]);
 
         $plan = $this->findPlan($validated['plan_id']);
-        $amount = $this->amountFor($plan, $validated['billing_period']);
+        // Same figure the checkout page showed as "Total due today".
+        $amount = $this->pricing($plan, $validated['billing_period'])['due_today'];
         $user = Auth::user();
 
         if ($amount <= 0) {
@@ -123,6 +124,10 @@ class BillingController extends Controller
 
         return view('account-billing.pay', [
             'tranId' => $tranId,
+            // Shown on the KHQR dialog so the payer can check the amount
+            // against what their banking app is about to charge them.
+            'amount' => $amount,
+            'planName' => $plan['name'],
             'qrImage' => $response['qrImage'] ?? null,
             'deeplink' => $response['abapay_deeplink'] ?? null,
             'appStore' => $response['app_store'] ?? null,
@@ -209,6 +214,32 @@ class BillingController extends Controller
     private function findPlan(string $planId): array
     {
         return collect(config('plans.tiers'))->firstWhere('id', $planId);
+    }
+
+    /**
+     * The one place a price is decided. Both the figures the checkout page
+     * prints and the amount handed to PayWay come from here, so the customer
+     * cannot be shown one total and charged another — which is exactly what
+     * happened while the view multiplied by 12 for annual and pay() charged
+     * a single month.
+     *
+     * 'per_month' is the headline rate (what the plan grid advertises);
+     * 'due_today' is what actually gets charged — twelve of those months up
+     * front on annual, one month on monthly.
+     */
+    private function pricing(array $plan, string $billingPeriod): array
+    {
+        $perMonth = $this->amountFor($plan, $billingPeriod);
+        $months = $billingPeriod === 'annual' ? 12 : 1;
+
+        return [
+            'per_month' => $perMonth,
+            'months' => $months,
+            'due_today' => round($perMonth * $months, 2),
+            // What the same term would have cost without the annual discount,
+            // so the page can show the saving rather than assert it.
+            'undiscounted' => round(((float) $plan['monthly']) * $months, 2),
+        ];
     }
 
     /** Recomputed server-side, same formula as the public pricing page, so a tampered client value can't set the price. */

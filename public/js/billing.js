@@ -46,8 +46,8 @@
         apply('monthly');
     }
 
-    // Checkout confirm: show a brief "processing" state before the form
-    // actually submits, since there is no real payment gateway to wait on.
+    // Checkout confirm: PayWay's purchase call happens server-side during
+    // this submit, so guard against a second click while it is in flight.
     const checkoutForm = document.querySelector('[data-checkout-form]');
 
     if (checkoutForm) {
@@ -56,23 +56,13 @@
                 return;
             }
 
-            event.preventDefault();
             checkoutForm.dataset.processing = 'true';
 
             const button = checkoutForm.querySelector('[data-checkout-submit]');
-            const status = checkoutForm.querySelector('[data-checkout-status]');
 
             if (button) {
                 button.disabled = true;
             }
-
-            if (status) {
-                status.classList.add('is-active');
-            }
-
-            window.setTimeout(function () {
-                checkoutForm.submit();
-            }, 1200);
         });
     }
 })();

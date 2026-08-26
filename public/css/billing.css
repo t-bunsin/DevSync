@@ -456,172 +456,854 @@ html[data-admin-theme="dark"] .kh-bill__plan-features li {
   color: color-mix(in srgb, var(--kh-ink) 88%, transparent);
 }
 
-/* Checkout / mock processing
+/* Checkout — confirm your plan (kh-co)
+   ------------------------------------------------------------------
+   Plan recap on the left, order summary on the right. The summary is the
+   pane that has to be unambiguous about money, so it owns the totals, the
+   submit button and the payment method; the left pane is reassurance about
+   what the money buys.
    ------------------------------------------------------------------ */
-.kh-bill__checkout {
-  max-width: 520px;
+.kh-co {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 408px);
+  gap: 24px;
+  align-items: start;
 }
 
-.kh-bill__summary {
+/* Plan recap
+   ------------------------------------------------------------------ */
+.kh-co__plan {
+  --kh-plan-accent: var(--kh-ocean);
+
+  padding: 24px;
+  background: var(--kh-surface);
+  border: 1px solid var(--kh-line);
+  border-radius: 22px;
+}
+
+.kh-co__plan--teal {
+  --kh-plan-accent: var(--kh-teal);
+}
+
+.kh-co__plan--violet {
+  --kh-plan-accent: var(--kh-violet);
+}
+
+.kh-co__plan-head {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 16px 0;
-  border-bottom: 1px dashed var(--kh-line);
+  gap: 16px;
 }
 
-.kh-bill__summary:last-of-type {
-  border-bottom: 0;
-}
-
-.kh-bill__summary span:first-child {
-  color: var(--kh-muted);
-  font-size: 0.83rem;
-}
-
-.kh-bill__summary strong {
-  font-size: 0.95rem;
-}
-
-.kh-bill__total {
-  padding-top: 16px;
+.kh-co__plan-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 46px;
+  height: 46px;
+  color: var(--kh-plan-accent);
+  background: color-mix(in srgb, var(--kh-plan-accent) 12%, transparent);
+  border-radius: 50%;
   font-size: 1.2rem;
 }
 
-.kh-bill__processing {
-  display: none;
-  align-items: center;
-  gap: 10px;
-  padding: 12px 0 0;
-  color: var(--kh-muted);
-  font-size: 0.83rem;
+.kh-co__plan-name {
+  margin: 0;
+  color: var(--kh-ink);
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
 }
 
-.kh-bill__processing.is-active {
-  display: flex;
-}
-
-.kh-bill__processing i {
-  color: var(--kh-ocean);
-}
-
-/* KHQR pay screen
-   ------------------------------------------------------------------ */
-.kh-pay {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  max-width: 360px;
-  margin: 0 auto;
-  text-align: center;
-}
-
-.kh-pay > [data-live] {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-}
-
-.kh-pay__badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 14px;
-  margin-bottom: 16px;
-  color: var(--kh-ocean);
-  background: color-mix(in srgb, var(--kh-ocean) 12%, transparent);
-  border-radius: 999px;
+.kh-co__plan-tagline {
+  margin: 3px 0 0;
+  color: var(--kh-plan-accent);
   font-size: 0.76rem;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-}
-
-.kh-pay__badge svg {
-  width: 14px;
-  height: 14px;
-}
-
-.kh-pay__expiry {
-  margin: 10px 0 0;
-  color: var(--kh-muted);
-  font-size: 0.78rem;
-  font-variant-numeric: tabular-nums;
-}
-
-.kh-pay__expired {
-  margin: 16px 0 0;
-  color: var(--kh-muted);
-  font-size: 0.85rem;
-}
-
-.kh-pay__expired a {
-  color: var(--kh-ocean);
   font-weight: 600;
 }
 
-.kh-pay__qr {
-  width: 100%;
-  max-width: 260px;
-  padding: 12px;
-  background: #fff;
-  border: 1px solid var(--kh-line);
-  border-radius: 14px;
-}
-
-.kh-pay__missing {
+.kh-co__plan-blurb {
+  margin: 18px 0 0;
   color: var(--kh-muted);
   font-size: 0.85rem;
+  line-height: 1.6;
 }
 
-.kh-pay__deeplink {
-  width: 100%;
+.kh-co__plan-included {
+  margin: 24px 0 0;
+  padding-top: 18px;
+  border-top: 1px solid var(--kh-line);
+  color: var(--kh-muted);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.kh-co__features {
+  margin: 14px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.kh-co__features li {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  padding: 7px 0;
+  color: var(--kh-ink);
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.kh-co__features li.is-highlight {
+  font-weight: 700;
+}
+
+.kh-co__tick {
+  display: inline-flex;
+  align-items: center;
   justify-content: center;
-  margin-top: 18px;
+  flex-shrink: 0;
+  width: 21px;
+  height: 21px;
+  margin-top: 1px;
+  color: #fff;
+  background: var(--kh-plan-accent);
+  border-radius: 50%;
+  font-size: 0.6rem;
 }
 
-.kh-pay__stores-label {
-  margin: 16px 0 6px;
+/* Order summary
+   ------------------------------------------------------------------ */
+.kh-co__order {
+  position: sticky;
+  top: 24px;
+  padding: 22px;
+  background: var(--kh-surface);
+  border: 1px solid var(--kh-line);
+  border-radius: 22px;
+  box-shadow: 0 14px 36px color-mix(in srgb, var(--kh-navy, #102a43) 8%, transparent);
+}
+
+.kh-co__order-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.kh-co__order-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  color: var(--kh-ocean);
+  background: color-mix(in srgb, var(--kh-ocean) 11%, transparent);
+  border-radius: 50%;
+}
+
+.kh-co__order-icon svg {
+  width: 19px;
+  height: 19px;
+}
+
+.kh-co__order-title {
+  margin: 0;
+  color: var(--kh-ink);
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.kh-co__order-sub {
+  margin: 2px 0 0;
   color: var(--kh-muted);
   font-size: 0.76rem;
 }
 
-.kh-pay__stores {
-  display: flex;
-  gap: 10px;
+/* Detail rows, grouped into one inset panel so they read as the order's
+   facts rather than as free-floating lines.
+   ------------------------------------------------------------------ */
+.kh-co__rows {
+  margin: 0;
+  background: color-mix(in srgb, var(--kh-ink) 3%, var(--kh-surface));
+  border: 1px solid var(--kh-line);
+  border-radius: 16px;
 }
 
-.kh-pay__stores a {
+.kh-co__row {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--kh-line);
+}
+
+.kh-co__row:last-child {
+  border-bottom: 0;
+}
+
+.kh-co__row-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 33px;
+  height: 33px;
   color: var(--kh-ocean);
+  background: color-mix(in srgb, var(--kh-ocean) 9%, var(--kh-surface));
+  border: 1px solid color-mix(in srgb, var(--kh-ocean) 18%, transparent);
+  border-radius: 11px;
+}
+
+.kh-co__row-icon svg {
+  width: 17px;
+  height: 17px;
+}
+
+.kh-co__row dt {
+  flex: 1;
+  min-width: 0;
+  color: var(--kh-muted);
+  font-size: 0.8rem;
+}
+
+.kh-co__row dd {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin: 0;
+  color: var(--kh-ink);
+  font-size: 0.87rem;
+  font-weight: 700;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.kh-co__row--saving dd {
+  color: var(--kh-teal, #1ca6a0);
+}
+
+.kh-co__change {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  margin-top: 1px;
+  color: var(--kh-ocean);
+  font-size: 0.73rem;
+  font-weight: 600;
+}
+
+.kh-co__change svg {
+  width: 12px;
+  height: 12px;
+}
+
+/* Total — the one figure that has to be unmissable.
+   ------------------------------------------------------------------ */
+.kh-co__totalcard {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  margin: 14px 0 16px;
+  padding: 14px 14px;
+  background: color-mix(in srgb, var(--kh-ocean) 8%, var(--kh-surface));
+  border: 1px solid color-mix(in srgb, var(--kh-ocean) 22%, transparent);
+  border-radius: 16px;
+}
+
+.kh-co__total-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 37px;
+  height: 37px;
+  color: #fff;
+  background: var(--kh-ocean);
+  border-radius: 50%;
+}
+
+.kh-co__total-icon svg {
+  width: 19px;
+  height: 19px;
+}
+
+.kh-co__total-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.kh-co__total-text strong {
+  display: block;
+  color: var(--kh-ink);
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.kh-co__total-text span {
+  display: block;
+  margin-top: 2px;
+  color: var(--kh-muted);
+  font-size: 0.72rem;
+  line-height: 1.4;
+}
+
+.kh-co__total-figure {
+  color: var(--kh-ink);
+  font-size: 1.45rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Actions
+   ------------------------------------------------------------------ */
+.kh-co__submit {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 13px 18px;
+  background: var(--kh-ocean);
+  border: 0;
+  border-radius: 13px;
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 160ms ease, transform 160ms ease;
+}
+
+.kh-co__submit:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--kh-ocean) 84%, #000);
+  transform: translateY(-1px);
+}
+
+.kh-co__submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.kh-co__submit-lock {
+  width: 18px;
+  height: 18px;
+}
+
+/* Pinned to the edge so the lock + label pair stays centred. */
+.kh-co__submit-arrow {
+  position: absolute;
+  top: 50%;
+  right: 18px;
+  width: 18px;
+  height: 18px;
+  transform: translateY(-50%);
+}
+
+.kh-co__cancel {
+  display: block;
+  margin-top: 10px;
+  padding: 11px 18px;
+  background: var(--kh-surface);
+  border: 1px solid var(--kh-line);
+  border-radius: 13px;
+  color: var(--kh-ink);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-align: center;
+  text-decoration: none;
+  transition: border-color 160ms ease, color 160ms ease;
+}
+
+.kh-co__cancel:hover {
+  border-color: color-mix(in srgb, var(--kh-ink) 28%, var(--kh-line));
+  color: var(--kh-ink);
+}
+
+/* Payment method
+   ------------------------------------------------------------------ */
+.kh-co__method {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid var(--kh-line);
+  text-align: left;
+}
+
+.kh-co__method-text {
+  min-width: 0;
+}
+
+.kh-co__method-text strong {
+  display: block;
+  margin-bottom: 3px;
+  color: var(--kh-ink);
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.kh-co__method-text span {
+  display: block;
+  color: var(--kh-muted);
+  font-size: 0.76rem;
+  line-height: 1.5;
+}
+
+.kh-co__secured {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+.kh-co__secured svg {
+  flex-shrink: 0;
+  width: 15px;
+  height: 15px;
+  color: var(--kh-ocean);
+}
+
+/* Decorative KHQR emblem (kh-qrmark)
+   ------------------------------------------------------------------
+   A stylised code used as a payment-method mark, framed with the same grey
+   corner brackets as the pay screen's standee so the two read as one
+   system. It is deliberately not a scannable code — the only real KHQR in
+   this app comes from PayWay's purchase response — so it is kept small
+   enough to read as an icon rather than something to point a phone at. */
+.kh-qrmark {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+  padding: 6px 8px 7px;
+  background: #fff;
+  border: 1px solid var(--kh-line);
+  border-radius: 13px;
+}
+
+.kh-qrmark svg {
+  display: block;
+  width: 42px;
+  height: 42px;
+  color: #16283c;
+}
+
+/* Matches .kh-payq__corner on the pay screen. */
+.kh-qrmark__frame {
+  stroke: #b9bfc7;
+}
+
+.kh-qrmark__modules {
+  opacity: 0.9;
+}
+
+.kh-qrmark__disc {
+  fill: #d4232e;
+}
+
+.kh-qrmark__word {
+  margin-top: 1px;
+  color: #d4232e;
+  font-size: 0.5rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  line-height: 1;
+}
+
+/* KHQR pay dialog (kh-payq)
+   ------------------------------------------------------------------
+   Laid out like a KHQR merchant standee — patterned card, tagline,
+   bracketed code, KHQR mark at the foot — minus the bank logo, merchant
+   name and merchant ID that format carries, since this is a one-off payment
+   rather than a standing placard. Fixed-position so it reads as a dialog
+   even though this is a full page render.
+   ------------------------------------------------------------------ */
+.kh-payq {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(71, 85, 105, 0.62);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  overflow-y: auto;
+}
+
+.kh-payq__dialog {
+  width: 100%;
+  max-width: 384px;
+  margin: auto;
+  overflow: hidden;
+  background: var(--kh-surface);
+  border-radius: 16px;
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.3);
+  text-align: center;
+}
+
+/* The navy bands top and bottom of the standee. */
+.kh-payq__rule {
+  display: block;
+  height: 9px;
+  background: var(--kh-ocean);
+}
+
+.kh-payq__rule--bottom {
+  height: 7px;
+}
+
+/* Card face, carrying the faint KHQR motif. */
+.kh-payq__sheet {
+  position: relative;
+  padding: 12px 26px 20px;
+  background-color: var(--kh-surface);
+  overflow: hidden;
+}
+
+.kh-payq__sheet::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='58' height='58' viewBox='0 0 58 58'%3E%3Cpath d='M29 5l7 7h10v10l7 7-7 7v10H36l-7 7-7-7H12V36l-7-7 7-7V12h10z' fill='none' stroke='%230c6071' stroke-width='1.3'/%3E%3C/svg%3E");
+  background-position: center 20px;
+  opacity: 0.07;
+  pointer-events: none;
+}
+
+/* Timer + close, kept light so the code stays the focus. */
+.kh-payq__head {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.kh-payq__timer {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--kh-muted);
   font-size: 0.82rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.kh-payq__ring {
+  width: 19px;
+  height: 19px;
+  transform: rotate(-90deg);
+}
+
+.kh-payq__ring-track,
+.kh-payq__ring-fill {
+  fill: none;
+  stroke-width: 3.4;
+}
+
+.kh-payq__ring-track {
+  stroke: var(--kh-line);
+}
+
+.kh-payq__ring-fill {
+  stroke: var(--kh-ocean);
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1s linear;
+}
+
+.kh-payq__close {
+  /* Stays right even when the timer is hidden on expiry. */
+  margin-left: auto;
+  display: inline-flex;
+  color: var(--kh-muted);
+  transition: color 0.15s ease;
+}
+
+.kh-payq__close:hover {
+  color: var(--kh-ocean);
+}
+
+.kh-payq__close svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Tagline + amount
+   ------------------------------------------------------------------ */
+.kh-payq__tagline {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  color: var(--kh-ink);
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.kh-payq__amount {
+  position: relative;
+  z-index: 1;
+  margin: 8px 0 14px;
+}
+
+.kh-payq__figure {
+  color: var(--kh-ink);
+  font-size: 1.85rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.kh-payq__currency {
+  margin-left: 4px;
+  color: var(--kh-ink);
+  font-size: 0.8rem;
+  font-weight: 600;
+  vertical-align: super;
+}
+
+/* Code + its brackets
+   ------------------------------------------------------------------ */
+.kh-payq__frame {
+  position: relative;
+  z-index: 1;
+  display: inline-block;
+  padding: 16px;
+  background: #fff;
+  border-radius: 12px;
+}
+
+.kh-payq__corner {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  /* Fixed grey, not a token: these sit on the QR's permanently white
+     panel, so they must not follow the theme into invisibility. */
+  border: 2px solid #b9bfc7;
+  pointer-events: none;
+}
+
+.kh-payq__corner--tl {
+  top: 0;
+  left: 0;
+  border-right: 0;
+  border-bottom: 0;
+  border-radius: 11px 0 0 0;
+}
+
+.kh-payq__corner--tr {
+  top: 0;
+  right: 0;
+  border-left: 0;
+  border-bottom: 0;
+  border-radius: 0 11px 0 0;
+}
+
+.kh-payq__corner--bl {
+  bottom: 0;
+  left: 0;
+  border-right: 0;
+  border-top: 0;
+  border-radius: 0 0 0 11px;
+}
+
+.kh-payq__corner--br {
+  bottom: 0;
+  right: 0;
+  border-left: 0;
+  border-top: 0;
+  border-radius: 0 0 11px 0;
+}
+
+.kh-payq__qr {
+  position: relative;
+  display: block;
+  width: 196px;
+  height: 196px;
+  max-width: 100%;
+  background: #fff;
+}
+
+.kh-payq__missing {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  color: var(--kh-muted);
+  font-size: 0.85rem;
+}
+
+/* Plan name sits where the standee prints the merchant name. */
+.kh-payq__plan {
+  position: relative;
+  z-index: 1;
+  margin: 10px 0 0;
+  color: var(--kh-ink);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+/* Actions + status
+   ------------------------------------------------------------------ */
+.kh-payq__deeplink {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-top: 14px;
+  padding: 11px 16px;
+  background: var(--kh-ocean);
+  border-radius: 10px;
+  color: #fff;
+  font-size: 0.85rem;
   font-weight: 600;
   text-decoration: none;
 }
 
-.kh-pay__stores a:hover {
-  text-decoration: underline;
+.kh-payq__deeplink:hover {
+  background: color-mix(in srgb, var(--kh-ocean) 84%, #000);
+  color: #fff;
 }
 
-.kh-pay__waiting {
+.kh-payq__waiting {
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
-  margin: 22px 0 0;
+  margin: 14px 0 0;
   color: var(--kh-muted);
-  font-size: 0.83rem;
+  font-size: 0.78rem;
 }
 
-.kh-pay__waiting i {
+.kh-payq__waiting i {
   color: var(--kh-ocean);
 }
 
-.kh-pay__failed {
-  margin: 22px 0 0;
+.kh-payq__failed {
+  position: relative;
+  z-index: 1;
+  margin: 14px 0 0;
   color: var(--bo-danger, #c0392b);
-  font-size: 0.83rem;
+  font-size: 0.8rem;
 }
 
-.kh-pay__failed a {
+.kh-payq__failed a {
   color: inherit;
   font-weight: 600;
 }
+
+.kh-payq__stores {
+  position: relative;
+  z-index: 1;
+  margin: 12px 0 0;
+  color: var(--kh-muted);
+  font-size: 0.73rem;
+}
+
+.kh-payq__stores a {
+  margin-left: 8px;
+  color: var(--kh-ocean);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.kh-payq__stores a:hover {
+  text-decoration: underline;
+}
+
+/* Expired
+   ------------------------------------------------------------------ */
+.kh-payq__expired-panel {
+  position: relative;
+  z-index: 1;
+  padding: 18px 0 6px;
+}
+
+.kh-payq__expired-icon {
+  margin: 0 0 10px;
+  color: var(--kh-muted);
+  font-size: 1.8rem;
+}
+
+.kh-payq__expired-text {
+  margin: 0 0 4px;
+  color: var(--kh-ink);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+/* Foot: the KHQR membership mark, as printed bottom-left of the standee.
+   ------------------------------------------------------------------ */
+.kh-payq__foot {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid var(--kh-line);
+}
+
+.kh-payq__member {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1.15;
+}
+
+.kh-payq__member span {
+  color: var(--kh-muted);
+  font-size: 0.58rem;
+  font-weight: 600;
+}
+
+.kh-payq__member strong {
+  color: #d4232e;
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+/* The red sweep across the bottom-right corner. */
+.kh-payq__swoosh {
+  position: absolute;
+  right: -58px;
+  bottom: -66px;
+  width: 132px;
+  height: 132px;
+  border: 24px solid var(--kh-ocean);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+@media (max-width: 420px) {
+  .kh-payq {
+    padding: 12px;
+  }
+
+  .kh-payq__sheet {
+    padding: 12px 18px 18px;
+  }
+
+  .kh-payq__figure {
+    font-size: 1.6rem;
+  }
+}
+

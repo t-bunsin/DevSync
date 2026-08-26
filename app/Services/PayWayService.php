@@ -10,20 +10,19 @@ use Illuminate\Support\Str;
  * ABA PayWay checkout (Bakong/KHQR).
  *
  * ============================================================================
- * CAVEAT — READ BEFORE RELYING ON THIS IN PRODUCTION
+ * VERIFICATION STATUS
  * ============================================================================
- * This was built without access to PayWay's actual API reference (only their
- * public quickstart page, which does not document the hash formula). The
- * field order in HASH_FIELD_ORDER is PayWay's commonly published/documented
- * convention from their public integration samples, NOT confirmed against an
- * official spec or a live sandbox call. Before processing a single real
- * payment:
- *   1. Get PayWay's merchant API PDF (issued at onboarding) and diff
- *      HASH_FIELD_ORDER against its literal hash formula.
- *   2. Test a purchase end-to-end against the sandbox
- *      (https://checkout-sandbox.payway.com.kh) with a real Merchant ID.
- *   3. A wrong hash fails closed — PayWay rejects the request — so this is
- *      safe to try against sandbox, just not something to trust unverified.
+ * Outbound purchase hash (HASH_FIELD_ORDER) — CONFIRMED 2026-08-26 against
+ * the live sandbox (checkout-sandbox.payway.com.kh) with the sandbox merchant
+ * id: PayWay answered status.code "00" / "Success!" and returned a real
+ * qrString + qrImage. A wrong field order fails closed ("Wrong Hash"), so a
+ * success response is positive proof the order is right.
+ *
+ * Inbound callback signature (verifyCallback) — STILL UNVERIFIED. No callback
+ * has been observed, so the concatenation there remains a guess. It fails
+ * closed, which is what keeps paywayCallback() from activating a subscription
+ * it cannot authenticate. Confirm it against PayWay's merchant API PDF (issued
+ * at onboarding) before trusting a callback to grant paid access.
  * ============================================================================
  */
 class PayWayService
