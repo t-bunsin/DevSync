@@ -124,6 +124,10 @@ html[data-admin-theme="dark"] .kh-admin-brand strong {
   -webkit-text-fill-color: transparent;
 }
 
+html[data-admin-theme="dark"] .kh-admin-brand__tagline {
+  color: #8fa6ae;
+}
+
 html[data-admin-theme="dark"] .kh-view-site {
   color: #c5d5d9 !important;
   background: #0e1b21;
@@ -441,6 +445,10 @@ html[data-admin-theme="dark"] .datatable-table {
     width: auto;
     min-width: 0;
     flex: 0 1 auto;
+  }
+
+  .nav-fixed .topnav .kh-admin-brand__tagline {
+    display: none;
   }
 
   .nav-fixed .topnav .navbar-nav {

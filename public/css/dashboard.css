@@ -124,6 +124,30 @@ body.nav-fixed {
   background: var(--kh-line);
 }
 
+.kh-admin-brand__text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.kh-admin-brand__word {
+  line-height: 1;
+}
+
+/* Plain small-caps label under the wordmark — no ruled lines here: the
+   column is only ever as wide as this text, so a rule on each side (as
+   the wide public header uses) has no room to stretch and just renders
+   as a stray dash. */
+.kh-admin-brand__tagline {
+  color: var(--kh-muted, #6b8190);
+  font-size: 0.5rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
 .kh-view-site {
   display: inline-flex !important;
   align-items: center;
