@@ -12,6 +12,14 @@ class Subscription extends Model
     public const STATUS_CANCELED = 'canceled';
     public const STATUS_FAILED = 'failed';
 
+    /** Every value the status enum accepts, in the order the billing register lists them. */
+    public const STATUSES = [
+        self::STATUS_ACTIVE,
+        self::STATUS_PENDING,
+        self::STATUS_FAILED,
+        self::STATUS_CANCELED,
+    ];
+
     protected $fillable = [
         'user_id',
         'tran_id',

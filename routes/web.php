@@ -140,6 +140,11 @@ Route::prefix('admin')->group(function () {
             Route::get('/roles', [RoleController::class, 'index'])->name('roles');
             Route::patch('/roles/permissions', [RoleController::class, 'updatePermissions'])->name('roles.permissions.update');
 
+            // The billing register — every account's subscription. Admin-only:
+            // the per-user view is /account-billing, which shows the caller's
+            // own row and needs no role gate.
+            Route::get('/account-billing/list', [BillingController::class, 'list'])->name('account-billing.list');
+
             // Curates the 'featured' flag on job posts — an admin call, not
             // something the employer-facing job post form exposes anymore.
             Route::get('/featured-jobs', [FeaturedJobController::class, 'index'])->name('featured-jobs');

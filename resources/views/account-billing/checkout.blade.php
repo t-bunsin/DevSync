@@ -57,36 +57,11 @@
             </div>
         @endif
 
-        {{-- Two panes: what you're getting on the left, what you're paying on
+        {{-- Two panes: what you're paying on the left, what you're getting on
              the right. The order pane is the one that has to be unambiguous,
-             so it carries the totals, the button and the payment method. --}}
+             so it carries the totals, the button and the payment method, and
+             it leads in the markup so reading order matches the layout. --}}
         <div class="kh-co">
-            <section class="kh-co__plan kh-co__plan--{{ $plan['tone'] }}" aria-labelledby="kh-co-plan-name">
-                <header class="kh-co__plan-head">
-                    <span class="kh-co__plan-icon" aria-hidden="true">
-                        <i class="fas {{ $plan['icon'] }}"></i>
-                    </span>
-
-                    <div>
-                        <h2 class="kh-co__plan-name" id="kh-co-plan-name">{{ $plan['name'] }}</h2>
-                        <p class="kh-co__plan-tagline">{{ $plan['tagline'] }}</p>
-                    </div>
-                </header>
-
-                <p class="kh-co__plan-blurb">{{ $plan['blurb'] }}</p>
-
-                <p class="kh-co__plan-included">What's included</p>
-
-                <ul class="kh-co__features">
-                    @foreach ($plan['features'] as $feature)
-                        <li class="{{ $feature['highlight'] ? 'is-highlight' : '' }}">
-                            <span class="kh-co__tick" aria-hidden="true"><i class="fas fa-check"></i></span>
-                            {{ $feature['label'] }}
-                        </li>
-                    @endforeach
-                </ul>
-            </section>
-
             <section class="kh-co__order" aria-labelledby="kh-co-order-title">
                 <header class="kh-co__order-head">
                     <span class="kh-co__order-icon" aria-hidden="true">
@@ -201,6 +176,32 @@
                         </div>
                     </div>
                 @endunless
+            </section>
+
+            <section class="kh-co__plan kh-co__plan--{{ $plan['tone'] }}" aria-labelledby="kh-co-plan-name">
+                <header class="kh-co__plan-head">
+                    <span class="kh-co__plan-icon" aria-hidden="true">
+                        <i class="fas {{ $plan['icon'] }}"></i>
+                    </span>
+
+                    <div>
+                        <h2 class="kh-co__plan-name" id="kh-co-plan-name">{{ $plan['name'] }}</h2>
+                        <p class="kh-co__plan-tagline">{{ $plan['tagline'] }}</p>
+                    </div>
+                </header>
+
+                <p class="kh-co__plan-blurb">{{ $plan['blurb'] }}</p>
+
+                <p class="kh-co__plan-included">What's included</p>
+
+                <ul class="kh-co__features">
+                    @foreach ($plan['features'] as $feature)
+                        <li class="{{ $feature['highlight'] ? 'is-highlight' : '' }}">
+                            <span class="kh-co__tick" aria-hidden="true"><i class="fas fa-check"></i></span>
+                            {{ $feature['label'] }}
+                        </li>
+                    @endforeach
+                </ul>
             </section>
         </div>
     </div>

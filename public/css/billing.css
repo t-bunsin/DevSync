@@ -465,7 +465,7 @@ html[data-admin-theme="dark"] .kh-bill__plan-features li {
    ------------------------------------------------------------------ */
 .kh-co {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 408px);
+  grid-template-columns: minmax(0, 408px) minmax(0, 1fr);
   gap: 24px;
   align-items: start;
 }

@@ -305,12 +305,19 @@
                                     <nav class="sidenav-menu-nested nav">
                                         <a class="nav-link {{ setActive('admin/profile') }}"
                                             href="{{ route('profile') }}">Profile</a>
-                                        <a class="nav-link {{ setActive(['admin/account-billing', 'admin/account-billing/*']) }}"
+                                        {{-- The checkout and pay screens are part of this flow and
+                                             keep it lit, but the register below is its own entry,
+                                             so it is excluded rather than lighting both rows. --}}
+                                        <a class="nav-link {{ request()->is('admin/account-billing', 'admin/account-billing/*') && ! request()->is('admin/account-billing/list') ? 'active' : '' }}"
                                             href="{{ url('admin/account-billing') }}">Billing</a>
                                         <a class="nav-link {{ setActive('account-security') }}"
                                             href="{{ url('account-security') }}">Security</a>
-                                        <a class="nav-link {{ setActive('account-notifications') }}"
-                                            href="{{ url('account-notifications') }}">Notifications</a>
+                                        {{-- The whole billing register, not the caller's own row,
+                                             so it is hidden from everyone the route would 403. --}}
+                                        @if ($adminUser?->isAdmin())
+                                        <a class="nav-link {{ setActive('admin/account-billing/list') }}"
+                                            href="{{ route('account-billing.list') }}">Billing List</a>
+                                        @endif
                                     </nav>
                                 </div>
                             </nav>

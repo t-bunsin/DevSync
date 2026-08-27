@@ -34,6 +34,54 @@ class BillingController extends Controller
         ]);
     }
 
+    /**
+     * The billing register: every account's subscription in one table.
+     *
+     * Admin-only at the route, because this is the whole table rather than
+     * the caller's own row — subscriptions.user_id is unique, so a per-user
+     * "list" would only ever be the single row index() already shows.
+     */
+    public function list(Request $request): View
+    {
+        $status = $request->query('status');
+        $status = in_array($status, Subscription::STATUSES, true) ? $status : null;
+        $search = trim((string) $request->query('q'));
+
+        $subscriptions = Subscription::query()
+            // Eager loaded: the table prints a name and email on every row.
+            ->with('user')
+            ->when($status, fn ($query) => $query->where('status', $status))
+            ->when($search !== '', fn ($query) => $query->where(function ($group) use ($search) {
+                $group->where('tran_id', 'like', "%{$search}%")
+                    ->orWhere('plan_id', 'like', "%{$search}%")
+                    ->orWhereHas('user', fn ($user) => $user
+                        ->where('email', 'like', "%{$search}%")
+                        ->orWhere('display_name', 'like', "%{$search}%"));
+            }))
+            ->orderByDesc('created_at')
+            ->get();
+
+        // Counted off the whole table, not the filtered set, so the tiles do
+        // not change meaning when a filter is applied — same call shape as
+        // ComplianceController::index().
+        $counts = Subscription::query()
+            ->selectRaw('status, COUNT(*) as total')
+            ->groupBy('status')
+            ->pluck('total', 'status');
+
+        return view('account-billing.list', [
+            'subscriptions' => $subscriptions,
+            'counts' => $counts,
+            // Only active plans are money actually being collected; pending and
+            // failed rows would overstate it.
+            'activeValue' => Subscription::query()
+                ->where('status', Subscription::STATUS_ACTIVE)
+                ->sum('amount'),
+            'activeStatus' => $status,
+            'searchTerm' => $search,
+        ]);
+    }
+
     public function checkout(Request $request): View
     {
         $validated = $request->validate([
