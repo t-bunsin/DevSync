@@ -272,29 +272,39 @@
                         </div>
                         <!-- Sidenav Heading (Custom)-->
                         <div class="sidenav-menu-heading">Custom</div>
+                        @php
+                            // Drives both the Pages accordion and the Account one nested
+                            // inside it, so landing on any Account page leaves the whole
+                            // path open instead of collapsing the highlight out of sight.
+                            $khAccountActive = request()->is('admin/profile', 'admin/account-billing*', 'account-*');
+                        @endphp
                         <!-- Sidenav Accordion (Pages)-->
-                        <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse"
-                            data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
+                        <a class="nav-link collapsed {{ $khAccountActive ? 'kh-nav-parent-active' : '' }}"
+                            href="javascript:void(0);" data-bs-toggle="collapse"
+                            data-bs-target="#collapsePages"
+                            aria-expanded="{{ $khAccountActive ? 'true' : 'false' }}"
+                            aria-controls="collapsePages">
                             <div class="nav-link-icon"><i data-feather="grid"></i></div>
                             Pages
                             <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
-                        <div class="collapse" id="collapsePages" data-bs-parent="#accordionSidenav">
+                        <div class="collapse {{ $khAccountActive ? 'show' : '' }}"
+                            id="collapsePages" data-bs-parent="#accordionSidenav">
                             <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPagesMenu">
                                 <!-- Nested Sidenav Accordion (Pages -> Account)-->
-                                <a class="nav-link collapsed {{ setActive(['account-profile', 'admin/account-billing', 'admin/account-billing/*', 'account-security', 'account-notifications']) }}"
+                                <a class="nav-link collapsed {{ $khAccountActive ? 'active' : '' }}"
                                     href="javascript:void(0);" data-bs-toggle="collapse"
                                     data-bs-target="#pagesCollapseAccount"
-                                    aria-expanded="{{ request()->is('account-*', 'admin/account-billing*') ? 'true' : 'false' }}"
+                                    aria-expanded="{{ $khAccountActive ? 'true' : 'false' }}"
                                     aria-controls="pagesCollapseAccount">
                                     Account
                                     <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                                 </a>
-                                <div class="collapse {{ request()->is('account-*', 'admin/account-billing*') ? 'show' : '' }}"
+                                <div class="collapse {{ $khAccountActive ? 'show' : '' }}"
                                     id="pagesCollapseAccount" data-bs-parent="#accordionSidenavPagesMenu">
                                     <nav class="sidenav-menu-nested nav">
-                                        <a class="nav-link {{ setActive('account-profile') }}"
-                                            href="{{ url('account-profile') }}">Profile</a>
+                                        <a class="nav-link {{ setActive('admin/profile') }}"
+                                            href="{{ route('profile') }}">Profile</a>
                                         <a class="nav-link {{ setActive(['admin/account-billing', 'admin/account-billing/*']) }}"
                                             href="{{ url('admin/account-billing') }}">Billing</a>
                                         <a class="nav-link {{ setActive('account-security') }}"

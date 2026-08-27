@@ -1288,7 +1288,7 @@ html[data-admin-theme="dark"] .kh-bill__plan-features li {
   bottom: -66px;
   width: 132px;
   height: 132px;
-  border: 24px solid var(--kh-ocean);
+  border: 24px solid #d4232e;
   border-radius: 50%;
   pointer-events: none;
 }
