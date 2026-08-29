@@ -248,16 +248,14 @@ class JobPost extends Model
     {
         $days = $this->postedDays();
 
-        return match (true) {
-            $days === 0 => 'today',
-            $days === 1 => '1 day ago',
-            default => "{$days} days ago",
-        };
+        return $days === 0
+            ? __('ui.job.posted_today')
+            : trans_choice('ui.job.posted_days_ago', $days, ['count' => $days]);
     }
 
     public function postedLabel(): string
     {
-        return 'Posted ' . $this->postedAgo();
+        return __('ui.job.posted_prefix', ['ago' => $this->postedAgo()]);
     }
 
     /** Whole days until the deadline; 0 once it has passed, null if there is none. */
@@ -290,18 +288,16 @@ class JobPost extends Model
         $days = $this->deadlineDaysLeft();
 
         if ($days === null) {
-            return 'Open until filled';
+            return __('ui.job.deadline_open');
         }
 
         if ($this->deadline->isPast()) {
-            return 'Closed';
+            return __('ui.job.deadline_closed');
         }
 
-        return match (true) {
-            $days === 0 => 'Closes today',
-            $days === 1 => '1 day left',
-            default => "{$days} days left",
-        };
+        return $days === 0
+            ? __('ui.job.deadline_today')
+            : trans_choice('ui.job.deadline_days_left', $days, ['count' => $days]);
     }
 
     /**

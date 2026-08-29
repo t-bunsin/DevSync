@@ -28,9 +28,9 @@
 @empty
     <div class="dropdown-item dropdown-notifications-item kh-notify__empty">
         <div class="dropdown-notifications-item-content">
-            <div class="dropdown-notifications-item-content-text">No activity yet.</div>
+            <div class="dropdown-notifications-item-content-text">{{ __('ui.admin.notifications.empty') }}</div>
             <div class="dropdown-notifications-item-content-details">
-                Applications from the public job pages arrive here.
+                {{ __('ui.admin.notifications.empty_hint') }}
             </div>
         </div>
     </div>

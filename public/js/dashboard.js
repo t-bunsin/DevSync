@@ -17,12 +17,18 @@
     };
 
     function renderIcons() {
-        if (window.feather && typeof window.feather.replace === 'function') {
-            window.feather.replace({
-                width: 18,
-                height: 18,
-                'stroke-width': 2,
-            });
+        // Guarded: feather throws on an unknown data-feather name, and an
+        // uncaught throw here would skip the rest of the dashboard init.
+        try {
+            if (window.feather && typeof window.feather.replace === 'function') {
+                window.feather.replace({
+                    width: 18,
+                    height: 18,
+                    'stroke-width': 2,
+                });
+            }
+        } catch (error) {
+            console.error('feather.replace() failed', error);
         }
     }
 

@@ -4,24 +4,10 @@
     * Licensed under SEE_LICENSE (https://github.com/StartBootstrap/sb-admin-pro/blob/master/LICENSE)
     */
 window.addEventListener('DOMContentLoaded', event => {
-    // Activate feather
-    if (window.feather && typeof window.feather.replace === 'function') {
-        window.feather.replace();
-    }
-
-    // Enable tooltips globally
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl);
-    });
-
-    // Enable popovers globally
-    var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
-    var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
-        return new bootstrap.Popover(popoverTriggerEl);
-    });
-
-    // Toggle the side navigation
+    // Toggle the side navigation.
+    // Registered first, and everything after it is wrapped: feather.replace()
+    // throws on an unknown data-feather name, which used to abort this whole
+    // handler and leave the sidebar toggle dead on that page.
     const sidebarToggle = document.body.querySelector('#sidebarToggle');
     if (sidebarToggle) {
         // Uncomment Below to persist sidebar toggle between refreshes
@@ -37,6 +23,31 @@ window.addEventListener('DOMContentLoaded', event => {
             );
             localStorage.setItem('sb|sidebar-toggle', document.body.classList.contains('sidenav-toggled'));
         });
+    }
+
+    // Activate feather
+    try {
+        if (window.feather && typeof window.feather.replace === 'function') {
+            window.feather.replace();
+        }
+    } catch (error) {
+        console.error('feather.replace() failed', error);
+    }
+
+    // Enable tooltips globally
+    try {
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+
+        // Enable popovers globally
+        var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
+        var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+            return new bootstrap.Popover(popoverTriggerEl);
+        });
+    } catch (error) {
+        console.error('bootstrap tooltip/popover init failed', error);
     }
 
     // Close side navigation when width < LG

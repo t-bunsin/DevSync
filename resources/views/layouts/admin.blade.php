@@ -43,12 +43,13 @@
         $adminFullName = $adminUser?->displayName() ?? 'Administrator';
         $adminInitial = $adminUser ? mb_substr($adminUser->initials(), 0, 1) : 'A';
         $adminAvatar = $adminUser?->avatarUrl();
+        $currentLocale = app()->getLocale();
     @endphp
     <nav class="topnav navbar navbar-expand shadow justify-content-between justify-content-sm-start navbar-light bg-white"
         id="sidenavAccordion">
         <!-- Sidenav Toggle Button-->
         <button class="btn btn-icon btn-transparent-dark order-0 me-1 ms-1 ms-lg-2 me-lg-0" id="sidebarToggle"
-            type="button" aria-label="Toggle navigation" aria-controls="layoutSidenav" aria-expanded="true"><i
+            type="button" aria-label="{{ __('ui.admin.a11y.toggle_nav') }}" aria-controls="layoutSidenav" aria-expanded="true"><i
                 data-feather="menu"></i></button>
         <!-- Navbar Brand-->
         <!-- * * Tip * * You can use text or an image for your navbar brand.-->
@@ -59,7 +60,7 @@
             <span class="kh-admin-brand__divider" aria-hidden="true"></span>
             <span class="kh-admin-brand__text">
                 <span class="kh-admin-brand__word">KH-<strong>WORKS</strong></span>
-                <span class="kh-admin-brand__tagline">Build your dream job</span>
+                <span class="kh-admin-brand__tagline">{{ __('ui.admin.brand_tagline') }}</span>
             </span>
         </a>
         <!-- Navbar Search Input-->
@@ -76,14 +77,22 @@
                  APP_TIMEZONE is UTC, so a server-rendered value would show the
                  wrong time until the script replaced it. --}}
             <li class="nav-item d-none d-md-block me-3 kh-admin-clock-item">
-                <time class="kh-admin-clock" id="khAdminClock" hidden>
+                {{-- Day/month names are handed to admin-clock.js as data, so the
+                     script itself stays free of any hardcoded language. --}}
+                <time class="kh-admin-clock" id="khAdminClock" hidden
+                    data-clock-days="{{ json_encode(__('ui.admin.clock.days'), JSON_UNESCAPED_UNICODE) }}"
+                    data-clock-months="{{ json_encode(__('ui.admin.clock.months'), JSON_UNESCAPED_UNICODE) }}"
+                    data-clock-am="{{ __('ui.admin.clock.am') }}"
+                    data-clock-pm="{{ __('ui.admin.clock.pm') }}">
                     <span data-clock-date></span>
                     <span class="kh-admin-clock__time" data-clock-time></span>
                 </time>
             </li>
             <li class="nav-item me-2 me-sm-3 kh-admin-theme-item">
-                <button class="kh-admin-theme-toggle" type="button" aria-label="Switch to dark theme"
-                    aria-pressed="false" title="Switch to dark theme">
+                <button class="kh-admin-theme-toggle" type="button"
+                    data-theme-to-dark="{{ __('ui.admin.a11y.theme_to_dark') }}"
+                    data-theme-to-light="{{ __('ui.admin.a11y.theme_to_light') }}" aria-label="{{ __('ui.admin.a11y.theme_to_dark') }}"
+                    aria-pressed="false" title="{{ __('ui.admin.a11y.theme_to_dark') }}">
                     <span class="kh-admin-theme-toggle__track" aria-hidden="true">
                         <i class="fas fa-sun kh-admin-theme-toggle__sun"></i>
                         <i class="fas fa-moon kh-admin-theme-toggle__moon"></i>
@@ -91,10 +100,46 @@
                     </span>
                 </button>
             </li>
+            {{-- Language switcher. Same session-backed route the public header uses
+                 (routes/web.php -> language.switch), so switching in either shell
+                 carries over to the other. --}}
+            <li class="nav-item dropdown no-caret me-2 me-sm-3 kh-admin-lang-item">
+                <a class="kh-admin-lang dropdown-toggle" id="languageDropdown" href="#" role="button"
+                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                    aria-label="{{ __('ui.language.switch') }}">
+                    <span class="kh-admin-lang__globe" aria-hidden="true"><i data-feather="globe"></i></span>
+                    <span class="kh-admin-lang__label">
+                        {{ $currentLocale === 'kh' ? __('ui.language.kh') : __('ui.language.en') }}
+                    </span>
+                    <i class="fas fa-chevron-down kh-admin-lang__caret" aria-hidden="true"></i>
+                </a>
+                <div class="dropdown-menu dropdown-menu-end kh-admin-lang__menu animated--fade-in-up"
+                    aria-labelledby="languageDropdown">
+                    <span class="kh-admin-lang__menu-title">{{ __('ui.language.switch') }}</span>
+                    {{-- The two-letter chips are decorative: the language name that
+                         follows is what a screen reader should announce. --}}
+                    <a class="dropdown-item kh-admin-lang__option{{ $currentLocale === 'en' ? ' is-active' : '' }}"
+                        href="{{ route('language.switch', 'en') }}">
+                        <span class="kh-admin-lang__code" aria-hidden="true">EN</span>
+                        <span class="kh-admin-lang__name">{{ __('ui.language.english') }}</span>
+                        @if ($currentLocale === 'en')
+                            <i class="fas fa-check" aria-hidden="true"></i>
+                        @endif
+                    </a>
+                    <a class="dropdown-item kh-admin-lang__option{{ $currentLocale === 'kh' ? ' is-active' : '' }}"
+                        href="{{ route('language.switch', 'kh') }}">
+                        <span class="kh-admin-lang__code" aria-hidden="true">KH</span>
+                        <span class="kh-admin-lang__name">{{ __('ui.language.khmer') }}</span>
+                        @if ($currentLocale === 'kh')
+                            <i class="fas fa-check" aria-hidden="true"></i>
+                        @endif
+                    </a>
+                </div>
+            </li>
             <li class="nav-item d-none d-md-block me-3">
                 <a class="nav-link kh-view-site" href="{{ url('/') }}" target="_blank" rel="noopener">
                     <i data-feather="external-link"></i>
-                    <span>View website</span>
+                    <span>{{ __('ui.admin.topnav.view_website') }}</span>
                 </a>
             </li>
             <!-- Navbar Search Dropdown-->
@@ -102,15 +147,15 @@
             <li class="nav-item dropdown no-caret me-3 d-lg-none kh-admin-search-item">
                 <a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="searchDropdown" href="#"
                     role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                    aria-label="Open search"><i
+                    aria-label="{{ __('ui.admin.a11y.open_search') }}"><i
                         data-feather="search"></i></a>
                 <!-- Dropdown - Search-->
                 <div class="dropdown-menu dropdown-menu-end p-3 shadow animated--fade-in-up"
                     aria-labelledby="searchDropdown">
                     <form class="form-inline me-auto w-100">
                         <div class="input-group input-group-joined input-group-solid">
-                            <input class="form-control pe-0" type="text" placeholder="Search for..."
-                                aria-label="Search" aria-describedby="basic-addon2" />
+                            <input class="form-control pe-0" type="text" placeholder="{{ __('ui.admin.topnav.search') }}"
+                                aria-label="{{ __('ui.admin.a11y.search') }}" aria-describedby="basic-addon2" />
                             <div class="input-group-text"><i data-feather="search"></i></div>
                         </div>
                     </form>
@@ -126,68 +171,68 @@
                 data-read-url="{{ route('notifications.read') }}">
                 <a class="btn btn-icon btn-transparent-dark dropdown-toggle kh-notify__toggle" id="navbarDropdownAlerts"
                     href="javascript:void(0);" role="button" data-bs-toggle="dropdown" aria-haspopup="true"
-                    aria-expanded="false" aria-label="Open notifications"><i data-feather="bell"></i>
+                    aria-expanded="false" aria-label="{{ __('ui.admin.a11y.open_notifications') }}"><i data-feather="bell"></i>
                     <span class="kh-notify__badge" data-kh-badge @if ($khUnread === 0) hidden @endif>{{ $khUnread > 9 ? '9+' : $khUnread }}</span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end border-0 shadow animated--fade-in-up"
                     aria-labelledby="navbarDropdownAlerts">
                     <h6 class="dropdown-header dropdown-notifications-header">
                         <i class="me-2" data-feather="bell"></i>
-                        Activity center
+                        {{ __('ui.admin.topnav.activity_center') }}
                     </h6>
                     <div data-kh-notification-items>
                         @include('partials.notification-items', ['notifications' => $khNotifications])
                     </div>
-                    <a class="dropdown-item dropdown-notifications-footer" href="{{ route('home') }}">Open workspace</a>
+                    <a class="dropdown-item dropdown-notifications-footer" href="{{ route('home') }}">{{ __('ui.admin.topnav.open_workspace') }}</a>
                 </div>
             </li>
             <!-- Messages Dropdown-->
             <li class="nav-item dropdown no-caret d-none d-sm-block me-3 dropdown-notifications">
                 <a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownMessages"
                     href="javascript:void(0);" role="button" data-bs-toggle="dropdown" aria-haspopup="true"
-                    aria-expanded="false" aria-label="Open messages"><i data-feather="mail"></i></a>
+                    aria-expanded="false" aria-label="{{ __('ui.admin.a11y.open_messages') }}"><i data-feather="mail"></i></a>
                 <div class="dropdown-menu dropdown-menu-end border-0 shadow animated--fade-in-up"
                     aria-labelledby="navbarDropdownMessages">
                     <h6 class="dropdown-header dropdown-notifications-header">
                         <i class="me-2" data-feather="mail"></i>
-                        Team messages
+                        {{ __('ui.admin.topnav.team_messages') }}
                     </h6>
                     <a class="dropdown-item dropdown-notifications-item" href="{{ route('companies') }}">
                         <span class="dropdown-notifications-item-img kh-message-avatar">TH</span>
                         <div class="dropdown-notifications-item-content">
-                            <div class="dropdown-notifications-item-content-text">Could you review our employer verification today?</div>
-                            <div class="dropdown-notifications-item-content-details">Tech Horizon · 12m</div>
+                            <div class="dropdown-notifications-item-content-text">{{ __('ui.admin.inbox.verification') }}</div>
+                            <div class="dropdown-notifications-item-content-details">{{ __('ui.admin.inbox.verification_meta') }}</div>
                         </div>
                     </a>
                     <a class="dropdown-item dropdown-notifications-item" href="{{ route('companies') }}">
                         <span class="dropdown-notifications-item-img kh-message-avatar kh-message-avatar--blue">ABA</span>
                         <div class="dropdown-notifications-item-content">
-                            <div class="dropdown-notifications-item-content-text">Our new retail role is ready for candidate matching.</div>
-                            <div class="dropdown-notifications-item-content-details">ABA Bank · 1h</div>
+                            <div class="dropdown-notifications-item-content-text">{{ __('ui.admin.inbox.retail') }}</div>
+                            <div class="dropdown-notifications-item-content-details">{{ __('ui.admin.inbox.retail_meta') }}</div>
                         </div>
                     </a>
                     <a class="dropdown-item dropdown-notifications-item" href="{{ route('resumes.index') }}">
                         <span class="dropdown-notifications-item-img kh-message-avatar kh-message-avatar--gold">AC</span>
                         <div class="dropdown-notifications-item-content">
-                            <div class="dropdown-notifications-item-content-text">The design portfolio shortlist has been updated.</div>
-                            <div class="dropdown-notifications-item-content-details">Angkor Creative · 3h</div>
+                            <div class="dropdown-notifications-item-content-text">{{ __('ui.admin.inbox.portfolio') }}</div>
+                            <div class="dropdown-notifications-item-content-details">{{ __('ui.admin.inbox.portfolio_meta') }}</div>
                         </div>
                     </a>
                     <a class="dropdown-item dropdown-notifications-item" href="{{ route('resumes.index') }}">
                         <span class="dropdown-notifications-item-img kh-message-avatar kh-message-avatar--violet">ML</span>
                         <div class="dropdown-notifications-item-content">
-                            <div class="dropdown-notifications-item-content-text">Seven new candidates are available for screening.</div>
-                            <div class="dropdown-notifications-item-content-details">Matching team · Today</div>
+                            <div class="dropdown-notifications-item-content-text">{{ __('ui.admin.inbox.screening') }}</div>
+                            <div class="dropdown-notifications-item-content-details">{{ __('ui.admin.inbox.screening_meta') }}</div>
                         </div>
                     </a>
-                    <a class="dropdown-item dropdown-notifications-footer" href="{{ route('resumes.index') }}">View candidates</a>
+                    <a class="dropdown-item dropdown-notifications-footer" href="{{ route('resumes.index') }}">{{ __('ui.admin.topnav.view_candidates') }}</a>
                 </div>
             </li>
             <!-- User Dropdown-->
             <li class="nav-item dropdown no-caret dropdown-user me-3 me-lg-4">
                 <a class="btn btn-icon btn-transparent-dark dropdown-toggle kh-user-avatar" id="navbarDropdownUserImage"
                     href="javascript:void(0);" role="button" data-bs-toggle="dropdown" aria-haspopup="true"
-                    aria-expanded="false" aria-label="Open account menu">
+                    aria-expanded="false" aria-label="{{ __('ui.admin.a11y.open_account') }}">
                     @if ($adminAvatar)
                         <img class="kh-user-avatar__img" src="{{ $adminAvatar }}" alt="">
                     @else
@@ -215,12 +260,12 @@
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="{{ route('profile') }}">
                         <div class="dropdown-item-icon"><i data-feather="settings"></i></div>
-                        Account
+                        {{ __('ui.admin.nav.account') }}
                     </a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#logoutModal">
                         <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                        &nbsp{{ __('Logout') }}
+                        &nbsp;{{ __('ui.admin.logout.confirm') }}
                     </a>
                 </div>
             </li>
@@ -233,23 +278,23 @@
                     <div class="nav accordion" id="accordionSidenav">
                         <!-- Sidenav Menu Heading (Account)-->
                         <!-- * * Note: * * Visible only on and above the sm breakpoint-->
-                        <div class="sidenav-menu-heading d-sm-none">Account</div>
+                        <div class="sidenav-menu-heading d-sm-none">{{ __('ui.admin.nav.account') }}</div>
                         <!-- Sidenav Link (Alerts)-->
                         <!-- * * Note: * * Visible only on and above the sm breakpoint-->
                         <a class="nav-link d-sm-none" href="#!">
                             <div class="nav-link-icon"><i data-feather="bell"></i></div>
-                            Alerts
-                            <span class="badge bg-warning-soft text-warning ms-auto">4 New!</span>
+                            {{ __('ui.admin.topnav.alerts') }}
+                            <span class="badge bg-warning-soft text-warning ms-auto">{{ __('ui.admin.topnav.new_count', ['count' => 4]) }}</span>
                         </a>
                         <!-- Sidenav Link (Messages)-->
                         <!-- * * Note: * * Visible only on and above the sm breakpoint-->
                         <a class="nav-link d-sm-none" href="#!">
                             <div class="nav-link-icon"><i data-feather="mail"></i></div>
-                            Messages
-                            <span class="badge bg-success-soft text-success ms-auto">2 New!</span>
+                            {{ __('ui.admin.topnav.messages') }}
+                            <span class="badge bg-success-soft text-success ms-auto">{{ __('ui.admin.topnav.new_count', ['count' => 2]) }}</span>
                         </a>
                         <!-- Sidenav Menu Heading (Core)-->
-                        <div class="sidenav-menu-heading">Core</div>
+                        <div class="sidenav-menu-heading">{{ __('ui.admin.nav.core') }}</div>
                         <!-- Sidenav Accordion (Dashboard)-->
                         <a class="nav-link collapsed {{ request()->routeIs('home') ? 'kh-nav-parent-active' : '' }}"
                             href="javascript:void(0);" data-bs-toggle="collapse"
@@ -257,7 +302,7 @@
                             aria-expanded="{{ request()->routeIs('home') ? 'true' : 'false' }}"
                             aria-controls="collapseDashboards">
                             <div class="nav-link-icon"><i data-feather="activity"></i></div>
-                            Dashboards
+                            {{ __('ui.admin.nav.dashboards') }}
                             <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
                         <div class="collapse {{ request()->routeIs('home') ? 'show' : '' }}"
@@ -265,13 +310,13 @@
                             <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
                                 <a class="nav-link {{ request()->routeIs('home') ? 'active fw-bold' : '' }}"
                                     href="{{ route('home') }}">
-                                    Overview
-                                    <span class="badge bg-primary-soft text-primary ms-auto">Live</span>
+                                    {{ __('ui.admin.nav.overview') }}
+                                    <span class="badge bg-primary-soft text-primary ms-auto">{{ __('ui.admin.nav.live') }}</span>
                                 </a>
                             </nav>
                         </div>
                         <!-- Sidenav Heading (Custom)-->
-                        <div class="sidenav-menu-heading">Custom</div>
+                        <div class="sidenav-menu-heading">{{ __('ui.admin.nav.custom') }}</div>
                         @php
                             // Drives both the Pages accordion and the Account one nested
                             // inside it, so landing on any Account page leaves the whole
@@ -285,7 +330,7 @@
                             aria-expanded="{{ $khAccountActive ? 'true' : 'false' }}"
                             aria-controls="collapsePages">
                             <div class="nav-link-icon"><i data-feather="grid"></i></div>
-                            Pages
+                            {{ __('ui.admin.nav.pages') }}
                             <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
                         <div class="collapse {{ $khAccountActive ? 'show' : '' }}"
@@ -297,26 +342,26 @@
                                     data-bs-target="#pagesCollapseAccount"
                                     aria-expanded="{{ $khAccountActive ? 'true' : 'false' }}"
                                     aria-controls="pagesCollapseAccount">
-                                    Account
+                                    {{ __('ui.admin.nav.account') }}
                                     <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                                 </a>
                                 <div class="collapse {{ $khAccountActive ? 'show' : '' }}"
                                     id="pagesCollapseAccount" data-bs-parent="#accordionSidenavPagesMenu">
                                     <nav class="sidenav-menu-nested nav">
                                         <a class="nav-link {{ setActive('admin/profile') }}"
-                                            href="{{ route('profile') }}">Profile</a>
+                                            href="{{ route('profile') }}">{{ __('ui.admin.nav.profile') }}</a>
                                         {{-- The checkout and pay screens are part of this flow and
                                              keep it lit, but the register below is its own entry,
                                              so it is excluded rather than lighting both rows. --}}
                                         <a class="nav-link {{ request()->is('admin/account-billing', 'admin/account-billing/*') && ! request()->is('admin/account-billing/list') ? 'active' : '' }}"
-                                            href="{{ url('admin/account-billing') }}">Billing</a>
+                                            href="{{ url('admin/account-billing') }}">{{ __('ui.admin.nav.billing') }}</a>
                                         <a class="nav-link {{ setActive('account-security') }}"
-                                            href="{{ url('account-security') }}">Security</a>
+                                            href="{{ url('account-security') }}">{{ __('ui.admin.nav.security') }}</a>
                                         {{-- The whole billing register, not the caller's own row,
                                              so it is hidden from everyone the route would 403. --}}
                                         @if ($adminUser?->isAdmin())
                                         <a class="nav-link {{ setActive('admin/account-billing/list') }}"
-                                            href="{{ route('account-billing.list') }}">Billing List</a>
+                                            href="{{ route('account-billing.list') }}">{{ __('ui.admin.nav.billing_list') }}</a>
                                         @endif
                                     </nav>
                                 </div>
@@ -336,7 +381,7 @@
                             <div class="nav-link-icon">
                                 <i data-feather="globe"></i>
                             </div>
-                            Applications
+                            {{ __('ui.admin.nav.applications') }}
                             <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
 
@@ -353,7 +398,7 @@
                                     data-bs-target="#appsCollapseUserManagement"
                                     aria-expanded="{{ request()->routeIs('users', 'user.*') || request()->is('user-management-*') ? 'true' : 'false' }}"
                                     aria-controls="appsCollapseUserManagement">
-                                    User Management
+                                    {{ __('ui.admin.nav.user_management') }}
                                     <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                                 </a>
 
@@ -361,9 +406,9 @@
                                     id="appsCollapseUserManagement" data-bs-parent="#accordionSidenavAppsMenu">
                                     <nav class="sidenav-menu-nested nav">
                                         <a class="nav-link {{ request()->is('admin/users') ? 'active fw-bold' : '' }}"
-                                            href="{{ route('user.index') }}">Users List</a>
+                                            href="{{ route('user.index') }}">{{ __('ui.admin.nav.users_list') }}</a>
                                         <a class="nav-link {{ request()->routeIs('user.create') ? 'active fw-bold' : '' }}"
-                                            href="{{ route('user.create') }}">Add New User</a>
+                                            href="{{ route('user.create') }}">{{ __('ui.admin.nav.add_user') }}</a>
                                     </nav>
                                 </div>
                                 @endif
@@ -380,7 +425,7 @@
                                     data-bs-target="#appsCollapseJobPosts"
                                     aria-expanded="{{ request()->routeIs('job-posts.*', 'featured-jobs*') ? 'true' : 'false' }}"
                                     aria-controls="appsCollapseJobPosts">
-                                    Job Management
+                                    {{ __('ui.admin.nav.job_management') }}
                                     <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                                 </a>
 
@@ -389,15 +434,15 @@
                                     <nav class="sidenav-menu-nested nav">
                                         @if ($canSeeJobPosts)
                                         <a class="nav-link {{ request()->routeIs('job-posts.index') ? 'active fw-bold' : '' }}"
-                                            href="{{ route('job-posts.index') }}">Job Posts</a>
+                                            href="{{ route('job-posts.index') }}">{{ __('ui.admin.nav.job_posts') }}</a>
                                         @endif
                                         @if ($adminUser?->hasPermission(\App\Models\Permission::JOB_CREATE))
                                         <a class="nav-link {{ request()->routeIs('job-posts.create') ? 'active fw-bold' : '' }}"
-                                            href="{{ route('job-posts.create') }}">Add Job Post</a>
+                                            href="{{ route('job-posts.create') }}">{{ __('ui.admin.nav.add_job_post') }}</a>
                                         @endif
                                         @if ($adminUser?->isAdmin())
                                         <a class="nav-link {{ request()->routeIs('featured-jobs*') ? 'active fw-bold' : '' }}"
-                                            href="{{ route('featured-jobs') }}">Featured Jobs</a>
+                                            href="{{ route('featured-jobs') }}">{{ __('ui.admin.nav.featured_jobs') }}</a>
                                         @endif
                                     </nav>
                                 </div>
@@ -412,7 +457,7 @@
                                     data-bs-target="#appsCollapseResumes"
                                     aria-expanded="{{ request()->routeIs('resumes.*') ? 'true' : 'false' }}"
                                     aria-controls="appsCollapseResumes">
-                                    Resume Management
+                                    {{ __('ui.admin.nav.resume_management') }}
                                     <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                                 </a>
 
@@ -420,10 +465,10 @@
                                     id="appsCollapseResumes" data-bs-parent="#accordionSidenavAppsMenu">
                                     <nav class="sidenav-menu-nested nav">
                                         <a class="nav-link {{ request()->routeIs('resumes.index') ? 'active fw-bold' : '' }}"
-                                            href="{{ route('resumes.index') }}">{{ $adminUser?->isCandidateOnly() ? 'My Resume' : 'Resumes' }}</a>
+                                            href="{{ route('resumes.index') }}">{{ $adminUser?->isCandidateOnly() ? __('ui.admin.nav.my_resume') : __('ui.admin.nav.resumes') }}</a>
                                         @if ($adminUser?->hasPermission(\App\Models\Permission::RESUME_CREATE) || $adminUser?->isCandidateOnly())
                                         <a class="nav-link {{ request()->routeIs('resumes.create') ? 'active fw-bold' : '' }}"
-                                            href="{{ route('resumes.create') }}">{{ $adminUser?->isCandidateOnly() ? 'Create Resume' : 'Add Resume' }}</a>
+                                            href="{{ route('resumes.create') }}">{{ $adminUser?->isCandidateOnly() ? __('ui.admin.nav.create_resume') : __('ui.admin.nav.add_resume') }}</a>
                                         @endif
                                     </nav>
                                 </div>
@@ -459,7 +504,7 @@
                             aria-expanded="{{ request()->routeIs('compliance.*', 'companies', 'companies.*') ? 'true' : 'false' }}"
                             aria-controls="collapseFlows">
                             <div class="nav-link-icon"><i data-feather="repeat"></i></div>
-                            Companies
+                            {{ __('ui.admin.nav.companies') }}
                             <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
                         <div class="collapse {{ request()->routeIs('compliance.*', 'companies', 'companies.*') ? 'show' : '' }}"
@@ -473,7 +518,7 @@
                                     data-bs-target="#companiesCollapseCompliance"
                                     aria-expanded="{{ request()->routeIs('compliance.*') ? 'true' : 'false' }}"
                                     aria-controls="companiesCollapseCompliance">
-                                    Compliance
+                                    {{ __('ui.admin.nav.compliance') }}
                                     <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                                 </a>
 
@@ -481,9 +526,9 @@
                                     id="companiesCollapseCompliance" data-bs-parent="#accordionSidenavCompaniesMenu">
                                     <nav class="sidenav-menu-nested nav">
                                         <a class="nav-link {{ request()->routeIs('compliance.index') ? 'active fw-bold' : '' }}"
-                                            href="{{ route('compliance.index') }}">Compliance Register</a>
+                                            href="{{ route('compliance.index') }}">{{ __('ui.admin.nav.compliance_register') }}</a>
                                         <a class="nav-link {{ request()->routeIs('compliance.create') ? 'active fw-bold' : '' }}"
-                                            href="{{ route('compliance.create') }}">Add Record</a>
+                                            href="{{ route('compliance.create') }}">{{ __('ui.admin.nav.add_record') }}</a>
                                     </nav>
                                 </div>
                                 @endif
@@ -494,7 +539,7 @@
                                     data-bs-target="#companiesCollapseDirectory"
                                     aria-expanded="{{ request()->routeIs('companies', 'companies.*') ? 'true' : 'false' }}"
                                     aria-controls="companiesCollapseDirectory">
-                                    Company Directory
+                                    {{ __('ui.admin.nav.company_directory') }}
                                     <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                                 </a>
 
@@ -502,10 +547,10 @@
                                     id="companiesCollapseDirectory" data-bs-parent="#accordionSidenavCompaniesMenu">
                                     <nav class="sidenav-menu-nested nav">
                                         <a class="nav-link {{ request()->routeIs('companies') ? 'active fw-bold' : '' }}"
-                                            href="{{ route('companies') }}">All Companies</a>
+                                            href="{{ route('companies') }}">{{ __('ui.admin.nav.all_companies') }}</a>
                                         @if ($adminUser?->isAdmin())
                                         <a class="nav-link {{ request()->routeIs('companies.create') ? 'active fw-bold' : '' }}"
-                                            href="{{ route('companies.create') }}">Add Company</a>
+                                            href="{{ route('companies.create') }}">{{ __('ui.admin.nav.add_company') }}</a>
                                         @endif
                                     </nav>
                                 </div>
@@ -519,12 +564,12 @@
                         <a class="nav-link {{ request()->routeIs('my-applications') ? 'active fw-bold' : '' }}"
                             href="{{ route('my-applications') }}">
                             <div class="nav-link-icon"><i data-feather="file-text"></i></div>
-                            My Applications
+                            {{ __('ui.admin.nav.my_applications') }}
                         </a>
                         @endif
                         @if ($adminUser?->isAdmin())
                         <!-- Sidenav Heading (Settings)-->
-                        <div class="sidenav-menu-heading">Settings</div>
+                        <div class="sidenav-menu-heading">{{ __('ui.admin.nav.settings') }}</div>
                         <!-- Sidenav Accordion (Component)-->
                         <a class="nav-link collapsed {{ request()->routeIs('components.*') ? 'kh-nav-parent-active' : '' }}"
                             href="javascript:void(0);" data-bs-toggle="collapse"
@@ -532,17 +577,17 @@
                             aria-expanded="{{ request()->routeIs('components.*') ? 'true' : 'false' }}"
                             aria-controls="collapseComponent">
                             <div class="nav-link-icon"><i data-feather="package"></i></div>
-                            Component
+                            {{ __('ui.admin.nav.component') }}
                             <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
                         <div class="collapse {{ request()->routeIs('components.*') ? 'show' : '' }}"
                             id="collapseComponent" data-bs-parent="#accordionSidenav">
                             <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavComponentMenu">
-                                @foreach ([
-                                    'locations' => 'Locations',
-                                    'departments' => 'Departments',
-                                    'job-types' => 'Job Types',
-                                ] as $componentType => $componentLabel)
+                                {{-- Labels come from ui.admin.components.*, not from
+                                     "All {label}" / "Add {singular}" built in the view:
+                                     that composition has no Khmer equivalent, and Khmer
+                                     has no singular form to derive. --}}
+                                @foreach (['locations', 'departments', 'job-types'] as $componentType)
                                     @php
                                         $componentActive = request()->routeIs('components.*') && request()->route('type') === $componentType;
                                         $componentCollapseId = 'componentCollapse' . \Illuminate\Support\Str::studly($componentType);
@@ -552,16 +597,16 @@
                                         data-bs-target="#{{ $componentCollapseId }}"
                                         aria-expanded="{{ $componentActive ? 'true' : 'false' }}"
                                         aria-controls="{{ $componentCollapseId }}">
-                                        {{ $componentLabel }}
+                                        {{ __('ui.admin.components.' . $componentType . '.label') }}
                                         <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                                     </a>
                                     <div class="collapse {{ $componentActive ? 'show' : '' }}"
                                         id="{{ $componentCollapseId }}" data-bs-parent="#accordionSidenavComponentMenu">
                                         <nav class="sidenav-menu-nested nav">
                                             <a class="nav-link {{ request()->routeIs('components.index') && request()->route('type') === $componentType ? 'active fw-bold' : '' }}"
-                                                href="{{ route('components.index', $componentType) }}">All {{ $componentLabel }}</a>
+                                                href="{{ route('components.index', $componentType) }}">{{ __('ui.admin.components.' . $componentType . '.all') }}</a>
                                             <a class="nav-link {{ request()->routeIs('components.create') && request()->route('type') === $componentType ? 'active fw-bold' : '' }}"
-                                                href="{{ route('components.create', $componentType) }}">Add {{ \Illuminate\Support\Str::singular($componentLabel) }}</a>
+                                                href="{{ route('components.create', $componentType) }}">{{ __('ui.admin.components.' . $componentType . '.add') }}</a>
                                         </nav>
                                     </div>
                                 @endforeach
@@ -572,7 +617,7 @@
                         <a class="nav-link {{ request()->routeIs('roles') ? 'active fw-bold' : '' }}"
                             href="{{ route('roles') }}">
                             <div class="nav-link-icon"><i data-feather="shield"></i></div>
-                            User Role &amp; Permission
+                            {{ __('ui.admin.nav.roles_permissions') }}
                         </a>
                         @endif
                     </div>
@@ -580,7 +625,7 @@
                 <!-- Sidenav Footer-->
                 <div class="sidenav-footer">
                     <div class="sidenav-footer-content">
-                        <div class="sidenav-footer-subtitle">Logged in as:</div>
+                        <div class="sidenav-footer-subtitle">{{ __('ui.admin.footer.logged_in_as') }}</div>
                         <div class="sidenav-footer-title">{{ $adminFullName }}</div>
                     </div>
                 </div>
@@ -603,14 +648,14 @@
                         </span>
                         <div>
                             <strong>KH-WORKS</strong>
-                            <small>&copy; {{ date('Y') }}. All rights reserved.</small>
+                            <small>&copy; {{ date('Y') }}. {{ __('ui.admin.footer.rights') }}</small>
                         </div>
                     </div>
 
-                    <nav class="kh-admin-footer__links" aria-label="Footer navigation">
-                        <a href="{{ route('about') }}">About</a>
+                    <nav class="kh-admin-footer__links" aria-label="{{ __('ui.admin.a11y.footer_nav') }}">
+                        <a href="{{ route('about') }}">{{ __('ui.admin.footer.about') }}</a>
                         <a href="{{ url('/') }}" target="_blank" rel="noopener">
-                            <span>View website</span>
+                            <span>{{ __('ui.admin.topnav.view_website') }}</span>
                             <i data-feather="external-link" aria-hidden="true"></i>
                         </a>
                     </nav>
@@ -624,14 +669,14 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">{{ __('Ready to Leave?') }}</h5>
-                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h5 class="modal-title" id="exampleModalLabel">{{ __('ui.admin.logout.title') }}</h5>
+                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="{{ __('ui.admin.a11y.close') }}"></button>
                 </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-body">{{ __('ui.admin.logout.body') }}</div>
                 <div class="modal-footer">
-                    <button class="btn btn-link" type="button" data-bs-dismiss="modal">{{ __('Cancel') }}</button>
+                    <button class="btn btn-link" type="button" data-bs-dismiss="modal">{{ __('ui.admin.logout.cancel') }}</button>
                     <a class="btn btn-danger" href="{{ route('logout') }}"
-                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">{{ __('Logout') }}</a>
+                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">{{ __('ui.admin.logout.confirm') }}</a>
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                         @csrf
                     </form>

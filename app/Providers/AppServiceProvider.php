@@ -5,7 +5,6 @@ namespace App\Providers;
 use App\Models\User;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
 
@@ -26,7 +25,9 @@ class AppServiceProvider extends ServiceProvider
     {
         Paginator::useBootstrap();
 
-        App::setLocale(session('locale', config('app.locale')));
+        // The locale is applied by App\Http\Middleware\SetLocale. Doing it here
+        // silently did nothing: providers boot before StartSession, so the
+        // session was not readable yet.
 
         // The admin sidebar shows a user count on every screen, not just the one
         // whose controller happens to load users. Only filled in for signed-in

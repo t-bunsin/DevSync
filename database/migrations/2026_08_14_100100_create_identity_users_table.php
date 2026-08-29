@@ -70,7 +70,9 @@ return new class extends Migration
         // Must be reachable by at least one channel. A social-only account has no
         // password_hash by design; that a credential exists at all is enforced in
         // application code, since a CHECK cannot see user_identities.
-        DB::statement('ALTER TABLE `users` ADD CONSTRAINT `chk_contact` CHECK (`email` IS NOT NULL OR `phone` IS NOT NULL)');
+        // Unquoted identifiers: backticks are MySQL-only, and this has to parse on
+        // PostgreSQL too. Both engines accept these names bare.
+        DB::statement('ALTER TABLE users ADD CONSTRAINT chk_contact CHECK (email IS NOT NULL OR phone IS NOT NULL)');
     }
 
     public function down(): void

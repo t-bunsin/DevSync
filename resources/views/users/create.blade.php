@@ -28,7 +28,7 @@
         <div class="kh-user-create__shell">
             <header class="kh-user-create__page-head">
                 <div class="kh-user-create__heading">
-                    <a class="kh-user-create__back" href="{{ route('users') }}" aria-label="Back to users list">
+                    <a class="kh-user-create__back" href="{{ route('users') }}" aria-label="{{ __('ui.bo.users.form.back_to_list') }}">
                         <i data-feather="arrow-left" aria-hidden="true"></i>
                     </a>
 
@@ -37,9 +37,9 @@
                     </span>
 
                     <div>
-                        <span class="kh-user-create__eyebrow">User management</span>
-                        <h1>Add a new user</h1>
-                        <p>Create an account, choose the right access level, and keep your team directory organized.</p>
+                        <span class="kh-user-create__eyebrow">{{ __('ui.bo.users.form.kicker') }}</span>
+                        <h1>{{ __('ui.bo.users.form.create_title') }}</h1>
+                        <p>{{ __('ui.bo.users.form.create_lead') }}</p>
                     </div>
                 </div>
 
@@ -48,8 +48,8 @@
                         <i data-feather="sun"></i>
                     </span>
                     <span>
-                        <strong>Light mode by default</strong>
-                        <small>Use the switch in the top menu anytime.</small>
+                        <strong>{{ __('ui.bo.users.form.light_mode') }}</strong>
+                        <small>{{ __('ui.bo.users.form.light_mode_hint') }}</small>
                     </span>
                 </div>
             </header>
@@ -58,11 +58,11 @@
                 <section class="kh-user-create__card kh-user-create__form-card" aria-labelledby="create-user-title">
                     <div class="kh-user-create__card-head">
                         <div>
-                            <span class="kh-user-create__card-kicker">New account</span>
-                            <h2 id="create-user-title">User details</h2>
-                            <p>Enter the information this person will use to access KH-WORKS.</p>
+                            <span class="kh-user-create__card-kicker">{{ __('ui.bo.users.form.badge_new') }}</span>
+                            <h2 id="create-user-title">{{ __('ui.bo.users.form.details') }}</h2>
+                            <p>{{ __('ui.bo.users.form.details_hint_create') }}</p>
                         </div>
-                        <span class="kh-user-create__required-note"><b aria-hidden="true">*</b> Required fields</span>
+                        <span class="kh-user-create__required-note"><b aria-hidden="true">*</b> {{ __('ui.bo.users.form.required_fields') }}</span>
                     </div>
 
                     @if ($errors->any())
@@ -71,7 +71,7 @@
                                 <i data-feather="alert-circle"></i>
                             </span>
                             <div>
-                                <strong>Please check the highlighted fields.</strong>
+                                <strong>{{ __('ui.bo.check_fields') }}</strong>
                                 <ul>
                                     @foreach ($errors->messages() as $field => $messages)
                                         @foreach ($messages as $message)
@@ -89,25 +89,25 @@
                         @csrf
 
                         <fieldset class="kh-user-create__form-section">
-                            <legend class="kh-user-create__legend">Personal information</legend>
+                            <legend class="kh-user-create__legend">{{ __('ui.bo.users.form.personal') }}</legend>
                             <div class="kh-user-create__section-head">
                                 <span class="kh-user-create__step" aria-hidden="true">01</span>
                                 <span>
-                                    <strong>Personal information</strong>
-                                    <small>Basic contact details for the new team member.</small>
+                                    <strong>{{ __('ui.bo.users.form.personal') }}</strong>
+                                    <small>{{ __('ui.bo.users.form.personal_hint_create') }}</small>
                                 </span>
                             </div>
 
                             <div class="kh-user-create__grid">
                                 <div class="kh-user-create__field">
                                     <label class="kh-user-create__label" for="inputFirstName">
-                                        First name <span class="kh-required" aria-hidden="true">*</span>
+                                        {{ __('ui.bo.users.form.first_name') }} <span class="kh-required" aria-hidden="true">*</span>
                                     </label>
                                     <div class="kh-user-create__input-wrap">
                                         <i data-feather="user" aria-hidden="true"></i>
                                         <input @class(['kh-user-create__control', 'is-invalid' => $errors->has('first_name')])
                                             id="inputFirstName" name="first_name" type="text"
-                                            value="{{ old('first_name') }}" placeholder="e.g. Dara" autocomplete="given-name"
+                                            value="{{ old('first_name') }}" placeholder="{{ __('ui.bo.users.form.first_name_placeholder') }}" autocomplete="given-name"
                                             maxlength="80"
                                             aria-invalid="{{ $errors->has('first_name') ? 'true' : 'false' }}"
                                             aria-describedby="inputNameHint{{ $errors->has('first_name') ? ' inputFirstNameError' : '' }}"
@@ -122,13 +122,13 @@
 
                                 <div class="kh-user-create__field">
                                     <label class="kh-user-create__label" for="inputLastName">
-                                        Last name <span class="kh-required" aria-hidden="true">*</span>
+                                        {{ __('ui.bo.users.form.last_name') }} <span class="kh-required" aria-hidden="true">*</span>
                                     </label>
                                     <div class="kh-user-create__input-wrap">
                                         <i data-feather="user" aria-hidden="true"></i>
                                         <input @class(['kh-user-create__control', 'is-invalid' => $errors->has('last_name')])
                                             id="inputLastName" name="last_name" type="text"
-                                            value="{{ old('last_name') }}" placeholder="e.g. Sok" autocomplete="family-name"
+                                            value="{{ old('last_name') }}" placeholder="{{ __('ui.bo.users.form.last_name_placeholder') }}" autocomplete="family-name"
                                             maxlength="80"
                                             aria-invalid="{{ $errors->has('last_name') ? 'true' : 'false' }}"
                                             aria-describedby="inputNameHint{{ $errors->has('last_name') ? ' inputLastNameError' : '' }}"
@@ -142,18 +142,18 @@
                                 </div>
                             </div>
 
-                            <p class="kh-user-create__field-hint" id="inputNameHint">Shown together as the full name across the platform.</p>
+                            <p class="kh-user-create__field-hint" id="inputNameHint">{{ __('ui.bo.users.form.name_hint') }}</p>
 
                             <div class="kh-user-create__grid">
                                 <div class="kh-user-create__field">
                                     <label class="kh-user-create__label" for="inputEmailAddress">
-                                        Email address <span class="kh-required" aria-hidden="true">*</span>
+                                        {{ __('ui.bo.users.form.email') }} <span class="kh-required" aria-hidden="true">*</span>
                                     </label>
                                     <div class="kh-user-create__input-wrap">
                                         <i data-feather="mail" aria-hidden="true"></i>
                                         <input @class(['kh-user-create__control', 'is-invalid' => $errors->has('email')])
                                             id="inputEmailAddress" name="email" type="email"
-                                            value="{{ old('email') }}" placeholder="name@company.com" autocomplete="email"
+                                            value="{{ old('email') }}" placeholder="{{ __('ui.bo.users.form.email_placeholder') }}" autocomplete="email"
                                             spellcheck="false" inputmode="email"
                                             aria-invalid="{{ $errors->has('email') ? 'true' : 'false' }}"
                                             @if ($errors->has('email')) aria-describedby="inputEmailAddressError" @endif
@@ -167,7 +167,7 @@
                                 </div>
 
                                 <div class="kh-user-create__field">
-                                    <label class="kh-user-create__label" for="inputPhone">Phone number</label>
+                                    <label class="kh-user-create__label" for="inputPhone">{{ __('ui.bo.users.form.phone') }}</label>
                                     <div class="kh-user-create__input-wrap">
                                         <i data-feather="phone" aria-hidden="true"></i>
                                         <input @class(['kh-user-create__control', 'is-invalid' => $errors->has('phone')])
@@ -177,7 +177,7 @@
                                             aria-invalid="{{ $errors->has('phone') ? 'true' : 'false' }}"
                                             aria-describedby="inputPhoneHint{{ $errors->has('phone') ? ' inputPhoneError' : '' }}">
                                     </div>
-                                    <p class="kh-user-create__field-hint" id="inputPhoneHint">Optional, but must be unique if given.</p>
+                                    <p class="kh-user-create__field-hint" id="inputPhoneHint">{{ __('ui.bo.users.form.phone_hint') }}</p>
                                     @error('phone')
                                         <p class="kh-user-create__field-error" id="inputPhoneError">
                                             <i data-feather="alert-circle" aria-hidden="true"></i>{{ $message }}
@@ -187,13 +187,13 @@
 
                                 <div class="kh-user-create__field">
                                     <label class="kh-user-create__label" for="inputStatus">
-                                        Account status <span class="kh-required" aria-hidden="true">*</span>
+                                        {{ __('ui.bo.users.form.status') }} <span class="kh-required" aria-hidden="true">*</span>
                                     </label>
                                     <div class="kh-user-create__input-wrap kh-user-create__input-wrap--select">
                                         <i data-feather="activity" aria-hidden="true"></i>
                                         <select @class(['kh-user-create__control', 'is-invalid' => $errors->has('status')])
                                             id="inputStatus" name="status" required>
-                                            @foreach (['active' => 'Active — can sign in', 'pending' => 'Pending — awaiting verification', 'suspended' => 'Suspended — temporarily blocked', 'banned' => 'Banned — permanently blocked'] as $value => $label)
+                                            @foreach (['active' => __('ui.bo.users.form.status_active'), 'pending' => __('ui.bo.users.form.status_pending'), 'suspended' => __('ui.bo.users.form.status_suspended'), 'banned' => __('ui.bo.users.form.status_banned')] as $value => $label)
                                                 <option value="{{ $value }}" {{ old('status', 'active') === $value ? 'selected' : '' }}>{{ $label }}</option>
                                             @endforeach
                                         </select>
@@ -207,14 +207,14 @@
 
                                 <div class="kh-user-create__field">
                                     <label class="kh-user-create__label" for="inputLocale">
-                                        Preferred language <span class="kh-required" aria-hidden="true">*</span>
+                                        {{ __('ui.bo.users.form.locale') }} <span class="kh-required" aria-hidden="true">*</span>
                                     </label>
                                     <div class="kh-user-create__input-wrap kh-user-create__input-wrap--select">
                                         <i data-feather="globe" aria-hidden="true"></i>
                                         <select @class(['kh-user-create__control', 'is-invalid' => $errors->has('preferred_locale')])
                                             id="inputLocale" name="preferred_locale" required>
-                                            <option value="en" {{ old('preferred_locale', 'en') === 'en' ? 'selected' : '' }}>English</option>
-                                            <option value="km" {{ old('preferred_locale') === 'km' ? 'selected' : '' }}>ភាសាខ្មែរ (Khmer)</option>
+                                            <option value="en" {{ old('preferred_locale', 'en') === 'en' ? 'selected' : '' }}>{{ __('ui.language.english') }}</option>
+                                            <option value="km" {{ old('preferred_locale') === 'km' ? 'selected' : '' }}>{{ __('ui.language.khmer') }}</option>
                                         </select>
                                     </div>
                                     @error('preferred_locale')
@@ -227,18 +227,18 @@
                         </fieldset>
 
                         <fieldset class="kh-user-create__form-section">
-                            <legend class="kh-user-create__legend">Access and security</legend>
+                            <legend class="kh-user-create__legend">{{ __('ui.bo.users.form.access') }}</legend>
                             <div class="kh-user-create__section-head">
                                 <span class="kh-user-create__step" aria-hidden="true">02</span>
                                 <span>
-                                    <strong>Access and security</strong>
-                                    <small>Set permissions and secure the account.</small>
+                                    <strong>{{ __('ui.bo.users.form.access') }}</strong>
+                                    <small>{{ __('ui.bo.users.form.access_hint_create') }}</small>
                                 </span>
                             </div>
 
                             <div class="kh-user-create__field kh-user-create__field--wide">
                                 <label class="kh-user-create__label" for="inputRole">
-                                    Account role <span class="kh-required" aria-hidden="true">*</span>
+                                    {{ __('ui.bo.users.form.role') }} <span class="kh-required" aria-hidden="true">*</span>
                                 </label>
                                 <div class="kh-user-create__input-wrap kh-user-create__input-wrap--select">
                                     <i data-feather="briefcase" aria-hidden="true"></i>
@@ -253,7 +253,7 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                <p class="kh-user-create__field-hint" id="inputRoleHint">Choose the lowest access level this person needs.</p>
+                                <p class="kh-user-create__field-hint" id="inputRoleHint">{{ __('ui.bo.users.form.role_hint_create') }}</p>
                                 @error('role')
                                     <p class="kh-user-create__field-error" id="inputRoleError">
                                         <i data-feather="alert-circle" aria-hidden="true"></i>{{ $message }}
@@ -264,17 +264,17 @@
                             <div class="kh-user-create__field kh-user-create__field--wide" data-employer-only
                                 @if ($currentRole !== 'employer') hidden @endif>
                                 <label class="kh-user-create__label" for="inputCompanyName">
-                                    Company name <span class="kh-required" aria-hidden="true">*</span>
+                                    {{ __('ui.bo.users.form.company') }} <span class="kh-required" aria-hidden="true">*</span>
                                 </label>
                                 <div class="kh-user-create__input-wrap">
                                     <i data-feather="briefcase" aria-hidden="true"></i>
                                     <input @class(['kh-user-create__control', 'is-invalid' => $errors->has('company_name')])
                                         id="inputCompanyName" name="company_name" type="text"
-                                        value="{{ old('company_name') }}" placeholder="e.g. Tech Horizon Co., Ltd"
+                                        value="{{ old('company_name') }}" placeholder="{{ __('ui.bo.users.form.company_placeholder') }}"
                                         maxlength="255"
                                         aria-describedby="inputCompanyNameHint{{ $errors->has('company_name') ? ' inputCompanyNameError' : '' }}">
                                 </div>
-                                <p class="kh-user-create__field-hint" id="inputCompanyNameHint">Required for employers, who post jobs on this company's behalf.</p>
+                                <p class="kh-user-create__field-hint" id="inputCompanyNameHint">{{ __('ui.bo.users.form.company_hint_create') }}</p>
                                 @error('company_name')
                                     <p class="kh-user-create__field-error" id="inputCompanyNameError">
                                         <i data-feather="alert-circle" aria-hidden="true"></i>{{ $message }}
@@ -285,23 +285,23 @@
                             <div class="kh-user-create__grid kh-user-create__grid--passwords">
                                 <div class="kh-user-create__field">
                                     <label class="kh-user-create__label" for="inputPassword">
-                                        Password <span class="kh-required" aria-hidden="true">*</span>
+                                        {{ __('ui.bo.users.form.password') }} <span class="kh-required" aria-hidden="true">*</span>
                                     </label>
                                     <div class="kh-user-create__input-wrap kh-user-create__input-wrap--password">
                                         <i data-feather="lock" aria-hidden="true"></i>
                                         <input @class(['kh-user-create__control', 'is-invalid' => $errors->has('password')])
                                             id="inputPassword" name="password" type="password"
-                                            placeholder="Create a secure password" autocomplete="new-password"
+                                            placeholder="{{ __('ui.bo.users.form.password_placeholder') }}" autocomplete="new-password"
                                             minlength="8"
                                             aria-invalid="{{ $errors->has('password') ? 'true' : 'false' }}"
                                             aria-describedby="inputPasswordHint{{ $errors->has('password') ? ' inputPasswordError' : '' }}" required>
                                         <button class="kh-user-create__password-toggle" type="button"
-                                            data-password-toggle="inputPassword" aria-label="Show password"
+                                            data-password-toggle="inputPassword" aria-label="{{ __('ui.bo.users.form.show_password') }}"
                                             aria-pressed="false">
                                             <i class="far fa-eye" aria-hidden="true"></i>
                                         </button>
                                     </div>
-                                    <p class="kh-user-create__field-hint" id="inputPasswordHint">Use at least 8 characters.</p>
+                                    <p class="kh-user-create__field-hint" id="inputPasswordHint">{{ __('ui.bo.users.form.password_hint') }}</p>
                                     @error('password')
                                         <p class="kh-user-create__field-error" id="inputPasswordError">
                                             <i data-feather="alert-circle" aria-hidden="true"></i>{{ $message }}
@@ -311,15 +311,15 @@
 
                                 <div class="kh-user-create__field">
                                     <label class="kh-user-create__label" for="inputPasswordConfirm">
-                                        Confirm password <span class="kh-required" aria-hidden="true">*</span>
+                                        {{ __('ui.bo.users.form.password_confirm') }} <span class="kh-required" aria-hidden="true">*</span>
                                     </label>
                                     <div class="kh-user-create__input-wrap kh-user-create__input-wrap--password">
                                         <i data-feather="shield" aria-hidden="true"></i>
                                         <input class="kh-user-create__control" id="inputPasswordConfirm"
-                                            name="password_confirmation" type="password" placeholder="Repeat the password"
+                                            name="password_confirmation" type="password" placeholder="{{ __('ui.bo.users.form.password_confirm_placeholder') }}"
                                             autocomplete="new-password" minlength="8" required>
                                         <button class="kh-user-create__password-toggle" type="button"
-                                            data-password-toggle="inputPasswordConfirm" aria-label="Show password confirmation"
+                                            data-password-toggle="inputPasswordConfirm" aria-label="{{ __('ui.bo.users.form.show_password_confirm') }}"
                                             aria-pressed="false">
                                             <i class="far fa-eye" aria-hidden="true"></i>
                                         </button>
@@ -331,47 +331,47 @@
                         <div class="kh-user-create__actions">
                             <p>
                                 <i data-feather="shield" aria-hidden="true"></i>
-                                Passwords are securely hashed before storage.
+                                {{ __('ui.bo.users.form.hashed_note') }}
                             </p>
                             <div class="kh-user-create__button-row">
                                 <a class="kh-user-create__btn kh-user-create__btn--ghost" href="{{ route('users') }}">
-                                    Cancel
+                                    {{ __('ui.bo.job_posts.form.cancel') }}
                                 </a>
                                 <button class="kh-user-create__btn kh-user-create__btn--primary" type="submit">
                                     <i data-feather="user-plus" aria-hidden="true"></i>
-                                    <span>Create user</span>
+                                    <span>{{ __('ui.bo.users.form.submit_create') }}</span>
                                 </button>
                             </div>
                         </div>
                     </form>
                 </section>
 
-                <aside class="kh-user-create__side" aria-label="User creation guidance">
+                <aside class="kh-user-create__side" aria-label="{{ __('ui.bo.users.form.guidance_create') }}">
                     <section class="kh-user-create__card kh-user-create__guide-card">
-                        <span class="kh-user-create__card-kicker">Before you save</span>
-                        <h2>Account checklist</h2>
-                        <p>A quick review keeps access safe and onboarding smooth.</p>
+                        <span class="kh-user-create__card-kicker">{{ __('ui.bo.users.form.before_you_save') }}</span>
+                        <h2>{{ __('ui.bo.users.form.checklist_create') }}</h2>
+                        <p>{{ __('ui.bo.users.form.checklist_lead_create') }}</p>
 
                         <ol class="kh-user-create__checklist">
                             <li>
                                 <span aria-hidden="true"><i data-feather="mail"></i></span>
                                 <div>
-                                    <strong>Confirm the email</strong>
-                                    <small>It will be used for sign-in and recovery.</small>
+                                    <strong>{{ __('ui.bo.users.form.check_email') }}</strong>
+                                    <small>{{ __('ui.bo.users.form.check_email_hint_create') }}</small>
                                 </div>
                             </li>
                             <li>
                                 <span aria-hidden="true"><i data-feather="key"></i></span>
                                 <div>
-                                    <strong>Limit permissions</strong>
-                                    <small>Only grant the access required for the role.</small>
+                                    <strong>{{ __('ui.bo.users.form.check_perms_create') }}</strong>
+                                    <small>{{ __('ui.bo.users.form.check_perms_hint') }}</small>
                                 </div>
                             </li>
                             <li>
                                 <span aria-hidden="true"><i data-feather="send"></i></span>
                                 <div>
-                                    <strong>Share credentials safely</strong>
-                                    <small>Use a trusted channel after creating the account.</small>
+                                    <strong>{{ __('ui.bo.users.form.check_share_create') }}</strong>
+                                    <small>{{ __('ui.bo.users.form.check_share_hint_create') }}</small>
                                 </div>
                             </li>
                         </ol>
@@ -381,8 +381,8 @@
                         <div class="kh-user-create__role-head">
                             <span aria-hidden="true"><i data-feather="shield"></i></span>
                             <div>
-                                <span class="kh-user-create__card-kicker">Access guide</span>
-                                <h2>Choose the right role</h2>
+                                <span class="kh-user-create__card-kicker">{{ __('ui.bo.users.form.access_guide') }}</span>
+                                <h2>{{ __('ui.bo.users.form.choose_role') }}</h2>
                             </div>
                         </div>
 

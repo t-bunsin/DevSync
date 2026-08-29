@@ -8,10 +8,10 @@
 
 @section('main-content')
     <div class="kh-bo">
-        <nav class="kh-bo__breadcrumb" aria-label="Breadcrumb">
-            <a href="{{ route('home') }}">Back office</a>
+        <nav class="kh-bo__breadcrumb" aria-label="{{ __('ui.admin.a11y.breadcrumb') }}">
+            <a href="{{ route('home') }}">{{ __('ui.bo.breadcrumb_root') }}</a>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6" /></svg>
-            <a href="{{ route('resumes.index') }}">Resumes</a>
+            <a href="{{ route('resumes.index') }}">{{ __('ui.bo.resumes.title') }}</a>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6" /></svg>
             <span aria-current="page">{{ $resume->full_name }}</span>
         </nav>
@@ -31,9 +31,9 @@
             </div>
 
             <div class="kh-bo__actions">
-                <a class="kh-bo__btn kh-bo__btn--ghost" href="{{ route('resumes.download', $resume) }}">Download PDF</a>
-                <a class="kh-bo__btn kh-bo__btn--ghost" href="{{ route('resumes.show', $resume) }}">Preview</a>
-                <a class="kh-bo__btn kh-bo__btn--ghost" href="{{ route('resumes.index') }}">Back to register</a>
+                <a class="kh-bo__btn kh-bo__btn--ghost" href="{{ route('resumes.download', $resume) }}">{{ __('ui.bo.resumes.download_pdf') }}</a>
+                <a class="kh-bo__btn kh-bo__btn--ghost" href="{{ route('resumes.show', $resume) }}">{{ __('ui.bo.resumes.preview') }}</a>
+                <a class="kh-bo__btn kh-bo__btn--ghost" href="{{ route('resumes.index') }}">{{ __('ui.bo.resumes.back_to_register') }}</a>
             </div>
         </header>
 

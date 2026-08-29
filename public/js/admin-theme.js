@@ -8,7 +8,11 @@
 
         const setTheme = (theme, persist = false) => {
             const isDark = theme === 'dark';
-            const nextThemeLabel = isDark ? 'Switch to light theme' : 'Switch to dark theme';
+            // Labels come from the button's data-* attributes (ui.admin.a11y.*)
+            // so the toggle follows the chosen language; English is the fallback.
+            const toDark = toggle?.dataset.themeToDark || 'Switch to dark theme';
+            const toLight = toggle?.dataset.themeToLight || 'Switch to light theme';
+            const nextThemeLabel = isDark ? toLight : toDark;
 
             root.dataset.adminTheme = isDark ? 'dark' : 'light';
             root.style.colorScheme = isDark ? 'dark' : 'light';

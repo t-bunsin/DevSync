@@ -12,16 +12,16 @@
     @endphp
 
     <div class="kh-bo">
-        <nav class="kh-bo__breadcrumb" aria-label="Breadcrumb">
-            <a href="{{ route('home') }}">Back office</a>
+        <nav class="kh-bo__breadcrumb" aria-label="{{ __('ui.admin.a11y.breadcrumb') }}">
+            <a href="{{ route('home') }}">{{ __('ui.bo.breadcrumb_root') }}</a>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6" /></svg>
-            <span aria-current="page">My Applications</span>
+            <span aria-current="page">{{ __('ui.bo.mine.title') }}</span>
         </nav>
 
         <header class="kh-bo__head">
             <div>
-                <h1>My Applications</h1>
-                <p>The jobs you've applied to, and where each one stands.</p>
+                <h1>{{ __('ui.bo.mine.title') }}</h1>
+                <p>{{ __('ui.bo.mine.subtitle') }}</p>
             </div>
         </header>
 
@@ -38,9 +38,9 @@
         <section class="kh-bo__card">
             <div class="kh-bo__card-head">
                 <div>
-                    <h2>Applications</h2>
+                    <h2>{{ __('ui.bo.mine.applications') }}</h2>
                     <p>
-                        {{ $total }} {{ \Illuminate\Support\Str::plural('application', $total) }}
+                        {{ trans_choice('ui.bo.billing.applications_shown', $total, ['count' => $total]) }}
                         {{ $isFiltered ? 'match this search.' : 'shown.' }}
                     </p>
                 </div>
@@ -48,19 +48,19 @@
                 <div class="kh-bo__tools">
                     <form class="kh-bo__search" method="GET" action="{{ route('my-applications') }}" role="search">
                         <input type="search" name="q" value="{{ $searchTerm }}"
-                            placeholder="Search job or company" aria-label="Search your applications">
+                            placeholder="{{ __('ui.bo.mine.search_placeholder') }}" aria-label="{{ __('ui.bo.mine.search_aria') }}">
 
                         <div class="kh-bo__range">
                             <input type="date" name="from" value="{{ $fromDate }}"
-                                aria-label="Applied from date" title="Applied from date">
+                                aria-label="{{ __('ui.bo.mine.from_date') }}" title="{{ __('ui.bo.mine.from_date') }}">
                             <span aria-hidden="true">–</span>
                             <input type="date" name="to" value="{{ $toDate }}"
-                                aria-label="Applied to date" title="Applied to date">
+                                aria-label="{{ __('ui.bo.mine.to_date') }}" title="{{ __('ui.bo.mine.to_date') }}">
                         </div>
 
-                        <button class="kh-bo__btn kh-bo__btn--ghost" type="submit">Search</button>
+                        <button class="kh-bo__btn kh-bo__btn--ghost" type="submit">{{ __('ui.bo.search') }}</button>
                         @if ($isFiltered)
-                            <a class="kh-bo__btn kh-bo__btn--ghost" href="{{ route('my-applications') }}">Clear</a>
+                            <a class="kh-bo__btn kh-bo__btn--ghost" href="{{ route('my-applications') }}">{{ __('ui.bo.clear') }}</a>
                         @endif
                     </form>
                 </div>
@@ -70,10 +70,10 @@
                 <table class="kh-bo__table kh-bo__table--dense">
                     <thead>
                         <tr>
-                            <th scope="col">Job</th>
-                            <th scope="col">Applied</th>
-                            <th scope="col">Status</th>
-                            <th scope="col"><span class="visually-hidden">Actions</span></th>
+                            <th scope="col">{{ __('ui.bo.mine.col_job') }}</th>
+                            <th scope="col">{{ __('ui.bo.mine.col_applied') }}</th>
+                            <th scope="col">{{ __('ui.bo.mine.col_status') }}</th>
+                            <th scope="col"><span class="visually-hidden">{{ __('ui.bo.actions') }}</span></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -97,7 +97,7 @@
                                             <span class="kh-bo__ref">{{ $post->company }}</span>
                                         @endif
                                         @if ($application->candidate_message)
-                                            <span class="kh-bo__ref">Message from the employer</span>
+                                            <span class="kh-bo__ref">{{ __('ui.bo.mine.employer_message') }}</span>
                                         @endif
                                     </div>
                                 </td>
@@ -109,7 +109,7 @@
 
                                 <td>
                                     <span class="kh-bo__status kh-bo__status--{{ $application->statusTone() }}">
-                                        {{ ucfirst($application->status) }}
+                                        {{ __('ui.bo.status.' . $application->status) }}
                                     </span>
 
                                     @if ($decidedAt = $application->decidedAt())
@@ -122,7 +122,7 @@
                                 <td>
                                     <div class="kh-bo__actions">
                                         <a class="kh-bo__action" href="{{ route('my-applications.show', $application) }}"
-                                            title="View application" aria-label="View your application for {{ $post?->title ?? 'this job' }}">
+                                            title="{{ __('ui.bo.mine.view_application') }}" aria-label="{{ __('ui.bo.mine.view_aria', ['title' => $post?->title ?? __('ui.bo.mine.this_job')]) }}">
                                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                                 <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z" /><circle cx="12" cy="12" r="3" />
                                             </svg>
@@ -134,7 +134,7 @@
                                                 @csrf
                                                 @method('DELETE')
                                                 <button class="kh-bo__action kh-bo__action--danger" type="submit"
-                                                    title="Withdraw application" aria-label="Withdraw your application for {{ $post?->title ?? 'this job' }}">
+                                                    title="{{ __('ui.bo.mine.withdraw_application') }}" aria-label="{{ __('ui.bo.mine.withdraw_aria', ['title' => $post?->title ?? __('ui.bo.mine.this_job')]) }}">
                                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                                         <circle cx="12" cy="12" r="9" /><path d="M15 9l-6 6M9 9l6 6" />
                                                     </svg>
@@ -149,14 +149,14 @@
                                 <td colspan="4">
                                     <div class="kh-bo__empty">
                                         @if ($isFiltered)
-                                            <strong>Nothing matches that search</strong>
+                                            <strong>{{ __('ui.bo.mine.empty_filtered_title') }}</strong>
                                             <span>
-                                                <a href="{{ route('my-applications') }}">Clear it</a> to see every application.
+                                                <a href="{{ route('my-applications') }}">{{ __('ui.bo.clear_it') }}</a> {{ __('ui.bo.mine.to_see_every') }}
                                             </span>
                                         @else
-                                            <strong>No applications yet</strong>
+                                            <strong>{{ __('ui.bo.mine.empty_title') }}</strong>
                                             <span>
-                                                Browse <a href="{{ route('jobs.index') }}">open roles</a> and apply — they'll show up here.
+                                                {{ __('ui.bo.mine.browse') }} <a href="{{ route('jobs.index') }}">{{ __('ui.bo.mine.open_roles') }}</a> {{ __('ui.bo.mine.and_apply') }}
                                             </span>
                                         @endif
                                     </div>

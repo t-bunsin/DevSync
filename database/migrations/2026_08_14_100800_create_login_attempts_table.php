@@ -34,7 +34,9 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users')->nullOnDelete();
         });
 
-        DB::statement('CREATE INDEX `idx_attempts_recent` ON `login_attempts` (`identifier`, `attempted_at` DESC)');
+        // Unquoted identifiers so this parses on MySQL and PostgreSQL alike; both
+        // support a DESC key part.
+        DB::statement('CREATE INDEX idx_attempts_recent ON login_attempts (identifier, attempted_at DESC)');
     }
 
     public function down(): void

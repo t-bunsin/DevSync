@@ -89,14 +89,14 @@
     <table>
         @if ($resume->summary)
             <tr class="row">
-                <td class="label">Professional Summary</td>
+                <td class="label">{{ __('ui.bo.resumes.section_summary') }}</td>
                 <td><p>{{ $resume->summary }}</p></td>
             </tr>
         @endif
 
         @if ($resume->section('work_history'))
             <tr class="row">
-                <td class="label">Work History</td>
+                <td class="label">{{ __('ui.bo.resumes.section_work') }}</td>
                 <td>
                     @foreach ($resume->section('work_history') as $job)
                         <div class="entry">
@@ -125,7 +125,7 @@
 
         @if ($skills)
             <tr class="row">
-                <td class="label">Skills</td>
+                <td class="label">{{ __('ui.bo.resumes.section_skills') }}</td>
                 <td>
                     <table>
                         <tr>
@@ -146,7 +146,7 @@
 
         @if ($resume->section('certifications'))
             <tr class="row">
-                <td class="label">Certifications</td>
+                <td class="label">{{ __('ui.bo.resumes.section_certifications') }}</td>
                 <td>
                     <ul>
                         @foreach ($resume->section('certifications') as $certificate)
@@ -159,7 +159,7 @@
 
         @if ($resume->section('education'))
             <tr class="row">
-                <td class="label">Education</td>
+                <td class="label">{{ __('ui.bo.resumes.section_education') }}</td>
                 <td>
                     @foreach ($resume->section('education') as $study)
                         <div class="entry">
@@ -179,7 +179,7 @@
 
         @if ($resume->section('languages'))
             <tr class="row">
-                <td class="label">Languages</td>
+                <td class="label">{{ __('ui.bo.resumes.section_languages') }}</td>
                 <td>
                     <table>
                         @foreach ($languages as $pair)

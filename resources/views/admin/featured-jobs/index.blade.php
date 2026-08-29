@@ -8,16 +8,16 @@
 
 @section('main-content')
     <div class="kh-bo">
-        <nav class="kh-bo__breadcrumb" aria-label="Breadcrumb">
-            <a href="{{ route('home') }}">Back office</a>
+        <nav class="kh-bo__breadcrumb" aria-label="{{ __('ui.admin.a11y.breadcrumb') }}">
+            <a href="{{ route('home') }}">{{ __('ui.bo.breadcrumb_root') }}</a>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6" /></svg>
-            <span aria-current="page">Featured Jobs</span>
+            <span aria-current="page">{{ __('ui.bo.featured.title') }}</span>
         </nav>
 
         <header class="kh-bo__head">
             <div>
-                <h1>Featured Jobs</h1>
-                <p>Pick which published roles are sorted to the top of the public jobs list. {{ $featuredCount }} currently featured.</p>
+                <h1>{{ __('ui.bo.featured.title') }}</h1>
+                <p>{{ __('ui.bo.featured.subtitle', ['count' => $featuredCount]) }}</p>
             </div>
         </header>
 
@@ -34,15 +34,15 @@
         <section class="kh-bo__card">
             <div class="kh-bo__card-head">
                 <div>
-                    <h2>Published job posts</h2>
-                    <p>{{ number_format($posts->total()) }} {{ \Illuminate\Support\Str::plural('post', $posts->total()) }}.</p>
+                    <h2>{{ __('ui.bo.featured.published_posts') }}</h2>
+                    <p>{{ trans_choice('ui.bo.featured.posts_count', $posts->total(), ['count' => number_format($posts->total())]) }}</p>
                 </div>
 
                 <div class="kh-bo__tools">
                     <form class="kh-bo__search" method="GET" action="{{ route('featured-jobs') }}" role="search">
                         <input type="search" name="q" value="{{ $searchTerm }}"
-                            placeholder="Search title or company" aria-label="Search job posts">
-                        <button class="kh-bo__btn kh-bo__btn--ghost" type="submit">Search</button>
+                            placeholder="{{ __('ui.bo.featured.search_placeholder') }}" aria-label="{{ __('ui.bo.featured.search_aria') }}">
+                        <button class="kh-bo__btn kh-bo__btn--ghost" type="submit">{{ __('ui.bo.search') }}</button>
                     </form>
                 </div>
             </div>
@@ -51,10 +51,10 @@
                 <table class="kh-bo__table">
                     <thead>
                         <tr>
-                            <th scope="col">Job</th>
-                            <th scope="col">Posted</th>
-                            <th scope="col">Status</th>
-                            <th scope="col"><span class="visually-hidden">Actions</span></th>
+                            <th scope="col">{{ __('ui.bo.featured.col_job') }}</th>
+                            <th scope="col">{{ __('ui.bo.featured.col_posted') }}</th>
+                            <th scope="col">{{ __('ui.bo.featured.col_status') }}</th>
+                            <th scope="col"><span class="visually-hidden">{{ __('ui.bo.actions') }}</span></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -84,7 +84,7 @@
 
                                 <td>
                                     <span class="kh-bo__status kh-bo__status--{{ $post->featured ? 'verified' : 'pending' }}">
-                                        {{ $post->featured ? 'Featured' : 'Not featured' }}
+                                        {{ $post->featured ? __('ui.bo.featured.is_featured') : __('ui.bo.featured.not_featured') }}
                                     </span>
                                 </td>
 
@@ -93,7 +93,7 @@
                                         @csrf
                                         @method('PATCH')
                                         <button class="kh-bo__btn kh-bo__btn--ghost" type="submit">
-                                            {{ $post->featured ? 'Remove from featured' : 'Feature this post' }}
+                                            {{ $post->featured ? __('ui.bo.featured.remove') : __('ui.bo.featured.feature') }}
                                         </button>
                                     </form>
                                 </td>
@@ -102,13 +102,13 @@
                             <tr>
                                 <td colspan="4">
                                     <div class="kh-bo__empty">
-                                        <strong>No published job posts</strong>
+                                        <strong>{{ __('ui.bo.featured.empty_title') }}</strong>
                                         <span>
                                             @if ($searchTerm)
-                                                Nothing matches this search.
-                                                <a href="{{ route('featured-jobs') }}">Clear it</a> to see everything.
+                                                {{ __('ui.bo.featured.empty_filtered') }}
+                                                <a href="{{ route('featured-jobs') }}">{{ __('ui.bo.clear_it') }}</a> {{ __('ui.bo.to_see_everything') }}
                                             @else
-                                                Featured placement only applies once a post is published.
+                                                {{ __('ui.bo.featured.empty_none') }}
                                             @endif
                                         </span>
                                     </div>

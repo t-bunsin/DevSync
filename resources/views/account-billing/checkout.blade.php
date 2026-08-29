@@ -21,27 +21,27 @@
     @endphp
 
     <div class="kh-bo">
-        <nav class="kh-bo__breadcrumb" aria-label="Breadcrumb">
-            <a href="{{ route('home') }}">Back office</a>
+        <nav class="kh-bo__breadcrumb" aria-label="{{ __('ui.admin.a11y.breadcrumb') }}">
+            <a href="{{ route('home') }}">{{ __('ui.bo.breadcrumb_root') }}</a>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6" /></svg>
-            <a href="{{ route('account-billing') }}">Billing</a>
+            <a href="{{ route('account-billing') }}">{{ __('ui.bo.billing.title') }}</a>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6" /></svg>
-            <span aria-current="page">Confirm your plan</span>
+            <span aria-current="page">{{ __('ui.bo.billing.confirm_title') }}</span>
         </nav>
 
         <header class="kh-bo__head">
             <div>
-                <span class="kh-bo__kicker">Account</span>
-                <h1>Confirm your plan</h1>
-                <p>Review the details before switching billing.</p>
+                <span class="kh-bo__kicker">{{ __('ui.bo.billing.kicker') }}</span>
+                <h1>{{ __('ui.bo.billing.confirm_title') }}</h1>
+                <p>{{ __('ui.bo.billing.confirm_subtitle') }}</p>
             </div>
 
-            <a class="kh-bo__btn kh-bo__btn--ghost" href="{{ route('account-billing') }}">Back to packages</a>
+            <a class="kh-bo__btn kh-bo__btn--ghost" href="{{ route('account-billing') }}">{{ __('ui.bo.billing.back_to_packages') }}</a>
         </header>
 
         @if ($errors->any())
             <div class="kh-bo__errors" role="alert">
-                <strong>Please check the highlighted fields.</strong>
+                <strong>{{ __('ui.bo.check_fields') }}</strong>
                 <ul>
                     @foreach ($errors->all() as $message)
                         <li>{{ $message }}</li>
@@ -52,8 +52,8 @@
 
         @if ($blocked)
             <div class="kh-bo__errors" role="alert">
-                <strong>Payment isn't set up yet.</strong>
-                Ask an administrator to add PAYWAY_MERCHANT_ID and PAYWAY_API_KEY before this plan can be purchased.
+                <strong>{{ __('ui.bo.billing.payway_missing') }}</strong>
+                {{ __('ui.bo.billing.payway_missing_body') }}
             </div>
         @endif
 
@@ -69,8 +69,8 @@
                     </span>
 
                     <div>
-                        <h2 class="kh-co__order-title" id="kh-co-order-title">Order summary</h2>
-                        <p class="kh-co__order-sub">Review your order details</p>
+                        <h2 class="kh-co__order-title" id="kh-co-order-title">{{ __('ui.bo.billing.order_summary') }}</h2>
+                        <p class="kh-co__order-sub">{{ __('ui.bo.billing.order_review') }}</p>
                     </div>
                 </header>
 
@@ -79,19 +79,19 @@
                         <span class="kh-co__row-icon" aria-hidden="true">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z" /><path d="M4 7.5l8 4.5 8-4.5M12 12v9" /></svg>
                         </span>
-                        <dt>Package</dt>
-                        <dd>{{ $plan['name'] }}</dd>
+                        <dt>{{ __('ui.bo.billing.package') }}</dt>
+                        <dd>{{ __('ui.bo.billing.plan.names.' . $plan['name']) }}</dd>
                     </div>
 
                     <div class="kh-co__row">
                         <span class="kh-co__row-icon" aria-hidden="true">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="16" rx="2.5" /><path d="M3.5 10h17M8 3v4M16 3v4" /><path d="M8 14h.01M12 14h.01M16 14h.01" /></svg>
                         </span>
-                        <dt>Billing period</dt>
+                        <dt>{{ __('ui.bo.billing.period_label') }}</dt>
                         <dd>
                             {{ $isAnnual ? 'Annual' : 'Monthly' }}
                             <a class="kh-co__change" href="{{ route('account-billing') }}">
-                                Change
+                                {{ __('ui.bo.billing.change') }}
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6" /></svg>
                             </a>
                         </dd>
@@ -129,7 +129,7 @@
                     </span>
 
                     <div class="kh-co__total-text">
-                        <strong>Total due today</strong>
+                        <strong>{{ __('ui.bo.billing.total_due') }}</strong>
                         <span>
                             @if ($isFree)
                                 No card needed — this plan stays free.
@@ -159,7 +159,7 @@
                         <svg class="kh-co__submit-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" /></svg>
                     </button>
 
-                    <a class="kh-co__cancel" href="{{ route('account-billing') }}">Cancel</a>
+                    <a class="kh-co__cancel" href="{{ route('account-billing') }}">{{ __('ui.bo.job_posts.form.cancel') }}</a>
                 </form>
 
                 @unless ($isFree)
@@ -167,11 +167,11 @@
                         @include('partials.khqr-mark')
 
                         <div class="kh-co__method-text">
-                            <strong>Bakong / KHQR</strong>
-                            <span>Scan with any Cambodian banking app.</span>
+                            <strong>{{ __('ui.bo.billing.khqr') }}</strong>
+                            <span>{{ __('ui.bo.billing.khqr_hint') }}</span>
                             <span class="kh-co__secured">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5.5c0 4.2-2.9 7.6-7 9-4.1-1.4-7-4.8-7-9V6z" /><path d="M9 12l2.2 2.2L15.5 10" /></svg>
-                                Secured by ABA PayWay.
+                                {{ __('ui.bo.billing.khqr_secured') }}
                             </span>
                         </div>
                     </div>
@@ -185,20 +185,20 @@
                     </span>
 
                     <div>
-                        <h2 class="kh-co__plan-name" id="kh-co-plan-name">{{ $plan['name'] }}</h2>
-                        <p class="kh-co__plan-tagline">{{ $plan['tagline'] }}</p>
+                        <h2 class="kh-co__plan-name" id="kh-co-plan-name">{{ __('ui.bo.billing.plan.names.' . $plan['name']) }}</h2>
+                        <p class="kh-co__plan-tagline">{{ __('ui.bo.billing.plan.taglines.' . $plan['tagline']) }}</p>
                     </div>
                 </header>
 
                 <p class="kh-co__plan-blurb">{{ $plan['blurb'] }}</p>
 
-                <p class="kh-co__plan-included">What's included</p>
+                <p class="kh-co__plan-included">{{ __('ui.bo.billing.included') }}</p>
 
                 <ul class="kh-co__features">
                     @foreach ($plan['features'] as $feature)
                         <li class="{{ $feature['highlight'] ? 'is-highlight' : '' }}">
                             <span class="kh-co__tick" aria-hidden="true"><i class="fas fa-check"></i></span>
-                            {{ $feature['label'] }}
+                            {{ __('ui.bo.billing.plan.features.' . $feature['label']) }}
                         </li>
                     @endforeach
                 </ul>

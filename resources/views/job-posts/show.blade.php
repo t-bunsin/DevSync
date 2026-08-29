@@ -17,10 +17,10 @@
     @endphp
 
     <div class="kh-bo">
-        <nav class="kh-bo__breadcrumb" aria-label="Breadcrumb">
-            <a href="{{ route('home') }}">Back office</a>
+        <nav class="kh-bo__breadcrumb" aria-label="{{ __('ui.admin.a11y.breadcrumb') }}">
+            <a href="{{ route('home') }}">{{ __('ui.bo.breadcrumb_root') }}</a>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6" /></svg>
-            <a href="{{ route('job-posts.index') }}">Job posts</a>
+            <a href="{{ route('job-posts.index') }}">{{ __('ui.bo.job_posts.title') }}</a>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6" /></svg>
             <span aria-current="page">{{ $post->title }}</span>
         </nav>
@@ -35,7 +35,7 @@
                     @endif
                     · {{ $post->location }}
                     @if ($post->isPublished())
-                        · live at <a href="{{ route('jobs.show', $post->slug) }}" target="_blank" rel="noopener">/jobs/{{ $post->slug }}</a>
+                        · {{ __('ui.bo.job_detail.live_at') }} <a href="{{ route('jobs.show', $post->slug) }}" target="_blank" rel="noopener">/jobs/{{ $post->slug }}</a>
                     @else
                         · not published
                     @endif
@@ -43,18 +43,18 @@
             </div>
 
             <div class="kh-bo__head-actions">
-                <a class="kh-bo__btn kh-bo__btn--ghost" href="{{ route('job-posts.index') }}">Back to job posts</a>
+                <a class="kh-bo__btn kh-bo__btn--ghost" href="{{ route('job-posts.index') }}">{{ __('ui.bo.job_detail.back_to_posts') }}</a>
 
                 @if ($post->isPublished())
                     <a class="kh-bo__btn kh-bo__btn--ghost" href="{{ route('jobs.show', $post->slug) }}"
-                        target="_blank" rel="noopener">View on site</a>
+                        target="_blank" rel="noopener">{{ __('ui.bo.job_detail.view_on_site') }}</a>
                 @endif
 
                 <a class="kh-bo__btn" href="{{ route('job-posts.edit', $post) }}">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                         <path d="M12 20h9" /><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z" />
                     </svg>
-                    Edit post
+                    {{ __('ui.bo.job_detail.edit_post') }}
                 </a>
             </div>
         </header>
@@ -74,17 +74,17 @@
                 <section class="kh-bo__card">
                     <div class="kh-bo__card-head">
                         <div>
-                            <h2>Summary</h2>
-                            <p>The short pitch shown on the job card and search results.</p>
+                            <h2>{{ __('ui.bo.job_detail.summary') }}</h2>
+                            <p>{{ __('ui.bo.job_detail.summary_hint') }}</p>
                         </div>
 
                         <div class="kh-bo__chips">
                             <span class="kh-bo__status kh-bo__status--{{ $statusTone }}">{{ ucfirst($post->status) }}</span>
                             @if ($post->featured)
-                                <span class="kh-bo__status kh-bo__status--verified">Featured</span>
+                                <span class="kh-bo__status kh-bo__status--verified">{{ __('ui.bo.job_posts.featured') }}</span>
                             @endif
                             @if ($post->highlighted)
-                                <span class="kh-bo__status kh-bo__status--pending">Spotlight</span>
+                                <span class="kh-bo__status kh-bo__status--pending">{{ __('ui.bo.job_posts.spotlight') }}</span>
                             @endif
                         </div>
                     </div>
@@ -93,7 +93,7 @@
                         @if (filled($post->summary))
                             <p class="kh-bo__prose">{{ $post->summary }}</p>
                         @else
-                            <p class="kh-bo__muted">No summary written yet.</p>
+                            <p class="kh-bo__muted">{{ __('ui.bo.job_detail.no_summary') }}</p>
                         @endif
 
                         <dl class="kh-bo__facts">
@@ -105,12 +105,12 @@
                             @endforeach
 
                             <div>
-                                <dt>Salary</dt>
+                                <dt>{{ __('ui.bo.job_detail.salary') }}<dt>
                                 <dd>{{ $job['salary'] }}</dd>
                             </div>
 
                             <div>
-                                <dt>Applicants</dt>
+                                <dt>{{ __('ui.bo.job_detail.applicants') }}<dt>
                                 <dd>
                                     {{ $job['applicants'] }}
                                     {{-- The recorded applications, which is what the figure
@@ -119,7 +119,7 @@
                                     <a class="kh-bo__ref" href="{{ route('job-posts.applications', $post) }}">
                                         @if ($post->hasApplications())
                                             View {{ number_format($post->applicantCount()) }}
-                                            {{ \Illuminate\Support\Str::plural('application', $post->applicantCount()) }}
+                                            {{ trans_choice('ui.bo.job_posts.candidates_applied', $post->applicantCount()) }}
                                         @else
                                             No applications recorded yet
                                         @endif
@@ -134,8 +134,8 @@
                 <section class="kh-bo__card">
                     <div class="kh-bo__card-head">
                         <div>
-                            <h2>Page content</h2>
-                            <p>Exactly what the three panels render on the public job page.</p>
+                            <h2>{{ __('ui.bo.job_detail.page_content') }}</h2>
+                            <p>{{ __('ui.bo.job_detail.page_content_hint') }}</p>
                         </div>
                     </div>
 
@@ -148,7 +148,7 @@
                                 @if (filled($panel['body']))
                                     <p class="kh-bo__prose">{{ $panel['body'] }}</p>
                                 @else
-                                    <p class="kh-bo__muted">No body copy.</p>
+                                    <p class="kh-bo__muted">{{ __('ui.bo.job_detail.no_body') }}</p>
                                 @endif
 
                                 @if ($panel['list'] !== [])
@@ -168,7 +168,7 @@
                     <section class="kh-bo__card">
                         <div class="kh-bo__card-head">
                             <div>
-                                <h2>What we can offer</h2>
+                                <h2>{{ __('ui.bo.job_detail.offer') }}</h2>
                                 <p>{{ count($job['offer']) }} of 3 columns filled in.</p>
                             </div>
                         </div>
@@ -194,21 +194,21 @@
             <aside class="kh-bo__detail-side">
                 <section class="kh-bo__card">
                     <div class="kh-bo__card-head">
-                        <div><h2>Dates</h2></div>
+                        <div><h2>{{ __('ui.bo.job_detail.dates') }}</h2></div>
                     </div>
 
                     <div class="kh-bo__card-body">
                         <dl class="kh-bo__facts kh-bo__facts--rows">
                             <div>
-                                <dt>Posted</dt>
+                                <dt>{{ __('ui.bo.job_detail.posted') }}<dt>
                                 <dd>
                                     {{ optional($post->published_at)->format('d M Y') ?: 'Not published' }}
-                                    <span class="kh-bo__ref">{{ $post->isPublished() ? $post->postedLabel() : 'Not live' }}</span>
+                                    <span class="kh-bo__ref">{{ $post->isPublished() ? $post->postedLabel() : __('ui.bo.job_posts.not_live') }}</span>
                                 </dd>
                             </div>
 
                             <div>
-                                <dt>Deadline</dt>
+                                <dt>{{ __('ui.bo.job_detail.deadline') }}<dt>
                                 <dd>
                                     {{ optional($post->deadline)->format('d M Y') ?: 'No end date' }}
                                     <span class="kh-bo__ref">{{ $post->deadlineLabel() }}</span>
@@ -216,7 +216,7 @@
                             </div>
 
                             <div>
-                                <dt>Registered</dt>
+                                <dt>{{ __('ui.bo.job_detail.registered') }}<dt>
                                 <dd>
                                     {{ optional($post->created_at)->format('d M Y, H:i') ?: '—' }}
                                     <span class="kh-bo__ref">Post by {{ $post->authorLabel() }}</span>
@@ -224,7 +224,7 @@
                             </div>
 
                             <div>
-                                <dt>Last updated</dt>
+                                <dt>{{ __('ui.bo.job_detail.last_updated') }}<dt>
                                 <dd>{{ optional($post->updated_at)->format('d M Y, H:i') ?: '—' }}</dd>
                             </div>
                         </dl>
@@ -233,7 +233,7 @@
 
                 <section class="kh-bo__card">
                     <div class="kh-bo__card-head">
-                        <div><h2>Employer</h2></div>
+                        <div><h2>{{ __('ui.bo.job_detail.employer') }}</h2></div>
                     </div>
 
                     <div class="kh-bo__card-body">
@@ -269,21 +269,21 @@
 
                                 @if ($employer->website)
                                     <div>
-                                        <dt>Website</dt>
+                                        <dt>{{ __('ui.bo.job_detail.website') }}<dt>
                                         <dd><a href="{{ $employer->website }}" target="_blank" rel="noopener">{{ $employer->website }}</a></dd>
                                     </div>
                                 @endif
 
                                 @if ($employer->address)
                                     <div>
-                                        <dt>Address</dt>
+                                        <dt>{{ __('ui.bo.job_detail.address') }}<dt>
                                         <dd>{{ $employer->address }}</dd>
                                     </div>
                                 @endif
                             </dl>
 
                             @if (auth()->user()?->isAdmin())
-                                <a class="kh-bo__btn kh-bo__btn--ghost" href="{{ route('companies.edit', $employer) }}">Open company profile</a>
+                                <a class="kh-bo__btn kh-bo__btn--ghost" href="{{ route('companies.edit', $employer) }}">{{ __('ui.bo.job_detail.open_company') }}</a>
                             @endif
                         @endif
                     </div>
@@ -291,30 +291,30 @@
 
                 <section class="kh-bo__card">
                     <div class="kh-bo__card-head">
-                        <div><h2>Publishing</h2></div>
+                        <div><h2>{{ __('ui.bo.job_detail.publishing') }}</h2></div>
                     </div>
 
                     <div class="kh-bo__card-body">
                         <dl class="kh-bo__facts kh-bo__facts--rows">
                             <div>
-                                <dt>Status</dt>
+                                <dt>{{ __('ui.bo.job_detail.status') }}<dt>
                                 <dd><span class="kh-bo__status kh-bo__status--{{ $statusTone }}">{{ ucfirst($post->status) }}</span></dd>
                             </div>
 
                             <div>
-                                <dt>Public URL</dt>
+                                <dt>{{ __('ui.bo.job_detail.public_url') }}<dt>
                                 <dd>
                                     @if ($post->isPublished())
                                         <a href="{{ route('jobs.show', $post->slug) }}" target="_blank" rel="noopener">/jobs/{{ $post->slug }}</a>
                                     @else
                                         /jobs/{{ $post->slug }}
-                                        <span class="kh-bo__ref">Reachable once published</span>
+                                        <span class="kh-bo__ref">{{ __('ui.bo.job_detail.reachable_once_published') }}</span>
                                     @endif
                                 </dd>
                             </div>
 
                             <div>
-                                <dt>Card artwork</dt>
+                                <dt>{{ __('ui.bo.job_detail.card_artwork') }}<dt>
                                 <dd>{{ ucfirst($job['logo']) }}</dd>
                             </div>
                         </dl>
@@ -327,7 +327,7 @@
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                     <path d="M3 6h18" /><path d="M8 6V4h8v2" /><path d="M19 6l-1 14H6L5 6" />
                                 </svg>
-                                Delete this post
+                                {{ __('ui.bo.job_detail.delete_post') }}
                             </button>
                         </form>
                     </div>

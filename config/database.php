@@ -95,7 +95,9 @@ return [
             'prefix' => '',
             'prefix_indexes' => true,
             'search_path' => 'public',
-            'sslmode' => 'prefer',
+            // Managed Postgres (Neon) refuses non-TLS connections, so this has to
+            // be overridable; 'prefer' stays the default for a local server.
+            'sslmode' => env('DB_SSLMODE', 'prefer'),
         ],
 
         'sqlsrv' => [

@@ -34,12 +34,12 @@
                         <span class="kh-payq__countdown" data-expiry>5:00</span>
                     </span>
 
-                    <a class="kh-payq__close" href="{{ route('account-billing') }}" aria-label="Cancel this payment">
+                    <a class="kh-payq__close" href="{{ route('account-billing') }}" aria-label="{{ __('ui.bo.billing.cancel_payment') }}">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
                     </a>
                 </header>
 
-                <p class="kh-payq__tagline" id="kh-payq-title">Scan. Pay. Done.</p>
+                <p class="kh-payq__tagline" id="kh-payq-title">{{ __('ui.bo.billing.scan_pay_done') }}</p>
 
                 <p class="kh-payq__amount">
                     <span class="kh-payq__figure">{{ number_format($amount, 2) }}</span>
@@ -53,30 +53,30 @@
                             <span class="kh-payq__corner kh-payq__corner--tr" aria-hidden="true"></span>
                             <span class="kh-payq__corner kh-payq__corner--bl" aria-hidden="true"></span>
                             <span class="kh-payq__corner kh-payq__corner--br" aria-hidden="true"></span>
-                            <img class="kh-payq__qr" src="{{ $qrImage }}" alt="KHQR code — scan with your banking app to pay">
+                            <img class="kh-payq__qr" src="{{ $qrImage }}" alt="{{ __('ui.bo.billing.qr_alt') }}">
                         </div>
                     @else
-                        <p class="kh-payq__missing">PayWay didn't return a QR code for this payment. Please try again.</p>
+                        <p class="kh-payq__missing">{{ __('ui.bo.billing.no_qr') }}</p>
                     @endif
 
                     <p class="kh-payq__plan">{{ $planName }}</p>
 
                     @if ($deeplink)
-                        <a class="kh-payq__deeplink" href="{{ $deeplink }}">Open ABA Mobile</a>
+                        <a class="kh-payq__deeplink" href="{{ $deeplink }}">{{ __('ui.bo.billing.open_aba') }}</a>
                     @endif
 
                     <p class="kh-payq__waiting" data-waiting>
                         <i class="fas fa-circle-notch fa-spin" aria-hidden="true"></i>
-                        Waiting for payment confirmation&hellip;
+                        {!! __('ui.bo.billing.waiting') !!}
                     </p>
 
                     <p class="kh-payq__failed" data-failed hidden>
-                        That payment didn't go through. <a href="{{ route('account-billing') }}">Try again</a>.
+                        {{ __('ui.bo.billing.payment_declined') }} <a href="{{ route('account-billing') }}">{{ __('ui.bo.billing.try_again') }}</a>.
                     </p>
 
                     @if ($appStore || $playStore)
                         <p class="kh-payq__stores">
-                            Don't have the app?
+                            {{ __('ui.bo.billing.no_app') }}
                             @if ($appStore)
                                 <a href="{{ $appStore }}" target="_blank" rel="noopener">App Store</a>
                             @endif
@@ -89,13 +89,13 @@
 
                 <div class="kh-payq__expired-panel" data-expired hidden>
                     <p class="kh-payq__expired-icon" aria-hidden="true"><i class="fas fa-clock"></i></p>
-                    <p class="kh-payq__expired-text">This code has expired.</p>
-                    <a class="kh-payq__deeplink" href="{{ route('account-billing') }}">Start a new payment</a>
+                    <p class="kh-payq__expired-text">{{ __('ui.bo.billing.expired') }}</p>
+                    <a class="kh-payq__deeplink" href="{{ route('account-billing') }}">{{ __('ui.bo.billing.start_new') }}</a>
                 </div>
 
                 <footer class="kh-payq__foot">
                     <span class="kh-payq__member">
-                        <span>Member of</span>
+                        <span>{{ __('ui.bo.billing.member_of') }}</span>
                         <strong>KHQR</strong>
                     </span>
                 </footer>

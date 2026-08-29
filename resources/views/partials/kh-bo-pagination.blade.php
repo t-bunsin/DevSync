@@ -15,10 +15,10 @@
         )->values();
     @endphp
 
-    <nav class="kh-bo__pagination" aria-label="Pagination">
+    <nav class="kh-bo__pagination" aria-label="{{ __('ui.bo.pagination.label') }}">
         <a class="kh-bo__pagination-btn{{ $paginator->onFirstPage() ? ' is-disabled' : '' }}"
             @if (! $paginator->onFirstPage()) href="{{ $paginator->previousPageUrl() }}" @endif
-            aria-label="Previous page" @if ($paginator->onFirstPage()) aria-disabled="true" @endif>
+            aria-label="{{ __('ui.bo.pagination.previous') }}" @if ($paginator->onFirstPage()) aria-disabled="true" @endif>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M15 6l-6 6 6 6" />
             </svg>
@@ -43,14 +43,14 @@
 
         <a class="kh-bo__pagination-btn{{ $paginator->hasMorePages() ? '' : ' is-disabled' }}"
             @if ($paginator->hasMorePages()) href="{{ $paginator->nextPageUrl() }}" @endif
-            aria-label="Next page" @if (! $paginator->hasMorePages()) aria-disabled="true" @endif>
+            aria-label="{{ __('ui.bo.pagination.next') }}" @if (! $paginator->hasMorePages()) aria-disabled="true" @endif>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M9 6l6 6-6 6" />
             </svg>
         </a>
 
         <span class="kh-bo__pagination-summary">
-            {{ number_format($paginator->total()) }} {{ \Illuminate\Support\Str::plural('result', $paginator->total()) }}
+            {{ trans_choice('ui.bo.pagination.results', $paginator->total(), ['count' => number_format($paginator->total())]) }}
         </span>
     </nav>
 @endif

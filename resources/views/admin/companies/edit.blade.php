@@ -8,10 +8,10 @@
 
 @section('main-content')
     <div class="kh-bo">
-        <nav class="kh-bo__breadcrumb" aria-label="Breadcrumb">
-            <a href="{{ route('home') }}">Back office</a>
+        <nav class="kh-bo__breadcrumb" aria-label="{{ __('ui.admin.a11y.breadcrumb') }}">
+            <a href="{{ route('home') }}">{{ __('ui.bo.breadcrumb_root') }}</a>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6" /></svg>
-            <a href="{{ route('companies') }}">Companies</a>
+            <a href="{{ route('companies') }}">{{ __('ui.bo.companies.title') }}</a>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6" /></svg>
             <span aria-current="page">{{ $company->name }}</span>
         </nav>
@@ -31,7 +31,7 @@
                 </p>
             </div>
 
-            <a class="kh-bo__btn kh-bo__btn--ghost" href="{{ route('companies') }}">Back to companies</a>
+            <a class="kh-bo__btn kh-bo__btn--ghost" href="{{ route('companies') }}">{{ __('ui.bo.companies.back_to_list') }}</a>
         </header>
 
 

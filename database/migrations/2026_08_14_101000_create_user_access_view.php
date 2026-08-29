@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 /*
 | KH-WORKS | Module 01 — Identity and Access (10 of 10)
@@ -30,9 +31,49 @@ return new class extends Migration
 {
     public function up(): void
     {
-        DB::statement('DROP VIEW IF EXISTS `v_user_access`');
+        DB::statement('DROP VIEW IF EXISTS v_user_access');
 
-        DB::statement(<<<'SQL'
+        DB::statement(
+            Schema::getConnection()->getDriverName() === 'pgsql'
+                ? $this->postgresView()
+                : $this->mysqlView()
+        );
+    }
+
+    public function down(): void
+    {
+        DB::statement('DROP VIEW IF EXISTS v_user_access');
+    }
+
+    /*
+    | PostgreSQL keeps the aggregate filter, but `roles` is still built with
+    | string_agg rather than array_agg so both engines hand back the same
+    | comma-separated string and callers do not have to branch.
+    */
+    private function postgresView(): string
+    {
+        return <<<'SQL'
+            CREATE VIEW v_user_access AS
+            SELECT
+                u.id,
+                MAX(u.email) AS email,
+                MAX(u.phone) AS phone,
+                MAX(u.display_name) AS display_name,
+                MAX(u.status) AS status,
+                MAX(u.preferred_locale) AS preferred_locale,
+                string_agg(r.code, ',' ORDER BY r.sort_order) AS roles,
+                MAX(r.code) FILTER (WHERE ur.is_primary) AS primary_role
+            FROM users u
+            LEFT JOIN user_roles ur ON ur.user_id = u.id
+            LEFT JOIN roles r       ON r.id = ur.role_id
+            WHERE u.deleted_at IS NULL
+            GROUP BY u.id
+        SQL;
+    }
+
+    private function mysqlView(): string
+    {
+        return <<<'SQL'
             CREATE VIEW `v_user_access` AS
             SELECT
                 u.id,
@@ -48,11 +89,6 @@ return new class extends Migration
             LEFT JOIN roles r       ON r.id = ur.role_id
             WHERE u.deleted_at IS NULL
             GROUP BY u.id
-        SQL);
-    }
-
-    public function down(): void
-    {
-        DB::statement('DROP VIEW IF EXISTS `v_user_access`');
+        SQL;
     }
 };

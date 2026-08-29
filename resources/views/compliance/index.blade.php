@@ -14,33 +14,33 @@
         $rejected = $counts['rejected'] ?? 0;
 
         $filters = [
-            '' => 'All',
-            'verified' => 'Verified',
-            'pending' => 'Pending',
-            'rejected' => 'Rejected',
+            '' => __('ui.bo.all'),
+            'verified' => __('ui.bo.status.verified'),
+            'pending' => __('ui.bo.status.pending'),
+            'rejected' => __('ui.bo.status.rejected'),
         ];
 
         $isFiltered = $activeStatus || $searchTerm || $fromDate || $toDate;
     @endphp
 
     <div class="kh-bo">
-        <nav class="kh-bo__breadcrumb" aria-label="Breadcrumb">
-            <a href="{{ route('home') }}">Back office</a>
+        <nav class="kh-bo__breadcrumb" aria-label="{{ __('ui.admin.a11y.breadcrumb') }}">
+            <a href="{{ route('home') }}">{{ __('ui.bo.breadcrumb_root') }}</a>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6" /></svg>
-            <span aria-current="page">Compliance</span>
+            <span aria-current="page">{{ __('ui.bo.compliance.title') }}</span>
         </nav>
 
         <header class="kh-bo__head">
             <div>
-                <h1>Compliance</h1>
-                <p>Track the licences and certificates each employer has to hold, and sign them off.</p>
+                <h1>{{ __('ui.bo.compliance.title') }}</h1>
+                <p>{{ __('ui.bo.compliance.subtitle') }}</p>
             </div>
 
             <a class="kh-bo__btn" href="{{ route('compliance.create') }}">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
                     <path d="M12 5v14M5 12h14" />
                 </svg>
-                Add record
+                {{ __('ui.bo.compliance.add') }}
             </a>
         </header>
 
@@ -54,14 +54,14 @@
             </div>
         @endif
 
-        <section class="kh-bo__tiles" aria-label="Compliance summary">
+        <section class="kh-bo__tiles" aria-label="{{ __('ui.bo.compliance.summary_label') }}">
             <article class="kh-bo__tile">
                 <span class="kh-bo__tile-icon" aria-hidden="true">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" /><path d="M14 2v6h6" />
                     </svg>
                 </span>
-                <div><strong>{{ number_format($counts->sum()) }}</strong><span>Records</span></div>
+                <div><strong>{{ number_format($counts->sum()) }}</strong><span>{{ __('ui.bo.compliance.tile_records') }}</span></div>
             </article>
 
             <article class="kh-bo__tile">
@@ -70,7 +70,7 @@
                         <path d="M9 12l2 2 4-4" /><circle cx="12" cy="12" r="9" />
                     </svg>
                 </span>
-                <div><strong>{{ number_format($verified) }}</strong><span>Verified</span></div>
+                <div><strong>{{ number_format($verified) }}</strong><span>{{ __('ui.bo.compliance.tile_verified') }}</span></div>
             </article>
 
             <article class="kh-bo__tile">
@@ -79,7 +79,7 @@
                         <circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" />
                     </svg>
                 </span>
-                <div><strong>{{ number_format($pending) }}</strong><span>Awaiting review</span></div>
+                <div><strong>{{ number_format($pending) }}</strong><span>{{ __('ui.bo.compliance.tile_awaiting') }}</span></div>
             </article>
 
             <article class="kh-bo__tile">
@@ -88,25 +88,22 @@
                         <circle cx="12" cy="12" r="9" /><path d="M15 9l-6 6M9 9l6 6" />
                     </svg>
                 </span>
-                <div><strong>{{ number_format($rejected) }}</strong><span>Rejected</span></div>
+                <div><strong>{{ number_format($rejected) }}</strong><span>{{ __('ui.bo.compliance.tile_rejected') }}</span></div>
             </article>
         </section>
 
         <section class="kh-bo__card">
             <div class="kh-bo__card-head">
                 <div>
-                    <h2>Compliance register</h2>
+                    <h2>{{ __('ui.bo.compliance.register') }}</h2>
                     <p>
-                        {{ $total }} {{ \Illuminate\Support\Str::plural('record', $total) }} shown.
-                        @if ($fromDate || $toDate)
-                            Expiring
-                            @if ($fromDate && $toDate)
-                                {{ $fromDate }} – {{ $toDate }}.
-                            @elseif ($fromDate)
-                                from {{ $fromDate }}.
-                            @else
-                                up to {{ $toDate }}.
-                            @endif
+                        {{ trans_choice('ui.bo.compliance.records_shown', $total, ['count' => $total]) }}
+                        @if ($fromDate && $toDate)
+                            {{ __('ui.bo.compliance.expiring_between', ['from' => $fromDate, 'to' => $toDate]) }}
+                        @elseif ($fromDate)
+                            {{ __('ui.bo.compliance.expiring_from', ['from' => $fromDate]) }}
+                        @elseif ($toDate)
+                            {{ __('ui.bo.compliance.expiring_to', ['to' => $toDate]) }}
                         @endif
                     </p>
                 </div>
@@ -117,24 +114,24 @@
                             'name' => 'status',
                             'options' => $filters,
                             'active' => $activeStatus,
-                            'label' => 'Filter by status',
-                            'allLabel' => 'All statuses',
+                            'label' => __('ui.bo.compliance.filter_status'),
+                            'allLabel' => __('ui.bo.compliance.all_statuses'),
                         ])
 
                         <input type="search" name="q" value="{{ $searchTerm }}"
-                            placeholder="Search name or reference" aria-label="Search compliance records">
+                            placeholder="{{ __('ui.bo.compliance.search_placeholder') }}" aria-label="{{ __('ui.bo.compliance.search_aria') }}">
 
                         <div class="kh-bo__range">
                             <input type="date" name="from" value="{{ $fromDate }}"
-                                aria-label="Expiring from date" title="Expiring from date">
+                                aria-label="{{ __('ui.bo.compliance.from_date') }}" title="{{ __('ui.bo.compliance.from_date') }}">
                             <span aria-hidden="true">–</span>
                             <input type="date" name="to" value="{{ $toDate }}"
-                                aria-label="Expiring end date" title="Expiring end date">
+                                aria-label="{{ __('ui.bo.compliance.to_date') }}" title="{{ __('ui.bo.compliance.to_date') }}">
                         </div>
 
-                        <button class="kh-bo__btn kh-bo__btn--ghost" type="submit">Search</button>
+                        <button class="kh-bo__btn kh-bo__btn--ghost" type="submit">{{ __('ui.bo.search') }}</button>
                         @if ($isFiltered)
-                            <a class="kh-bo__btn kh-bo__btn--ghost" href="{{ route('compliance.index') }}">Clear</a>
+                            <a class="kh-bo__btn kh-bo__btn--ghost" href="{{ route('compliance.index') }}">{{ __('ui.bo.clear') }}</a>
                         @endif
                     </form>
                 </div>
@@ -144,12 +141,12 @@
                 <table class="kh-bo__table">
                     <thead>
                         <tr>
-                            <th scope="col">Organisation</th>
-                            <th scope="col">Category</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Expires</th>
-                            <th scope="col">Verified by</th>
-                            <th scope="col"><span class="visually-hidden">Actions</span></th>
+                            <th scope="col">{{ __('ui.bo.compliance.col_organisation') }}</th>
+                            <th scope="col">{{ __('ui.bo.compliance.col_category') }}</th>
+                            <th scope="col">{{ __('ui.bo.compliance.col_status') }}</th>
+                            <th scope="col">{{ __('ui.bo.compliance.col_expires') }}</th>
+                            <th scope="col">{{ __('ui.bo.compliance.col_verified_by') }}</th>
+                            <th scope="col"><span class="visually-hidden">{{ __('ui.bo.actions') }}</span></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -176,11 +173,11 @@
                                     </div>
                                 </td>
 
-                                <td>{{ $record->category }}</td>
+                                <td>{{ __('ui.bo.options.compliance_category.' . $record->category) }}</td>
 
                                 <td>
                                     <span class="kh-bo__status kh-bo__status--{{ $record->status }}">
-                                        {{ ucfirst($record->status) }}
+                                        {{ __('ui.bo.status.' . $record->status) }}
                                     </span>
                                 </td>
 
@@ -188,12 +185,12 @@
                                     @if ($record->expires_on)
                                         {{ $record->expires_on->format('M j, Y') }}
                                         @if ($record->hasExpired())
-                                            <span class="kh-bo__expiry-flag kh-bo__expiry-flag--past">Expired</span>
+                                            <span class="kh-bo__expiry-flag kh-bo__expiry-flag--past">{{ __('ui.bo.compliance.expired') }}</span>
                                         @elseif ($record->expiresSoon())
-                                            <span class="kh-bo__expiry-flag">Expiring soon</span>
+                                            <span class="kh-bo__expiry-flag">{{ __('ui.bo.compliance.expiring_soon') }}</span>
                                         @endif
                                     @else
-                                        <span class="kh-bo__ref">No expiry</span>
+                                        <span class="kh-bo__ref">{{ __('ui.bo.compliance.no_expiry') }}</span>
                                     @endif
                                 </td>
 
@@ -222,18 +219,18 @@
                                         </form>
 
                                         <a class="kh-bo__action" href="{{ route('compliance.edit', $record) }}"
-                                            title="Edit record" aria-label="Edit {{ $record->name }}">
+                                            title="{{ __('ui.bo.compliance.edit_record') }}" aria-label="{{ __('ui.bo.compliance.edit_aria', ['name' => $record->name]) }}">
                                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                                 <path d="M12 20h9" /><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z" />
                                             </svg>
                                         </a>
 
                                         <form method="POST" action="{{ route('compliance.destroy', $record) }}"
-                                            onsubmit="return confirm('Delete the compliance record for {{ addslashes($record->name) }}? This cannot be undone.');">
+                                            onsubmit="return confirm('{{ addslashes(__('ui.bo.delete_confirm', ['name' => $record->name])) }}');">
                                             @csrf
                                             @method('DELETE')
                                             <button class="kh-bo__action kh-bo__action--danger" type="submit"
-                                                title="Delete record" aria-label="Delete {{ $record->name }}">
+                                                title="{{ __('ui.bo.compliance.delete_record') }}" aria-label="{{ __('ui.bo.compliance.delete_aria', ['name' => $record->name]) }}">
                                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                                     <path d="M3 6h18" /><path d="M8 6V4h8v2" /><path d="M19 6l-1 14H6L5 6" />
                                                 </svg>
@@ -246,13 +243,13 @@
                             <tr>
                                 <td colspan="6">
                                     <div class="kh-bo__empty">
-                                        <strong>Nothing to review</strong>
+                                        <strong>{{ __('ui.bo.compliance.empty_title') }}</strong>
                                         <span>
                                             @if ($isFiltered)
-                                                No records match this filter.
-                                                <a href="{{ route('compliance.index') }}">Clear it</a> to see everything.
+                                                {{ __('ui.bo.compliance.empty_filtered') }}
+                                                <a href="{{ route('compliance.index') }}">{{ __('ui.bo.clear_it') }}</a> {{ __('ui.bo.to_see_everything') }}
                                             @else
-                                                Add the first compliance record to get started.
+                                                {{ __('ui.bo.compliance.empty_none') }}
                                             @endif
                                         </span>
                                     </div>

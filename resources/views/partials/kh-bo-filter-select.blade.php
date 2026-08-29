@@ -10,8 +10,8 @@
     $active. Optional: $label (a11y), $allLabel (what '' reads as).
 --}}
 @php
-    $label ??= 'Filter';
-    $allLabel ??= 'All';
+    $label ??= __('ui.bo.filter');
+    $allLabel ??= __('ui.bo.all');
 @endphp
 
 <select name="{{ $name }}" aria-label="{{ $label }}" title="{{ $label }}">

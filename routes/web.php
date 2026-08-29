@@ -53,7 +53,7 @@ Route::post('/jobs/{job}/apply', [JobController::class, 'storeApplication'])
     ->name('jobs.apply.store');
 
 Route::get('/language/{locale}', function (Request $request, string $locale) {
-    abort_unless(in_array($locale, ['en', 'kh'], true), 404);
+    abort_unless(in_array($locale, \App\Http\Middleware\SetLocale::SUPPORTED, true), 404);
 
     session(['locale' => $locale]);
 

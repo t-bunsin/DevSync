@@ -13,18 +13,18 @@
     @endphp
 
     <div class="kh-bo">
-        <nav class="kh-bo__breadcrumb" aria-label="Breadcrumb">
-            <a href="{{ route('home') }}">Back office</a>
+        <nav class="kh-bo__breadcrumb" aria-label="{{ __('ui.admin.a11y.breadcrumb') }}">
+            <a href="{{ route('home') }}">{{ __('ui.bo.breadcrumb_root') }}</a>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6" /></svg>
-            <a href="{{ route('resumes.index') }}">Resumes</a>
+            <a href="{{ route('resumes.index') }}">{{ __('ui.bo.resumes.title') }}</a>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6" /></svg>
-            <span aria-current="page">Resume preview</span>
+            <span aria-current="page">{{ __('ui.bo.resumes.preview_title') }}</span>
         </nav>
 
         <header class="kh-bo__head">
             <div>
-                <h1>Resume preview</h1>
-                <p>How this record reads once printed.</p>
+                <h1>{{ __('ui.bo.resumes.preview_title') }}</h1>
+                <p>{{ __('ui.bo.resumes.preview_subtitle') }}</p>
             </div>
 
             <div class="kh-bo__actions">
@@ -32,10 +32,10 @@
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                         <path d="M12 3v12" /><path d="M7 12l5 5 5-5" /><path d="M4 21h16" />
                     </svg>
-                    Download PDF
+                    {{ __('ui.bo.resumes.download_pdf') }}
                 </a>
-                <a class="kh-bo__btn kh-bo__btn--ghost" href="{{ route('resumes.edit', $resume) }}">Edit</a>
-                <a class="kh-bo__btn kh-bo__btn--ghost" href="{{ route('resumes.index') }}">Back to register</a>
+                <a class="kh-bo__btn kh-bo__btn--ghost" href="{{ route('resumes.edit', $resume) }}">{{ __('ui.bo.edit') }}</a>
+                <a class="kh-bo__btn kh-bo__btn--ghost" href="{{ route('resumes.index') }}">{{ __('ui.bo.resumes.back_to_register') }}</a>
             </div>
         </header>
 
@@ -58,14 +58,14 @@
 
             @if ($resume->summary)
                 <section class="kh-cv__row">
-                    <h3>Professional Summary</h3>
+                    <h3>{{ __('ui.bo.resumes.section_summary') }}</h3>
                     <div><p>{{ $resume->summary }}</p></div>
                 </section>
             @endif
 
             @if ($resume->section('work_history'))
                 <section class="kh-cv__row">
-                    <h3>Work History</h3>
+                    <h3>{{ __('ui.bo.resumes.section_work') }}</h3>
                     <div>
                         @foreach ($resume->section('work_history') as $job)
                             <div class="kh-cv__entry">
@@ -96,7 +96,7 @@
 
             @if ($resume->skillList())
                 <section class="kh-cv__row">
-                    <h3>Skills</h3>
+                    <h3>{{ __('ui.bo.resumes.section_skills') }}</h3>
                     <div>
                         <ul class="kh-cv__columns">
                             @foreach ($resume->skillList() as $skill)
@@ -109,7 +109,7 @@
 
             @if ($resume->section('certifications'))
                 <section class="kh-cv__row">
-                    <h3>Certifications</h3>
+                    <h3>{{ __('ui.bo.resumes.section_certifications') }}</h3>
                     <div>
                         <ul>
                             @foreach ($resume->section('certifications') as $certificate)
@@ -122,7 +122,7 @@
 
             @if ($resume->section('education'))
                 <section class="kh-cv__row">
-                    <h3>Education</h3>
+                    <h3>{{ __('ui.bo.resumes.section_education') }}</h3>
                     <div>
                         @foreach ($resume->section('education') as $study)
                             <div class="kh-cv__entry">
@@ -144,7 +144,7 @@
 
             @if ($resume->section('languages'))
                 <section class="kh-cv__row">
-                    <h3>Languages</h3>
+                    <h3>{{ __('ui.bo.resumes.section_languages') }}</h3>
                     <div class="kh-cv__languages">
                         @foreach ($resume->section('languages') as $language)
                             <div class="kh-cv__language">

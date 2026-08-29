@@ -16,10 +16,10 @@
     @endphp
 
     <div class="kh-bo">
-        <nav class="kh-bo__breadcrumb" aria-label="Breadcrumb">
-            <a href="{{ route('home') }}">Back office</a>
+        <nav class="kh-bo__breadcrumb" aria-label="{{ __('ui.admin.a11y.breadcrumb') }}">
+            <a href="{{ route('home') }}">{{ __('ui.bo.breadcrumb_root') }}</a>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6" /></svg>
-            <a href="{{ route('job-posts.index') }}">Job posts</a>
+            <a href="{{ route('job-posts.index') }}">{{ __('ui.bo.job_posts.title') }}</a>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6" /></svg>
             <a href="{{ route('job-posts.applications', $post) }}">{{ $post->title }}</a>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6" /></svg>
@@ -30,7 +30,7 @@
             <div>
                 <h1>{{ $application->full_name }}</h1>
                 <p>
-                    Applied for <a href="{{ route('job-posts.show', $post) }}">{{ $post->title }}</a>
+                    {{ __('ui.bo.applications.applied_for') }} <a href="{{ route('job-posts.show', $post) }}">{{ $post->title }}</a>
                     · {{ $application->appliedAgo() }}
                     @if ($appliedAt)
                         · {{ $appliedAt->format('d M Y, H:i') }}
@@ -39,16 +39,16 @@
             </div>
 
             <div class="kh-bo__head-actions">
-                <a class="kh-bo__btn kh-bo__btn--ghost" href="{{ route('job-posts.applications', $post) }}">Back to candidates</a>
+                <a class="kh-bo__btn kh-bo__btn--ghost" href="{{ route('job-posts.applications', $post) }}">{{ __('ui.bo.applications.back_to_candidates') }}</a>
 
                 <a class="kh-bo__btn kh-bo__btn--ghost"
-                    href="mailto:{{ $application->email }}?subject={{ rawurlencode('Your application for ' . $post->title) }}">Email them</a>
+                    href="mailto:{{ $application->email }}?subject={{ rawurlencode('Your application for ' . $post->title) }}">{{ __('ui.bo.applications.email_them') }}</a>
 
                 <form method="POST" action="{{ route('job-applications.destroy', $application) }}"
                     onsubmit="return confirm('Delete the application from {{ addslashes($application->full_name) }}? This cannot be undone.');">
                     @csrf
                     @method('DELETE')
-                    <button class="kh-bo__btn kh-bo__btn--ghost kh-bo__btn--danger" type="submit">Delete</button>
+                    <button class="kh-bo__btn kh-bo__btn--ghost kh-bo__btn--danger" type="submit">{{ __('ui.bo.delete') }}</button>
                 </form>
             </div>
         </header>
@@ -68,12 +68,12 @@
                 <section class="kh-bo__card">
                     <div class="kh-bo__card-head">
                         <div>
-                            <h2>Review</h2>
-                            <p>Where this candidate sits, and the two notes attached to them.</p>
+                            <h2>{{ __('ui.bo.applications.review') }}</h2>
+                            <p>{{ __('ui.bo.applications.review_hint') }}</p>
                         </div>
 
                         <span class="kh-bo__status kh-bo__status--{{ $application->statusTone() }}">
-                            {{ ucfirst($application->status) }}
+                            {{ __('ui.bo.status.' . $application->status) }}
                         </span>
                     </div>
 
@@ -86,7 +86,7 @@
                                  pipeline, and seeing where this candidate sits in it
                                  is the point of the page. --}}
                             <fieldset class="kh-bo__pills">
-                                <legend class="kh-bo__label">Status</legend>
+                                <legend class="kh-bo__label">{{ __('ui.bo.applications.col_status') }}</legend>
 
                                 @foreach (\App\Models\JobApplication::statuses() as $status)
                                     <label class="kh-bo__pill kh-bo__pill--{{ $tones[$status] ?? 'neutral' }}">
@@ -105,23 +105,23 @@
                             @endif
 
                             <label class="kh-bo__field">
-                                <span class="kh-bo__label">Internal note</span>
+                                <span class="kh-bo__label">{{ __('ui.bo.applications.internal_note') }}</span>
                                 <textarea class="kh-bo__control" name="note" rows="4"
-                                    placeholder="Only the hiring team sees this.">{{ $application->note }}</textarea>
-                                <small class="kh-bo__hint">Private to your team — the candidate never sees this.</small>
+                                    placeholder="{{ __('ui.bo.applications.internal_note_placeholder') }}">{{ $application->note }}</textarea>
+                                <small class="kh-bo__hint">{{ __('ui.bo.applications.internal_note_hint') }}</small>
                             </label>
 
                             <label class="kh-bo__field">
-                                <span class="kh-bo__label">Message to candidate</span>
+                                <span class="kh-bo__label">{{ __('ui.bo.applications.message_to_candidate') }}</span>
                                 <textarea class="kh-bo__control" name="candidate_message" rows="4"
-                                    placeholder="Anything you want {{ $application->full_name }} to read.">{{ $application->candidate_message }}</textarea>
+                                    placeholder="{{ __('ui.bo.applications.message_placeholder', ['name' => $application->full_name]) }}">{{ $application->candidate_message }}</textarea>
                                 <small class="kh-bo__hint kh-bo__hint--warn">
                                     {{ $application->full_name }} reads this on their application page. Leave it empty to say nothing.
                                 </small>
                             </label>
 
                             <div class="kh-bo__form-actions">
-                                <button class="kh-bo__btn" type="submit">Save review</button>
+                                <button class="kh-bo__btn" type="submit">{{ __('ui.bo.applications.save_review') }}</button>
                             </div>
                         </form>
                     </div>
@@ -130,8 +130,8 @@
                 <section class="kh-bo__card">
                     <div class="kh-bo__card-head">
                         <div>
-                            <h2>Their message</h2>
-                            <p>What the candidate wrote when they applied.</p>
+                            <h2>{{ __('ui.bo.applications.their_message') }}</h2>
+                            <p>{{ __('ui.bo.applications.their_message_hint') }}</p>
                         </div>
                     </div>
 
@@ -139,7 +139,7 @@
                         @if ($application->message)
                             <blockquote class="kh-bo__quote">{{ $application->message }}</blockquote>
                         @else
-                            <p class="kh-bo__muted">No message was sent with this application.</p>
+                            <p class="kh-bo__muted">{{ __('ui.bo.applications.no_message') }}</p>
                         @endif
                     </div>
                 </section>
@@ -149,8 +149,8 @@
                 <section class="kh-bo__card">
                     <div class="kh-bo__card-head">
                         <div>
-                            <h2>Candidate</h2>
-                            <p>How to reach them, and what they attached.</p>
+                            <h2>{{ __('ui.bo.applications.candidate') }}</h2>
+                            <p>{{ __('ui.bo.applications.reach_them') }}</p>
                         </div>
                     </div>
 
@@ -176,7 +176,7 @@
                                     <path d="M22 16.9v3a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3.1 19.5 19.5 0 01-6-6A19.8 19.8 0 012.1 4.2 2 2 0 014.1 2h3a2 2 0 012 1.7c.1 1 .4 1.9.7 2.8a2 2 0 01-.5 2.1L8.1 9.9a16 16 0 006 6l1.3-1.2a2 2 0 012.1-.5c.9.3 1.8.6 2.8.7a2 2 0 011.7 2z" />
                                 </svg>
                                 <div class="kh-bo__specrow-body">
-                                    <span class="kh-bo__specrow-label">Phone</span>
+                                    <span class="kh-bo__specrow-label">{{ __('ui.bo.applications.phone') }}</span>
                                     <span class="kh-bo__specrow-value">
                                         @if ($application->phone)
                                             <a href="tel:{{ $application->phone }}">{{ $application->phone }}</a>
@@ -219,12 +219,12 @@
                                             <span class="kh-bo__filechip">{{ $application->cvLabel() }}</span>
                                         @endif
                                     @else
-                                        <span class="kh-bo__specrow-value">No CV on file</span>
+                                        <span class="kh-bo__specrow-value">{{ __('ui.bo.applications.no_cv') }}</span>
                                     @endif
 
                                     @if ($application->resume)
                                         <span class="kh-bo__specrow-value">
-                                            <a href="{{ route('resumes.show', $application->resume) }}">Open their resume</a>
+                                            <a href="{{ route('resumes.show', $application->resume) }}">{{ __('ui.bo.applications.open_resume') }}</a>
                                         </span>
                                     @endif
                                 </div>
@@ -235,7 +235,7 @@
                                     <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" /><circle cx="12" cy="7" r="4" />
                                 </svg>
                                 <div class="kh-bo__specrow-body">
-                                    <span class="kh-bo__specrow-label">Account</span>
+                                    <span class="kh-bo__specrow-label">{{ __('ui.bo.applications.account') }}</span>
                                     <span class="kh-bo__specrow-value">
                                         @if ($application->candidate)
                                             {{ $application->candidate->displayName() }}
@@ -251,7 +251,7 @@
                                     <circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" />
                                 </svg>
                                 <div class="kh-bo__specrow-body">
-                                    <span class="kh-bo__specrow-label">Applied</span>
+                                    <span class="kh-bo__specrow-label">{{ __('ui.bo.applications.applied') }}</span>
                                     <span class="kh-bo__specrow-value">{{ $appliedAt?->format('d M Y, H:i') ?: '—' }}</span>
                                 </div>
                             </li>

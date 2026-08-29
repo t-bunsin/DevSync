@@ -16,6 +16,61 @@
   font-weight: 700;
 }
 
+/* Khmer OS Battambang (self-hosted, same as Metropolis above, so the backend
+   does not depend on a CDN being reachable).
+
+   unicode-range is the whole point: it is limited to the Khmer block, so the
+   browser only reaches for this face on Khmer characters and Latin text keeps
+   using Metropolis. That means the stacks below need no locale switch — a
+   Khmer company name renders correctly even while the UI is in English. */
+@font-face {
+  font-family: "Battambang";
+  src: url("../assets/fonts/battambang/battambang-khmer-300.woff2") format("woff2");
+  font-weight: 300;
+  font-display: swap;
+  /* Battambang's glyphs sit ~8% smaller than Metropolis at the same px,
+     so Khmer looked undersized next to Latin. size-adjust rescales the
+     outlines once, here, instead of per-component font-size bumps. */
+  size-adjust: 116%;
+  unicode-range: U+1780-17FF, U+19E0-19FF, U+200C-200D, U+25CC;
+}
+
+@font-face {
+  font-family: "Battambang";
+  src: url("../assets/fonts/battambang/battambang-khmer-400.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+  /* Battambang's glyphs sit ~8% smaller than Metropolis at the same px,
+     so Khmer looked undersized next to Latin. size-adjust rescales the
+     outlines once, here, instead of per-component font-size bumps. */
+  size-adjust: 116%;
+  unicode-range: U+1780-17FF, U+19E0-19FF, U+200C-200D, U+25CC;
+}
+
+@font-face {
+  font-family: "Battambang";
+  src: url("../assets/fonts/battambang/battambang-khmer-700.woff2") format("woff2");
+  font-weight: 700;
+  font-display: swap;
+  /* Battambang's glyphs sit ~8% smaller than Metropolis at the same px,
+     so Khmer looked undersized next to Latin. size-adjust rescales the
+     outlines once, here, instead of per-component font-size bumps. */
+  size-adjust: 116%;
+  unicode-range: U+1780-17FF, U+19E0-19FF, U+200C-200D, U+25CC;
+}
+
+@font-face {
+  font-family: "Battambang";
+  src: url("../assets/fonts/battambang/battambang-khmer-900.woff2") format("woff2");
+  font-weight: 900;
+  font-display: swap;
+  /* Battambang's glyphs sit ~8% smaller than Metropolis at the same px,
+     so Khmer looked undersized next to Latin. size-adjust rescales the
+     outlines once, here, instead of per-component font-size bumps. */
+  size-adjust: 116%;
+  unicode-range: U+1780-17FF, U+19E0-19FF, U+200C-200D, U+25CC;
+}
+
 body.nav-fixed {
   --kh-ink: #102a43;
   --kh-muted: #6b8190;
@@ -34,7 +89,11 @@ body.nav-fixed {
   --kh-radius-md: 15px;
   --kh-shadow: 0 18px 50px rgba(16, 42, 67, 0.08);
   min-width: 320px;
-  font-family: "Metropolis", "Segoe UI", sans-serif;
+  font-family: "Metropolis", "Battambang", "Segoe UI", sans-serif;
+  /* Bootstrap components that resolve their own font off this variable rather
+     than inheriting from body (.dropdown-menu, .modal, .btn) need Battambang in
+     the stack too, or Khmer inside them drops to a system fallback. */
+  --bs-body-font-family: "Metropolis", "Battambang", "Segoe UI", sans-serif;
 }
 
 .kh-dashboard-page {
@@ -164,6 +223,188 @@ body.nav-fixed {
 .kh-view-site svg {
   width: 14px;
   height: 14px;
+}
+
+/* Language switcher.
+
+   A pill rather than another flat grey rectangle: the teal globe puck ties it
+   to the brand mark and the avatar, and gives the control an identity without
+   competing with the primary actions beside it. */
+.kh-admin-lang {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  /* min-height + a loose line-height, because Khmer stacks diacritics above and
+     below the baseline and gets clipped at the tighter Latin metrics. */
+  min-height: 38px;
+  /* Tighter on the left so the puck sits flush inside the pill. */
+  padding: 5px 13px 5px 5px;
+  color: var(--kh-ink);
+  background: var(--kh-surface);
+  border: 1px solid var(--kh-line);
+  border-radius: 999px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  line-height: 1.7;
+  text-decoration: none;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(16, 42, 67, 0.05);
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+}
+
+.kh-admin-lang:hover {
+  color: var(--kh-ink);
+  border-color: rgba(28, 166, 160, 0.45);
+  box-shadow: 0 6px 18px rgba(12, 96, 113, 0.13);
+  transform: translateY(-1px);
+}
+
+.kh-admin-lang[aria-expanded="true"] {
+  color: var(--kh-ink);
+  border-color: rgba(28, 166, 160, 0.55);
+  box-shadow: 0 6px 18px rgba(12, 96, 113, 0.13);
+}
+
+.kh-admin-lang__globe {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  color: #fff;
+  background: linear-gradient(145deg, var(--kh-teal), var(--kh-ocean));
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(12, 96, 113, 0.3);
+}
+
+.kh-admin-lang__globe svg {
+  width: 13px;
+  height: 13px;
+}
+
+/* Unscoped, unlike the .kh-dashboard-page focus rules further down: the admin
+   shell wraps every backend screen, not just the dashboard. */
+.kh-admin-lang:focus-visible {
+  outline: 3px solid rgba(28, 166, 160, 0.34);
+  outline-offset: 2px;
+  box-shadow: none;
+}
+
+.kh-admin-lang__caret {
+  font-size: 0.56rem;
+  color: var(--kh-muted);
+  transition: transform 0.18s ease;
+}
+
+.kh-admin-lang[aria-expanded="true"] .kh-admin-lang__caret {
+  color: var(--kh-ocean);
+  transform: rotate(180deg);
+}
+
+.kh-admin-lang__menu {
+  min-width: 212px;
+  margin-top: 10px !important;
+  padding: 8px;
+  background: var(--kh-surface);
+  border: 1px solid var(--kh-line) !important;
+  border-radius: 18px !important;
+  box-shadow: 0 22px 46px rgba(16, 42, 67, 0.15) !important;
+}
+
+.kh-admin-lang__menu-title {
+  display: block;
+  padding: 3px 10px 9px;
+  color: var(--kh-muted);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.kh-admin-lang__option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 12px;
+  font-size: 0.79rem;
+  font-weight: 600;
+  line-height: 1.7;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+/* Two-letter chip, so the eye can pick the row without reading the name. */
+.kh-admin-lang__code {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 27px;
+  height: 27px;
+  color: var(--kh-muted);
+  background: #eef4f3;
+  border: 1px solid var(--kh-line);
+  border-radius: 9px;
+  font-size: 0.58rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.kh-admin-lang__name {
+  flex: 1;
+}
+
+.kh-admin-lang__option .fa-check {
+  color: var(--kh-teal);
+  font-size: 0.68rem;
+}
+
+.kh-admin-lang__option.is-active {
+  color: var(--kh-ocean);
+  background: #e9f5f3;
+}
+
+.kh-admin-lang__option.is-active .kh-admin-lang__code {
+  color: #fff;
+  background: linear-gradient(145deg, var(--kh-teal), var(--kh-ocean));
+  border-color: transparent;
+}
+
+/* Narrow screens keep the globe and the caret; the label is the first thing
+   that can go, since the open menu names both languages anyway. */
+@media (max-width: 575.98px) {
+  .kh-admin-lang__label {
+    display: none;
+  }
+
+  .kh-admin-lang {
+    padding: 5px 9px 5px 5px;
+  }
+}
+
+/* Khmer builds a syllable by stacking marks around the base glyph, so
+   letter-spacing pulls a word apart rather than opening it up, and uppercase
+   does nothing. Both are dropped on the small-caps labels when the page is
+   in Khmer. */
+/* Display type is set at 1.02–1.1 line-height, which is fine for Latin but
+   collides once Khmer stacks a subscript under one line and a superscript over
+   the next. Relaxed only for Khmer, so the English headings keep their tight
+   setting. */
+html[lang="kh"] .kh-command h2,
+html[lang="kh"] .kh-dash__intro h1,
+html[lang="kh"] .kh-metric__body strong {
+  line-height: 1.4;
+}
+
+html[lang="kh"] .kh-admin-lang__menu-title,
+html[lang="kh"] .kh-admin-lang__code,
+html[lang="kh"] .kh-admin-brand__tagline,
+html[lang="kh"] .nav-fixed .sidenav-menu-heading,
+html[lang="kh"] .kh-sidebar-pulse > span,
+html[lang="kh"] .kh-command__eyebrow,
+html[lang="kh"] .kh-command__score-copy > span,
+html[lang="kh"] .kh-panel__kicker {
+  letter-spacing: 0;
+  text-transform: none;
 }
 
 .kh-user-avatar {

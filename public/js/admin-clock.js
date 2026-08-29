@@ -17,12 +17,33 @@
     var DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     var MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
                   'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    var AM = 'AM';
+    var PM = 'PM';
 
     var clock = document.getElementById('khAdminClock');
 
     if (!clock) {
         return;
     }
+
+    // Names come from the view (ui.admin.clock.*) so the clock follows the
+    // chosen language. The English arrays above stay as the fallback for a
+    // malformed or missing attribute — a broken clock is worse than an
+    // untranslated one.
+    function names(attribute, fallback) {
+        try {
+            var parsed = JSON.parse(clock.getAttribute(attribute));
+
+            return Array.isArray(parsed) && parsed.length === fallback.length ? parsed : fallback;
+        } catch (error) {
+            return fallback;
+        }
+    }
+
+    DAYS = names('data-clock-days', DAYS);
+    MONTHS = names('data-clock-months', MONTHS);
+    AM = clock.getAttribute('data-clock-am') || AM;
+    PM = clock.getAttribute('data-clock-pm') || PM;
 
     var dateSlot = clock.querySelector('[data-clock-date]');
     var timeSlot = clock.querySelector('[data-clock-time]');
@@ -38,7 +59,7 @@
 
         dateSlot.textContent = DAYS[now.getDay()] + ' ' + pad(now.getDate()) + ' ' + MONTHS[now.getMonth()];
         timeSlot.textContent = hours12 + ':' + pad(now.getMinutes()) + ':' + pad(now.getSeconds())
-            + ' ' + (hours24 < 12 ? 'AM' : 'PM');
+            + ' ' + (hours24 < 12 ? AM : PM);
 
         // Local time, so no trailing Z — that would claim UTC.
         clock.setAttribute('datetime',

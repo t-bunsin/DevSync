@@ -29,7 +29,10 @@ return new class extends Migration
     {
         Schema::create('email_verification_codes', function (Blueprint $table) {
             $table->id();
-            $table->char('user_id', 36);
+            // uuid(), not char(36): both render as char(36) on MySQL, but only
+            // uuid() matches the type of users.id on PostgreSQL, which will not
+            // carry a foreign key between char and uuid.
+            $table->uuid('user_id');
             $table->string('code_hash');
             $table->unsignedTinyInteger('attempts')->default(0);
             $table->timestamp('expires_at')->useCurrent();

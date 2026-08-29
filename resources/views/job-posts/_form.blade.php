@@ -15,7 +15,7 @@
 
 @if ($errors->any())
     <div class="kh-bo__errors" role="alert">
-        <strong>Please check the highlighted fields.</strong>
+        <strong>{{ __('ui.bo.job_posts.form.errors') }}</strong>
         <ul>
             @foreach ($errors->all() as $message)
                 <li>{{ $message }}</li>
@@ -25,13 +25,13 @@
 @endif
 
 <div class="kh-bo__form-card" data-bo-tabs>
-    <div class="kh-bo__tabs" role="tablist" aria-label="Job post sections">
+    <div class="kh-bo__tabs" role="tablist" aria-label="{{ __('ui.bo.job_posts.form.sections') }}">
         <button class="kh-bo__tab" type="button" role="tab" data-bo-tab="overview"
-            aria-selected="true" aria-controls="bo-panel-overview">Overview</button>
+            aria-selected="true" aria-controls="bo-panel-overview">{{ __('ui.bo.job_posts.form.tab_overview') }}</button>
         <button class="kh-bo__tab" type="button" role="tab" data-bo-tab="description"
-            aria-selected="false" aria-controls="bo-panel-description">Job description</button>
+            aria-selected="false" aria-controls="bo-panel-description">{{ __('ui.bo.job_posts.form.tab_description') }}</button>
         <button class="kh-bo__tab" type="button" role="tab" data-bo-tab="requirements"
-            aria-selected="false" aria-controls="bo-panel-requirements">Requirements</button>
+            aria-selected="false" aria-controls="bo-panel-requirements">{{ __('ui.bo.job_posts.form.tab_requirements') }}</button>
     </div>
 
     {{-- Panels are hidden, never removed, so every field still submits. --}}
@@ -39,18 +39,18 @@
         <div class="kh-bo__grid">
 
         <div class="kh-bo__field">
-            <label class="kh-bo__label" for="title">Job title <span class="kh-bo__required" aria-hidden="true">*</span></label>
+            <label class="kh-bo__label" for="title">{{ __('ui.bo.job_posts.form.job_title') }} <span class="kh-bo__required" aria-hidden="true">*</span></label>
             <input @class(['kh-bo__control', 'is-invalid' => $errors->has('title')])
                 id="title" name="title" type="text" maxlength="255" required
-                value="{{ old('title', $post->title) }}" placeholder="e.g. Software Engineer">
+                value="{{ old('title', $post->title) }}" placeholder="{{ __('ui.bo.job_posts.form.job_title_placeholder') }}">
             @error('title') <span class="kh-bo__error">{{ $message }}</span> @enderror
         </div>
 
         <div class="kh-bo__field">
-            <label class="kh-bo__label" for="company_id">Company <span class="kh-bo__required" aria-hidden="true">*</span></label>
+            <label class="kh-bo__label" for="company_id">{{ __('ui.bo.job_posts.form.company') }} <span class="kh-bo__required" aria-hidden="true">*</span></label>
             <select @class(['kh-bo__control', 'is-invalid' => $errors->has('company_id')])
                 id="company_id" name="company_id" required>
-                <option value="">Choose a company…</option>
+                <option value="">{{ __('ui.bo.job_posts.form.company_choose') }}</option>
                 @foreach ($companies as $option)
                     <option value="{{ $option->id }}" @selected((int) old('company_id', $post->company_id) === $option->id)>
                         {{ $option->name }}
@@ -59,53 +59,53 @@
             </select>
             <span class="kh-bo__hint">
                 @if (auth()->user()?->isAdmin())
-                    Only approved companies appear here.
-                    <a href="{{ route('companies.create') }}">Add a company</a> if it is missing.
+                    {{ __('ui.bo.job_posts.form.company_hint_admin') }}
+                    <a href="{{ route('companies.create') }}">{{ __('ui.bo.job_posts.form.company_hint_admin_link') }}</a> {{ __('ui.bo.job_posts.form.company_hint_admin_rest') }}
                 @else
-                    Only your own company appears here. If it's missing, your company profile may still be pending approval.
+                    {{ __('ui.bo.job_posts.form.company_hint_employer') }}
                 @endif
             </span>
             @error('company_id') <span class="kh-bo__error">{{ $message }}</span> @enderror
         </div>
 
         <div class="kh-bo__field">
-            <label class="kh-bo__label" for="location">Location <span class="kh-bo__required" aria-hidden="true">*</span></label>
+            <label class="kh-bo__label" for="location">{{ __('ui.bo.job_posts.form.location') }} <span class="kh-bo__required" aria-hidden="true">*</span></label>
             <select @class(['kh-bo__control', 'is-invalid' => $errors->has('location')])
                 id="location" name="location" required>
-                <option value="">Choose a location…</option>
+                <option value="">{{ __('ui.bo.job_posts.form.location_choose') }}</option>
                 @foreach (\App\Models\JobPost::locationOptions() as $location)
                     <option value="{{ $location }}" @selected(old('location', $post->location) === $location)>{{ $location }}</option>
                 @endforeach
             </select>
             <span class="kh-bo__hint">
-                Managed under <a href="{{ route('components.index', 'locations') }}">Component</a>.
+                {!! __('ui.bo.job_posts.form.managed_under', ['link' => '<a href="' . route('components.index', 'locations') . '">' . __('ui.bo.job_posts.form.component') . '</a>']) !!}
             </span>
             @error('location') <span class="kh-bo__error">{{ $message }}</span> @enderror
         </div>
 
         <div class="kh-bo__field">
-            <label class="kh-bo__label" for="slug">URL slug</label>
+            <label class="kh-bo__label" for="slug">{{ __('ui.bo.job_posts.form.slug') }}</label>
             <input @class(['kh-bo__control', 'is-invalid' => $errors->has('slug')])
                 id="slug" name="slug" type="text" maxlength="255"
                 value="{{ old('slug', $post->slug) }}" placeholder="software-engineer">
-            <span class="kh-bo__hint">Leave blank to build it from the title. Lives at /jobs/&lt;slug&gt;.</span>
+            <span class="kh-bo__hint">{!! __('ui.bo.job_posts.form.slug_hint') !!}</span>
             @error('slug') <span class="kh-bo__error">{{ $message }}</span> @enderror
         </div>
 
         <div class="kh-bo__field">
-            <label class="kh-bo__label" for="type">Job type <span class="kh-bo__required" aria-hidden="true">*</span></label>
+            <label class="kh-bo__label" for="type">{{ __('ui.bo.job_posts.form.type') }} <span class="kh-bo__required" aria-hidden="true">*</span></label>
             <select @class(['kh-bo__control', 'is-invalid' => $errors->has('type')]) id="type" name="type" required>
                 @foreach (\App\Models\JobPost::types() as $type)
                     <option value="{{ $type }}" @selected(old('type', $post->type ?? 'Full-time') === $type)>{{ $type }}</option>
                 @endforeach
             </select>
             <span class="kh-bo__hint">
-                Managed under <a href="{{ route('components.index', 'job-types') }}">Component</a>.
+                {!! __('ui.bo.job_posts.form.managed_under', ['link' => '<a href="' . route('components.index', 'job-types') . '">' . __('ui.bo.job_posts.form.component') . '</a>']) !!}
             </span>
         </div>
 
         <div class="kh-bo__field">
-            <label class="kh-bo__label" for="mode">Work mode <span class="kh-bo__required" aria-hidden="true">*</span></label>
+            <label class="kh-bo__label" for="mode">{{ __('ui.bo.job_posts.form.mode') }} <span class="kh-bo__required" aria-hidden="true">*</span></label>
             <select @class(['kh-bo__control', 'is-invalid' => $errors->has('mode')]) id="mode" name="mode" required>
                 @foreach (\App\Models\JobPost::modes() as $mode)
                     <option value="{{ $mode }}" @selected(old('mode', $post->mode ?? 'On-site') === $mode)>{{ $mode }}</option>
@@ -114,97 +114,97 @@
         </div>
 
         <div class="kh-bo__field">
-            <label class="kh-bo__label" for="experience">Experience</label>
+            <label class="kh-bo__label" for="experience">{{ __('ui.bo.job_posts.form.experience') }}</label>
             <input class="kh-bo__control" id="experience" name="experience" type="text" maxlength="60"
-                value="{{ old('experience', $post->experience) }}" placeholder="e.g. 3+ Years">
+                value="{{ old('experience', $post->experience) }}" placeholder="{{ __('ui.bo.job_posts.form.experience_placeholder') }}">
         </div>
 
         <div class="kh-bo__field">
-            <label class="kh-bo__label" for="department">Department</label>
+            <label class="kh-bo__label" for="department">{{ __('ui.bo.job_posts.form.department') }}</label>
             <select @class(['kh-bo__control', 'is-invalid' => $errors->has('department')]) id="department" name="department">
-                <option value="">None</option>
+                <option value="">{{ __('ui.bo.job_posts.form.department_none') }}</option>
                 @foreach (\App\Models\JobPost::departmentOptions() as $department)
                     <option value="{{ $department }}" @selected(old('department', $post->department) === $department)>{{ $department }}</option>
                 @endforeach
             </select>
             <span class="kh-bo__hint">
-                Managed under <a href="{{ route('components.index', 'departments') }}">Component</a>.
+                {!! __('ui.bo.job_posts.form.managed_under', ['link' => '<a href="' . route('components.index', 'departments') . '">' . __('ui.bo.job_posts.form.component') . '</a>']) !!}
             </span>
             @error('department') <span class="kh-bo__error">{{ $message }}</span> @enderror
         </div>
 
         <div class="kh-bo__field">
-            <label class="kh-bo__label" for="salary">Salary (full)</label>
+            <label class="kh-bo__label" for="salary">{{ __('ui.bo.job_posts.form.salary_full') }}</label>
             <input class="kh-bo__control" id="salary" name="salary" type="text" maxlength="255"
                 value="{{ old('salary', $post->salary) }}" placeholder="$80,000 - $120,000 a year">
         </div>
 
         <div class="kh-bo__field">
-            <label class="kh-bo__label" for="short_salary">Salary (short)</label>
+            <label class="kh-bo__label" for="short_salary">{{ __('ui.bo.job_posts.form.salary_short') }}</label>
             <input class="kh-bo__control" id="short_salary" name="short_salary" type="text" maxlength="255"
                 value="{{ old('short_salary', $post->short_salary) }}" placeholder="$80k - $120k / year">
-            <span class="kh-bo__hint">Used on the compact job cards.</span>
+            <span class="kh-bo__hint">{{ __('ui.bo.job_posts.form.salary_short_hint') }}</span>
         </div>
 
         <div class="kh-bo__field kh-bo__field--wide">
-            <label class="kh-bo__label" for="summary">Summary</label>
+            <label class="kh-bo__label" for="summary">{{ __('ui.bo.job_posts.form.summary') }}</label>
             <textarea @class(['kh-bo__control', 'is-invalid' => $errors->has('summary')])
                 id="summary" name="summary" maxlength="1000" style="min-height: 76px;"
-                placeholder="One or two lines shown on the job cards.">{{ old('summary', $post->summary) }}</textarea>
+                placeholder="{{ __('ui.bo.job_posts.form.summary_placeholder') }}">{{ old('summary', $post->summary) }}</textarea>
             @error('summary') <span class="kh-bo__error">{{ $message }}</span> @enderror
         </div>
 
         <div class="kh-bo__field">
-            <label class="kh-bo__label" for="deadline">Application deadline</label>
+            <label class="kh-bo__label" for="deadline">{{ __('ui.bo.job_posts.form.deadline') }}</label>
             <input @class(['kh-bo__control', 'is-invalid' => $errors->has('deadline')])
                 id="deadline" name="deadline" type="date"
                 value="{{ old('deadline', $post->deadline?->format('Y-m-d')) }}">
-            <span class="kh-bo__hint">Blank shows “Open until filled”.</span>
+            <span class="kh-bo__hint">{{ __('ui.bo.job_posts.form.deadline_hint') }}</span>
             @error('deadline') <span class="kh-bo__error">{{ $message }}</span> @enderror
         </div>
 
         <div class="kh-bo__field">
-            <label class="kh-bo__label" for="applicants">Applicant count</label>
+            <label class="kh-bo__label" for="applicants">{{ __('ui.bo.job_posts.form.applicants') }}</label>
             <input class="kh-bo__control" id="applicants" name="applicants" type="number" min="0"
                 value="{{ old('applicants', $post->applicants ?? 0) }}">
         </div>
 
         <div class="kh-bo__field">
-            <label class="kh-bo__label" for="logo">Card artwork</label>
+            <label class="kh-bo__label" for="logo">{{ __('ui.bo.job_posts.form.logo') }}</label>
             <select class="kh-bo__control" id="logo" name="logo" required>
                 @foreach (\App\Models\JobPost::logos() as $logo)
-                    <option value="{{ $logo }}" @selected(old('logo', $post->logo ?? 'default') === $logo)>{{ ucfirst($logo) }}</option>
+                    <option value="{{ $logo }}" @selected(old('logo', $post->logo ?? 'default') === $logo)>{{ __('ui.bo.job_posts.logo_' . $logo) }}</option>
                 @endforeach
             </select>
         </div>
 
         <div class="kh-bo__field">
-            <label class="kh-bo__label" for="status">Status <span class="kh-bo__required" aria-hidden="true">*</span></label>
+            <label class="kh-bo__label" for="status">{{ __('ui.bo.job_posts.form.status') }} <span class="kh-bo__required" aria-hidden="true">*</span></label>
             <select @class(['kh-bo__control', 'is-invalid' => $errors->has('status')]) id="status" name="status" required>
                 @foreach (\App\Models\JobPost::statuses() as $status)
-                    <option value="{{ $status }}" @selected(old('status', $post->status ?? 'draft') === $status)>{{ ucfirst($status) }}</option>
+                    <option value="{{ $status }}" @selected(old('status', $post->status ?? 'draft') === $status)>{{ __('ui.bo.job_posts.status_' . $status) }}</option>
                 @endforeach
             </select>
-            <span class="kh-bo__hint">Only published posts appear on the public site.</span>
+            <span class="kh-bo__hint">{{ __('ui.bo.job_posts.form.status_hint') }}</span>
         </div>
 
         <div class="kh-bo__field kh-bo__field--wide">
             @if (auth()->user()?->isAdmin())
                 <label class="kh-bo__checkbox">
                     <input type="checkbox" name="featured" value="1" @checked(old('featured', $post->featured))>
-                    Featured — sorted to the top of the jobs list
+                    {{ __('ui.bo.job_posts.form.featured') }}
                 </label>
             @elseif ($post->exists)
                 <span class="kh-bo__hint">
-                    Featured placement is curated by admin, not set here.
+                    {{ __('ui.bo.job_posts.form.featured_curated') }}
                     @if ($post->featured)
-                        This post is currently featured.
+                        {{ __('ui.bo.job_posts.form.featured_current') }}
                     @endif
                 </span>
             @endif
             <label class="kh-bo__checkbox">
                 <input type="checkbox" name="highlighted" value="1" @checked(old('highlighted', $post->highlighted))>
-                Spotlight — the role the explorer opens on (only one post can hold this)
+                {{ __('ui.bo.job_posts.form.spotlight') }}
             </label>
         </div>
         </div>
@@ -213,63 +213,63 @@
     <div class="kh-bo__panel" data-bo-panel="description" id="bo-panel-description" role="tabpanel" hidden>
         <div class="kh-bo__grid">
             <div class="kh-bo__section-label">
-                Overview
-                <span>The first tab on the public job page.</span>
+                {{ __('ui.bo.job_posts.form.section_overview') }}
+                <span>{{ __('ui.bo.job_posts.form.section_overview_hint') }}</span>
             </div>
 
             <div class="kh-bo__field">
-                <label class="kh-bo__label" for="tabs_description_title">Heading</label>
+                <label class="kh-bo__label" for="tabs_description_title">{{ __('ui.bo.job_posts.form.heading') }}</label>
                 <input class="kh-bo__control" id="tabs_description_title" name="tabs[description][title]" type="text"
-                    value="{{ old("tabs.description.title", $tabs['description']['title'] ?? '') }}" placeholder="Section heading">
+                    value="{{ old("tabs.description.title", $tabs['description']['title'] ?? '') }}" placeholder="{{ __('ui.bo.job_posts.form.heading_placeholder') }}">
             </div>
 
             <div class="kh-bo__field">
-                <label class="kh-bo__label" for="tabs_description_list_title">List heading</label>
+                <label class="kh-bo__label" for="tabs_description_list_title">{{ __('ui.bo.job_posts.form.list_heading') }}</label>
                 <input class="kh-bo__control" id="tabs_description_list_title" name="tabs[description][list_title]" type="text"
-                    value="{{ old("tabs.description.list_title", $tabs['description']['list_title'] ?? '') }}" placeholder="e.g. What You Will Do">
+                    value="{{ old("tabs.description.list_title", $tabs['description']['list_title'] ?? '') }}" placeholder="{{ __('ui.bo.job_posts.form.list_heading_placeholder') }}">
             </div>
 
             <div class="kh-bo__field kh-bo__field--wide">
-                <label class="kh-bo__label" for="tabs_description_body">Paragraph</label>
+                <label class="kh-bo__label" for="tabs_description_body">{{ __('ui.bo.job_posts.form.paragraph') }}</label>
                 <textarea class="kh-bo__control" id="tabs_description_body" name="tabs[description][body]"
-                    placeholder="A short paragraph.">{{ old("tabs.description.body", $tabs['description']['body'] ?? '') }}</textarea>
+                    placeholder="{{ __('ui.bo.job_posts.form.paragraph_placeholder') }}">{{ old("tabs.description.body", $tabs['description']['body'] ?? '') }}</textarea>
             </div>
 
             <div class="kh-bo__field kh-bo__field--wide">
-                <label class="kh-bo__label" for="tabs_description_list">Bullet points</label>
+                <label class="kh-bo__label" for="tabs_description_list">{{ __('ui.bo.job_posts.form.bullets') }}</label>
                 <textarea class="kh-bo__control" id="tabs_description_list" name="tabs[description][list]"
-                    placeholder="One per line.">{{ old("tabs.description.list", $listValue('description')) }}</textarea>
-                <span class="kh-bo__hint">One bullet per line.</span>
+                    placeholder="{{ __('ui.bo.job_posts.form.bullets_placeholder') }}">{{ old("tabs.description.list", $listValue('description')) }}</textarea>
+                <span class="kh-bo__hint">{{ __('ui.bo.job_posts.form.bullets_hint') }}</span>
             </div>
 
             <div class="kh-bo__section-label">
-                Job description
-                <span>Extra role copy, shown under the Requirements tab.</span>
+                {{ __('ui.bo.job_posts.form.section_description') }}
+                <span>{{ __('ui.bo.job_posts.form.section_description_hint') }}</span>
             </div>
 
             <div class="kh-bo__field">
-                <label class="kh-bo__label" for="tabs_job_description_title">Heading</label>
+                <label class="kh-bo__label" for="tabs_job_description_title">{{ __('ui.bo.job_posts.form.heading') }}</label>
                 <input class="kh-bo__control" id="tabs_job_description_title" name="tabs[job_description][title]" type="text"
-                    value="{{ old("tabs.job_description.title", $tabs['job_description']['title'] ?? '') }}" placeholder="Section heading">
+                    value="{{ old("tabs.job_description.title", $tabs['job_description']['title'] ?? '') }}" placeholder="{{ __('ui.bo.job_posts.form.heading_placeholder') }}">
             </div>
 
             <div class="kh-bo__field">
-                <label class="kh-bo__label" for="tabs_job_description_list_title">List heading</label>
+                <label class="kh-bo__label" for="tabs_job_description_list_title">{{ __('ui.bo.job_posts.form.list_heading') }}</label>
                 <input class="kh-bo__control" id="tabs_job_description_list_title" name="tabs[job_description][list_title]" type="text"
-                    value="{{ old("tabs.job_description.list_title", $tabs['job_description']['list_title'] ?? '') }}" placeholder="e.g. What You Will Do">
+                    value="{{ old("tabs.job_description.list_title", $tabs['job_description']['list_title'] ?? '') }}" placeholder="{{ __('ui.bo.job_posts.form.list_heading_placeholder') }}">
             </div>
 
             <div class="kh-bo__field kh-bo__field--wide">
-                <label class="kh-bo__label" for="tabs_job_description_body">Paragraph</label>
+                <label class="kh-bo__label" for="tabs_job_description_body">{{ __('ui.bo.job_posts.form.paragraph') }}</label>
                 <textarea class="kh-bo__control" id="tabs_job_description_body" name="tabs[job_description][body]"
-                    placeholder="A short paragraph.">{{ old("tabs.job_description.body", $tabs['job_description']['body'] ?? '') }}</textarea>
+                    placeholder="{{ __('ui.bo.job_posts.form.paragraph_placeholder') }}">{{ old("tabs.job_description.body", $tabs['job_description']['body'] ?? '') }}</textarea>
             </div>
 
             <div class="kh-bo__field kh-bo__field--wide">
-                <label class="kh-bo__label" for="tabs_job_description_list">Bullet points</label>
+                <label class="kh-bo__label" for="tabs_job_description_list">{{ __('ui.bo.job_posts.form.bullets') }}</label>
                 <textarea class="kh-bo__control" id="tabs_job_description_list" name="tabs[job_description][list]"
-                    placeholder="One per line.">{{ old("tabs.job_description.list", $listValue('job_description')) }}</textarea>
-                <span class="kh-bo__hint">One bullet per line.</span>
+                    placeholder="{{ __('ui.bo.job_posts.form.bullets_placeholder') }}">{{ old("tabs.job_description.list", $listValue('job_description')) }}</textarea>
+                <span class="kh-bo__hint">{{ __('ui.bo.job_posts.form.bullets_hint') }}</span>
             </div>
         </div>
     </div>
@@ -277,81 +277,81 @@
     <div class="kh-bo__panel" data-bo-panel="requirements" id="bo-panel-requirements" role="tabpanel" hidden>
         <div class="kh-bo__grid">
             <div class="kh-bo__section-label">
-                Requirements
-                <span>The second tab on the public job page.</span>
+                {{ __('ui.bo.job_posts.form.section_requirements') }}
+                <span>{{ __('ui.bo.job_posts.form.section_requirements_hint') }}</span>
             </div>
 
             <div class="kh-bo__field">
-                <label class="kh-bo__label" for="tabs_requirements_title">Heading</label>
+                <label class="kh-bo__label" for="tabs_requirements_title">{{ __('ui.bo.job_posts.form.heading') }}</label>
                 <input class="kh-bo__control" id="tabs_requirements_title" name="tabs[requirements][title]" type="text"
-                    value="{{ old("tabs.requirements.title", $tabs['requirements']['title'] ?? '') }}" placeholder="Section heading">
+                    value="{{ old("tabs.requirements.title", $tabs['requirements']['title'] ?? '') }}" placeholder="{{ __('ui.bo.job_posts.form.heading_placeholder') }}">
             </div>
 
             <div class="kh-bo__field">
-                <label class="kh-bo__label" for="tabs_requirements_list_title">List heading</label>
+                <label class="kh-bo__label" for="tabs_requirements_list_title">{{ __('ui.bo.job_posts.form.list_heading') }}</label>
                 <input class="kh-bo__control" id="tabs_requirements_list_title" name="tabs[requirements][list_title]" type="text"
-                    value="{{ old("tabs.requirements.list_title", $tabs['requirements']['list_title'] ?? '') }}" placeholder="e.g. What You Will Do">
+                    value="{{ old("tabs.requirements.list_title", $tabs['requirements']['list_title'] ?? '') }}" placeholder="{{ __('ui.bo.job_posts.form.list_heading_placeholder') }}">
             </div>
 
             <div class="kh-bo__field kh-bo__field--wide">
-                <label class="kh-bo__label" for="tabs_requirements_body">Paragraph</label>
+                <label class="kh-bo__label" for="tabs_requirements_body">{{ __('ui.bo.job_posts.form.paragraph') }}</label>
                 <textarea class="kh-bo__control" id="tabs_requirements_body" name="tabs[requirements][body]"
-                    placeholder="A short paragraph.">{{ old("tabs.requirements.body", $tabs['requirements']['body'] ?? '') }}</textarea>
+                    placeholder="{{ __('ui.bo.job_posts.form.paragraph_placeholder') }}">{{ old("tabs.requirements.body", $tabs['requirements']['body'] ?? '') }}</textarea>
             </div>
 
             <div class="kh-bo__field kh-bo__field--wide">
-                <label class="kh-bo__label" for="tabs_requirements_list">Bullet points</label>
+                <label class="kh-bo__label" for="tabs_requirements_list">{{ __('ui.bo.job_posts.form.bullets') }}</label>
                 <textarea class="kh-bo__control" id="tabs_requirements_list" name="tabs[requirements][list]"
-                    placeholder="One per line.">{{ old("tabs.requirements.list", $listValue('requirements')) }}</textarea>
-                <span class="kh-bo__hint">One bullet per line.</span>
+                    placeholder="{{ __('ui.bo.job_posts.form.bullets_placeholder') }}">{{ old("tabs.requirements.list", $listValue('requirements')) }}</textarea>
+                <span class="kh-bo__hint">{{ __('ui.bo.job_posts.form.bullets_hint') }}</span>
             </div>
 
             <div class="kh-bo__section-label">
-                What we can offer
-                <span>Shown as a three-column card on the job page. One item per line; blank columns are left out.</span>
+                {{ __('ui.bo.job_posts.form.section_offer') }}
+                <span>{{ __('ui.bo.job_posts.form.section_offer_hint') }}</span>
             </div>
 
             <div class="kh-bo__field">
-                <label class="kh-bo__label" for="benefits">Benefits</label>
+                <label class="kh-bo__label" for="benefits">{{ __('ui.bo.job_posts.form.benefits') }}</label>
                 <textarea @class(['kh-bo__control', 'is-invalid' => $errors->has('benefits')])
                     id="benefits" name="benefits" maxlength="2000"
-                    placeholder="Salary&#10;Lunch Allowance&#10;Seniority Payment">{{ old('benefits', $post->benefits) }}</textarea>
+                    placeholder="{{ __('ui.bo.job_posts.form.benefits_placeholder') }}">{{ old('benefits', $post->benefits) }}</textarea>
                 @error('benefits') <span class="kh-bo__error">{{ $message }}</span> @enderror
             </div>
 
             <div class="kh-bo__field">
-                <label class="kh-bo__label" for="highlights">Highlights</label>
+                <label class="kh-bo__label" for="highlights">{{ __('ui.bo.job_posts.form.highlights') }}</label>
                 <textarea @class(['kh-bo__control', 'is-invalid' => $errors->has('highlights')])
                     id="highlights" name="highlights" maxlength="2000"
-                    placeholder="An awesome company&#10;Join a winning team">{{ old('highlights', $post->highlights) }}</textarea>
+                    placeholder="{{ __('ui.bo.job_posts.form.highlights_placeholder') }}">{{ old('highlights', $post->highlights) }}</textarea>
                 @error('highlights') <span class="kh-bo__error">{{ $message }}</span> @enderror
             </div>
 
             <div class="kh-bo__field">
-                <label class="kh-bo__label" for="career_opportunities">Career Opportunities</label>
+                <label class="kh-bo__label" for="career_opportunities">{{ __('ui.bo.job_posts.form.career') }}</label>
                 <textarea @class(['kh-bo__control', 'is-invalid' => $errors->has('career_opportunities')])
                     id="career_opportunities" name="career_opportunities" maxlength="2000"
-                    placeholder="Opportunities for promotion&#10;Possibility for job training">{{ old('career_opportunities', $post->career_opportunities) }}</textarea>
+                    placeholder="{{ __('ui.bo.job_posts.form.career_placeholder') }}">{{ old('career_opportunities', $post->career_opportunities) }}</textarea>
                 @error('career_opportunities') <span class="kh-bo__error">{{ $message }}</span> @enderror
             </div>
 
         <div class="kh-bo__field">
-            <label class="kh-bo__label" for="quick_apply_title">Apply box heading</label>
+            <label class="kh-bo__label" for="quick_apply_title">{{ __('ui.bo.job_posts.form.apply_heading') }}</label>
             <input class="kh-bo__control" id="quick_apply_title" name="quick_apply_title" type="text" maxlength="255"
-                value="{{ old('quick_apply_title', $post->quick_apply_title) }}" placeholder="Quick apply">
+                value="{{ old('quick_apply_title', $post->quick_apply_title) }}" placeholder="{{ __('ui.bo.job_posts.form.apply_heading_placeholder') }}">
         </div>
 
         <div class="kh-bo__field">
-            <label class="kh-bo__label" for="quick_apply_text">Apply box text</label>
+            <label class="kh-bo__label" for="quick_apply_text">{{ __('ui.bo.job_posts.form.apply_text') }}</label>
             <input class="kh-bo__control" id="quick_apply_text" name="quick_apply_text" type="text" maxlength="500"
                 value="{{ old('quick_apply_text', $post->quick_apply_text) }}"
-                placeholder="Applications are reviewed as they arrive.">
+                placeholder="{{ __('ui.bo.job_posts.form.apply_text_placeholder') }}">
         </div>
         </div>
     </div>
 
     <div class="kh-bo__form-actions">
-        <a class="kh-bo__btn kh-bo__btn--ghost" href="{{ route('job-posts.index') }}">Cancel</a>
-        <button class="kh-bo__btn" type="submit">{{ $isEdit ? 'Save changes' : 'Create job post' }}</button>
+        <a class="kh-bo__btn kh-bo__btn--ghost" href="{{ route('job-posts.index') }}">{{ __('ui.bo.job_posts.form.cancel') }}</a>
+        <button class="kh-bo__btn" type="submit">{{ $isEdit ? __('ui.bo.job_posts.form.save') : __('ui.bo.job_posts.form.create') }}</button>
     </div>
 </div>

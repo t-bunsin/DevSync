@@ -20,7 +20,7 @@
         <div class="kh-user-create__shell">
             <header class="kh-user-create__page-head kh-perm__head">
                 <div class="kh-user-create__heading">
-                    <a class="kh-user-create__back" href="{{ route('home') }}" aria-label="Back to back office">
+                    <a class="kh-user-create__back" href="{{ route('home') }}" aria-label="{{ __('ui.bo.roles.back_to_bo') }}">
                         <i data-feather="arrow-left" aria-hidden="true"></i>
                     </a>
 
@@ -29,9 +29,9 @@
                     </span>
 
                     <div>
-                        <span class="kh-user-create__eyebrow">User access</span>
-                        <h1>User Role &amp; Permission</h1>
-                        <p>Pick a role, then switch the functions it may perform. Everything else is enforced in code.</p>
+                        <span class="kh-user-create__eyebrow">{{ __('ui.bo.roles.kicker') }}</span>
+                        <h1>{{ __('ui.bo.roles.title') }}</h1>
+                        <p>{{ __('ui.bo.roles.subtitle') }}</p>
                     </div>
                 </div>
 
@@ -40,10 +40,10 @@
                 @php
                     $userTotal = $roles->sum('users_count');
                     $stats = [
-                        ['icon' => 'shield', 'value' => $roles->count(), 'label' => \Illuminate\Support\Str::plural('Role', $roles->count())],
-                        ['icon' => 'layers', 'value' => count($permissionGroups), 'label' => \Illuminate\Support\Str::plural('Module', count($permissionGroups))],
-                        ['icon' => 'toggle-right', 'value' => $assignablePermissions, 'label' => \Illuminate\Support\Str::plural('Function', $assignablePermissions)],
-                        ['icon' => 'users', 'value' => $userTotal, 'label' => \Illuminate\Support\Str::plural('User', $userTotal)],
+                        ['icon' => 'shield', 'value' => $roles->count(), 'label' => trans_choice('ui.bo.roles.stat_roles', $roles->count())],
+                        ['icon' => 'layers', 'value' => count($permissionGroups), 'label' => trans_choice('ui.bo.roles.stat_modules', count($permissionGroups))],
+                        ['icon' => 'toggle-right', 'value' => $assignablePermissions, 'label' => trans_choice('ui.bo.roles.stat_functions', $assignablePermissions)],
+                        ['icon' => 'users', 'value' => $userTotal, 'label' => trans_choice('ui.bo.roles.stat_users', $userTotal)],
                     ];
                 @endphp
 
@@ -75,7 +75,7 @@
 
                 {{-- Roles are tabs rather than table rows: a role's whole permission set
                      fits on screen at once, however many modules ship later. --}}
-                <div class="kh-perm__roles" role="tablist" aria-label="Roles">
+                <div class="kh-perm__roles" role="tablist" aria-label="{{ __('ui.bo.roles.roles_tablist') }}">
                     @foreach ($roles as $role)
                         @php($granted = $role->permissions->pluck('id')->intersect($assignableIds)->count())
                         <button type="button"
@@ -94,7 +94,7 @@
                             <span class="kh-perm__role-name">{{ $role->name_en }}</span>
                             <span class="kh-perm__role-meta">
                                 {{ $role->code }}@if ($role->name_km) · {{ $role->name_km }}@endif
-                                · {{ $role->users_count }} {{ \Illuminate\Support\Str::plural('user', $role->users_count) }}
+                                · {{ trans_choice('ui.bo.roles.users_count', $role->users_count, ['count' => $role->users_count]) }}
                             </span>
                             <span class="kh-perm__role-count" data-role-count="{{ $role->id }}">
                                 {{ $granted }}/{{ $assignablePermissions }}
@@ -120,18 +120,18 @@
                             <div class="kh-perm__panel-tools">
                                 <label class="kh-perm__search">
                                     <i data-feather="search" aria-hidden="true"></i>
-                                    <span class="sr-only visually-hidden">Filter functions</span>
-                                    <input type="search" placeholder="Filter functions…" data-perm-search autocomplete="off">
+                                    <span class="sr-only visually-hidden">{{ __('ui.bo.roles.filter_functions') }}</span>
+                                    <input type="search" placeholder="{{ __('ui.bo.roles.filter_functions_placeholder') }}" data-perm-search autocomplete="off">
                                 </label>
                                 <button type="button" class="kh-perm__mini" data-perm-bulk="on">
-                                    <i data-feather="check-square" aria-hidden="true"></i> Allow all
+                                    <i data-feather="check-square" aria-hidden="true"></i> {{ __('ui.bo.roles.allow_all') }}
                                 </button>
                                 <button type="button" class="kh-perm__mini" data-perm-bulk="off">
-                                    <i data-feather="square" aria-hidden="true"></i> Clear
+                                    <i data-feather="square" aria-hidden="true"></i> {{ __('ui.bo.roles.clear') }}
                                 </button>
                                 <a class="kh-perm__mini" href="{{ route('users', ['role' => $role->code]) }}">
                                     <i data-feather="users" aria-hidden="true"></i>
-                                    {{ $role->users_count }} {{ \Illuminate\Support\Str::plural('user', $role->users_count) }}
+                                    {{ trans_choice('ui.bo.roles.users_count', $role->users_count, ['count' => $role->users_count]) }}
                                 </a>
                             </div>
                         </div>
@@ -143,7 +143,7 @@
                             </p>
                         @endif
 
-                        <p class="kh-perm__empty">No function matches that filter.</p>
+                        <p class="kh-perm__empty">{{ __('ui.bo.roles.no_match') }}</p>
 
                         <div class="kh-perm__modules">
                             @foreach ($permissionGroups as $group)
@@ -162,7 +162,7 @@
                                                     @checked($grantedIds->intersect(collect($group['permissions'])->pluck('id'))->count() === count($group['permissions']))>
                                                 <span></span>
                                             </span>
-                                            All
+                                            {{ __('ui.bo.roles.all') }}
                                         </label>
                                     </div>
 
@@ -193,13 +193,13 @@
                         <div class="kh-perm__savebar">
                             <p>
                                 <i data-feather="shield" aria-hidden="true"></i>
-                                Changes apply immediately to live requests.
-                                <span class="kh-perm__dirty" data-perm-dirty>0 unsaved</span>
+                                {{ __('ui.bo.roles.applies_immediately') }}
+                                <span class="kh-perm__dirty" data-perm-dirty>{{ __('ui.bo.roles.unsaved', ['count' => 0]) }}</span>
                             </p>
                             <div class="kh-user-create__button-row">
                                 <button class="kh-user-create__btn kh-user-create__btn--primary" type="submit">
                                     <i data-feather="check" aria-hidden="true"></i>
-                                    <span>Save permissions</span>
+                                    <span>{{ __('ui.bo.roles.save') }}</span>
                                 </button>
                             </div>
                         </div>
@@ -210,22 +210,22 @@
                     <div class="kh-perm__tip">
                         <span aria-hidden="true"><i data-feather="layers"></i></span>
                         <div>
-                            <strong>View is its own switch</strong>
-                            <small>Every module grants browsing separately, so "download only" really means download only — the list stays closed.</small>
+                            <strong>{{ __('ui.bo.roles.tip_view') }}</strong>
+                            <small>{{ __('ui.bo.roles.tip_view_body') }}</small>
                         </div>
                     </div>
                     <div class="kh-perm__tip">
                         <span aria-hidden="true"><i data-feather="shield"></i></span>
                         <div>
-                            <strong>Every role is assignable</strong>
-                            <small>Administrators included — a role holds exactly what is switched on here. Reaching a back-office area is a separate check, so this page never locks itself.</small>
+                            <strong>{{ __('ui.bo.roles.tip_assignable') }}</strong>
+                            <small>{{ __('ui.bo.roles.tip_assignable_body') }}</small>
                         </div>
                     </div>
                     <div class="kh-perm__tip">
                         <span aria-hidden="true"><i data-feather="zap"></i></span>
                         <div>
-                            <strong>Takes effect immediately</strong>
-                            <small>Saved changes are checked live by JobPostController and ResumeController on the next request.</small>
+                            <strong>{{ __('ui.bo.roles.tip_immediate') }}</strong>
+                            <small>{{ __('ui.bo.roles.tip_immediate_body') }}</small>
                         </div>
                     </div>
                 </div>

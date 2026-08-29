@@ -9,20 +9,20 @@
 @section('main-content')
     @php
         $total = $companies->count();
-        $filters = ['' => 'All', 'approved' => 'Approved', 'pending' => 'Pending', 'rejected' => 'Rejected'];
+        $filters = ['' => __('ui.bo.all'), 'approved' => __('ui.bo.status.approved'), 'pending' => __('ui.bo.status.pending'), 'rejected' => __('ui.bo.status.rejected')];
     @endphp
 
     <div class="kh-bo">
-        <nav class="kh-bo__breadcrumb" aria-label="Breadcrumb">
-            <a href="{{ route('home') }}">Back office</a>
+        <nav class="kh-bo__breadcrumb" aria-label="{{ __('ui.admin.a11y.breadcrumb') }}">
+            <a href="{{ route('home') }}">{{ __('ui.bo.breadcrumb_root') }}</a>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6" /></svg>
-            <span aria-current="page">Companies</span>
+            <span aria-current="page">{{ __('ui.bo.companies.title') }}</span>
         </nav>
 
         <header class="kh-bo__head">
             <div>
-                <h1>Companies</h1>
-                <p>Employers on the platform, the licences they hold, and the roles they advertise.</p>
+                <h1>{{ __('ui.bo.companies.title') }}</h1>
+                <p>{{ __('ui.bo.companies.subtitle') }}</p>
             </div>
 
             @if (auth()->user()?->isAdmin())
@@ -30,7 +30,7 @@
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
                         <path d="M12 5v14M5 12h14" />
                     </svg>
-                    Add company
+                    {{ __('ui.bo.companies.add') }}
                 </a>
             @endif
         </header>
@@ -53,14 +53,14 @@
             </div>
         @endif
 
-        <section class="kh-bo__tiles" aria-label="Company summary">
+        <section class="kh-bo__tiles" aria-label="{{ __('ui.bo.companies.summary_label') }}">
             <article class="kh-bo__tile">
                 <span class="kh-bo__tile-icon" aria-hidden="true">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M3 21h18" /><path d="M5 21V7l7-4 7 4v14" /><path d="M9 9h2M9 13h2M9 17h2M13 9h2M13 13h2M13 17h2" />
                     </svg>
                 </span>
-                <div><strong>{{ number_format($counts->sum()) }}</strong><span>Companies</span></div>
+                <div><strong>{{ number_format($counts->sum()) }}</strong><span>{{ __('ui.bo.companies.tile_companies') }}</span></div>
             </article>
 
             <article class="kh-bo__tile">
@@ -69,7 +69,7 @@
                         <path d="M9 12l2 2 4-4" /><circle cx="12" cy="12" r="9" />
                     </svg>
                 </span>
-                <div><strong>{{ number_format($counts->get('approved', 0)) }}</strong><span>Approved</span></div>
+                <div><strong>{{ number_format($counts->get('approved', 0)) }}</strong><span>{{ __('ui.bo.companies.tile_approved') }}</span></div>
             </article>
 
             <article class="kh-bo__tile">
@@ -78,7 +78,7 @@
                         <circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" />
                     </svg>
                 </span>
-                <div><strong>{{ number_format($counts->get('pending', 0)) }}</strong><span>Awaiting approval</span></div>
+                <div><strong>{{ number_format($counts->get('pending', 0)) }}</strong><span>{{ __('ui.bo.companies.tile_awaiting') }}</span></div>
             </article>
 
             <article class="kh-bo__tile">
@@ -87,15 +87,15 @@
                         <circle cx="12" cy="12" r="9" /><path d="M15 9l-6 6M9 9l6 6" />
                     </svg>
                 </span>
-                <div><strong>{{ number_format($counts->get('rejected', 0)) }}</strong><span>Rejected</span></div>
+                <div><strong>{{ number_format($counts->get('rejected', 0)) }}</strong><span>{{ __('ui.bo.companies.tile_rejected') }}</span></div>
             </article>
         </section>
 
         <section class="kh-bo__card">
             <div class="kh-bo__card-head">
                 <div>
-                    <h2>Company directory</h2>
-                    <p>{{ $total }} {{ \Illuminate\Support\Str::plural('company', $total) }} shown.</p>
+                    <h2>{{ __('ui.bo.companies.directory') }}</h2>
+                    <p>{{ trans_choice('ui.bo.companies.companies_shown', $total, ['count' => $total]) }}</p>
                 </div>
 
                 <div class="kh-bo__tools">
@@ -104,13 +104,13 @@
                             'name' => 'status',
                             'options' => $filters,
                             'active' => $activeStatus,
-                            'label' => 'Filter by status',
-                            'allLabel' => 'All statuses',
+                            'label' => __('ui.bo.companies.filter_status'),
+                            'allLabel' => __('ui.bo.companies.all_statuses'),
                         ])
 
                         <input type="search" name="q" value="{{ $searchTerm }}"
-                            placeholder="Search name or registration" aria-label="Search companies">
-                        <button class="kh-bo__btn kh-bo__btn--ghost" type="submit">Search</button>
+                            placeholder="{{ __('ui.bo.companies.search_placeholder') }}" aria-label="{{ __('ui.bo.companies.search_aria') }}">
+                        <button class="kh-bo__btn kh-bo__btn--ghost" type="submit">{{ __('ui.bo.search') }}</button>
                     </form>
                 </div>
             </div>
@@ -119,12 +119,12 @@
                 <table class="kh-bo__table">
                     <thead>
                         <tr>
-                            <th scope="col">Company</th>
-                            <th scope="col">Contact</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Compliance</th>
-                            <th scope="col">Job posts</th>
-                            <th scope="col"><span class="visually-hidden">Actions</span></th>
+                            <th scope="col">{{ __('ui.bo.companies.col_company') }}</th>
+                            <th scope="col">{{ __('ui.bo.companies.col_contact') }}</th>
+                            <th scope="col">{{ __('ui.bo.companies.col_status') }}</th>
+                            <th scope="col">{{ __('ui.bo.companies.col_compliance') }}</th>
+                            <th scope="col">{{ __('ui.bo.companies.col_job_posts') }}</th>
+                            <th scope="col"><span class="visually-hidden">{{ __('ui.bo.actions') }}</span></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -150,7 +150,7 @@
                                                     <x-verified-badge :show-label="false" :size="16" />
                                                 @endif
                                             </span>
-                                            <span class="kh-bo__ref">{{ $company->registration_no ?: 'No registration number' }}</span>
+                                            <span class="kh-bo__ref">{{ $company->registration_no ?: __('ui.bo.billing.no_registration') }}</span>
                                         </div>
                                     </div>
                                 </td>
@@ -162,17 +162,17 @@
 
                                 <td>
                                     <span class="kh-bo__status kh-bo__status--{{ $company->status === 'approved' ? 'verified' : ($company->status === 'pending' ? 'pending' : 'rejected') }}">
-                                        {{ ucfirst($company->status) }}
+                                        {{ __('ui.bo.status.' . $company->status) }}
                                     </span>
                                 </td>
 
                                 <td>
                                     @if ($company->compliance_records_count === 0)
-                                        <span class="kh-bo__expiry-flag kh-bo__expiry-flag--past">None on file</span>
+                                        <span class="kh-bo__expiry-flag kh-bo__expiry-flag--past">{{ __('ui.bo.companies.none_on_file') }}</span>
                                     @else
-                                        {{ $verified }}/{{ $company->compliance_records_count }} verified
+                                        {{ __('ui.bo.companies.verified_count', ['verified' => $verified, 'total' => $company->compliance_records_count]) }}
                                         <span class="kh-bo__ref">
-                                            <a href="{{ route('compliance.index', ['q' => $company->name]) }}">View records</a>
+                                            <a href="{{ route('compliance.index', ['q' => $company->name]) }}">{{ __('ui.bo.companies.view_records') }}</a>
                                         </span>
                                     @endif
                                 </td>
@@ -180,7 +180,7 @@
                                 <td>
                                     {{ $company->job_posts_count }}
                                     <span class="kh-bo__ref">
-                                        <a href="{{ route('job-posts.index', ['q' => $company->name]) }}">View posts</a>
+                                        <a href="{{ route('job-posts.index', ['q' => $company->name]) }}">{{ __('ui.bo.companies.view_posts') }}</a>
                                     </span>
                                 </td>
 
@@ -192,7 +192,7 @@
                                         <div class="kh-bo__actions">
                                             <a class="kh-bo__action" href="{{ route('companies.edit', $company) }}"
                                                 title="{{ auth()->user()?->isAdmin() ? 'Edit company' : 'Edit your company' }}"
-                                                aria-label="Edit {{ $company->name }}">
+                                                aria-label="{{ __('ui.bo.companies.edit_aria', ['name' => $company->name]) }}">
                                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                                     <path d="M12 20h9" /><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z" />
                                                 </svg>
@@ -200,11 +200,11 @@
 
                                             @if (auth()->user()?->isAdmin())
                                             <form method="POST" action="{{ route('companies.destroy', $company) }}"
-                                                onsubmit="return confirm('Delete {{ addslashes($company->name) }}? This cannot be undone.');">
+                                                onsubmit="return confirm('{{ addslashes(__('ui.bo.delete_confirm', ['name' => $company->name])) }}');">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button class="kh-bo__action kh-bo__action--danger" type="submit"
-                                                    title="Delete company" aria-label="Delete {{ $company->name }}">
+                                                    title="{{ __('ui.bo.companies.delete_company') }}" aria-label="{{ __('ui.bo.companies.delete_aria', ['name' => $company->name]) }}">
                                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                                         <path d="M3 6h18" /><path d="M8 6V4h8v2" /><path d="M19 6l-1 14H6L5 6" />
                                                     </svg>
@@ -219,13 +219,13 @@
                             <tr>
                                 <td colspan="6">
                                     <div class="kh-bo__empty">
-                                        <strong>No companies</strong>
+                                        <strong>{{ __('ui.bo.companies.empty_title') }}</strong>
                                         <span>
                                             @if ($activeStatus || $searchTerm)
-                                                Nothing matches this filter.
-                                                <a href="{{ route('companies') }}">Clear it</a> to see everything.
+                                                {{ __('ui.bo.companies.empty_filtered') }}
+                                                <a href="{{ route('companies') }}">{{ __('ui.bo.clear_it') }}</a> {{ __('ui.bo.to_see_everything') }}
                                             @else
-                                                Add the first employer to start posting jobs against it.
+                                                {{ __('ui.bo.companies.empty_none') }}
                                             @endif
                                         </span>
                                     </div>

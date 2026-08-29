@@ -10,7 +10,7 @@
     @php
         $total = $subscriptions->count();
 
-        $filters = ['' => 'All'] + collect(\App\Models\Subscription::STATUSES)
+        $filters = ['' => __('ui.bo.all')] + collect(\App\Models\Subscription::STATUSES)
             ->mapWithKeys(fn ($status) => [$status => ucfirst($status)])
             ->all();
 
@@ -28,27 +28,27 @@
     @endphp
 
     <div class="kh-bo">
-        <nav class="kh-bo__breadcrumb" aria-label="Breadcrumb">
-            <a href="{{ route('home') }}">Back office</a>
+        <nav class="kh-bo__breadcrumb" aria-label="{{ __('ui.admin.a11y.breadcrumb') }}">
+            <a href="{{ route('home') }}">{{ __('ui.bo.breadcrumb_root') }}</a>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6" /></svg>
-            <span aria-current="page">Billing list</span>
+            <span aria-current="page">{{ __('ui.bo.billing.list_title') }}</span>
         </nav>
 
         <header class="kh-bo__head">
             <div>
-                <h1>Billing list</h1>
-                <p>Every account's subscription, the plan it is on and where its last payment got to.</p>
+                <h1>{{ __('ui.bo.billing.list_title') }}</h1>
+                <p>{{ __('ui.bo.billing.list_subtitle') }}</p>
             </div>
 
             <a class="kh-bo__btn" href="{{ route('account-billing') }}">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
                     <rect x="2" y="5" width="20" height="14" rx="2" /><path d="M2 10h20" />
                 </svg>
-                My billing
+                {{ __('ui.bo.billing.my_billing') }}
             </a>
         </header>
 
-        <section class="kh-bo__tiles" aria-label="Billing summary">
+        <section class="kh-bo__tiles" aria-label="{{ __('ui.bo.billing.summary_label') }}">
             <article class="kh-bo__tile">
                 <span class="kh-bo__tile-icon" aria-hidden="true">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -57,7 +57,7 @@
                 </span>
                 <div>
                     <strong>{{ $counts->sum() }}</strong>
-                    <span>Subscriptions</span>
+                    <span>{{ __('ui.bo.billing.tile_subscriptions') }}</span>
                 </div>
             </article>
 
@@ -69,7 +69,7 @@
                 </span>
                 <div>
                     <strong>{{ $counts[\App\Models\Subscription::STATUS_ACTIVE] ?? 0 }}</strong>
-                    <span>Active</span>
+                    <span>{{ __('ui.bo.billing.tile_active') }}</span>
                 </div>
             </article>
 
@@ -81,7 +81,7 @@
                 </span>
                 <div>
                     <strong>{{ $counts[\App\Models\Subscription::STATUS_PENDING] ?? 0 }}</strong>
-                    <span>Awaiting payment</span>
+                    <span>{{ __('ui.bo.billing.tile_awaiting') }}</span>
                 </div>
             </article>
 
@@ -93,15 +93,15 @@
                 </span>
                 <div>
                     <strong>${{ number_format($activeValue, 2) }}</strong>
-                    <span>Active plan value</span>
+                    <span>{{ __('ui.bo.billing.tile_value') }}</span>
                 </div>
             </article>
         </section>
 
-        <section class="kh-bo__card" aria-label="Subscriptions">
+        <section class="kh-bo__card" aria-label="{{ __('ui.bo.billing.subscriptions') }}">
             <div class="kh-bo__card-head">
                 <div>
-                    <h2>Subscriptions</h2>
+                    <h2>{{ __('ui.bo.billing.subscriptions') }}</h2>
                     <p>{{ $total }} {{ \Illuminate\Support\Str::plural('subscription', $total) }} shown.</p>
                 </div>
 
@@ -111,16 +111,16 @@
                             'name' => 'status',
                             'options' => $filters,
                             'active' => $activeStatus,
-                            'label' => 'Filter by status',
-                            'allLabel' => 'All statuses',
+                            'label' => __('ui.bo.billing.filter_status'),
+                            'allLabel' => __('ui.bo.billing.all_statuses'),
                         ])
 
                         <input type="search" name="q" value="{{ $searchTerm }}"
-                            placeholder="Search name, email or transaction" aria-label="Search subscriptions">
+                            placeholder="{{ __('ui.bo.billing.search_placeholder') }}" aria-label="{{ __('ui.bo.billing.search_aria') }}">
 
-                        <button class="kh-bo__btn kh-bo__btn--ghost" type="submit">Search</button>
+                        <button class="kh-bo__btn kh-bo__btn--ghost" type="submit">{{ __('ui.bo.search') }}</button>
                         @if ($isFiltered)
-                            <a class="kh-bo__btn kh-bo__btn--ghost" href="{{ route('account-billing.list') }}">Clear</a>
+                            <a class="kh-bo__btn kh-bo__btn--ghost" href="{{ route('account-billing.list') }}">{{ __('ui.bo.clear') }}</a>
                         @endif
                     </form>
                 </div>
@@ -130,13 +130,13 @@
                 <table class="kh-bo__table">
                     <thead>
                         <tr>
-                            <th scope="col">Account</th>
-                            <th scope="col">Plan</th>
-                            <th scope="col">Billing</th>
-                            <th scope="col">Amount</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Transaction</th>
-                            <th scope="col">Started</th>
+                            <th scope="col">{{ __('ui.bo.billing.col_account') }}</th>
+                            <th scope="col">{{ __('ui.bo.billing.col_plan') }}</th>
+                            <th scope="col">{{ __('ui.bo.billing.col_billing') }}</th>
+                            <th scope="col">{{ __('ui.bo.billing.col_amount') }}</th>
+                            <th scope="col">{{ __('ui.bo.billing.col_status') }}</th>
+                            <th scope="col">{{ __('ui.bo.billing.col_transaction') }}</th>
+                            <th scope="col">{{ __('ui.bo.billing.col_started') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -168,7 +168,7 @@
 
                                 <td>
                                     <span class="kh-bo__status kh-bo__status--{{ $statusTone[$subscription->status] ?? 'pending' }}">
-                                        {{ ucfirst($subscription->status) }}
+                                        {{ __('ui.bo.status.' . $subscription->status) }}
                                     </span>
                                 </td>
 
@@ -184,7 +184,7 @@
                                     @if ($subscription->started_at)
                                         {{ $subscription->started_at->format('M j, Y') }}
                                     @else
-                                        <span class="kh-bo__ref">Not started</span>
+                                        <span class="kh-bo__ref">{{ __('ui.bo.billing.not_started') }}</span>
                                     @endif
                                 </td>
                             </tr>
@@ -192,11 +192,11 @@
                             <tr>
                                 <td colspan="7">
                                     <div class="kh-bo__empty">
-                                        <strong>No subscriptions yet</strong>
+                                        <strong>{{ __('ui.bo.billing.empty_title') }}</strong>
                                         <span>
                                             @if ($isFiltered)
                                                 No subscriptions match this filter.
-                                                <a href="{{ route('account-billing.list') }}">Clear it</a> to see everything.
+                                                <a href="{{ route('account-billing.list') }}">{{ __('ui.bo.clear_it') }}</a> to see everything.
                                             @else
                                                 Nobody has bought a plan yet. They will appear here as soon as someone checks out.
                                             @endif

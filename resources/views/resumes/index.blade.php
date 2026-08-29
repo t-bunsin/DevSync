@@ -11,10 +11,10 @@
         $total = $resumes->count();
 
         $filters = [
-            '' => 'All',
-            'published' => 'Published',
-            'draft' => 'Draft',
-            'archived' => 'Archived',
+            '' => __('ui.bo.all'),
+            'published' => __('ui.bo.status.published'),
+            'draft' => __('ui.bo.status.draft'),
+            'archived' => __('ui.bo.status.archived'),
         ];
 
         $isFiltered = $activeStatus || $searchTerm || $fromDate || $toDate;
@@ -25,8 +25,8 @@
     @endphp
 
     <div class="kh-bo">
-        <nav class="kh-bo__breadcrumb" aria-label="Breadcrumb">
-            <a href="{{ route('home') }}">Back office</a>
+        <nav class="kh-bo__breadcrumb" aria-label="{{ __('ui.admin.a11y.breadcrumb') }}">
+            <a href="{{ route('home') }}">{{ __('ui.bo.breadcrumb_root') }}</a>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6" /></svg>
             <span aria-current="page">{{ $isCandidate ? 'My Resume' : 'Resumes' }}</span>
         </nav>
@@ -61,14 +61,14 @@
             </div>
         @endif
 
-        <section class="kh-bo__tiles" aria-label="Resume summary">
+        <section class="kh-bo__tiles" aria-label="{{ __('ui.bo.resumes.summary_label') }}">
             <article class="kh-bo__tile">
                 <span class="kh-bo__tile-icon" aria-hidden="true">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" /><path d="M14 2v6h6" />
                     </svg>
                 </span>
-                <div><strong>{{ number_format($counts->sum()) }}</strong><span>Resumes</span></div>
+                <div><strong>{{ number_format($counts->sum()) }}</strong><span>{{ __('ui.bo.resumes.tile_resumes') }}</span></div>
             </article>
 
             <article class="kh-bo__tile">
@@ -77,7 +77,7 @@
                         <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z" /><circle cx="12" cy="12" r="3" />
                     </svg>
                 </span>
-                <div><strong>{{ number_format($counts->get('published', 0)) }}</strong><span>Published</span></div>
+                <div><strong>{{ number_format($counts->get('published', 0)) }}</strong><span>{{ __('ui.bo.resumes.tile_published') }}</span></div>
             </article>
 
             <article class="kh-bo__tile">
@@ -86,7 +86,7 @@
                         <path d="M12 20h9" /><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z" />
                     </svg>
                 </span>
-                <div><strong>{{ number_format($counts->get('draft', 0)) }}</strong><span>Drafts</span></div>
+                <div><strong>{{ number_format($counts->get('draft', 0)) }}</strong><span>{{ __('ui.bo.resumes.tile_drafts') }}</span></div>
             </article>
 
             <article class="kh-bo__tile">
@@ -95,25 +95,22 @@
                         <rect x="3" y="11" width="18" height="10" rx="2" /><path d="M7 11V7a5 5 0 0110 0v4" />
                     </svg>
                 </span>
-                <div><strong>{{ number_format($counts->get('archived', 0)) }}</strong><span>Archived</span></div>
+                <div><strong>{{ number_format($counts->get('archived', 0)) }}</strong><span>{{ __('ui.bo.resumes.tile_archived') }}</span></div>
             </article>
         </section>
 
         <section class="kh-bo__card">
             <div class="kh-bo__card-head">
                 <div>
-                    <h2>Resume register</h2>
+                    <h2>{{ __('ui.bo.resumes.register') }}</h2>
                     <p>
-                        {{ $total }} {{ \Illuminate\Support\Str::plural('resume', $total) }} shown.
-                        @if ($fromDate || $toDate)
-                            Registered
-                            @if ($fromDate && $toDate)
-                                {{ $fromDate }} – {{ $toDate }}.
-                            @elseif ($fromDate)
-                                from {{ $fromDate }}.
-                            @else
-                                up to {{ $toDate }}.
-                            @endif
+                        {{ trans_choice('ui.bo.resumes.resumes_shown', $total, ['count' => $total]) }}
+                        @if ($fromDate && $toDate)
+                            {{ __('ui.bo.resumes.registered_between', ['from' => $fromDate, 'to' => $toDate]) }}
+                        @elseif ($fromDate)
+                            {{ __('ui.bo.resumes.registered_from', ['from' => $fromDate]) }}
+                        @elseif ($toDate)
+                            {{ __('ui.bo.resumes.registered_to', ['to' => $toDate]) }}
                         @endif
                     </p>
                 </div>
@@ -124,24 +121,24 @@
                             'name' => 'status',
                             'options' => $filters,
                             'active' => $activeStatus,
-                            'label' => 'Filter by status',
-                            'allLabel' => 'All statuses',
+                            'label' => __('ui.bo.resumes.filter_status'),
+                            'allLabel' => __('ui.bo.resumes.all_statuses'),
                         ])
 
                         <input type="search" name="q" value="{{ $searchTerm }}"
-                            placeholder="Search name or headline" aria-label="Search resumes">
+                            placeholder="{{ __('ui.bo.resumes.search_placeholder') }}" aria-label="{{ __('ui.bo.resumes.search_aria') }}">
 
                         <div class="kh-bo__range">
                             <input type="date" name="from" value="{{ $fromDate }}"
-                                aria-label="Registered from date" title="Registered from date">
+                                aria-label="{{ __('ui.bo.resumes.from_date') }}" title="{{ __('ui.bo.resumes.from_date') }}">
                             <span aria-hidden="true">–</span>
                             <input type="date" name="to" value="{{ $toDate }}"
-                                aria-label="Registered end date" title="Registered end date">
+                                aria-label="{{ __('ui.bo.resumes.to_date') }}" title="{{ __('ui.bo.resumes.to_date') }}">
                         </div>
 
-                        <button class="kh-bo__btn kh-bo__btn--ghost" type="submit">Search</button>
+                        <button class="kh-bo__btn kh-bo__btn--ghost" type="submit">{{ __('ui.bo.search') }}</button>
                         @if ($isFiltered)
-                            <a class="kh-bo__btn kh-bo__btn--ghost" href="{{ route('resumes.index') }}">Clear</a>
+                            <a class="kh-bo__btn kh-bo__btn--ghost" href="{{ route('resumes.index') }}">{{ __('ui.bo.clear') }}</a>
                         @endif
                     </form>
                 </div>
@@ -151,12 +148,12 @@
                 <table class="kh-bo__table">
                     <thead>
                         <tr>
-                            <th scope="col">Candidate</th>
-                            <th scope="col">Headline</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Sections</th>
-                            <th scope="col">Registered</th>
-                            <th scope="col"><span class="visually-hidden">Actions</span></th>
+                            <th scope="col">{{ __('ui.bo.resumes.col_candidate') }}</th>
+                            <th scope="col">{{ __('ui.bo.resumes.col_headline') }}</th>
+                            <th scope="col">{{ __('ui.bo.resumes.col_status') }}</th>
+                            <th scope="col">{{ __('ui.bo.resumes.col_sections') }}</th>
+                            <th scope="col">{{ __('ui.bo.resumes.col_registered') }}</th>
+                            <th scope="col"><span class="visually-hidden">{{ __('ui.bo.actions') }}</span></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -212,7 +209,7 @@
                                     <div class="kh-bo__actions">
                                         @if ($can['download'])
                                             <a class="kh-bo__action" href="{{ route('resumes.download', $resume) }}"
-                                                title="Download PDF" aria-label="Download {{ $resume->full_name }} as PDF">
+                                                title="{{ __('ui.bo.resumes.download_pdf') }}" aria-label="{{ __('ui.bo.resumes.download_aria', ['name' => $resume->full_name]) }}">
                                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                                     <path d="M12 3v12" /><path d="M7 12l5 5 5-5" /><path d="M4 21h16" />
                                                 </svg>
@@ -220,7 +217,7 @@
                                         @endif
 
                                         <a class="kh-bo__action" href="{{ route('resumes.show', $resume) }}"
-                                            title="Preview resume" aria-label="Preview {{ $resume->full_name }}">
+                                            title="{{ __('ui.bo.resumes.preview_resume') }}" aria-label="{{ __('ui.bo.resumes.preview_aria', ['name' => $resume->full_name]) }}">
                                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                                 <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z" /><circle cx="12" cy="12" r="3" />
                                             </svg>
@@ -228,7 +225,7 @@
 
                                         @if ($can['edit'])
                                             <a class="kh-bo__action" href="{{ route('resumes.edit', $resume) }}"
-                                                title="Edit resume" aria-label="Edit {{ $resume->full_name }}">
+                                                title="{{ __('ui.bo.resumes.edit_resume') }}" aria-label="{{ __('ui.bo.resumes.edit_aria', ['name' => $resume->full_name]) }}">
                                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                                     <path d="M12 20h9" /><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z" />
                                                 </svg>
@@ -237,11 +234,11 @@
 
                                         @if ($can['delete'])
                                             <form method="POST" action="{{ route('resumes.destroy', $resume) }}"
-                                                onsubmit="return confirm('Delete the resume for {{ addslashes($resume->full_name) }}? This cannot be undone.');">
+                                                onsubmit="return confirm('{{ addslashes(__('ui.bo.delete_confirm', ['name' => $resume->full_name])) }}');">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button class="kh-bo__action kh-bo__action--danger" type="submit"
-                                                    title="Delete resume" aria-label="Delete {{ $resume->full_name }}">
+                                                    title="{{ __('ui.bo.resumes.delete_resume') }}" aria-label="{{ __('ui.bo.resumes.delete_aria', ['name' => $resume->full_name]) }}">
                                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                                         <path d="M3 6h18" /><path d="M8 6V4h8v2" /><path d="M19 6l-1 14H6L5 6" />
                                                     </svg>
@@ -255,13 +252,13 @@
                             <tr>
                                 <td colspan="6">
                                     <div class="kh-bo__empty">
-                                        <strong>No resumes yet</strong>
+                                        <strong>{{ __('ui.bo.resumes.empty_title') }}</strong>
                                         <span>
                                             @if ($isFiltered)
-                                                No resumes match this filter.
-                                                <a href="{{ route('resumes.index') }}">Clear it</a> to see everything.
+                                                {{ __('ui.bo.resumes.empty_filtered') }}
+                                                <a href="{{ route('resumes.index') }}">{{ __('ui.bo.clear_it') }}</a> {{ __('ui.bo.to_see_everything') }}
                                             @else
-                                                Register the first resume to get started.
+                                                {{ __('ui.bo.resumes.empty_none') }}
                                             @endif
                                         </span>
                                     </div>

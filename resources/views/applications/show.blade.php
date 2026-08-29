@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', ($application->jobPost?->title ?? 'Application') . ' | My Applications')
+@section('title', ($application->jobPost?->title ?? __('ui.bo.applications.title')) . ' | ' . __('ui.bo.mine.title'))
 
 @push('styles')
     <link href="{{ asset('css/backoffice.css') }}?v={{ filemtime(public_path('css/backoffice.css')) }}" rel="stylesheet" />
@@ -26,10 +26,10 @@
     @endphp
 
     <div class="kh-bo">
-        <nav class="kh-bo__breadcrumb" aria-label="Breadcrumb">
-            <a href="{{ route('home') }}">Back office</a>
+        <nav class="kh-bo__breadcrumb" aria-label="{{ __('ui.admin.a11y.breadcrumb') }}">
+            <a href="{{ route('home') }}">{{ __('ui.bo.breadcrumb_root') }}</a>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6" /></svg>
-            <a href="{{ route('my-applications') }}">My Applications</a>
+            <a href="{{ route('my-applications') }}">{{ __('ui.bo.mine.title') }}</a>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6" /></svg>
             <span aria-current="page">{{ $post?->title ?? 'Application' }}</span>
         </nav>
@@ -51,11 +51,11 @@
             </div>
 
             <div class="kh-bo__head-actions">
-                <a class="kh-bo__btn kh-bo__btn--ghost" href="{{ route('my-applications') }}">Back to my applications</a>
+                <a class="kh-bo__btn kh-bo__btn--ghost" href="{{ route('my-applications') }}">{{ __('ui.bo.mine.back_to_mine') }}</a>
 
                 @if ($post?->isPublished())
                     <a class="kh-bo__btn kh-bo__btn--ghost" href="{{ route('jobs.show', $post->slug) }}"
-                        target="_blank" rel="noopener">View the posting</a>
+                        target="_blank" rel="noopener">{{ __('ui.bo.mine.view_posting') }}</a>
                 @endif
 
                 @if ($application->isCancellable())
@@ -67,7 +67,7 @@
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                 <circle cx="12" cy="12" r="9" /><path d="M15 9l-6 6M9 9l6 6" />
                             </svg>
-                            Withdraw application
+                            {{ __('ui.bo.mine.withdraw_application') }}
                         </button>
                     </form>
                 @endif
@@ -79,12 +79,12 @@
                 <section class="kh-bo__card">
                     <div class="kh-bo__card-head">
                         <div>
-                            <h2>Where it stands</h2>
-                            <p>Only the employer can move this along — you'll see it change here.</p>
+                            <h2>{{ __('ui.bo.mine.where_it_stands') }}</h2>
+                            <p>{{ __('ui.bo.mine.where_it_stands_hint') }}</p>
                         </div>
 
                         <span class="kh-bo__status kh-bo__status--{{ $application->statusTone() }}">
-                            {{ ucfirst($application->status) }}
+                            {{ __('ui.bo.status.' . $application->status) }}
                         </span>
                     </div>
 
@@ -103,7 +103,7 @@
 
                         <dl class="kh-bo__facts">
                             <div>
-                                <dt>Applied</dt>
+                                <dt>{{ __('ui.bo.applications.applied') }}</dt>
                                 <dd>{{ $appliedAt?->format('d M Y, H:i') ?: '—' }}</dd>
                             </div>
                             <div>
@@ -114,14 +114,14 @@
                                         <span class="kh-bo__ref">{{ $decidedAt->diffForHumans() }}</span>
                                     @elseif ($application->decisionLabel())
                                         {{-- Moved before this date was recorded. --}}
-                                        <span class="kh-bo__ref">Date not recorded</span>
+                                        <span class="kh-bo__ref">{{ __('ui.bo.mine.date_not_recorded') }}</span>
                                     @else
-                                        <span class="kh-bo__ref">Not opened yet</span>
+                                        <span class="kh-bo__ref">{{ __('ui.bo.mine.not_opened') }}</span>
                                     @endif
                                 </dd>
                             </div>
                             <div>
-                                <dt>Can withdraw</dt>
+                                <dt>{{ __('ui.bo.mine.can_withdraw') }}</dt>
                                 <dd>
                                     @if ($application->isCancellable())
                                         Yes — the employer has not opened it yet
@@ -138,7 +138,7 @@
                     <section class="kh-bo__card">
                         <div class="kh-bo__card-head">
                             <div>
-                                <h2>Message from the employer</h2>
+                                <h2>{{ __('ui.bo.mine.employer_message') }}</h2>
                                 <p>
                                     Written by the hiring team at {{ $post?->company ?? 'the company' }}@if ($decidedAt), {{ $decidedAt->diffForHumans() }}@endif.
                                 </p>
@@ -157,8 +157,8 @@
                 <section class="kh-bo__card">
                     <div class="kh-bo__card-head">
                         <div>
-                            <h2>What you sent</h2>
-                            <p>The details attached to this application.</p>
+                            <h2>{{ __('ui.bo.mine.what_you_sent') }}</h2>
+                            <p>{{ __('ui.bo.mine.what_you_sent_hint') }}</p>
                         </div>
                     </div>
 
@@ -186,7 +186,7 @@
                                     <path d="M22 16.9v3a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3.1 19.5 19.5 0 01-6-6A19.8 19.8 0 012.1 4.2 2 2 0 014.1 2h3a2 2 0 012 1.7c.1 1 .4 1.9.7 2.8a2 2 0 01-.5 2.1L8.1 9.9a16 16 0 006 6l1.3-1.2a2 2 0 012.1-.5c.9.3 1.8.6 2.8.7a2 2 0 011.7 2z" />
                                 </svg>
                                 <div class="kh-bo__specrow-body">
-                                    <span class="kh-bo__specrow-label">Phone</span>
+                                    <span class="kh-bo__specrow-label">{{ __('ui.bo.applications.phone') }}</span>
                                     <span class="kh-bo__specrow-value">
                                         @if ($application->phone)
                                             <a href="tel:{{ $application->phone }}">{{ $application->phone }}</a>
@@ -211,7 +211,7 @@
                                             {{ $application->cvLabel() }}
                                         </span>
                                     @else
-                                        <span class="kh-bo__specrow-value">No CV attached</span>
+                                        <span class="kh-bo__specrow-value">{{ __('ui.bo.mine.no_cv_attached') }}</span>
                                     @endif
                                 </div>
                             </li>
@@ -222,7 +222,7 @@
                                         <path d="M21 11.5a8.4 8.4 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.4 8.4 0 01-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.4 8.4 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z" />
                                     </svg>
                                     <div class="kh-bo__specrow-body">
-                                        <span class="kh-bo__specrow-label">Your message</span>
+                                        <span class="kh-bo__specrow-label">{{ __('ui.bo.mine.your_message') }}</span>
                                         <p class="kh-bo__quote">{{ $application->message }}</p>
                                     </div>
                                 </li>
@@ -246,12 +246,12 @@
                     <section class="kh-bo__card">
                         <div class="kh-bo__card-head">
                             <div>
-                                <h2>The job</h2>
-                                <p>How the role was described when you applied.</p>
+                                <h2>{{ __('ui.bo.mine.the_job') }}</h2>
+                                <p>{{ __('ui.bo.mine.the_job_hint') }}</p>
                             </div>
 
                             @unless ($post->isPublished())
-                                <span class="kh-bo__status kh-bo__status--pending">Closed</span>
+                                <span class="kh-bo__status kh-bo__status--pending">{{ __('ui.bo.mine.closed') }}</span>
                             @endunless
                         </div>
 
@@ -278,7 +278,7 @@
                                         <svg viewBox="0 0 24 24" aria-hidden="true">
                                             <line x1="12" y1="1" x2="12" y2="23" /><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" />
                                         </svg>
-                                        Salary
+                                        {{ __('ui.bo.job_detail.salary') }}
                                     </span>
                                     <strong>{{ $post->salary ?: 'Undisclosed' }}</strong>
                                 </div>
@@ -288,7 +288,7 @@
                                         <svg viewBox="0 0 24 24" aria-hidden="true">
                                             <circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" />
                                         </svg>
-                                        Deadline
+                                        {{ __('ui.bo.job_detail.deadline') }}
                                     </span>
                                     <strong>{{ $post->deadlineLabel() }}</strong>
                                 </div>
