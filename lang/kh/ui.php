@@ -554,7 +554,7 @@ return [
                 'password_new' => 'ពាក្យសម្ងាត់ថ្មី',
                 'password_placeholder' => 'បង្កើតពាក្យសម្ងាត់ដែលមានសុវត្ថិភាព',
                 'password_placeholder_edit' => 'ទុកទទេ ដើម្បីរក្សាពាក្យសម្ងាត់ដដែល',
-                'password_hint' => 'ប្រើយ៉ាងតិច ៨ តួអក្សរ។',
+                'password_hint' => 'យ៉ាងតិច ៨ តួអក្សរ រួមមានអក្សរធំ អក្សរតូច លេខ និងសញ្ញាពិសេស។',
                 'password_hint_edit' => 'ទុកវាលទាំងពីរឲ្យទទេ ដើម្បីរក្សាពាក្យសម្ងាត់ដែលមានស្រាប់។',
                 'password_confirm' => 'បញ្ជាក់ពាក្យសម្ងាត់',
                 'password_confirm_new' => 'បញ្ជាក់ពាក្យសម្ងាត់ថ្មី',
@@ -811,7 +811,7 @@ return [
             'password_hint' => 'ទុកវាលទាំងនេះឲ្យទទេ ដើម្បីរក្សាពាក្យសម្ងាត់បច្ចុប្បន្ន។',
             'current_password' => 'ពាក្យសម្ងាត់បច្ចុប្បន្ន',
             'new_password' => 'ពាក្យសម្ងាត់ថ្មី',
-            'new_password_hint' => 'យ៉ាងតិច ៨ តួអក្សរ។',
+            'new_password_hint' => 'យ៉ាងតិច ៨ តួអក្សរ រួមមានអក្សរធំ អក្សរតូច លេខ និងសញ្ញាពិសេស។',
             'confirm_new_password' => 'បញ្ជាក់ពាក្យសម្ងាត់ថ្មី',
         ],
         'billing' => [
@@ -821,10 +821,8 @@ return [
             'back_to_dashboard' => 'ត្រឡប់ទៅផ្ទាំងគ្រប់គ្រង',
             'payment_pending' => 'ការទូទាត់កំពុងរង់ចាំ។',
             'payment_failed' => 'ការទូទាត់ចុងក្រោយបានបរាជ័យ។',
-            'choose_plan' => 'ជ្រើសរើសកញ្ចប់របស់អ្នក',
-            'pricing_heading' => 'តម្លៃសាមញ្ញ មុខងារពេញលេញ',
-            'pricing_lead' => 'ជ្រើសរើសកញ្ចប់ដែលសមនឹងក្តារការងាររបស់អ្នក។',
             'period_label' => 'រយៈពេលទូទាត់',
+            'save_percent' => 'សន្សំ :percent%',
             'monthly' => 'ប្រចាំខែ',
             'annual' => 'ប្រចាំឆ្នាំ',
             'current_plan' => 'កញ្ចប់បច្ចុប្បន្ន',
@@ -833,21 +831,21 @@ return [
             'included' => 'អ្វីខ្លះដែលរួមបញ្ចូល',
             'footnote' => 'ការទូទាត់សុវត្ថិភាពដោយ PayWay &middot; គ្មានថ្លៃដំឡើង &middot; បោះបង់បានគ្រប់ពេល',
             'plan' => [
-                /* Keys are the English label stored in config/plans.php. */
+                /* Keyed by the plan's id — see lang/en/ui.php. */
                 'names' => [
-                    'Revenue Share' => 'ចែករំលែកចំណូល',
-                    'Single Site' => 'គេហទំព័រតែមួយ',
-                    'Multi Site' => 'គេហទំព័រច្រើន',
+                    'revenue-share' => 'ចែករំលែកចំណូល',
+                    'single-site' => 'គេហទំព័រតែមួយ',
+                    'multi-site' => 'គេហទំព័រច្រើន',
                 ],
                 'taglines' => [
-                    'Perfect for a first board' => 'ល្អឥតខ្ចោះសម្រាប់ក្តារដំបូង',
-                    'Ideal for growing boards' => 'សក្តិសមសម្រាប់ក្តារកំពុងរីកចម្រើន',
-                    'For agencies & enterprises' => 'សម្រាប់ភ្នាក់ងារ និងសហគ្រាស',
+                    'revenue-share' => 'ល្អឥតខ្ចោះសម្រាប់ក្តារដំបូង',
+                    'single-site' => 'សក្តិសមសម្រាប់ក្តារកំពុងរីកចម្រើន',
+                    'multi-site' => 'សម្រាប់ភ្នាក់ងារ និងសហគ្រាស',
                 ],
                 'blurbs' => [
-                    'For a new board finding its first employers.' => 'សម្រាប់ក្តារថ្មីដែលកំពុងស្វែងរកនិយោជកដំបូង។',
-                    'For one board with steady traffic and hiring.' => 'សម្រាប់ក្តារមួយដែលមានចរាចរណ៍ និងការជ្រើសរើសបុគ្គលិកទៀងទាត់។',
-                    'For agencies running several boards at once.' => 'សម្រាប់ភ្នាក់ងារដែលដំណើរការក្តារច្រើនក្នុងពេលតែមួយ។',
+                    'revenue-share' => 'សម្រាប់ក្តារថ្មីដែលកំពុងស្វែងរកនិយោជកដំបូង។',
+                    'single-site' => 'សម្រាប់ក្តារមួយដែលមានចរាចរណ៍ និងការជ្រើសរើសបុគ្គលិកទៀងទាត់។',
+                    'multi-site' => 'សម្រាប់ភ្នាក់ងារដែលដំណើរការក្តារច្រើនក្នុងពេលតែមួយ។',
                 ],
                 'features' => [
                     '25% Revenue Share' => 'ចែករំលែកចំណូល ២៥%',

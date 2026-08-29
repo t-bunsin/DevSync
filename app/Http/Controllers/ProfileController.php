@@ -31,7 +31,8 @@ class ProfileController extends Controller
             'email' => ['required', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user->id)],
             'phone' => ['nullable', 'string', 'max:30', Rule::unique('users', 'phone')->ignore($user->id)],
             'current_password' => 'nullable|required_with:new_password',
-            'new_password' => 'nullable|min:8|confirmed|required_with:current_password',
+            'new_password' => ['nullable', 'confirmed', 'required_with:current_password',
+                \App\Http\Controllers\Auth\RegisterController::passwordRules()],
             // A real image, one of three web formats, big enough to be worth
             // showing and small enough that a phone snapshot still uploads.
             'photo' => User::PHOTO_RULES,

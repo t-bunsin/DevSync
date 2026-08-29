@@ -13,6 +13,7 @@ use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rules\Password;
 
 class RegisterController extends Controller
 {
@@ -74,17 +75,39 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
+    /**
+     * Password policy, in one place so registration, password reset and any
+     * future change-password screen cannot drift apart.
+     *
+     * uncompromised() is deliberately left off: it calls the Have I Been Pwned
+     * API on every submit, and a slow or blocked request there would block
+     * sign-up entirely.
+     */
+    public static function passwordRules(): Password
+    {
+        return Password::min(8)
+            ->letters()
+            ->mixedCase()
+            ->numbers()
+            ->symbols();
+    }
+
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'first_name' => ['required', 'string', 'max:80'],
-            'last_name' => ['required', 'string', 'max:80'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'first_name' => ['required', 'string', 'min:2', 'max:80'],
+            'last_name' => ['required', 'string', 'min:2', 'max:80'],
+            // 'rfc' only, not 'rfc,dns': the dns check does a live MX lookup, so a
+            // slow resolver or a valid domain without MX records would block sign-up.
+            'email' => ['required', 'string', 'email:rfc', 'max:255', 'unique:users,email'],
             'account_type' => ['required', 'in:employee,employer'],
-            'company_name' => ['nullable', 'required_if:account_type,employer', 'string', 'max:255'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            // Not a flat 'required': the field is only shown, and only means
+            // anything, on the employer path.
+            'company_name' => ['nullable', 'required_if:account_type,employer', 'string', 'min:2', 'max:255'],
+            'password' => ['required', 'string', 'confirmed', self::passwordRules()],
         ], [
             'company_name.required_if' => 'Please tell us which company you are hiring for.',
+            'password.confirmed' => 'The two passwords do not match.',
         ]);
     }
 

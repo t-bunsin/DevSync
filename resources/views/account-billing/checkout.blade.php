@@ -80,7 +80,7 @@
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z" /><path d="M4 7.5l8 4.5 8-4.5M12 12v9" /></svg>
                         </span>
                         <dt>{{ __('ui.bo.billing.package') }}</dt>
-                        <dd>{{ __('ui.bo.billing.plan.names.' . $plan['name']) }}</dd>
+                        <dd>{{ __('ui.bo.billing.plan.names.' . $plan['id']) }}</dd>
                     </div>
 
                     <div class="kh-co__row">
@@ -185,8 +185,8 @@
                     </span>
 
                     <div>
-                        <h2 class="kh-co__plan-name" id="kh-co-plan-name">{{ __('ui.bo.billing.plan.names.' . $plan['name']) }}</h2>
-                        <p class="kh-co__plan-tagline">{{ __('ui.bo.billing.plan.taglines.' . $plan['tagline']) }}</p>
+                        <h2 class="kh-co__plan-name" id="kh-co-plan-name">{{ __('ui.bo.billing.plan.names.' . $plan['id']) }}</h2>
+                        <p class="kh-co__plan-tagline">{{ __('ui.bo.billing.plan.taglines.' . $plan['id']) }}</p>
                     </div>
                 </header>
 

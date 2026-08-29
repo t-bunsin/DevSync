@@ -107,8 +107,13 @@
                 <form method="POST" action="{{ route('register') }}" class="jf-auth__form" data-auth-form novalidate>
                     @csrf
 
+                    <p class="jf-auth__required-note">
+                        <i class="fas fa-circle-info" aria-hidden="true"></i>
+                        All fields are required.
+                    </p>
+
                     <fieldset class="jf-auth__roles">
-                        <legend>I want to</legend>
+                        <legend>I want to <span class="jf-auth__req" aria-hidden="true">*</span></legend>
 
                         <div class="jf-auth__roles-grid">
                         <label class="jf-role">
@@ -139,7 +144,7 @@
 
                     <div class="jf-auth__grid">
                         <div class="jf-auth__field">
-                            <label for="first_name">First name</label>
+                            <label for="first_name">First name <span class="jf-auth__req" aria-hidden="true">*</span></label>
                             <input id="first_name" name="first_name" type="text" value="{{ old('first_name') }}"
                                 placeholder="Sokha" autocomplete="given-name" required autofocus
                                 @error('first_name') aria-invalid="true" @enderror>
@@ -147,7 +152,7 @@
                         </div>
 
                         <div class="jf-auth__field">
-                            <label for="last_name">Last name</label>
+                            <label for="last_name">Last name <span class="jf-auth__req" aria-hidden="true">*</span></label>
                             <input id="last_name" name="last_name" type="text" value="{{ old('last_name') }}"
                                 placeholder="Chan" autocomplete="family-name" required
                                 @error('last_name') aria-invalid="true" @enderror>
@@ -156,7 +161,7 @@
                     </div>
 
                     <div class="jf-auth__field jf-auth__field--company" data-company-field>
-                        <label for="company_name">Company name</label>
+                        <label for="company_name">Company name <span class="jf-auth__req" data-company-req aria-hidden="true">*</span></label>
                         <input id="company_name" name="company_name" type="text" value="{{ old('company_name') }}"
                             placeholder="e.g. PPCB Bank" autocomplete="organization"
                             @error('company_name') aria-invalid="true" @enderror>
@@ -168,7 +173,7 @@
                     </div>
 
                     <div class="jf-auth__field">
-                        <label for="email">Email</label>
+                        <label for="email">Email <span class="jf-auth__req" aria-hidden="true">*</span></label>
                         <input id="email" name="email" type="email" value="{{ old('email') }}"
                             placeholder="you@example.com" autocomplete="email" required
                             @error('email') aria-invalid="true" @enderror>
@@ -177,32 +182,41 @@
 
                     <div class="jf-auth__grid">
                         <div class="jf-auth__field">
-                            <label for="password">Password</label>
+                            <label for="password">Password <span class="jf-auth__req" aria-hidden="true">*</span></label>
                             <span class="jf-auth__control">
                                 <input id="password" name="password" type="password" placeholder="At least 8 characters"
-                                    autocomplete="new-password" required @error('password') aria-invalid="true" @enderror>
+                                    autocomplete="new-password" required data-password
+                                    aria-describedby="password-rules"
+                                    @error('password') aria-invalid="true" @enderror>
                                 <button type="button" data-toggle-password="password" aria-label="Show password">
                                     <i class="fas fa-eye" aria-hidden="true"></i>
                                 </button>
                             </span>
-                            @error('password')
-                                <small class="jf-auth__error">{{ $message }}</small>
-                            @else
-                                <small class="jf-auth__hint">Minimum 8 characters.</small>
-                            @enderror
+                            @error('password')<small class="jf-auth__error">{{ $message }}</small>@enderror
                         </div>
 
                         <div class="jf-auth__field">
-                            <label for="password_confirmation">Confirm password</label>
+                            <label for="password_confirmation">Confirm password <span class="jf-auth__req" aria-hidden="true">*</span></label>
                             <span class="jf-auth__control">
                                 <input id="password_confirmation" name="password_confirmation" type="password"
-                                    placeholder="Repeat your password" autocomplete="new-password" required>
+                                    placeholder="Repeat your password" autocomplete="new-password" required
+                                    data-password-confirm aria-describedby="password-match">
                                 <button type="button" data-toggle-password="password_confirmation" aria-label="Show password">
                                     <i class="fas fa-eye" aria-hidden="true"></i>
                                 </button>
                             </span>
+                            <small class="jf-auth__match" id="password-match" data-password-match hidden></small>
                         </div>
                     </div>
+
+                    {{-- Mirrors RegisterController::passwordRules(). Server-side stays
+                         the gate; this only tells people what is missing as they type. --}}
+                    <ul class="jf-auth__rules" id="password-rules" data-password-rules aria-live="polite">
+                        <li data-rule="length"><i class="fas fa-circle" aria-hidden="true"></i>At least 8 characters</li>
+                        <li data-rule="mixed"><i class="fas fa-circle" aria-hidden="true"></i>Upper and lower case letters</li>
+                        <li data-rule="number"><i class="fas fa-circle" aria-hidden="true"></i>At least one number</li>
+                        <li data-rule="symbol"><i class="fas fa-circle" aria-hidden="true"></i>At least one symbol</li>
+                    </ul>
 
                     <button class="jf-auth__submit" type="submit">
                         <i class="fas fa-user-plus" aria-hidden="true"></i>

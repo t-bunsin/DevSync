@@ -680,6 +680,97 @@ body.jf-auth-body {
   cursor: default;
 }
 
+/* Required marker + the live password checklist
+   ------------------------------------------------------------------ */
+.jf-auth__req {
+  margin-left: 2px;
+  color: #c0563f;
+  font-weight: 700;
+}
+
+.jf-auth__required-note {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0 0 4px;
+  color: var(--jf-auth-ink-soft);
+  font-size: 0.74rem;
+  font-weight: 600;
+}
+
+.jf-auth__required-note i {
+  font-size: 0.72rem;
+  opacity: 0.7;
+}
+
+/* Collapsed until the field is touched, so an empty form is not a wall of
+   unmet demands; it opens on first keystroke. */
+.jf-auth__rules {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 5px 16px;
+  margin: -4px 0 0;
+  padding: 0;
+  max-height: 0;
+  overflow: hidden;
+  list-style: none;
+  opacity: 0;
+  transition: max-height 0.22s ease, opacity 0.22s ease, margin 0.22s ease;
+}
+
+.jf-auth__rules.is-active {
+  max-height: 90px;
+  margin-top: 2px;
+  opacity: 1;
+}
+
+.jf-auth__rules li {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--jf-auth-ink-soft);
+  font-size: 0.73rem;
+  font-weight: 600;
+  transition: color 0.18s ease;
+}
+
+.jf-auth__rules li i {
+  width: 12px;
+  font-size: 0.52rem;
+  opacity: 0.55;
+  transition: color 0.18s ease, font-size 0.18s ease, opacity 0.18s ease;
+}
+
+.jf-auth__rules li.is-met {
+  color: #1a7f5a;
+}
+
+.jf-auth__rules li.is-met i {
+  color: #1a7f5a;
+  font-size: 0.78rem;
+  opacity: 1;
+}
+
+.jf-auth__match {
+  color: #9a3131;
+  font-size: 0.73rem;
+  font-weight: 600;
+}
+
+.jf-auth__match.is-ok {
+  color: #1a7f5a;
+}
+
+@media (max-width: 520px) {
+  .jf-auth__rules {
+    grid-template-columns: 1fr;
+  }
+
+  .jf-auth__rules.is-active {
+    max-height: 140px;
+  }
+}
+
 .jf-auth__error {
   color: #9a3131;
   font-size: 0.73rem;

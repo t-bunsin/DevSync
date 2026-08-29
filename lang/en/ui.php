@@ -564,7 +564,7 @@ return [
                 'password_new' => 'New password',
                 'password_placeholder' => 'Create a secure password',
                 'password_placeholder_edit' => 'Leave blank to keep current',
-                'password_hint' => 'Use at least 8 characters.',
+                'password_hint' => 'At least 8 characters, with upper and lower case, a number and a symbol.',
                 'password_hint_edit' => 'Leave both fields empty to keep the existing password.',
                 'password_confirm' => 'Confirm password',
                 'password_confirm_new' => 'Confirm new password',
@@ -821,7 +821,7 @@ return [
             'password_hint' => 'Leave these blank to keep your current password.',
             'current_password' => 'Current password',
             'new_password' => 'New password',
-            'new_password_hint' => 'At least 8 characters.',
+            'new_password_hint' => 'At least 8 characters, with upper and lower case, a number and a symbol.',
             'confirm_new_password' => 'Confirm new password',
         ],
         'billing' => [
@@ -831,10 +831,8 @@ return [
             'back_to_dashboard' => 'Back to dashboard',
             'payment_pending' => 'Payment pending.',
             'payment_failed' => 'Last payment failed.',
-            'choose_plan' => 'Choose your plan',
-            'pricing_heading' => 'Simple pricing, powerful features',
-            'pricing_lead' => 'Select the package that fits your job board.',
             'period_label' => 'Billing period',
+            'save_percent' => 'Save :percent%',
             'monthly' => 'Monthly',
             'annual' => 'Annual',
             'current_plan' => 'Current plan',
@@ -843,21 +841,22 @@ return [
             'included' => "What's included",
             'footnote' => 'Secure payment by PayWay &middot; No setup fee &middot; Cancel any time',
             'plan' => [
-                /* Keys are the English label stored in config/plans.php. */
+                /* Keyed by the plan's id, not its English text: __() splits keys
+                   on dots and every blurb ends in a full stop. */
                 'names' => [
-                    'Revenue Share' => 'Revenue Share',
-                    'Single Site' => 'Single Site',
-                    'Multi Site' => 'Multi Site',
+                    'revenue-share' => 'Revenue Share',
+                    'single-site' => 'Single Site',
+                    'multi-site' => 'Multi Site',
                 ],
                 'taglines' => [
-                    'Perfect for a first board' => 'Perfect for a first board',
-                    'Ideal for growing boards' => 'Ideal for growing boards',
-                    'For agencies & enterprises' => 'For agencies & enterprises',
+                    'revenue-share' => 'Perfect for a first board',
+                    'single-site' => 'Ideal for growing boards',
+                    'multi-site' => 'For agencies & enterprises',
                 ],
                 'blurbs' => [
-                    'For a new board finding its first employers.' => 'For a new board finding its first employers.',
-                    'For one board with steady traffic and hiring.' => 'For one board with steady traffic and hiring.',
-                    'For agencies running several boards at once.' => 'For agencies running several boards at once.',
+                    'revenue-share' => 'For a new board finding its first employers.',
+                    'single-site' => 'For one board with steady traffic and hiring.',
+                    'multi-site' => 'For agencies running several boards at once.',
                 ],
                 'features' => [
                     '25% Revenue Share' => '25% Revenue Share',

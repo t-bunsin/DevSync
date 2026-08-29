@@ -60,7 +60,7 @@
         @if ($subscription && $subscription->status === 'active')
             <div class="kh-bill__current">
                 <div>
-                    <strong>{{ __('ui.bo.billing.on_plan', ['plan' => __('ui.bo.billing.plan.names.' . ($subscription->plan()['name'] ?? $subscription->plan_id))]) }}</strong>
+                    <strong>{{ __('ui.bo.billing.on_plan', ['plan' => __('ui.bo.billing.plan.names.' . $subscription->plan_id)]) }}</strong>
                     <span>
                         ${{ number_format($subscription->amount, 0) }} / {{ $subscription->billing_period === 'annual' ? 'month, billed annually' : 'month' }}
                         &middot; since {{ $subscription->started_at->format('M j, Y') }}
@@ -70,25 +70,23 @@
         @elseif ($subscription && $subscription->status === 'pending')
             <div class="kh-bo__errors" role="status">
                 <strong>{{ __('ui.bo.billing.payment_pending') }}</strong>
-                {{ __('ui.bo.billing.awaiting_payway', ['plan' => __('ui.bo.billing.plan.names.' . ($subscription->plan()['name'] ?? $subscription->plan_id))]) }}
+                {{ __('ui.bo.billing.awaiting_payway', ['plan' => __('ui.bo.billing.plan.names.' . $subscription->plan_id)]) }}
             </div>
         @elseif ($subscription && $subscription->status === 'failed')
             <div class="kh-bo__errors" role="status">
                 <strong>{{ __('ui.bo.billing.payment_failed') }}</strong>
-                {{ __('ui.bo.billing.payment_failed_plan', ['plan' => __('ui.bo.billing.plan.names.' . ($subscription->plan()['name'] ?? $subscription->plan_id))]) }}
+                {{ __('ui.bo.billing.payment_failed_plan', ['plan' => __('ui.bo.billing.plan.names.' . $subscription->plan_id)]) }}
             </div>
         @endif
 
         <div class="kh-bill" data-period="monthly">
+            {{-- The page heading above already says this is Billing, so the
+                 intro block is just the period switch. --}}
             <div class="kh-bill__intro">
-                <span class="kh-bill__intro-kicker">{{ __('ui.bo.billing.choose_plan') }}</span>
-                <h2>{{ __('ui.bo.billing.pricing_heading') }}</h2>
-                <p>{{ __('ui.bo.billing.pricing_lead') }}</p>
-
                 <div class="kh-bill__period" data-billing-toggle role="group" aria-label="{{ __('ui.bo.billing.period_label') }}">
                     <button type="button" data-period="monthly" aria-pressed="true">{{ __('ui.bo.billing.monthly') }}</button>
                     <button type="button" data-period="annual" aria-pressed="false">
-                        {{ __('ui.bo.billing.annual') }}<span>Save {{ round($annualDiscount * 100) }}%</span>
+                        {{ __('ui.bo.billing.annual') }}<span>{{ __('ui.bo.billing.save_percent', ['percent' => round($annualDiscount * 100)]) }}</span>
                     </button>
                 </div>
             </div>
@@ -120,8 +118,8 @@
                                 <i class="fas {{ $plan['icon'] }}"></i>
                             </span>
                             <div>
-                                <h3 class="kh-bill__plan-name">{{ __('ui.bo.billing.plan.names.' . $plan['name']) }}</h3>
-                                <p class="kh-bill__plan-tagline">{{ __('ui.bo.billing.plan.taglines.' . $plan['tagline']) }}</p>
+                                <h3 class="kh-bill__plan-name">{{ __('ui.bo.billing.plan.names.' . $plan['id']) }}</h3>
+                                <p class="kh-bill__plan-tagline">{{ __('ui.bo.billing.plan.taglines.' . $plan['id']) }}</p>
                             </div>
                         </div>
 
@@ -132,7 +130,7 @@
                             <span class="kh-bill__plan-cycle">{{ __('ui.bo.billing.per_month') }}</span>
                         </p>
 
-                        <p class="kh-bill__plan-blurb">{{ __('ui.bo.billing.plan.blurbs.' . $plan['blurb']) }}</p>
+                        <p class="kh-bill__plan-blurb">{{ __('ui.bo.billing.plan.blurbs.' . $plan['id']) }}</p>
 
                         <p class="kh-bill__plan-note" data-amount data-monthly="{{ $plan['amounts']['monthly']['note'] }}"
                             data-annual="{{ $plan['amounts']['annual']['note'] }}">{{ $plan['amounts']['monthly']['note'] }}</p>
@@ -150,7 +148,7 @@
 
                         <a class="kh-bill__plan-select" data-plan-select
                             href="{{ route('account-billing.checkout', ['plan_id' => $plan['id'], 'billing_period' => 'monthly']) }}">
-                            {{ $isCurrent ? __('ui.bo.billing.change_period') : __('ui.bo.billing.select_plan', ['plan' => __('ui.bo.billing.plan.names.' . $plan['name'])]) }}
+                            {{ $isCurrent ? __('ui.bo.billing.change_period') : __('ui.bo.billing.select_plan', ['plan' => __('ui.bo.billing.plan.names.' . $plan['id'])]) }}
                             <i class="fas fa-arrow-right" aria-hidden="true"></i>
                         </a>
                     </article>

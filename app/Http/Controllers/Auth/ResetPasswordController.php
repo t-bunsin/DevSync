@@ -29,6 +29,19 @@ class ResetPasswordController extends Controller
     protected $redirectTo = RouteServiceProvider::HOME;
 
     /**
+     * Same policy as sign-up. The ResetsPasswords trait defaults to a bare
+     * min:8, which would let someone reset their way around the rules.
+     */
+    protected function rules()
+    {
+        return [
+            'token' => 'required',
+            'email' => 'required|email',
+            'password' => ['required', 'confirmed', RegisterController::passwordRules()],
+        ];
+    }
+
+    /**
      * Set the user's password.
      *
      * @param  \Illuminate\Contracts\Auth\CanResetPassword  $user

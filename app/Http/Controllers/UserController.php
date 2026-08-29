@@ -201,7 +201,9 @@ class UserController extends Controller
             'preferred_locale' => ['required', Rule::in(['en', 'km'])],
             'company_name' => ['nullable', 'required_if:role,' . Role::EMPLOYER, 'string', 'max:255'],
             // Required on create, optional on update where blank means "keep current".
-            'password' => [$user ? 'nullable' : 'required', 'string', 'confirmed', 'min:8'],
+            // Same policy as sign-up, so an admin-created account is not weaker
+            // than one a person registers themselves.
+            'password' => [$user ? 'nullable' : 'required', 'string', 'confirmed', \App\Http\Controllers\Auth\RegisterController::passwordRules()],
         ];
     }
 
