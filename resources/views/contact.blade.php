@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
-@section('title', 'Contact | KH-WORKS')
-@section('meta-description', 'Talk to the KH-WORKS team about hiring, job applications, or partnerships. Phnom Penh office, phone, email, and a direct message form.')
+@section('title', 'Contact | ZIN-WORKS')
+@section('meta-description', 'Talk to the ZIN-WORKS team about hiring, job applications, or partnerships. Phnom Penh office, phone, email, and a direct message form.')
 
 @push('styles')
     {{-- jobs.css carries the frontend design tokens plus the shared header/footer theming. --}}
@@ -47,7 +47,7 @@
         ];
 
         $topics = [
-            'hiring' => 'I want to hire on KH-WORKS',
+            'hiring' => 'I want to hire on ZIN-WORKS',
             'job-seeking' => 'I am looking for a job',
             'partnership' => 'Partnership or media',
             'other' => 'Something else',
@@ -98,12 +98,12 @@
                 <figure class="jf-contact__map">
                     <iframe
                         src="https://www.google.com/maps?q={{ urlencode($details['map_query']) }}&z=16&hl=en&output=embed"
-                        title="Map showing the KH-WORKS office in Phnom Penh"
+                        title="Map showing the ZIN-WORKS office in Phnom Penh"
                         loading="lazy"
                         referrerpolicy="no-referrer-when-downgrade"
                         allowfullscreen></iframe>
                     <figcaption>
-                        <span><i class="fas fa-map-pin" aria-hidden="true"></i> KH-WORKS office</span>
+                        <span><i class="fas fa-map-pin" aria-hidden="true"></i> ZIN-WORKS office</span>
                         <a href="https://www.google.com/maps/search/?api=1&query={{ urlencode($details['map_query']) }}"
                             target="_blank" rel="noopener">
                             Open in Maps <i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i>

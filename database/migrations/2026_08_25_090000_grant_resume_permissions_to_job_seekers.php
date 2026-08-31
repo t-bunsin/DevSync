@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
 
 /*
-| KH-WORKS | Resume grants for the job seeker role
+| ZIN-WORKS | Resume grants for the job seeker role
 |
 | ResumeController used to let a candidate act on their own resume by
 | ownership alone, returning before the permission check — which is why the

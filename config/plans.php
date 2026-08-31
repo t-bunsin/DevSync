@@ -1,7 +1,7 @@
 <?php
 
 /*
-| KH-WORKS | Pricing tiers
+| ZIN-WORKS | Pricing tiers
 |
 | Single source of truth for the plan grid shown on the public pricing
 | section (resources/views/main.blade.php) and the "choose a package" step

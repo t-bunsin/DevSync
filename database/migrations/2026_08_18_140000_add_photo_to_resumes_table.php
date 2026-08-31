@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 /*
-| KH-WORKS | Candidate photo on a resume
+| ZIN-WORKS | Candidate photo on a resume
 |
 | Path on the `public` disk, the same convention as compliance logos. Nullable:
 | a photo is optional, and the register, preview and PDF all fall back to the

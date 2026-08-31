@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
-@section('title', 'About Us | KH-WORKS')
-@section('meta-description', 'KH-WORKS is a Cambodian job portal built on verified employers. Learn who we are, what we build for job seekers and hiring teams, and how the platform grew.')
+@section('title', 'About Us | ZIN-WORKS')
+@section('meta-description', 'ZIN-WORKS is a Cambodian job portal built on verified employers. Learn who we are, what we build for job seekers and hiring teams, and how the platform grew.')
 
 @push('styles')
     {{-- jobs.css carries the frontend design tokens plus the shared header/footer theming. --}}
@@ -47,7 +47,7 @@
         ];
 
         $milestones = [
-            ['year' => '2015', 'text' => 'KH-WORKS starts in Phnom Penh as a small job board for local employers.'],
+            ['year' => '2015', 'text' => 'ZIN-WORKS starts in Phnom Penh as a small job board for local employers.'],
             ['year' => '2018', 'text' => 'Employer verification introduced — licences checked before a company can post.'],
             ['year' => '2020', 'text' => 'The platform goes bilingual, Khmer and English, end to end.'],
             ['year' => '2022', 'text' => 'Company profiles launch so candidates can research an employer in one place.'],
@@ -65,7 +65,7 @@
                 <span aria-current="page">About Us</span>
             </nav>
 
-            <h1 id="about-title">About KH-WORKS</h1>
+            <h1 id="about-title">About ZIN-WORKS</h1>
             <p>A Cambodian job portal built on employers we have actually checked.</p>
         </div>
     </section>
@@ -77,7 +77,7 @@
                 <h2 id="about-intro-title">A job portal built around verified employers</h2>
 
                 <p>
-                    <strong>KH-WORKS</strong> is a Cambodian job platform that matches candidates with
+                    <strong>ZIN-WORKS</strong> is a Cambodian job platform that matches candidates with
                     employers whose registration and licences have been checked. Every advert names a real
                     company, shows what the role pays, and says when applications close.
                 </p>
@@ -127,7 +127,7 @@
         </div>
     </section>
 
-    <section class="jf-about-stats" aria-label="KH-WORKS in numbers">
+    <section class="jf-about-stats" aria-label="ZIN-WORKS in numbers">
         <div class="jf-shell">
             <dl class="jf-about-stats__grid">
                 @foreach ($statCards as $card)
@@ -198,7 +198,7 @@
         <div class="jf-shell">
             <div class="jf-about-section-head">
                 <span class="jf-kicker">On the platform now</span>
-                <h2 id="about-employers-title">Who is hiring on KH-WORKS</h2>
+                <h2 id="about-employers-title">Who is hiring on ZIN-WORKS</h2>
                 <p>Approved employers, busiest first. The blue tick means our team has checked that company's licences.</p>
             </div>
 

@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 /*
-| KH-WORKS | Notifications
+| ZIN-WORKS | Notifications
 |
 | Laravel's standard database-channel table, with one adaptation: the
 | notifiable is addressed by `uuidMorphs`, not `morphs`. Module 01 replaced the

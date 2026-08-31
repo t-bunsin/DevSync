@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 /*
-| KH-WORKS | Companies
+| ZIN-WORKS | Companies
 |
 | The employer record. Job posts and compliance records both belong to one,
 | and employer signup registers against one.

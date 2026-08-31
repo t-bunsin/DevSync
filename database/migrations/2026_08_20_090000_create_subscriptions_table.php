@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 /*
-| KH-WORKS | Subscriptions
+| ZIN-WORKS | Subscriptions
 |
 | One row per user tracking which pricing tier (config/plans.php) they are
 | on. No payment gateway is wired up yet — BillingController::store() writes

@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 /*
-| KH-WORKS | Module 01 — Identity and Access (9 of 10)
+| ZIN-WORKS | Module 01 — Identity and Access (9 of 10)
 |
 | Who moderated what.
 |

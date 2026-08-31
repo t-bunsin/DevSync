@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
 
 /*
-| KH-WORKS | View permissions, and the applicant inbox
+| ZIN-WORKS | View permissions, and the applicant inbox
 |
 | Three gaps the first two permission migrations left:
 |

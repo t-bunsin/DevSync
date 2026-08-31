@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-@section('title', $job['title'] . ' at ' . $job['company'] . ' | KH-WORKS')
+@section('title', $job['title'] . ' at ' . $job['company'] . ' | ZIN-WORKS')
 @section('meta-description', $job['summary'])
 
 @push('styles')

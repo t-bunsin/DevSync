@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 /*
-| KH-WORKS | Give the existing job posts an author
+| ZIN-WORKS | Give the existing job posts an author
 |
 | add_created_by_to_job_posts_table added the column as nullable, so every post
 | that already existed — and every post the seeder wrote before it learned to

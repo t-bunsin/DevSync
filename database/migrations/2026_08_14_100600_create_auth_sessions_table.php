@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 /*
-| KH-WORKS | Module 01 — Identity and Access (6 of 10)
+| ZIN-WORKS | Module 01 — Identity and Access (6 of 10)
 |
 | One row per active device. Distinct from Laravel's own `sessions` table
 | (the session-driver store) — that one stays as it is.

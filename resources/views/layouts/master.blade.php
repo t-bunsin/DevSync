@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="@yield('meta-description', 'KH-WORKS connects job seekers with trusted employers across Cambodia and remote-first teams.')">
+    <meta name="description" content="@yield('meta-description', 'ZIN-WORKS connects job seekers with trusted employers across Cambodia and remote-first teams.')">
     <meta name="theme-color" id="theme-color" content="#ffffff">
     <script>
         (() => {
@@ -20,7 +20,7 @@
             }
         })();
     </script>
-    <title>@yield('title', 'KH-WORKS')</title>
+    <title>@yield('title', 'ZIN-WORKS')</title>
     <link rel="icon" type="image/png" href="{{ asset('img/favicon.png') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}">

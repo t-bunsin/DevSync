@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 /*
-| KH-WORKS | Who registered a component
+| ZIN-WORKS | Who registered a component
 |
 | Records the signed-in admin who added a Location/Department/Job type, so
 | the list can say who registered it and when — same idiom as job_posts'

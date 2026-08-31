@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 /*
-| KH-WORKS | Compliance records
+| ZIN-WORKS | Compliance records
 |
 | One row per document an employer has to hold to trade on the platform — a
 | business licence, a tax certificate, a labour registration. Each starts

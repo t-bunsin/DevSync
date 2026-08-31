@@ -12,7 +12,7 @@
 <footer class="jf-footer">
     <div class="jf-shell jf-footer__inner">
         <div class="jf-footer__about">
-            <a class="jf-footer__brand" href="{{ url('/') }}">KH-<span>WORKS</span></a>
+            <a class="jf-footer__brand" href="{{ url('/') }}">ZIN-<span>WORKS</span></a>
             <p class="jf-footer__copy">{{ __('ui.footer.copy') }}</p>
 
             @if ($social)
@@ -36,7 +36,7 @@
             </div>
 
             <div>
-                <strong>KH-WORKS</strong>
+                <strong>ZIN-WORKS</strong>
                 <a href="{{ route('about') }}">{{ __('ui.nav.about') }}</a>
                 <a href="{{ route('contact') }}">{{ __('ui.nav.contact') }}</a>
             </div>
@@ -55,7 +55,7 @@
     </div>
 
     <div class="jf-shell jf-footer__bottom">
-        <p>&copy; {{ date('Y') }} KH-WORKS. {{ __('ui.footer.rights') }}</p>
+        <p>&copy; {{ date('Y') }} ZIN-WORKS. {{ __('ui.footer.rights') }}</p>
         <span class="jf-footer__place">
             <i class="fas fa-location-dot" aria-hidden="true"></i>{{ __('ui.footer.place') }}
         </span>

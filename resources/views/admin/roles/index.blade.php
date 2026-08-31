@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'User Role & Permission | KH-WORKS Admin')
+@section('title', 'User Role & Permission | ZIN-WORKS Admin')
 @section('body-class', 'kh-user-create-page')
 
 @push('styles')

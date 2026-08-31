@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 /*
-| KH-WORKS | Registration email codes
+| ZIN-WORKS | Registration email codes
 |
 | One row per account, replaced on every resend, so a code that was superseded
 | stops working the moment the next one goes out.

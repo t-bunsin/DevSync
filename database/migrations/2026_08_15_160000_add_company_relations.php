@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 
 /*
-| KH-WORKS | Companies become the hub
+| ZIN-WORKS | Companies become the hub
 |
 | Hangs job posts and compliance records off `companies`, and adopts every
 | employer already named on a post as a real company record.

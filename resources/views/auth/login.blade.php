@@ -1,6 +1,6 @@
 @extends('layouts.auth')
 
-@section('title', 'Sign in | KH-WORKS')
+@section('title', 'Sign in | ZIN-WORKS')
 @section('body-class', 'jf-auth-body')
 
 @push('styles')
@@ -26,7 +26,7 @@
                     <span class="jf-auth__brand-mark"><i class="fas fa-briefcase" aria-hidden="true"></i></span>
                     <span class="jf-auth__brand-divider" aria-hidden="true"></span>
                     <span class="jf-auth__brand-text">
-                        <span class="jf-auth__brand-word">KH-<span>WORKS</span></span>
+                        <span class="jf-auth__brand-word">ZIN-<span>WORKS</span></span>
                         <span class="jf-auth__brand-tagline">Build your dream job</span>
                     </span>
                 </a>
@@ -124,7 +124,7 @@
                 </form>
 
                 <footer class="jf-auth__card-foot">
-                    <span>New to KH-WORKS? <a href="{{ route('register') }}">Create an account</a></span>
+                    <span>New to ZIN-WORKS? <a href="{{ route('register') }}">Create an account</a></span>
                     <a class="jf-auth__back" href="{{ url('/') }}"><i class="fas fa-arrow-left" aria-hidden="true"></i> Back to jobs</a>
                 </footer>
             </section>

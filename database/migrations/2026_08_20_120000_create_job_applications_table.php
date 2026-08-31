@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 /*
-| KH-WORKS | Job applications
+| ZIN-WORKS | Job applications
 |
 | One row per candidate application to a job post. This table is what finally
 | *defines* "how many candidates applied": until now `job_posts.applicants` was

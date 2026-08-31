@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 /*
-| KH-WORKS | The CV attached to an application
+| ZIN-WORKS | The CV attached to an application
 |
 | Applying now requires one, by either route: the candidate uploads a file, or
 | they build a resume in the dashboard and `resume_id` carries it. This column

@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Schema;
 
 /*
 |--------------------------------------------------------------------------
-| KH-WORKS | Module 01 — Identity and Access (1 of 10)
+| ZIN-WORKS | Module 01 — Identity and Access (1 of 10)
 |--------------------------------------------------------------------------
 |
 | Port of the PostgreSQL module-01 schema to MySQL 8. Adaptations made here,

@@ -1,6 +1,6 @@
 @extends('layouts.auth')
 
-@section('title', 'Create Account | KH-WORKS')
+@section('title', 'Create Account | ZIN-WORKS')
 @section('body-class', 'jf-auth-body')
 
 @push('styles')
@@ -45,7 +45,7 @@
                     <span class="jf-auth__brand-mark"><i class="fas fa-briefcase" aria-hidden="true"></i></span>
                     <span class="jf-auth__brand-divider" aria-hidden="true"></span>
                     <span class="jf-auth__brand-text">
-                        <span class="jf-auth__brand-word">KH-<span>WORKS</span></span>
+                        <span class="jf-auth__brand-word">ZIN-<span>WORKS</span></span>
                         <span class="jf-auth__brand-tagline">Build your dream job</span>
                     </span>
                 </a>
@@ -83,7 +83,7 @@
             <section class="jf-auth__card">
                 <header class="jf-auth__card-head">
                     <h2>Create account</h2>
-                    <p>Choose how you want to use KH-WORKS, then fill in your details.</p>
+                    <p>Choose how you want to use ZIN-WORKS, then fill in your details.</p>
                 </header>
 
                 {{-- Set by the job apply gate so the visitor knows why they are here. --}}

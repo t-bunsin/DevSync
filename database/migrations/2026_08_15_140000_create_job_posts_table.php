@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 /*
-| KH-WORKS | Job posts
+| ZIN-WORKS | Job posts
 |
 | The public job pages were served from config/jobs_demo.php. This table takes
 | that over, and JobPost::toCatalogArray() reproduces the exact array shape the

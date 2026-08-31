@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
 
 /*
-| KH-WORKS | Job post permissions
+| ZIN-WORKS | Job post permissions
 |
 | The permissions/role_permissions tables were created back in
 | create_permissions_tables and deliberately left unseeded — "permission

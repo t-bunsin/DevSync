@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
 
 /*
-| KH-WORKS | Resume permissions
+| ZIN-WORKS | Resume permissions
 |
 | Same idiom as job.* (see seed_job_permissions): four actions, assignable
 | per role from the User Role & Permission page.

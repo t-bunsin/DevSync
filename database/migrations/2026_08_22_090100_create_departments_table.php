@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 /*
-| KH-WORKS | Departments
+| ZIN-WORKS | Departments
 |
 | Curated job-post departments, managed by admin under Component. Same
 | relationship to job_posts.department as the locations table has to

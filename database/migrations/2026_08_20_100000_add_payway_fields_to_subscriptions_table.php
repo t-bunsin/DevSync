@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 /*
-| KH-WORKS | PayWay fields on subscriptions
+| ZIN-WORKS | PayWay fields on subscriptions
 |
 | Checking out now goes through ABA PayWay (Bakong/KHQR) instead of
 | activating instantly, so a subscription needs to exist in a 'pending'

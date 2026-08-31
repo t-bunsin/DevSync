@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 /*
-| KH-WORKS | Module 01 — Identity and Access (8 of 10)
+| ZIN-WORKS | Module 01 — Identity and Access (8 of 10)
 |
 | Rate limiting and abuse investigation. user_id is null when the identifier
 | matched no account — that is the common case for credential stuffing, so it

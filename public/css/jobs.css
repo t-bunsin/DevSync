@@ -1485,19 +1485,17 @@ body.jf-body::selection {
 .jf-job-card {
   /* Card-scoped so the reference palette stays inside the board and never
      leaks into the rest of the teal site. */
+  /* One accent for the whole card. Everything else is ink and grey: the
+     card carries its weight with type and spacing, not with colour. */
   --jf-card-accent: var(--jf-ocean);
-  --jf-card-accent-deep: #0e5261;
-  --jf-card-logo: #4d9dd6;
-  --jf-card-rule: #dbe6e8;
-  --jf-card-salary: var(--jf-teal);
-  --jf-card-salary-end: var(--jf-ocean);
+  --jf-card-line: #e8ecf1;
 
   position: relative;
   overflow: hidden;
   padding: 0;
   background: #fff;
-  border: 1px solid #eaeef4;
-  border-radius: 24px;
+  border: 1px solid var(--jf-card-line);
+  border-radius: 20px;
   /* Two shadows: a tight one to seat the card, a wide soft one for depth. */
   box-shadow: 0 1px 2px rgba(23, 43, 77, 0.04), 0 12px 30px rgba(23, 43, 77, 0.06);
   cursor: default;
@@ -1505,22 +1503,6 @@ body.jf-body::selection {
     transform 320ms cubic-bezier(0.2, 0.8, 0.2, 1),
     border-color 320ms ease,
     box-shadow 320ms ease;
-}
-
-/* A cool wash that fades up from the top-right corner on hover. */
-.jf-job-card::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(430px 190px at 100% 0%, rgba(28, 166, 160, 0.14), transparent 70%);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 360ms ease;
-}
-
-.jf-job-card:hover::after,
-.jf-job-card:focus-within::after {
-  opacity: 1;
 }
 
 .jf-job-card::before {
@@ -1539,20 +1521,19 @@ body.jf-body::selection {
 .jf-job-card:hover,
 .jf-job-card:focus-within {
   transform: translateY(-6px);
-  border-color: #a9ceca;
-  box-shadow: 0 4px 10px rgba(23, 43, 77, 0.05), 0 26px 50px rgba(23, 43, 77, 0.13);
+  border-color: #cfd8e2;
+  box-shadow: 0 4px 10px rgba(23, 43, 77, 0.05), 0 22px 44px rgba(23, 43, 77, 0.11);
 }
 
+/* A featured card is marked by a single hairline across the top and the
+   badge in the footer — not by repainting the whole header. */
 .jf-job-card.is-featured {
-  border-color: #eaeef4;
+  border-color: var(--jf-card-line);
 }
 
 .jf-job-card.is-featured .jf-job-card__topline {
-  padding-top: 23px;
-  background:
-    linear-gradient(90deg, #ffd07a, #f79f2e) top / 100% 3px no-repeat,
-    linear-gradient(212deg, rgba(15, 95, 115, 0.46) 0%, rgba(28, 166, 160, 0.16) 27%, rgba(28, 166, 160, 0) 53%),
-    linear-gradient(180deg, #edf5f5, rgba(237, 245, 245, 0));
+  padding-top: 22px;
+  background: linear-gradient(90deg, #e0b268, #e0b268) top / 100% 2px no-repeat;
 }
 
 .jf-job-card.is-active {
@@ -1577,23 +1558,16 @@ body.jf-body::selection {
   display: flex;
   align-items: center;
   gap: 14px;
-  padding: 18px 20px 16px;
-  background:
-    linear-gradient(212deg, rgba(15, 95, 115, 0.46) 0%, rgba(28, 166, 160, 0.16) 27%, rgba(28, 166, 160, 0) 53%),
-    linear-gradient(180deg, #edf5f5, rgba(237, 245, 245, 0));
+  padding: 20px 20px 14px;
+  background: none;
 }
 
 .jf-job-card .jf-logo {
   width: 48px;
   min-width: 48px;
   height: 48px;
-  border-radius: 14px;
-  box-shadow: 0 0 0 3px #fff, 0 8px 18px rgba(23, 43, 77, 0.18);
-  transition: transform 320ms cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-
-.jf-job-card:hover .jf-logo {
-  transform: scale(1.06) rotate(-3deg);
+  border-radius: 12px;
+  box-shadow: none;
 }
 
 /* An explicit column: .jf-job-card__company is inline-flex further down (it
@@ -1621,19 +1595,21 @@ body.jf-body::selection {
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  padding: 6px 12px;
-  color: #6b4400;
-  background: linear-gradient(135deg, #ffdf9a, #f6b23f);
-  box-shadow: 0 4px 12px rgba(226, 150, 24, 0.3);
+  padding: 5px 11px;
+  color: #6d7c8a;
+  background: none;
+  border: 1px solid var(--jf-card-line);
+  box-shadow: none;
   font-size: 0.62rem;
-  font-weight: 800;
-  letter-spacing: 0.05em;
+  font-weight: 700;
+  letter-spacing: 0.07em;
   text-transform: uppercase;
 }
 
+/* The star is the only warm note left on the card, and it is 10px wide. */
 .jf-job-card__actions .jf-badge i {
-  color: #8a5a00;
-  font-size: 0.64rem;
+  color: #d9a441;
+  font-size: 0.62rem;
 }
 
 .jf-job-card__status .jf-bookmark {
@@ -1680,17 +1656,6 @@ body.jf-body::selection {
   padding: 0 20px;
 }
 
-/* A short rule closing the summary, as in the reference. */
-.jf-job-card__content::after {
-  content: "";
-  display: block;
-  width: 46px;
-  height: 3px;
-  margin-top: 14px;
-  background: linear-gradient(90deg, var(--jf-ocean), var(--jf-teal));
-  border-radius: 3px;
-}
-
 .jf-job-card__company {
   margin: 0 0 2px;
   overflow: hidden;
@@ -1703,23 +1668,12 @@ body.jf-body::selection {
 }
 
 .jf-job-card__content h3 {
-  display: flex;
-  gap: 10px;
   margin: 0;
   color: var(--jf-navy);
-  font-size: 1.02rem;
+  font-size: 1.06rem;
   font-weight: 700;
   letter-spacing: -0.022em;
   line-height: 1.3;
-}
-
-/* The blue keyline beside the role name. */
-.jf-job-card__content h3::before {
-  content: "";
-  flex-shrink: 0;
-  width: 4px;
-  border-radius: 3px;
-  background: linear-gradient(180deg, var(--jf-teal), var(--jf-ocean));
 }
 
 .jf-job-card__preview {
@@ -1760,9 +1714,11 @@ body.jf-body::selection {
   line-height: 1.45;
 }
 
+/* Muted with the chip icons: the accent is reserved for Apply, which is the
+   one thing on the card asking to be clicked. */
 .jf-job-card__location i {
   margin-right: 5px;
-  color: var(--jf-card-accent);
+  color: #97a6b4;
   font-size: 0.72rem;
 }
 
@@ -1793,37 +1749,20 @@ body.jf-body::selection {
   align-items: center;
   gap: 6px;
   padding: 5px 12px;
-  color: #58717f;
-  background: #f2f6f5;
-  border: 1px solid transparent;
-  border-radius: 999px;
-  font-size: 0.73rem;
+  color: #5b6b7b;
+  background: #f5f7f9;
+  border: 1px solid #e9edf2;
+  border-radius: 8px;
+  font-size: 0.72rem;
   font-weight: 600;
 }
 
+/* The three facts are equals — type, work mode, experience — so they read as
+   one set. Colour-coding them by position said nothing and made the card
+   look like three separate warnings. */
 .jf-job-card__chips span i {
-  font-size: 0.7rem;
-  opacity: 0.9;
-}
-
-/* Position, not meaning: the badges arrive in a fixed order (type, mode, then
-   experience), so the reference's three tints map straight onto them. */
-.jf-job-card__chips span:nth-child(3n + 1) {
-  color: var(--jf-ocean);
-  background: #e4f2f3;
-  border-color: #cbe3e5;
-}
-
-.jf-job-card__chips span:nth-child(3n + 2) {
-  color: #389463;
-  background: #e7f6ec;
-  border-color: #d2ecdb;
-}
-
-.jf-job-card__chips span:nth-child(3n + 3) {
-  color: #c3871f;
-  background: #fdf3e0;
-  border-color: #f6e3c2;
+  color: #97a6b4;
+  font-size: 0.68rem;
 }
 
 .jf-job-card__footer {
@@ -1836,66 +1775,42 @@ body.jf-body::selection {
   border: 0;
 }
 
-/* The rate reads as its own panel rather than a line of text. */
+/* The pay is the number people scan for, so it is set as type above a rule
+   rather than boxed in a tinted panel with an icon competing beside it. */
 .jf-job-card__rate {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 11px 14px;
-  background: #e9f3f4;
-  border-radius: 14px;
-}
-
-.jf-job-card__rate-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  width: 30px;
-  height: 30px;
-  color: #fff;
-  background: linear-gradient(130deg, var(--jf-navy), var(--jf-card-accent-deep));
-  border-radius: 50%;
-  box-shadow: 0 4px 10px rgba(11, 38, 56, 0.3);
-  font-size: 0.72rem;
+  padding-top: 14px;
+  border-top: 1px solid var(--jf-card-line);
 }
 
 .jf-job-card__rate > div {
   min-width: 0;
-  padding-left: 12px;
-  border-left: 1px solid #c8dfe1;
 }
 
 .jf-job-card__rate small {
   display: block;
-  color: #5c7883;
+  color: #8b98a6;
   font-size: 0.66rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
 }
 
 .jf-job-card__salary {
-  margin: 1px 0 0;
-  font-size: 1.02rem;
+  margin: 3px 0 0;
+  font-size: 1.16rem;
   font-weight: 800;
-  letter-spacing: -0.025em;
+  letter-spacing: -0.03em;
 }
 
 .jf-job-card__salary strong {
-  /* The flat colour lands first so the rate stays readable if a browser
-     ignores background-clip. */
-  color: var(--jf-card-salary);
-  background: linear-gradient(120deg, var(--jf-card-salary), var(--jf-card-salary-end));
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: var(--jf-navy);
   font-weight: inherit;
 }
 
 .jf-job-card__salary span {
-  margin-left: 4px;
-  color: #7c8a9e;
-  font-size: 0.76rem;
+  margin-left: 5px;
+  color: #909daa;
+  font-size: 0.74rem;
   font-weight: 600;
 }
 
@@ -1914,14 +1829,12 @@ body.jf-body::selection {
   align-items: center;
   gap: 7px;
   justify-content: center;
-  min-height: 34px;
-  padding: 0 15px;
+  min-height: 36px;
+  padding: 0 16px;
   color: #fff;
-  background:
-    radial-gradient(circle at top right, rgba(28, 166, 160, 0.42), transparent 62%),
-    linear-gradient(130deg, var(--jf-navy), var(--jf-card-accent-deep));
-  border-radius: 999px;
-  box-shadow: 0 6px 14px rgba(11, 38, 56, 0.28);
+  background: var(--jf-card-accent);
+  border-radius: 10px;
+  box-shadow: none;
   font-size: 0.64rem;
   font-weight: 700;
   letter-spacing: 0.06em;
@@ -1943,8 +1856,9 @@ body.jf-body::selection {
 .jf-job-card__apply:hover,
 .jf-job-card__apply:focus-visible {
   color: #fff;
-  box-shadow: 0 13px 26px rgba(11, 38, 56, 0.42);
-  transform: translateY(-2px);
+  background: var(--jf-navy);
+  box-shadow: 0 8px 18px rgba(11, 38, 56, 0.22);
+  transform: translateY(-1px);
 }
 
 .jf-job-card__apply:hover .fa-chevron-right,
@@ -3439,35 +3353,15 @@ html[data-theme="dark"] .jf-dialog__note {
 /* ---- Job card, dark theme ------------------------------------------------ */
 
 html[data-theme="dark"] .jf-job-card {
-  --jf-card-accent: #76d6d1;
-  --jf-card-accent-deep: #0e5261;
-  --jf-card-rule: #2a3d45;
-  --jf-card-salary: #83ded8;
-  --jf-card-salary-end: #4fb9bd;
+  --jf-card-accent: #2f8d92;
+  --jf-card-line: #263940;
 
   border-color: #263940;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 12px 30px rgba(0, 0, 0, 0.28);
 }
 
-html[data-theme="dark"] .jf-job-card::after {
-  background: radial-gradient(430px 190px at 100% 0%, rgba(28, 166, 160, 0.14), transparent 70%);
-}
-
 html[data-theme="dark"] .jf-job-card.is-featured .jf-job-card__topline {
-  background:
-    linear-gradient(90deg, #ffd07a, #f79f2e) top / 100% 3px no-repeat,
-    linear-gradient(212deg, rgba(28, 166, 160, 0.3) 0%, rgba(28, 166, 160, 0.08) 27%, rgba(28, 166, 160, 0) 53%),
-    linear-gradient(180deg, #241f14, rgba(36, 31, 20, 0));
-}
-
-html[data-theme="dark"] .jf-job-card__topline {
-  background:
-    linear-gradient(212deg, rgba(28, 166, 160, 0.3) 0%, rgba(28, 166, 160, 0.08) 27%, rgba(28, 166, 160, 0) 53%),
-    linear-gradient(180deg, #13242c, rgba(19, 36, 44, 0));
-}
-
-html[data-theme="dark"] .jf-job-card .jf-logo {
-  box-shadow: 0 0 0 4px #0e1b21, 0 10px 22px rgba(0, 0, 0, 0.45);
+  background: linear-gradient(90deg, #b08a45, #b08a45) top / 100% 2px no-repeat;
 }
 
 html[data-theme="dark"] .jf-job-card__content h3 {
@@ -3481,19 +3375,16 @@ html[data-theme="dark"] .jf-job-card__company {
 }
 
 html[data-theme="dark"] .jf-job-card__rate {
-  background: #14242c;
-}
-
-html[data-theme="dark"] .jf-job-card__rate > div {
-  border-left-color: #2a3d45;
-}
-
-html[data-theme="dark"] .jf-job-card__rate-icon {
-  background: linear-gradient(130deg, #14343f, #0e5261);
+  background: none;
+  border-top-color: #263940;
 }
 
 html[data-theme="dark"] .jf-job-card__rate small {
-  color: #9db1b8;
+  color: #8fa3ab;
+}
+
+html[data-theme="dark"] .jf-job-card__salary strong {
+  color: #eef6f7;
 }
 
 html[data-theme="dark"] .jf-job-card__location {
@@ -3505,36 +3396,32 @@ html[data-theme="dark"] .jf-job-card__salary span {
   color: #9db1b8;
 }
 
-html[data-theme="dark"] .jf-job-card__chips span:nth-child(3n + 1) {
-  color: #83ded8;
-  background: #12292d;
-  border-color: #22484c;
+html[data-theme="dark"] .jf-job-card__chips span {
+  color: #aebfc7;
+  background: #16262d;
+  border-color: #263940;
 }
 
-html[data-theme="dark"] .jf-job-card__chips span:nth-child(3n + 2) {
-  color: #79cf9e;
-  background: #142a20;
-  border-color: #235238;
+html[data-theme="dark"] .jf-job-card__chips span i {
+  color: #7e939c;
 }
 
-html[data-theme="dark"] .jf-job-card__chips span:nth-child(3n + 3) {
-  color: #e2b45c;
-  background: #2c2416;
-  border-color: #56411c;
+html[data-theme="dark"] .jf-job-card__actions .jf-badge {
+  color: #9db1b8;
+  border-color: #263940;
 }
 
 html[data-theme="dark"] .jf-job-card__apply {
-  color: #071015;
-  background:
-    radial-gradient(circle at top right, rgba(131, 222, 216, 0.5), transparent 62%),
-    linear-gradient(130deg, #4fb9bd, #83ded8);
-  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.42);
+  color: #05171a;
+  background: #7fd3ce;
+  box-shadow: none;
 }
 
 html[data-theme="dark"] .jf-job-card__apply:hover,
 html[data-theme="dark"] .jf-job-card__apply:focus-visible {
-  color: #071015;
-  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.55);
+  color: #05171a;
+  background: #a4e2de;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.4);
 }
 
 html[data-theme="dark"] .jf-job-card:hover,

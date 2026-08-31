@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 /*
-| KH-WORKS | Locations
+| ZIN-WORKS | Locations
 |
 | Curated job-post locations, managed by admin under Component. Job posts
 | still store the chosen name as plain text (job_posts.location is unchanged)

@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 /*
-| KH-WORKS | Resumes
+| ZIN-WORKS | Resumes
 |
 | One row per candidate CV, holding every section of the printed layout: the
 | contact header, the professional summary, and the repeating blocks for work

@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', __('ui.admin.nav.title_dashboard') . ' | KH-WORKS Admin')
+@section('title', __('ui.admin.nav.title_dashboard') . ' | ZIN-WORKS Admin')
 
 {{-- Dashboard shell: canvas background and the tightened admin chrome. --}}
 @section('body-class', 'kh-dashboard-page')

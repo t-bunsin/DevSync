@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 /*
-| KH-WORKS | Module 01 — Identity and Access (2 of 10)
+| ZIN-WORKS | Module 01 — Identity and Access (2 of 10)
 |
 | Roles are reference data, seeded once here so the codes exist before
 | user_roles can point at them. SMALLSERIAL -> smallIncrements (UNSIGNED

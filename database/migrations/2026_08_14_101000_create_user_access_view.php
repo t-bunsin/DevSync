@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 /*
-| KH-WORKS | Module 01 — Identity and Access (10 of 10)
+| ZIN-WORKS | Module 01 — Identity and Access (10 of 10)
 |
 | Everything the app needs at login, in one read.
 |

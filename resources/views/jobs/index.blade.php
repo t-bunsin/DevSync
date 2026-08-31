@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-@section('title', 'Search Jobs | KH-WORKS')
+@section('title', 'Search Jobs | ZIN-WORKS')
 @section('meta-description', 'Search verified jobs from trusted employers in Cambodia and remote-first teams across Southeast Asia.')
 
 @push('styles')
@@ -11,7 +11,7 @@
 @section('content')
     <section class="jf-directory-heading" aria-labelledby="directory-title">
         <div class="jf-shell">
-            <span class="jf-directory-heading__eyebrow">KH-WORKS</span>
+            <span class="jf-directory-heading__eyebrow">ZIN-WORKS</span>
             <h1 id="directory-title">Jobs picked for you</h1>
             <p>Explore opportunities from trusted employers across Cambodia and remote-first teams.</p>
         </div>

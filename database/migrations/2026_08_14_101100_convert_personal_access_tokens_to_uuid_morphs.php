@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 /*
-| KH-WORKS | Module 01 support
+| ZIN-WORKS | Module 01 support
 |
 | Sanctum's tokenable morph was created by morphs(), i.e. BIGINT UNSIGNED. Once
 | users are UUID-keyed it can no longer hold a user id, so every token issued to

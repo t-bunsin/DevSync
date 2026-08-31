@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-@section('title', 'KH-WORKS | Find Your Next Opportunity')
+@section('title', 'ZIN-WORKS | Find Your Next Opportunity')
 
 @push('styles')
     <link rel="stylesheet" href="{{ asset('css/jobs.css') }}?v={{ filemtime(public_path('css/jobs.css')) }}">

@@ -1,4 +1,4 @@
-/* KH-WORKS — Roles & permissions
+/* ZIN-WORKS — Roles & permissions
    The matrix layout (one column per permission) stopped fitting once a second
    module landed, so this file replaces it with a role-at-a-time panel: roles
    are tabs, each module is a card, and permissions stack vertically. New

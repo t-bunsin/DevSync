@@ -9,7 +9,7 @@
             </span>
             <span class="jf-brand__divider" aria-hidden="true"></span>
             <span class="jf-brand__text">
-                <span class="jf-brand__word">KH-<span>WORKS</span></span>
+                <span class="jf-brand__word">ZIN-<span>WORKS</span></span>
                 <span class="jf-brand__tagline">Build your dream job</span>
             </span>
         </a>

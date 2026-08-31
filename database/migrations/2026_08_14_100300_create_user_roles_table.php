@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 /*
-| KH-WORKS | Module 01 — Identity and Access (3 of 10)
+| ZIN-WORKS | Module 01 — Identity and Access (3 of 10)
 |
 | A user may hold more than one role, so a person can be both an employer and
 | a job seeker on a single login.

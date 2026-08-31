@@ -71,7 +71,7 @@ class EmailVerificationCodeController extends Controller
 
         return redirect()
             ->intended(route($user->homeRouteName()))
-            ->withSuccess('Your email is verified. Welcome to KH-WORKS.');
+            ->withSuccess('Your email is verified. Welcome to ZIN-WORKS.');
     }
 
     public function resend(Request $request): RedirectResponse

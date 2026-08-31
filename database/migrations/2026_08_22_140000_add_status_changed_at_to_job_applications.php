@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 /*
-| KH-WORKS | When the employer last moved an application
+| ZIN-WORKS | When the employer last moved an application
 |
 | The candidate's application page wants to say "Accepted on 12 Aug" or
 | "Rejected on 12 Aug", and nothing on the row could answer that: updated_at

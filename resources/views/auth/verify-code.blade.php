@@ -1,6 +1,6 @@
 @extends('layouts.auth')
 
-@section('title', 'Confirm your email | KH-WORKS')
+@section('title', 'Confirm your email | ZIN-WORKS')
 @section('body-class', 'jf-auth-body')
 
 @push('styles')
@@ -26,7 +26,7 @@
                     <span class="jf-auth__brand-mark"><i class="fas fa-briefcase" aria-hidden="true"></i></span>
                     <span class="jf-auth__brand-divider" aria-hidden="true"></span>
                     <span class="jf-auth__brand-text">
-                        <span class="jf-auth__brand-word">KH-<span>WORKS</span></span>
+                        <span class="jf-auth__brand-word">ZIN-<span>WORKS</span></span>
                         <span class="jf-auth__brand-tagline">Build your dream job</span>
                     </span>
                 </a>

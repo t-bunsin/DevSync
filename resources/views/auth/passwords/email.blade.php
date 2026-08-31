@@ -417,7 +417,7 @@
                     <span class="auth-flow__brand-icon">
                         <i class="fas fa-briefcase"></i>
                     </span>
-                    <span>KH-<span>WORKS</span></span>
+                    <span>ZIN-<span>WORKS</span></span>
                 </div>
 
                 <span class="auth-flow__eyebrow">

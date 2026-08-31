@@ -5,8 +5,8 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="description" content="KH-WORKS administration workspace" />
-    <meta name="author" content="KH-WORKS" />
+    <meta name="description" content="ZIN-WORKS administration workspace" />
+    <meta name="author" content="ZIN-WORKS" />
     {{-- Read by js/admin-notifications.js when it marks the bell read. --}}
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <meta name="theme-color" id="admin-theme-color" content="#ffffff" />
@@ -25,7 +25,7 @@
             }
         })();
     </script>
-    <title>@yield('title', 'KH-WORKS Admin')</title>
+    <title>@yield('title', 'ZIN-WORKS Admin')</title>
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
     <link href="{{ asset('css/style.css') }}" rel="stylesheet" />
     <link href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" />
@@ -59,7 +59,7 @@
             <span class="kh-admin-brand__mark"><i class="fas fa-briefcase" aria-hidden="true"></i></span>
             <span class="kh-admin-brand__divider" aria-hidden="true"></span>
             <span class="kh-admin-brand__text">
-                <span class="kh-admin-brand__word">KH-<strong>WORKS</strong></span>
+                <span class="kh-admin-brand__word">ZIN-<strong>WORKS</strong></span>
                 <span class="kh-admin-brand__tagline">{{ __('ui.admin.brand_tagline') }}</span>
             </span>
         </a>
@@ -646,7 +646,7 @@
                             <i data-feather="briefcase"></i>
                         </span>
                         <div>
-                            <strong>KH-WORKS</strong>
+                            <strong>ZIN-WORKS</strong>
                             <small>&copy; {{ date('Y') }}. {{ __('ui.admin.footer.rights') }}</small>
                         </div>
                     </div>

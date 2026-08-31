@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Applications · ' . $post->title . ' | KH-WORKS Admin')
+@section('title', 'Applications · ' . $post->title . ' | ZIN-WORKS Admin')
 
 @push('styles')
     <link href="{{ asset('css/backoffice.css') }}?v={{ filemtime(public_path('css/backoffice.css')) }}" rel="stylesheet" />

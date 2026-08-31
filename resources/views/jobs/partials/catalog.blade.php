@@ -154,9 +154,6 @@
 
                             <div class="jf-job-card__footer">
                                 <div class="jf-job-card__rate">
-                                    <span class="jf-job-card__rate-icon" aria-hidden="true">
-                                        <i class="fas fa-dollar-sign"></i>
-                                    </span>
                                     <div>
                                         <small>{{ $rateLabel }}</small>
                                         <p class="jf-job-card__salary">

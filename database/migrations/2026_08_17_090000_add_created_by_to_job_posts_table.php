@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 /*
-| KH-WORKS | Who posted a job
+| ZIN-WORKS | Who posted a job
 |
 | Records the signed-in user who created a post, so the back office list can
 | say who registered it rather than only which employer it is for.

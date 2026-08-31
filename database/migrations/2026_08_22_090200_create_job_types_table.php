@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 /*
-| KH-WORKS | Job Types
+| ZIN-WORKS | Job Types
 |
 | Curated job-post types, managed by admin under Component. Replaces the
 | hardcoded list JobPost::types() used to return — see that method, now

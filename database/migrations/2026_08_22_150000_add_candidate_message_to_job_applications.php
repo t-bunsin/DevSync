@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 /*
-| KH-WORKS | The employer's message to the candidate
+| ZIN-WORKS | The employer's message to the candidate
 |
 | Deliberately a second column rather than opening up `note`. That one is
 | labelled "Internal note — only the hiring team sees this" in the review

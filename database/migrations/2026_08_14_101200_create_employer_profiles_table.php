@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 /*
-| KH-WORKS | PLACEHOLDER — not part of the module 01 schema
+| ZIN-WORKS | PLACEHOLDER — not part of the module 01 schema
 |
 | Module 01 keeps `users` deliberately thin: "anything specific to being an
 | employer or a job seeker lives in that role's own profile table, not here."

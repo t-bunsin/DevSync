@@ -5,9 +5,9 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 /*
-| KH-WORKS | Module 01 — Identity and Access (5 of 10)
+| ZIN-WORKS | Module 01 — Identity and Access (5 of 10)
 |
-| Social login. One row per provider account linked to a KH-WORKS user.
+| Social login. One row per provider account linked to a ZIN-WORKS user.
 | The auth_provider enum is inlined on each column that uses it; MySQL has no
 | standalone CREATE TYPE, so the value list is repeated here and in
 | login_attempts. Adding a provider means altering both.
