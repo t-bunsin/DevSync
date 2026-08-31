@@ -3287,19 +3287,6 @@ html[data-theme="dark"] .jf-dialog__note {
     display: none;
   }
 
-  .jf-brand {
-    font-size: 1.12rem;
-  }
-
-  .jf-brand__mark {
-    width: 40px;
-    height: 40px;
-  }
-
-  .jf-brand__tagline {
-    display: none;
-  }
-
   .jf-nav,
   .jf-header__actions {
     grid-template-columns: 1fr;
