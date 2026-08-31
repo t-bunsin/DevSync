@@ -45,7 +45,7 @@
             syncEmployerFields();
         }
 
-        const errorSummary = document.querySelector('.kh-user-create__error-summary');
+        const errorSummary = document.querySelector('.kh-bo__errors');
 
         if (errorSummary) {
             errorSummary.focus();

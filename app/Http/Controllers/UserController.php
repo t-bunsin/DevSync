@@ -73,6 +73,8 @@ class UserController extends Controller
     public function create(Request $request)
     {
         return view('users.create', [
+            // users._form is shared with edit, so it always wants a model.
+            'user' => new User(),
             'roles' => $this->assignableRoles($request->user()),
         ]);
     }
@@ -190,7 +192,7 @@ class UserController extends Controller
             'first_name' => 'required|string|max:80',
             'last_name' => 'required|string|max:80',
             'email' => ['required', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user?->id)],
-            'phone' => ['nullable', 'string', 'max:30', Rule::unique('users', 'phone')->ignore($user?->id)],
+            'phone' => ['required', 'string', 'max:30', Rule::unique('users', 'phone')->ignore($user?->id)],
             'role' => ['required', Rule::in($this->assignableRoleCodes(Auth::user())->all())],
             'status' => ['required', Rule::in([
                 User::STATUS_PENDING,

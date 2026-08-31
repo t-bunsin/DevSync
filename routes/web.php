@@ -17,6 +17,7 @@ use App\Http\Controllers\JobPostController;
 use App\Http\Controllers\MyApplicationsController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ResumeController;
+use App\Http\Controllers\SecurityController;
 use App\Http\Controllers\RoleController;
 use Illuminate\Http\Request;
 
@@ -83,6 +84,12 @@ Route::prefix('admin')->group(function () {
     Route::post('/account-billing/payway/callback', [BillingController::class, 'paywayCallback'])->name('account-billing.payway.callback');
 
     Route::middleware('auth')->group(function () {
+        // Self-service only: the caller's own password and security overview.
+        // Changing somebody else's password stays on the admin user form.
+        Route::get('/account-security', [SecurityController::class, 'index'])->name('security');
+        Route::put('/account-security/password', [SecurityController::class, 'updatePassword'])
+            ->name('security.password');
+
         // The Activity center bell: polled by the admin shell for new arrivals.
         Route::get('/notifications', [NotificationController::class, 'feed'])->name('notifications.feed');
         Route::post('/notifications/read', [NotificationController::class, 'markRead'])->name('notifications.read');

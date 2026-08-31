@@ -740,6 +740,48 @@ textarea.kh-bo__control {
   font-weight: 600;
 }
 
+/* Password field
+   ------------------------------------------------------------------
+   The only kh-bo control with an affordance sitting inside it: the show/hide
+   toggle on the user forms. Right padding on the input keeps the value clear
+   of the button rather than running underneath it. */
+.kh-bo__password {
+  position: relative;
+  display: flex;
+}
+
+.kh-bo__password .kh-bo__control {
+  padding-right: 42px;
+}
+
+.kh-bo__password-toggle {
+  position: absolute;
+  top: 50%;
+  right: 6px;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  color: var(--kh-muted);
+  background: none;
+  border: 0;
+  border-radius: 9px;
+  cursor: pointer;
+}
+
+.kh-bo__password-toggle:hover {
+  color: var(--kh-ocean);
+  background: color-mix(in srgb, var(--kh-ocean) 11%, transparent);
+}
+
+.kh-bo__password-toggle:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--kh-ocean) 26%, transparent);
+  outline-offset: 1px;
+}
+
 .kh-bo__logo-field {
   display: flex;
   align-items: center;

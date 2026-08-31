@@ -321,7 +321,7 @@
                             // Drives both the Pages accordion and the Account one nested
                             // inside it, so landing on any Account page leaves the whole
                             // path open instead of collapsing the highlight out of sight.
-                            $khAccountActive = request()->is('admin/profile', 'admin/account-billing*', 'account-*');
+                            $khAccountActive = request()->is('admin/profile', 'admin/account-billing*', 'admin/account-security*', 'account-*');
                         @endphp
                         <!-- Sidenav Accordion (Pages)-->
                         <a class="nav-link collapsed {{ $khAccountActive ? 'kh-nav-parent-active' : '' }}"
@@ -355,8 +355,8 @@
                                              so it is excluded rather than lighting both rows. --}}
                                         <a class="nav-link {{ request()->is('admin/account-billing', 'admin/account-billing/*') && ! request()->is('admin/account-billing/list') ? 'active' : '' }}"
                                             href="{{ url('admin/account-billing') }}">{{ __('ui.admin.nav.billing') }}</a>
-                                        <a class="nav-link {{ setActive('account-security') }}"
-                                            href="{{ url('account-security') }}">{{ __('ui.admin.nav.security') }}</a>
+                                        <a class="nav-link {{ request()->routeIs('security') ? 'active' : '' }}"
+                                            href="{{ route('security') }}">{{ __('ui.admin.nav.security') }}</a>
                                         {{-- The whole billing register, not the caller's own row,
                                              so it is hidden from everyone the route would 403. --}}
                                         @if ($adminUser?->isAdmin())

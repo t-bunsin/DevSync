@@ -1156,6 +1156,18 @@ html[lang="kh"] .kh-panel__kicker {
   height: 11px;
 }
 
+/* The badge used to be green in every case because the delta was hardcoded to
+   a rise. Real figures fall too, so the tone follows the sign. */
+.kh-trend--down {
+  color: #b3261e;
+  background: #fdecea;
+}
+
+.kh-trend--flat {
+  color: var(--kh-muted);
+  background: color-mix(in srgb, var(--kh-muted) 12%, transparent);
+}
+
 .kh-metric__body {
   position: relative;
   z-index: 2;

@@ -26,6 +26,66 @@
   font-style: normal;
 }
 
+/* Khmer OS Battambang (self-hosted, same as Metropolis above, so the public
+   site does not depend on a CDN being reachable).
+
+   unicode-range is the whole point: it is limited to the Khmer block, so the
+   browser only reaches for this face on Khmer characters and Latin text keeps
+   using Metropolis. That means the stack below needs no locale switch - the
+   Khmer nav labels render correctly even while the UI is in English. */
+
+@font-face {
+  font-family: "Battambang";
+  src: url("../assets/fonts/battambang/battambang-khmer-300.woff2") format("woff2");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+  /* Battambang's glyphs sit ~8% smaller than Metropolis at the same px,
+     so Khmer looked undersized next to Latin. size-adjust rescales the
+     outlines once, here, instead of per-component font-size bumps. */
+  size-adjust: 116%;
+  unicode-range: U+1780-17FF, U+19E0-19FF, U+200C-200D, U+25CC;
+}
+
+@font-face {
+  font-family: "Battambang";
+  src: url("../assets/fonts/battambang/battambang-khmer-400.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  /* Battambang's glyphs sit ~8% smaller than Metropolis at the same px,
+     so Khmer looked undersized next to Latin. size-adjust rescales the
+     outlines once, here, instead of per-component font-size bumps. */
+  size-adjust: 116%;
+  unicode-range: U+1780-17FF, U+19E0-19FF, U+200C-200D, U+25CC;
+}
+
+@font-face {
+  font-family: "Battambang";
+  src: url("../assets/fonts/battambang/battambang-khmer-700.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  /* Battambang's glyphs sit ~8% smaller than Metropolis at the same px,
+     so Khmer looked undersized next to Latin. size-adjust rescales the
+     outlines once, here, instead of per-component font-size bumps. */
+  size-adjust: 116%;
+  unicode-range: U+1780-17FF, U+19E0-19FF, U+200C-200D, U+25CC;
+}
+
+@font-face {
+  font-family: "Battambang";
+  src: url("../assets/fonts/battambang/battambang-khmer-900.woff2") format("woff2");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+  /* Battambang's glyphs sit ~8% smaller than Metropolis at the same px,
+     so Khmer looked undersized next to Latin. size-adjust rescales the
+     outlines once, here, instead of per-component font-size bumps. */
+  size-adjust: 116%;
+  unicode-range: U+1780-17FF, U+19E0-19FF, U+200C-200D, U+25CC;
+}
+
 :root {
   --jf-bg: #f3f6ff;
   --jf-surface: #ffffff;
@@ -63,7 +123,11 @@ html {
 body.jf-body {
   margin: 0;
   min-height: 100vh;
-  font-family: "Metropolis", "Segoe UI", sans-serif;
+  font-family: "Metropolis", "Battambang", "Segoe UI", sans-serif;
+  /* Bootstrap components that resolve their own font off this variable rather
+     than inheriting from body (.dropdown-menu, .modal, .btn) need Battambang in
+     the stack too, or Khmer inside them drops to a system fallback. */
+  --bs-body-font-family: "Metropolis", "Battambang", "Segoe UI", sans-serif;
   font-size: 15px;
   color: var(--jf-text);
   background:

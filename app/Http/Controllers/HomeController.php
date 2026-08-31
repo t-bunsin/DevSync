@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\JobPost;
-use App\Models\User;
+use App\Services\DashboardMetrics;
 
 class HomeController extends Controller
 {
@@ -22,13 +21,15 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
+    public function index(DashboardMetrics $metrics)
     {
-        $widget = [
-            'users' => User::count(),
-            'open_roles' => JobPost::published()->count(),
-        ];
+        $cards = $metrics->cards();
 
-        return view('home', compact('widget'));
+        return view('home', [
+            'cards' => $cards,
+            // The sidebar's user count would otherwise be recounted by the
+            // layouts.admin composer; hand it the figure already in hand.
+            'widget' => ['users' => $cards['users']['value']],
+        ]);
     }
 }

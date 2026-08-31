@@ -15,45 +15,27 @@
             ->locale(app()->getLocale() === 'kh' ? 'km' : 'en')
             ->translatedFormat('l, F j');
 
-        // Everything except the user count is still placeholder copy.
-        $stats = [
-            [
-                'label' => __('ui.dashboard.stats.active_users'),
-                'value' => number_format($widget['users'] ?? 0),
-                'icon' => 'users',
-                'tone' => 'teal',
-                'delta' => '+12.5%',
-                'note' => __('ui.dashboard.stats.active_users_note'),
-                'points' => '2,35 18,32 34,34 50,24 66,27 82,17 98,20 114,9',
-            ],
-            [
-                'label' => __('ui.dashboard.stats.open_roles'),
-                'value' => number_format($widget['open_roles'] ?? 0),
-                'icon' => 'briefcase',
-                'tone' => 'blue',
-                'delta' => '+8.2%',
-                'note' => __('ui.dashboard.stats.open_roles_note'),
-                'points' => '2,38 18,34 34,30 50,31 66,22 82,18 98,12 114,8',
-            ],
-            [
-                'label' => __('ui.dashboard.stats.applications'),
-                'value' => '842',
-                'icon' => 'send',
-                'tone' => 'gold',
-                'delta' => '+31.0%',
-                'note' => __('ui.dashboard.stats.applications_note'),
-                'points' => '2,37 18,30 34,32 50,20 66,25 82,13 98,17 114,5',
-            ],
-            [
-                'label' => __('ui.dashboard.stats.response_rate'),
-                'value' => '89%',
-                'icon' => 'message-circle',
-                'tone' => 'violet',
-                'delta' => '+4.6%',
-                'note' => __('ui.dashboard.stats.response_rate_note'),
-                'points' => '2,35 18,29 34,31 50,25 66,20 82,21 98,12 114,10',
-            ],
-        ];
+        // Values, deltas and sparklines all come from App\Services\DashboardMetrics,
+        // which reads the users, job_posts and job_applications tables. Only the
+        // label, icon and tone are presentation and live here.
+        $stats = collect([
+            ['key' => 'users', 'lang' => 'active_users', 'icon' => 'users', 'tone' => 'teal'],
+            ['key' => 'open_roles', 'lang' => 'open_roles', 'icon' => 'briefcase', 'tone' => 'blue'],
+            ['key' => 'applications', 'lang' => 'applications', 'icon' => 'send', 'tone' => 'gold'],
+            ['key' => 'resumes', 'lang' => 'resumes', 'icon' => 'file-text', 'tone' => 'violet'],
+        ])->map(function (array $card) use ($cards) {
+            $data = $cards[$card['key']];
+            $delta = $data['delta'];
+
+            return $card + [
+                'label' => __('ui.dashboard.stats.' . $card['lang']),
+                'note' => __('ui.dashboard.stats.' . $card['lang'] . '_note'),
+                'value' => number_format($data['value']),
+                'delta' => $delta,
+                'delta_label' => $delta === null ? null : sprintf('%+.1f%%', $delta),
+                'points' => $data['points'],
+            ];
+        })->all();
 
         $pipeline = [
             ['label' => __('ui.dashboard.funnel.new_applications'), 'value' => 342, 'percentage' => 100, 'tone' => 'teal'],
@@ -114,14 +96,21 @@
                 <article class="kh-metric kh-metric--{{ $stat['tone'] }}">
                     <div class="kh-metric__top">
                         <span class="kh-metric__icon"><i data-feather="{{ $stat['icon'] }}"></i></span>
-                        <span class="kh-trend"><i data-feather="arrow-up-right"></i>{{ $stat['delta'] }}</span>
+                        {{-- Hidden when the previous period was empty: there is no
+                             percentage change from nothing, and an invented one
+                             would read as real movement. --}}
+                        @if ($stat['delta'] !== null)
+                            <span @class(['kh-trend', 'kh-trend--down' => $stat['delta'] < 0, 'kh-trend--flat' => $stat['delta'] == 0])>
+                                <i data-feather="{{ $stat['delta'] < 0 ? 'arrow-down-right' : ($stat['delta'] == 0 ? 'minus' : 'arrow-up-right') }}"></i>{{ $stat['delta_label'] }}
+                            </span>
+                        @endif
                     </div>
                     <div class="kh-metric__body">
                         <span>{{ $stat['label'] }}</span>
                         <strong>{{ $stat['value'] }}</strong>
                         <small>{{ $stat['note'] }}</small>
                     </div>
-                    <svg class="kh-sparkline" viewBox="0 0 116 44" role="img" aria-label="{{ $stat['label'] }} upward trend">
+                    <svg class="kh-sparkline" viewBox="0 0 116 44" role="img" aria-label="{{ $stat['label'] }} {{ __('ui.dashboard.stats.trend_aria') }}">
                         <polyline points="{{ $stat['points'] }}" fill="none" vector-effect="non-scaling-stroke"></polyline>
                     </svg>
                 </article>
@@ -143,7 +132,7 @@
                 </header>
 
                 <div class="kh-performance__summary">
-                    <div><span>{{ __('ui.dashboard.total_applications') }}</span><strong id="chart-total" aria-live="polite">842</strong><small><i data-feather="trending-up"></i>{{ __('ui.dashboard.vs_last_period') }}</small></div>
+                    <div><span>{{ __('ui.dashboard.total_applications') }}</span><strong id="chart-total" aria-live="polite">{{ number_format($cards['applications']['value']) }}</strong><small><i data-feather="trending-up"></i>{{ __('ui.dashboard.vs_last_period') }}</small></div>
                     <div class="kh-chart-legend"><span><i class="kh-dot kh-dot--teal"></i>{{ __('ui.dashboard.chart.applications') }}</span><span><i class="kh-dot kh-dot--gold"></i>{{ __('ui.dashboard.chart.responses') }}</span></div>
                 </div>
 
