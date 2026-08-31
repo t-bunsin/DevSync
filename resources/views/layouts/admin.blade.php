@@ -262,17 +262,6 @@
                         <div class="dropdown-item-icon"><i data-feather="settings"></i></div>
                         {{ __('ui.admin.nav.account') }}
                     </a>
-                    {{-- Ungated on purpose: both pages are about the caller's own
-                         account, so every role reaches them the same way. The
-                         billing register below in the sidebar stays admin-only. --}}
-                    <a class="dropdown-item" href="{{ route('account-billing') }}">
-                        <div class="dropdown-item-icon"><i data-feather="credit-card"></i></div>
-                        {{ __('ui.admin.nav.billing') }}
-                    </a>
-                    <a class="dropdown-item" href="{{ route('security') }}">
-                        <div class="dropdown-item-icon"><i data-feather="shield"></i></div>
-                        {{ __('ui.admin.nav.security') }}
-                    </a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#logoutModal">
                         <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
