@@ -37,6 +37,9 @@ class CompanySeeder extends Seeder
                 'email' => 'careers@ppcbank.com.kh',
                 'phone' => '+855 23 999 500',
                 'website' => 'https://www.ppcbank.com.kh',
+                'facebook' => 'https://www.facebook.com/ppcbank',
+                'linkedin' => 'https://www.linkedin.com/company/ppcbank',
+                'tiktok' => 'https://www.tiktok.com/@ppcbank',
                 'address' => 'No.217, Norodom Blvd, Sangkat Tonle Bassac, Khan Chamkamorn, Phnom Penh, Cambodia',
 
                 'description' => 'A commercial local bank operating in Cambodia since 2008, known for accessible services and a strong digital banking offer.',

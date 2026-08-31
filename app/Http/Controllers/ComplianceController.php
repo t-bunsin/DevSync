@@ -51,10 +51,12 @@ class ComplianceController extends Controller
         ]);
     }
 
-    public function create()
+    public function create(Request $request)
     {
         return view('compliance.create', [
-            'compliance' => new Compliance(),
+            // Seeded so "Add record" on a company page lands on the form with
+            // that employer already picked.
+            'compliance' => new Compliance(['company_id' => $request->query('company_id')]),
             'companies' => Company::approved()->orderBy('name')->get(),
         ]);
     }

@@ -145,7 +145,7 @@
                                         </span>
                                         <div>
                                             <span class="kh-bo__name">
-                                                {{ $company->name }}
+                                                <a class="kh-bo__name-link" href="{{ route('companies.show', $company) }}">{{ $company->name }}</a>
                                                 @if ($verified > 0)
                                                     <x-verified-badge :show-label="false" :size="16" />
                                                 @endif

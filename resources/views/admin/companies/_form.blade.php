@@ -187,6 +187,14 @@
             @error('linkedin') <span class="kh-bo__error">{{ $message }}</span> @enderror
         </div>
 
+        <div class="kh-bo__field">
+            <label class="kh-bo__label" for="tiktok">{{ __('ui.bo.companies.form.tiktok') }}</label>
+            <input @class(['kh-bo__control', 'is-invalid' => $errors->has('tiktok')])
+                id="tiktok" name="tiktok" type="url" maxlength="255"
+                value="{{ old('tiktok', $company->tiktok) }}" placeholder="{{ __('ui.bo.companies.form.tiktok_placeholder') }}">
+            @error('tiktok') <span class="kh-bo__error">{{ $message }}</span> @enderror
+        </div>
+
         <div class="kh-bo__field kh-bo__field--wide">
             <label class="kh-bo__label" for="address">{{ __('ui.bo.companies.form.address') }}</label>
             <input @class(['kh-bo__control', 'is-invalid' => $errors->has('address')])

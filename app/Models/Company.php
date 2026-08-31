@@ -31,6 +31,7 @@ class Company extends Model
         'website',
         'facebook',
         'linkedin',
+        'tiktok',
         'email',
         'phone',
         'address',
@@ -101,6 +102,44 @@ class Company extends Model
             'Industry' => $this->industry,
             'No. Employees' => $this->employee_count,
         ])->filter(fn ($value) => filled($value))->all();
+    }
+
+    /**
+     * Website and social profiles as chip data for the contact card. The chips
+     * show `handle` — @ppcbank rather than the whole address — because a column
+     * of full URLs wraps over three lines each and reads as noise.
+     */
+    public function socialLinks(): array
+    {
+        return collect([
+            ['key' => 'website', 'label' => 'Website', 'icon' => 'fa-solid fa-globe'],
+            ['key' => 'facebook', 'label' => 'Facebook', 'icon' => 'fa-brands fa-facebook-f'],
+            ['key' => 'linkedin', 'label' => 'LinkedIn', 'icon' => 'fa-brands fa-linkedin-in'],
+            ['key' => 'tiktok', 'label' => 'TikTok', 'icon' => 'fa-brands fa-tiktok'],
+        ])
+            ->map(fn (array $link) => $link + ['url' => (string) $this->{$link['key']}])
+            ->filter(fn (array $link) => $link['url'] !== '')
+            ->map(fn (array $link) => $link + ['handle' => self::linkHandle($link['url'], $link['key'])])
+            ->values()
+            ->all();
+    }
+
+    /**
+     * The readable tail of a profile URL: the last path segment (@ppcbank,
+     * or ppcbank out of /company/ppcbank), and the bare host for a website.
+     * Anything unparseable falls back to the URL, so a chip is never blank.
+     */
+    private static function linkHandle(string $url, string $key): string
+    {
+        $parts = parse_url($url);
+        $host = preg_replace('/^www\./', '', $parts['host'] ?? '');
+        $segments = array_values(array_filter(explode('/', $parts['path'] ?? '')));
+
+        if ($key === 'website' || $segments === []) {
+            return $host ?: $url;
+        }
+
+        return end($segments);
     }
 
     public function jobPosts(): HasMany

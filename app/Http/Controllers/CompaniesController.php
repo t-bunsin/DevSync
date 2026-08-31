@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Company;
+use App\Models\Compliance;
 use App\Models\EmployerProfile;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -82,7 +83,31 @@ class CompaniesController extends Controller
 
     public function show(Company $company)
     {
-        return redirect()->route('companies.edit', $company);
+        $this->authorizeManage($company);
+
+        $company->loadCount(['jobPosts', 'complianceRecords']);
+
+        // The licences in full — the page is the one place an admin can read a
+        // company's compliance without going through the register's filters.
+        $records = $company->complianceRecords()
+            ->orderByDesc('expires_on')
+            ->orderByDesc('id')
+            ->get();
+
+        // Only the latest few: the Job posts count in the sidebar links to the
+        // full list, so this is a preview rather than a second directory.
+        $jobPosts = $company->jobPosts()
+            ->withCount('applications')
+            ->orderByDesc('created_at')
+            ->take(5)
+            ->get();
+
+        return view('admin.companies.show', [
+            'company' => $company,
+            'records' => $records,
+            'jobPosts' => $jobPosts,
+            'verified' => $records->where('status', Compliance::STATUS_VERIFIED)->count(),
+        ]);
     }
 
     public function edit(Company $company)
@@ -213,6 +238,7 @@ class CompaniesController extends Controller
             'website' => 'nullable|url|max:255',
             'facebook' => 'nullable|url|max:255',
             'linkedin' => 'nullable|url|max:255',
+            'tiktok' => 'nullable|url|max:255',
             'address' => 'nullable|string|max:255',
             'description' => 'nullable|string|max:2000',
             'vision_mission' => 'nullable|string|max:6000',
@@ -225,6 +251,7 @@ class CompaniesController extends Controller
             'website.url' => 'The website must be a full URL, including https://.',
             'facebook.url' => 'The Facebook link must be a full URL, including https://.',
             'linkedin.url' => 'The LinkedIn link must be a full URL, including https://.',
+            'tiktok.url' => 'The TikTok link must be a full URL, including https://.',
             'logo.max' => 'The logo must be 2 MB or smaller.',
             'cover.max' => 'The cover image must be 4 MB or smaller.',
         ]);
