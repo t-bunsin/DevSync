@@ -419,6 +419,11 @@ return [
             'section_languages' => 'Languages',
             'form' => [
                 'header' => 'Header',
+                'sections' => 'Resume sections',
+                'tab_profile' => 'Profile',
+                'tab_experience' => 'Work history',
+                'tab_education' => 'Education',
+                'tab_skills' => 'Skills & languages',
                 'header_hint' => 'The contact block printed at the top of the resume.',
                 'photo' => 'Photo',
                 'photo_hint' => 'JPG, PNG or WebP, up to 2 MB. Without one the initials are used.',

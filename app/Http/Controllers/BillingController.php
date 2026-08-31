@@ -37,9 +37,12 @@ class BillingController extends Controller
     /**
      * The billing register: every account's subscription in one table.
      *
-     * Admin-only at the route, because this is the whole table rather than
-     * the caller's own row — subscriptions.user_id is unique, so a per-user
-     * "list" would only ever be the single row index() already shows.
+     * Reachable by every signed-in role, not just admins — a product decision,
+     * so a job seeker reading this page sees other people's names, emails,
+     * plans and amounts. If that has to be walled off again, scope the query
+     * below to $request->user() rather than re-gating the route: the caller's
+     * own row is what /account-billing already shows, since
+     * subscriptions.user_id is unique.
      */
     public function list(Request $request): View
     {

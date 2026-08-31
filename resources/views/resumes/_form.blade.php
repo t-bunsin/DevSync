@@ -24,7 +24,23 @@
     </div>
 @endif
 
-<div class="kh-bo__form-card">
+<div class="kh-bo__form-card" data-bo-tabs>
+
+    {{-- Panels stay in the DOM and are only toggled with [hidden], so every
+         field still posts whichever tab is open. backoffice-tabs.js reopens
+         the panel holding the first validation error. --}}
+    <div class="kh-bo__tabs" role="tablist" aria-label="{{ __('ui.bo.resumes.form.sections') }}">
+        <button class="kh-bo__tab" type="button" role="tab" data-bo-tab="profile"
+            aria-selected="true" aria-controls="bo-panel-profile">{{ __('ui.bo.resumes.form.tab_profile') }}</button>
+        <button class="kh-bo__tab" type="button" role="tab" data-bo-tab="experience"
+            aria-selected="false" aria-controls="bo-panel-experience">{{ __('ui.bo.resumes.form.tab_experience') }}</button>
+        <button class="kh-bo__tab" type="button" role="tab" data-bo-tab="education"
+            aria-selected="false" aria-controls="bo-panel-education">{{ __('ui.bo.resumes.form.tab_education') }}</button>
+        <button class="kh-bo__tab" type="button" role="tab" data-bo-tab="skills"
+            aria-selected="false" aria-controls="bo-panel-skills">{{ __('ui.bo.resumes.form.tab_skills') }}</button>
+    </div>
+
+    <div class="kh-bo__panel" data-bo-panel="profile" id="bo-panel-profile" role="tabpanel">
     <div class="kh-bo__grid">
         <div class="kh-bo__section-label">
             {{ __('ui.bo.resumes.form.header') }}
@@ -141,7 +157,9 @@
             @enderror
         </div>
     </div>
+    </div>
 
+    <div class="kh-bo__panel" data-bo-panel="experience" id="bo-panel-experience" role="tabpanel" hidden>
     {{-- Work history ------------------------------------------------------ --}}
     <div class="kh-bo__repeater" data-bo-repeater="work_history">
         <div class="kh-bo__section-label">
@@ -204,62 +222,9 @@
 
         <button class="kh-bo__btn kh-bo__btn--ghost" type="button" data-bo-add>{{ __('ui.bo.resumes.form.add_role') }}</button>
     </div>
-
-    {{-- Skills ------------------------------------------------------------ --}}
-    <div class="kh-bo__grid">
-        <div class="kh-bo__section-label">
-            {{ __('ui.bo.resumes.form.skills') }}
-            <span>{{ __('ui.bo.resumes.form.skills_hint') }}</span>
-        </div>
-
-        <div class="kh-bo__field kh-bo__field--wide">
-            <label class="kh-bo__label" for="skills">{{ __('ui.bo.resumes.form.skills') }}</label>
-            <textarea @class(['kh-bo__control', 'is-invalid' => $errors->has('skills')])
-                id="skills" name="skills" maxlength="2000"
-                placeholder="{{ __('ui.bo.resumes.form.one_per_line') }}">{{ $skillsValue }}</textarea>
-            <span class="kh-bo__hint">{{ __('ui.bo.resumes.form.one_skill_hint') }}</span>
-            @error('skills')
-                <span class="kh-bo__error">{{ $message }}</span>
-            @enderror
-        </div>
     </div>
 
-    {{-- Certifications ----------------------------------------------------- --}}
-    <div class="kh-bo__repeater" data-bo-repeater="certifications">
-        <div class="kh-bo__section-label">
-            {{ __('ui.bo.resumes.form.certifications') }}
-            <span>{{ __('ui.bo.resumes.form.certifications_hint') }}</span>
-        </div>
-
-        <div data-bo-rows>
-            @foreach ($rowsFor('certifications') as $index => $row)
-                <fieldset class="kh-bo__repeat-row" data-bo-row>
-                    <legend class="kh-bo__repeat-title">{{ __('ui.bo.resumes.form.certificate') }} <span data-bo-number>{{ $index + 1 }}</span></legend>
-                    <button class="kh-bo__repeat-remove" type="button" data-bo-remove
-                        aria-label="{{ __('ui.bo.resumes.form.certificate_remove') }}">&times;</button>
-
-                    <div class="kh-bo__grid">
-                        <div class="kh-bo__field">
-                            <label class="kh-bo__label">{{ __('ui.bo.resumes.form.certificate') }}</label>
-                            <input class="kh-bo__control" type="text" maxlength="255"
-                                name="certifications[{{ $index }}][name]"
-                                value="{{ $row['name'] ?? '' }}" placeholder="{{ __('ui.bo.resumes.form.certificate_placeholder') }}">
-                        </div>
-
-                        <div class="kh-bo__field">
-                            <label class="kh-bo__label">{{ __('ui.bo.resumes.form.issued_by') }}</label>
-                            <input class="kh-bo__control" type="text" maxlength="255"
-                                name="certifications[{{ $index }}][issuer]"
-                                value="{{ $row['issuer'] ?? '' }}" placeholder="{{ __('ui.bo.resumes.form.issued_by_placeholder') }}">
-                        </div>
-                    </div>
-                </fieldset>
-            @endforeach
-        </div>
-
-        <button class="kh-bo__btn kh-bo__btn--ghost" type="button" data-bo-add>{{ __('ui.bo.resumes.form.add_certificate') }}</button>
-    </div>
-
+    <div class="kh-bo__panel" data-bo-panel="education" id="bo-panel-education" role="tabpanel" hidden>
     {{-- Education --------------------------------------------------------- --}}
     <div class="kh-bo__repeater" data-bo-repeater="education">
         <div class="kh-bo__section-label">
@@ -317,6 +282,63 @@
         <button class="kh-bo__btn kh-bo__btn--ghost" type="button" data-bo-add>{{ __('ui.bo.resumes.form.add_qualification') }}</button>
     </div>
 
+    {{-- Certifications ----------------------------------------------------- --}}
+    <div class="kh-bo__repeater" data-bo-repeater="certifications">
+        <div class="kh-bo__section-label">
+            {{ __('ui.bo.resumes.form.certifications') }}
+            <span>{{ __('ui.bo.resumes.form.certifications_hint') }}</span>
+        </div>
+
+        <div data-bo-rows>
+            @foreach ($rowsFor('certifications') as $index => $row)
+                <fieldset class="kh-bo__repeat-row" data-bo-row>
+                    <legend class="kh-bo__repeat-title">{{ __('ui.bo.resumes.form.certificate') }} <span data-bo-number>{{ $index + 1 }}</span></legend>
+                    <button class="kh-bo__repeat-remove" type="button" data-bo-remove
+                        aria-label="{{ __('ui.bo.resumes.form.certificate_remove') }}">&times;</button>
+
+                    <div class="kh-bo__grid">
+                        <div class="kh-bo__field">
+                            <label class="kh-bo__label">{{ __('ui.bo.resumes.form.certificate') }}</label>
+                            <input class="kh-bo__control" type="text" maxlength="255"
+                                name="certifications[{{ $index }}][name]"
+                                value="{{ $row['name'] ?? '' }}" placeholder="{{ __('ui.bo.resumes.form.certificate_placeholder') }}">
+                        </div>
+
+                        <div class="kh-bo__field">
+                            <label class="kh-bo__label">{{ __('ui.bo.resumes.form.issued_by') }}</label>
+                            <input class="kh-bo__control" type="text" maxlength="255"
+                                name="certifications[{{ $index }}][issuer]"
+                                value="{{ $row['issuer'] ?? '' }}" placeholder="{{ __('ui.bo.resumes.form.issued_by_placeholder') }}">
+                        </div>
+                    </div>
+                </fieldset>
+            @endforeach
+        </div>
+
+        <button class="kh-bo__btn kh-bo__btn--ghost" type="button" data-bo-add>{{ __('ui.bo.resumes.form.add_certificate') }}</button>
+    </div>
+    </div>
+
+    <div class="kh-bo__panel" data-bo-panel="skills" id="bo-panel-skills" role="tabpanel" hidden>
+    {{-- Skills ------------------------------------------------------------ --}}
+    <div class="kh-bo__grid">
+        <div class="kh-bo__section-label">
+            {{ __('ui.bo.resumes.form.skills') }}
+            <span>{{ __('ui.bo.resumes.form.skills_hint') }}</span>
+        </div>
+
+        <div class="kh-bo__field kh-bo__field--wide">
+            <label class="kh-bo__label" for="skills">{{ __('ui.bo.resumes.form.skills') }}</label>
+            <textarea @class(['kh-bo__control', 'is-invalid' => $errors->has('skills')])
+                id="skills" name="skills" maxlength="2000"
+                placeholder="{{ __('ui.bo.resumes.form.one_per_line') }}">{{ $skillsValue }}</textarea>
+            <span class="kh-bo__hint">{{ __('ui.bo.resumes.form.one_skill_hint') }}</span>
+            @error('skills')
+                <span class="kh-bo__error">{{ $message }}</span>
+            @enderror
+        </div>
+    </div>
+
     {{-- Languages --------------------------------------------------------- --}}
     <div class="kh-bo__repeater" data-bo-repeater="languages">
         <div class="kh-bo__section-label">
@@ -355,6 +377,7 @@
 
         <button class="kh-bo__btn kh-bo__btn--ghost" type="button" data-bo-add>{{ __('ui.bo.resumes.form.add_language') }}</button>
     </div>
+    </div>
 
     <div class="kh-bo__form-actions">
         <a class="kh-bo__btn kh-bo__btn--ghost" href="{{ route('resumes.index') }}">{{ __('ui.bo.job_posts.form.cancel') }}</a>
@@ -363,5 +386,6 @@
 </div>
 
 @push('scripts')
+    <script src="{{ asset('js/backoffice-tabs.js') }}?v={{ filemtime(public_path('js/backoffice-tabs.js')) }}"></script>
     <script src="{{ asset('js/backoffice-repeater.js') }}?v={{ filemtime(public_path('js/backoffice-repeater.js')) }}" defer></script>
 @endpush

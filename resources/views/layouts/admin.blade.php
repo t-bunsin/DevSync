@@ -262,6 +262,17 @@
                         <div class="dropdown-item-icon"><i data-feather="settings"></i></div>
                         {{ __('ui.admin.nav.account') }}
                     </a>
+                    {{-- Ungated on purpose: both pages are about the caller's own
+                         account, so every role reaches them the same way. The
+                         billing register below in the sidebar stays admin-only. --}}
+                    <a class="dropdown-item" href="{{ route('account-billing') }}">
+                        <div class="dropdown-item-icon"><i data-feather="credit-card"></i></div>
+                        {{ __('ui.admin.nav.billing') }}
+                    </a>
+                    <a class="dropdown-item" href="{{ route('security') }}">
+                        <div class="dropdown-item-icon"><i data-feather="shield"></i></div>
+                        {{ __('ui.admin.nav.security') }}
+                    </a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#logoutModal">
                         <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
@@ -357,12 +368,11 @@
                                             href="{{ url('admin/account-billing') }}">{{ __('ui.admin.nav.billing') }}</a>
                                         <a class="nav-link {{ request()->routeIs('security') ? 'active' : '' }}"
                                             href="{{ route('security') }}">{{ __('ui.admin.nav.security') }}</a>
-                                        {{-- The whole billing register, not the caller's own row,
-                                             so it is hidden from everyone the route would 403. --}}
-                                        @if ($adminUser?->isAdmin())
+                                        {{-- The whole billing register, not the caller's own row.
+                                             Shown to every role by product decision, matching the
+                                             route, which no longer gates on admin either. --}}
                                         <a class="nav-link {{ setActive('admin/account-billing/list') }}"
                                             href="{{ route('account-billing.list') }}">{{ __('ui.admin.nav.billing_list') }}</a>
-                                        @endif
                                     </nav>
                                 </div>
                             </nav>

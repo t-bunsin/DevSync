@@ -84,6 +84,13 @@ Route::prefix('admin')->group(function () {
     Route::post('/account-billing/payway/callback', [BillingController::class, 'paywayCallback'])->name('account-billing.payway.callback');
 
     Route::middleware('auth')->group(function () {
+        // The billing register — every account's subscription in one table.
+        // Open to every signed-in role by product decision, so a job seeker or
+        // employer sees the same rows an admin does, other people's names,
+        // emails, plans and amounts included. Scope it in
+        // BillingController::list() if that ever has to change.
+        Route::get('/account-billing/list', [BillingController::class, 'list'])->name('account-billing.list');
+
         // Self-service only: the caller's own password and security overview.
         // Changing somebody else's password stays on the admin user form.
         Route::get('/account-security', [SecurityController::class, 'index'])->name('security');
@@ -146,11 +153,6 @@ Route::prefix('admin')->group(function () {
             // Roles directory + the job post permission matrix, one page (RoleController).
             Route::get('/roles', [RoleController::class, 'index'])->name('roles');
             Route::patch('/roles/permissions', [RoleController::class, 'updatePermissions'])->name('roles.permissions.update');
-
-            // The billing register — every account's subscription. Admin-only:
-            // the per-user view is /account-billing, which shows the caller's
-            // own row and needs no role gate.
-            Route::get('/account-billing/list', [BillingController::class, 'list'])->name('account-billing.list');
 
             // Curates the 'featured' flag on job posts — an admin call, not
             // something the employer-facing job post form exposes anymore.
