@@ -401,7 +401,8 @@ html[lang="kh"] .kh-admin-brand__tagline,
 html[lang="kh"] .nav-fixed .sidenav-menu-heading,
 html[lang="kh"] .kh-sidebar-pulse > span,
 html[lang="kh"] .kh-command__eyebrow,
-html[lang="kh"] .kh-command__score-copy > span,
+html[lang="kh"] .kh-command__pulse-head > span,
+html[lang="kh"] .kh-command__gauge-value span,
 html[lang="kh"] .kh-panel__kicker {
   letter-spacing: 0;
   text-transform: none;
@@ -920,41 +921,70 @@ html[lang="kh"] .kh-panel__kicker {
   position: relative;
   isolation: isolate;
   display: grid;
-  grid-template-columns: minmax(0, 1.45fr) minmax(300px, 0.65fr);
-  gap: 44px;
+  grid-template-columns: minmax(0, 1fr) minmax(290px, 340px);
+  gap: clamp(28px, 3vw, 52px);
+  align-items: stretch;
   overflow: hidden;
-  padding: clamp(26px, 3vw, 42px);
+  padding: clamp(26px, 3vw, 40px);
   color: #fff;
   background:
-    linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
-    linear-gradient(120deg, #071d29, #0b5060);
-  background-size: 48px 48px, 48px 48px, auto;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+    linear-gradient(rgba(255, 255, 255, 0.022) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.022) 1px, transparent 1px),
+    linear-gradient(118deg, #061a25 0%, #0a3d4c 58%, #0d5464 100%);
+  background-size: 46px 46px, 46px 46px, auto;
+  border: 1px solid rgba(255, 255, 255, 0.07);
   border-radius: var(--kh-radius-xl);
   box-shadow: 0 22px 55px rgba(7, 29, 41, 0.2);
 }
 
+/* The banner's accent follows the health score, so the colour is making the
+   same claim the number is rather than decorating it. */
+.kh-command {
+  --kh-command-accent: #f0b95e;
+}
+
+.kh-command--strong { --kh-command-accent: #4fd1c0; }
+.kh-command--steady { --kh-command-accent: #f0b95e; }
+.kh-command--watch { --kh-command-accent: #f2925f; }
+.kh-command--quiet { --kh-command-accent: #7f9fa8; }
+
 .kh-command__glow {
   position: absolute;
   z-index: -1;
-  right: -90px;
-  bottom: -190px;
-  width: 430px;
-  height: 430px;
-  background: rgba(28, 166, 160, 0.26);
+  right: -120px;
+  bottom: -210px;
+  width: 460px;
+  height: 460px;
+  background: rgba(28, 166, 160, 0.24);
   border-radius: 50%;
+  filter: blur(10px);
+}
+
+/* Sits behind the rail, tinted by the same accent as the gauge, so the score's
+   colour reads as lighting the panel rather than as a mark on the banner. */
+.kh-command__glow--two {
+  right: -60px;
+  bottom: auto;
+  top: -160px;
+  width: 340px;
+  height: 340px;
+  background: color-mix(in srgb, var(--kh-command-accent) 13%, transparent);
+  filter: blur(30px);
 }
 
 .kh-command__copy {
+  display: flex;
+  flex-direction: column;
   align-self: center;
+  min-width: 0;
 }
 
 .kh-command__eyebrow {
   display: inline-flex;
+  align-self: flex-start;
   align-items: center;
-  gap: 7px;
-  padding: 7px 10px;
+  gap: 8px;
+  padding: 7px 12px 7px 10px;
   color: #9be4df;
   background: rgba(131, 222, 216, 0.1);
   border: 1px solid rgba(131, 222, 216, 0.18);
@@ -965,26 +995,41 @@ html[lang="kh"] .kh-panel__kicker {
   text-transform: uppercase;
 }
 
-.kh-command__eyebrow svg {
-  width: 13px;
-  height: 13px;
+/* A pulsing dot rather than a static glyph: "live" is the one label on the
+   page where a sign of life is the whole point. */
+.kh-command__live {
+  position: relative;
+  width: 7px;
+  height: 7px;
+  background: #4fd1c0;
+  border-radius: 50%;
+}
+
+.kh-command__live::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border: 1px solid #4fd1c0;
+  border-radius: 50%;
+  opacity: 0;
 }
 
 .kh-command h2 {
-  max-width: 18ch;
+  max-width: 19ch;
   margin: 18px 0 13px;
   color: #fff;
-  font-size: clamp(2rem, 3.5vw, 3.4rem);
+  font-size: clamp(1.9rem, 3.1vw, 3rem);
   font-weight: 600;
-  line-height: 1.02;
-  letter-spacing: -0.06em;
+  line-height: 1.05;
+  letter-spacing: -0.055em;
+  text-wrap: balance;
 }
 
 .kh-command__copy > p {
-  max-width: 66ch;
+  max-width: 58ch;
   margin: 0;
-  color: rgba(226, 241, 242, 0.72);
-  font-size: 0.8rem;
+  color: rgba(226, 241, 242, 0.74);
+  font-size: 0.82rem;
   line-height: 1.7;
 }
 
@@ -992,103 +1037,179 @@ html[lang="kh"] .kh-panel__kicker {
   display: flex;
   gap: 9px;
   flex-wrap: wrap;
-  margin-top: 23px;
+  margin-top: 26px;
 }
 
-.kh-command__signals span {
+.kh-signal {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 9px 11px;
+  gap: 7px;
+  padding: 9px 13px 9px 11px;
   color: #c5dadd;
-  background: rgba(255, 255, 255, 0.07);
+  background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
-  font-size: 0.66rem;
+  border-radius: 11px;
+  font-size: 0.68rem;
 }
 
-.kh-command__signals svg {
+.kh-signal svg {
   width: 13px;
   height: 13px;
-  color: #83ded8;
 }
 
-.kh-command__signals strong {
+.kh-signal strong {
   color: #fff;
+  font-weight: 600;
 }
 
-.kh-command__score {
-  display: flex;
-  align-items: center;
-  gap: 22px;
-  align-self: stretch;
-  padding: 24px;
-  background: rgba(255, 255, 255, 0.08);
+/* Direction is carried by the icon's colour only. The value stays white so a
+   figure never has to be read through a colour to be read at all. */
+.kh-signal--good svg { color: #4fd1c0; }
+.kh-signal--warn svg { color: #f2b06a; }
+.kh-signal--muted { color: #8fa8ad; }
+.kh-signal--muted svg { color: #7f9fa8; }
+.kh-signal--muted strong { color: #b9cbcf; }
+
+.kh-command__aside {
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  gap: 16px;
+  align-content: start;
+  padding: 22px;
+  background: rgba(255, 255, 255, 0.07);
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 22px;
   backdrop-filter: blur(12px);
 }
 
-.kh-score-ring {
+.kh-command__gauge {
+  position: relative;
   display: grid;
   place-items: center;
-  width: 124px;
-  min-width: 124px;
-  height: 124px;
-  background: conic-gradient(#f0b95e calc(var(--score) * 1%), rgba(255, 255, 255, 0.12) 0);
-  border-radius: 50%;
-  box-shadow: 0 0 36px rgba(240, 185, 94, 0.12);
+  justify-self: center;
+  width: 132px;
+  height: 132px;
 }
 
-.kh-score-ring::before {
-  content: "";
+.kh-gauge {
   grid-area: 1 / 1;
-  width: 96px;
-  height: 96px;
-  background: #123c49;
-  border-radius: 50%;
+  width: 100%;
+  height: 100%;
+  /* Zero is at twelve o'clock, not three. */
+  transform: rotate(-90deg);
 }
 
-.kh-score-ring > div {
+.kh-gauge circle {
+  fill: none;
+  stroke-width: 9;
+}
+
+.kh-gauge__track {
+  stroke: rgba(255, 255, 255, 0.11);
+}
+
+.kh-gauge__arc {
+  stroke: var(--kh-command-accent);
+  stroke-linecap: round;
+  stroke-dasharray: var(--arc) 327;
+  filter: drop-shadow(0 0 10px color-mix(in srgb, var(--kh-command-accent) 45%, transparent));
+}
+
+.kh-command__gauge-value {
   z-index: 1;
   grid-area: 1 / 1;
   display: grid;
   text-align: center;
 }
 
-.kh-score-ring strong {
+.kh-command__gauge-value strong {
   color: #fff;
-  font-size: 2rem;
+  font-size: 2.1rem;
+  font-weight: 600;
   line-height: 1;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
 }
 
-.kh-score-ring span {
-  margin-top: 5px;
+.kh-command__gauge-value span {
+  margin-top: 6px;
   color: #a8c5c9;
   font-size: 0.57rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
-.kh-command__score-copy {
+/* A bare score tells nobody whether 74 is good. The verdict says it in words. */
+.kh-command__verdict {
+  margin: 0;
+  padding-bottom: 16px;
+  color: rgba(226, 241, 242, 0.76);
+  font-size: 0.7rem;
+  line-height: 1.6;
+  text-align: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.kh-command__pulse {
   display: grid;
-  gap: 5px;
+  gap: 12px;
+  align-content: start;
 }
 
-.kh-command__score-copy > span {
+.kh-command__pulse-head {
+  display: grid;
+  gap: 4px;
+}
+
+.kh-command__pulse-head > span {
   color: #9be4df;
-  font-size: 0.62rem;
+  font-size: 0.6rem;
   font-weight: 700;
   letter-spacing: 0.09em;
   text-transform: uppercase;
 }
 
-.kh-command__score-copy strong {
+.kh-command__pulse-head > strong {
   color: #fff;
-  font-size: 1rem;
+  font-size: 1.05rem;
+  font-weight: 600;
 }
 
-.kh-command__score-copy small {
+.kh-command__delta {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   color: #a8c5c9;
-  font-size: 0.65rem;
+  font-size: 0.66rem;
+}
+
+.kh-command__delta svg {
+  width: 12px;
+  height: 12px;
+}
+
+.kh-command__delta.is-up { color: #7fe0d2; }
+.kh-command__delta.is-down { color: #f2b06a; }
+
+/* Fourteen days of arrivals under today's count: the number on its own says
+   nothing about whether today is busy or ordinary. */
+.kh-command__spark {
+  width: 100%;
+  height: 46px;
+}
+
+.kh-command__spark polyline {
+  fill: none;
+  stroke: var(--kh-command-accent);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.kh-command__spark polygon {
+  fill: color-mix(in srgb, var(--kh-command-accent) 15%, transparent);
+  stroke: none;
 }
 
 /* Metrics */
@@ -1818,7 +1939,25 @@ html[lang="kh"] .kh-panel__kicker {
   50% { opacity: 0.45; }
 }
 
+@keyframes kh-gauge-draw {
+  from { stroke-dasharray: 0 327; }
+}
+
+@keyframes kh-live-ping {
+  0% { opacity: 0.7; transform: scale(0.75); }
+  70%, 100% { opacity: 0; transform: scale(1.6); }
+}
+
 @media (prefers-reduced-motion: no-preference) {
+  .kh-gauge__arc {
+    animation: kh-gauge-draw 900ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: 220ms;
+  }
+
+  .kh-command__live::after {
+    animation: kh-live-ping 2.4s ease-out infinite;
+  }
+
   .kh-command,
   .kh-metric,
   .kh-panel {
@@ -1834,12 +1973,7 @@ html[lang="kh"] .kh-panel__kicker {
 
 @media (max-width: 1350px) {
   .kh-command {
-    grid-template-columns: 1.25fr 0.75fr;
-  }
-
-  .kh-command__score {
-    flex-direction: column;
-    align-items: flex-start;
+    grid-template-columns: minmax(0, 1fr) minmax(260px, 300px);
   }
 
   .kh-dash__lower-grid {
@@ -1856,8 +1990,32 @@ html[lang="kh"] .kh-panel__kicker {
 }
 
 @media (max-width: 1100px) {
+  /* Below this the rail cannot hold the gauge and the spark side by side in a
+     column, so it lies down across the full width instead. */
   .kh-command {
     grid-template-columns: 1fr;
+  }
+
+  .kh-command__aside {
+    grid-template-rows: none;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 12px 26px;
+    align-items: center;
+  }
+
+  .kh-command__gauge {
+    grid-row: span 2;
+  }
+
+  .kh-command__verdict {
+    align-self: end;
+    padding-bottom: 0;
+    text-align: left;
+    border-bottom: 0;
+  }
+
+  .kh-command__pulse {
+    align-self: start;
   }
 
   .kh-metrics {
@@ -1868,10 +2026,6 @@ html[lang="kh"] .kh-panel__kicker {
     grid-template-columns: 1fr;
   }
 
-  .kh-command__score {
-    flex-direction: row;
-    align-items: center;
-  }
 }
 
 @media (max-width: 820px) {
@@ -1883,10 +2037,6 @@ html[lang="kh"] .kh-panel__kicker {
   }
 
   .kh-dash__intro-actions {
-    justify-content: flex-start;
-  }
-
-  .kh-command__score {
     justify-content: flex-start;
   }
 
@@ -1948,9 +2098,22 @@ html[lang="kh"] .kh-panel__kicker {
     border-radius: 22px;
   }
 
-  .kh-command__score {
-    align-items: flex-start;
-    flex-direction: column;
+  .kh-command__aside {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    text-align: center;
+  }
+
+  .kh-command__gauge {
+    grid-row: auto;
+  }
+
+  .kh-command__verdict {
+    text-align: center;
+  }
+
+  .kh-command__pulse {
+    width: 100%;
   }
 
   .kh-metrics {

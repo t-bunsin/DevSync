@@ -27,6 +27,7 @@ class HomeController extends Controller
 
         return view('home', [
             'cards' => $cards,
+            'command' => $metrics->command(),
             // The sidebar's user count would otherwise be recounted by the
             // layouts.admin composer; hand it the figure already in hand.
             'widget' => ['users' => $cards['users']['value']],

@@ -164,15 +164,50 @@ return [
         'view_site' => 'View site',
         'add_user' => 'Add user',
         'live_operations' => 'Live operations',
-        'hero_title' => 'Your hiring network is gaining momentum.',
         'todays_pulse' => "Today's pulse",
         'health_score' => 'Health score',
-        'hero_body' => 'Applications are moving faster this week, with technology and product roles generating the strongest candidate engagement.',
+        // One headline per state of the pipeline. The banner reads whichever
+        // one the measured trend supports, so it never claims momentum the
+        // numbers underneath it do not show.
+        'hero' => [
+            'up' => [
+                'title' => 'Your hiring network is gaining momentum.',
+                'body' => 'Applications are arriving faster than last week. Keep replies quick and the candidates you want will still be available.',
+            ],
+            'steady' => [
+                'title' => 'Your hiring network is holding steady.',
+                'body' => 'Application volume is level with last week. Nothing is slipping, and there is room to push on the roles that matter most.',
+            ],
+            'down' => [
+                'title' => 'Applications have slowed this week.',
+                'body' => 'Fewer candidates are arriving than last week. It may be worth refreshing your open roles or widening where they are posted.',
+            ],
+            'backlog' => [
+                'title' => 'Candidates are waiting on you.',
+                'body' => 'Applications are sitting unopened past the 48-hour mark. Clearing the oldest ones first is the fastest way to bring this back.',
+            ],
+            'quiet' => [
+                'title' => 'Your hiring network is ready to go.',
+                'body' => 'No applications have come in yet. Publish a role and this banner will start tracking how quickly your team responds.',
+            ],
+        ],
         'signal_growth' => 'weekly growth',
         'signal_response' => 'response time',
         'signal_actions' => 'priority actions',
-        'pulse_value' => '24 new applicants',
-        'pulse_note' => '6 more than yesterday',
+        'signal_none' => 'no data yet',
+        'signal_hours' => ':hours h',
+        'pulse_value' => ':count new applicants',
+        'pulse_up' => ':count more than yesterday',
+        'pulse_down' => ':count fewer than yesterday',
+        'pulse_same' => 'Same as yesterday',
+        'pulse_quiet' => 'Nothing new today',
+        'pulse_spark_aria' => 'Applications per day over the last 14 days',
+        'score_pending' => 'Not enough activity to score yet.',
+        'score_tone' => [
+            'strong' => 'Applications are being answered quickly.',
+            'steady' => 'Most applications are being answered.',
+            'watch' => 'Replies are running behind.',
+        ],
         'total_applications' => 'Total applications',
         'vs_last_period' => '31% vs last period',
         'days' => ['mon' => 'Mon', 'tue' => 'Tue', 'wed' => 'Wed', 'thu' => 'Thu', 'fri' => 'Fri', 'sat' => 'Sat', 'sun' => 'Sun'],

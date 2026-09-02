@@ -26,15 +26,18 @@ class VerifyEmailCode extends Notification
 
     public function toMail(object $notifiable): MailMessage
     {
+        // A custom view rather than the markdown builder: the code is the whole
+        // message, and the stock template can only render it as one more line
+        // of body text under Laravel's own logo and footer.
         return (new MailMessage())
             ->subject('Your ZIN-WORKS verification code: ' . $this->code)
-            ->greeting('Welcome to ZIN-WORKS')
-            ->line('Enter this code to finish creating your account:')
-            ->line('**' . $this->code . '**')
-            ->line(sprintf(
-                'The code expires in %d minutes. If you did not sign up, you can ignore this email.',
-                EmailVerificationCode::TTL_MINUTES
-            ))
-            ->salutation('— The ZIN-WORKS team');
+            ->view(
+                ['emails.verify-code', 'emails.verify-code-text'],
+                [
+                    'code' => $this->code,
+                    'ttlMinutes' => EmailVerificationCode::TTL_MINUTES,
+                    'email' => $notifiable->email,
+                ]
+            );
     }
 }

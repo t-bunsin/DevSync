@@ -66,29 +66,125 @@
             </div>
         </header>
 
-        <section class="kh-command" aria-labelledby="command-title">
+        {{-- Command banner. Every figure here comes from DashboardMetrics::command();
+             the view only decides how to say it. --}}
+        @php
+            $trend = $command['trend'];
+            $score = $command['score'];
+            $delta = $command['today_delta'];
+
+            // The spark polyline closed into a filled area. The service draws
+            // the line; the floor is added here because only the view knows
+            // how tall its own box is. Null when nothing arrived in the
+            // fortnight — there is no shape to draw.
+            $sparkPoints = $command['spark'];
+            $sparkArea = null;
+
+            if ($sparkPoints !== null) {
+                $sparkEnds = explode(' ', $sparkPoints);
+                $sparkFirstX = explode(',', reset($sparkEnds))[0];
+                $sparkLastX = explode(',', end($sparkEnds))[0];
+                $sparkArea = $sparkPoints . ' ' . $sparkLastX . ',46 ' . $sparkFirstX . ',46';
+            }
+
+            $signals = [
+                [
+                    'icon' => $command['growth'] === null ? 'minus' : ($command['growth'] < 0 ? 'trending-down' : 'trending-up'),
+                    'tone' => $command['growth'] === null ? 'muted' : ($command['growth'] < 0 ? 'warn' : 'good'),
+                    'value' => $command['growth'] === null ? null : sprintf('%+.0f%%', $command['growth']),
+                    'label' => __('ui.dashboard.signal_growth'),
+                ],
+                [
+                    'icon' => 'clock',
+                    // Answering inside the working day reads as good; the
+                    // rest is just reported, not judged.
+                    'tone' => $command['response_hours'] === null ? 'muted' : ($command['response_hours'] <= 24 ? 'good' : 'warn'),
+                    'value' => $command['response_hours'] === null
+                        ? null
+                        : __('ui.dashboard.signal_hours', ['hours' => rtrim(rtrim(number_format($command['response_hours'], 1), '0'), '.')]),
+                    'label' => __('ui.dashboard.signal_response'),
+                ],
+                [
+                    'icon' => 'zap',
+                    'tone' => $command['overdue'] > 0 ? 'warn' : 'good',
+                    'value' => number_format($command['overdue']),
+                    'label' => __('ui.dashboard.signal_actions'),
+                ],
+            ];
+        @endphp
+
+        <section class="kh-command kh-command--{{ $command['tone'] }}" aria-labelledby="command-title">
             <div class="kh-command__glow" aria-hidden="true"></div>
+            <div class="kh-command__glow kh-command__glow--two" aria-hidden="true"></div>
+
             <div class="kh-command__copy">
-                <span class="kh-command__eyebrow"><i data-feather="activity"></i>{{ __('ui.dashboard.live_operations') }}</span>
-                <h2 id="command-title">{{ __('ui.dashboard.hero_title') }}</h2>
-                <p>{{ __('ui.dashboard.hero_body') }}</p>
+                <span class="kh-command__eyebrow">
+                    <span class="kh-command__live" aria-hidden="true"></span>{{ __('ui.dashboard.live_operations') }}
+                </span>
+                <h2 id="command-title">{{ __('ui.dashboard.hero.' . $trend . '.title') }}</h2>
+                <p>{{ __('ui.dashboard.hero.' . $trend . '.body') }}</p>
+
                 <div class="kh-command__signals">
-                    <span><i data-feather="trending-up"></i><strong>18%</strong> {{ __('ui.dashboard.signal_growth') }}</span>
-                    <span><i data-feather="clock"></i><strong>2.4h</strong> {{ __('ui.dashboard.signal_response') }}</span>
-                    <span><i data-feather="zap"></i><strong>7</strong> {{ __('ui.dashboard.signal_actions') }}</span>
+                    @foreach ($signals as $signal)
+                        <span class="kh-signal kh-signal--{{ $signal['tone'] }}">
+                            <i data-feather="{{ $signal['icon'] }}"></i>
+                            <strong>{{ $signal['value'] ?? '—' }}</strong>
+                            {{ $signal['value'] === null ? __('ui.dashboard.signal_none') : $signal['label'] }}
+                        </span>
+                    @endforeach
                 </div>
             </div>
 
-            <div class="kh-command__score">
-                <div class="kh-score-ring" style="--score: 74" role="img" aria-label="{{ __('ui.bo.applications.health_aria', ['score' => 74]) }}">
-                    <div><strong>74</strong><span>{{ __('ui.dashboard.health_score') }}</span></div>
+            <aside class="kh-command__aside">
+                <div class="kh-command__gauge">
+                    {{-- An SVG arc rather than a conic gradient: it takes a rounded
+                         cap, and it can be given a starting length to animate from. --}}
+                    <svg class="kh-gauge" viewBox="0 0 120 120" role="img"
+                         aria-label="{{ $score === null ? __('ui.dashboard.score_pending') : __('ui.bo.applications.health_aria', ['score' => $score]) }}">
+                        <circle class="kh-gauge__track" cx="60" cy="60" r="52"></circle>
+                        @if ($score !== null)
+                            {{-- 327 is the circumference at r=52, rounded down so a
+                                 full score closes the ring instead of overshooting it. --}}
+                            <circle class="kh-gauge__arc" cx="60" cy="60" r="52"
+                                    style="--arc: {{ round(327 * $score / 100) }}"></circle>
+                        @endif
+                    </svg>
+                    <div class="kh-command__gauge-value">
+                        <strong>{{ $score ?? '—' }}</strong>
+                        <span>{{ __('ui.dashboard.health_score') }}</span>
+                    </div>
                 </div>
-                <div class="kh-command__score-copy">
-                    <span>{{ __('ui.dashboard.todays_pulse') }}</span>
-                    <strong>{{ __('ui.dashboard.pulse_value') }}</strong>
-                    <small>{{ __('ui.dashboard.pulse_note') }}</small>
+
+                <p class="kh-command__verdict">
+                    {{ $score === null ? __('ui.dashboard.score_pending') : __('ui.dashboard.score_tone.' . $command['tone']) }}
+                </p>
+
+                <div class="kh-command__pulse">
+                    <div class="kh-command__pulse-head">
+                        <span>{{ __('ui.dashboard.todays_pulse') }}</span>
+                        <strong>{{ __('ui.dashboard.pulse_value', ['count' => number_format($command['today'])]) }}</strong>
+                        <small @class(['kh-command__delta', 'is-up' => $delta > 0, 'is-down' => $delta < 0])>
+                            @if ($command['today'] === 0 && $command['yesterday'] === 0)
+                                {{ __('ui.dashboard.pulse_quiet') }}
+                            @elseif ($delta > 0)
+                                <i data-feather="arrow-up-right"></i>{{ __('ui.dashboard.pulse_up', ['count' => $delta]) }}
+                            @elseif ($delta < 0)
+                                <i data-feather="arrow-down-right"></i>{{ __('ui.dashboard.pulse_down', ['count' => abs($delta)]) }}
+                            @else
+                                {{ __('ui.dashboard.pulse_same') }}
+                            @endif
+                        </small>
+                    </div>
+
+                    @if ($sparkPoints !== null)
+                        <svg class="kh-command__spark" viewBox="0 0 240 46" preserveAspectRatio="none"
+                             role="img" aria-label="{{ __('ui.dashboard.pulse_spark_aria') }}">
+                            <polygon points="{{ $sparkArea }}"></polygon>
+                            <polyline points="{{ $sparkPoints }}" vector-effect="non-scaling-stroke"></polyline>
+                        </svg>
+                    @endif
                 </div>
-            </div>
+            </aside>
         </section>
 
         <section class="kh-metrics" aria-label="{{ __('ui.bo.applications.metrics_aria') }}">
