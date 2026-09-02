@@ -701,8 +701,24 @@ body.jf-body::selection {
   text-transform: uppercase;
 }
 
-.jf-spotlight {
+/* Deck of featured roles: three cards fanned out, the front one rotating away
+   on a timer. Every card occupies the same grid cell, so the stack is exactly
+   as tall as its tallest card and nothing reflows as roles cycle. */
+.jf-deck {
   position: relative;
+}
+
+.jf-deck__stack {
+  display: grid;
+  padding: 34px 46px 0 0;
+}
+
+.jf-deck__card {
+  position: relative;
+  z-index: 1;
+  grid-area: 1 / 1;
+  display: flex;
+  flex-direction: column;
   padding: 30px;
   background: linear-gradient(180deg, #ffffff, #f6fbfa);
   border: 1px solid rgba(255, 255, 255, 0.5);
@@ -712,18 +728,14 @@ body.jf-body::selection {
     0 6px 18px rgba(0, 14, 22, 0.18),
     inset 0 1px 0 #fff;
   color: var(--jf-ink);
-  transition: transform 420ms var(--jf-ease-out), box-shadow 420ms var(--jf-ease-out);
+  transform-origin: 50% 100%;
+  transition:
+    transform 620ms var(--jf-ease-out),
+    opacity 460ms var(--jf-ease-out),
+    box-shadow 420ms var(--jf-ease-out);
 }
 
-.jf-spotlight:hover {
-  transform: translateY(-5px);
-  box-shadow:
-    0 58px 108px rgba(0, 14, 22, 0.48),
-    0 8px 22px rgba(0, 14, 22, 0.2),
-    inset 0 1px 0 #fff;
-}
-
-.jf-spotlight::after {
+.jf-deck__card::after {
   content: "";
   position: absolute;
   top: 0;
@@ -732,6 +744,76 @@ body.jf-body::selection {
   height: 3px;
   border-radius: 0 0 999px 999px;
   background: linear-gradient(90deg, var(--jf-teal), #83ded8 46%, var(--jf-gold));
+}
+
+/* Stack positions. The front card is flat and legible; the two behind it peek
+   out to the upper right, each smaller and a touch more rotated. */
+.jf-deck__card.is-front {
+  z-index: 3;
+  transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
+}
+
+.jf-deck__card.is-second {
+  z-index: 2;
+  transform: translate3d(24px, -18px, 0) scale(0.95) rotate(2.6deg);
+}
+
+.jf-deck__card.is-third {
+  z-index: 1;
+  transform: translate3d(46px, -32px, 0) scale(0.9) rotate(5.2deg);
+}
+
+/* Any extra roles wait out of sight underneath the third card. */
+.jf-deck__card.is-back {
+  z-index: 0;
+  opacity: 0;
+  transform: translate3d(46px, -32px, 0) scale(0.9) rotate(5.2deg);
+}
+
+/* Behind the front card only the paper edge should show - the accent bar and
+   the content underneath it stay out of the way. */
+.jf-deck__card:not(.is-front)::after {
+  display: none;
+}
+
+/* Cards behind the front one are dimmed rather than blurred, so the deck still
+   reads as paper rather than as a shadow. */
+.jf-deck__card:not(.is-front) {
+  box-shadow: 0 30px 60px rgba(0, 14, 22, 0.34);
+}
+
+.jf-deck__card:not(.is-front):not(.is-leaving)::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  border-radius: inherit;
+  background: rgba(9, 39, 52, 0.16);
+}
+
+/* The deck fans wider when you engage with it. */
+.jf-deck:hover .jf-deck__card.is-second,
+.jf-deck:focus-within .jf-deck__card.is-second {
+  transform: translate3d(32px, -26px, 0) scale(0.95) rotate(3.4deg);
+}
+
+.jf-deck:hover .jf-deck__card.is-third,
+.jf-deck:focus-within .jf-deck__card.is-third {
+  transform: translate3d(60px, -44px, 0) scale(0.9) rotate(6.4deg);
+}
+
+/* Off-stage: where a card flies to on its way out, and where the next one
+   flies in from. Scoped through .jf-deck so it outranks the hover fan rules,
+   which are otherwise a class more specific. */
+.jf-deck .jf-deck__card.is-leaving {
+  z-index: 5;
+  opacity: 0;
+  transform: translate3d(132px, 18px, 0) scale(0.96) rotate(11deg);
+}
+
+/* Used for a single frame to teleport a card without animating it. */
+.jf-deck .jf-deck__card.is-instant {
+  transition: none;
 }
 
 .jf-spotlight__topline,
@@ -803,7 +885,7 @@ body.jf-body::selection {
   letter-spacing: -0.045em;
 }
 
-.jf-spotlight .jf-logo {
+.jf-deck__card .jf-logo {
   width: 62px;
   min-width: 62px;
   height: 62px;
@@ -933,24 +1015,9 @@ body.jf-body::selection {
   transform: translateX(3px);
 }
 
-/* Spotlight slideshow */
-.jf-spotlight__slides {
-  display: grid;
-}
-
-.jf-spotlight__slide {
-  grid-area: 1 / 1;
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(10px);
-  transition: opacity 420ms var(--jf-ease-out), transform 420ms var(--jf-ease-out), visibility 0s linear 420ms;
-}
-
-.jf-spotlight__slide.is-active {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
-  transition-delay: 0s;
+/* Pinned to the bottom so every card lines its salary row up with the rest. */
+.jf-deck__card .jf-spotlight__footer {
+  margin-top: auto;
 }
 
 .jf-spotlight__controls {
@@ -958,19 +1025,22 @@ body.jf-body::selection {
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  margin-top: 22px;
+  margin-top: 26px;
+  padding: 0 46px 0 4px;
 }
 
 .jf-spotlight__arrow {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  width: 38px;
+  height: 38px;
   padding: 0;
-  color: var(--jf-ocean);
-  background: #eef5f4;
-  border: 1px solid rgba(28, 166, 160, 0.18);
+  color: #d7f2ef;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(159, 231, 226, 0.26);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border-radius: 50%;
   font-size: 0.72rem;
   cursor: pointer;
@@ -992,10 +1062,10 @@ body.jf-body::selection {
 }
 
 .jf-spotlight__dot {
-  width: 8px;
-  height: 8px;
+  width: 9px;
+  height: 9px;
   padding: 0;
-  background: rgba(28, 166, 160, 0.28);
+  background: rgba(255, 255, 255, 0.24);
   border: 0;
   border-radius: 999px;
   cursor: pointer;
@@ -1008,8 +1078,12 @@ body.jf-body::selection {
 }
 
 /* Dark theme touch-ups for the pieces the shared dark block does not cover. */
-html[data-theme="dark"] .jf-spotlight {
+html[data-theme="dark"] .jf-deck__card {
   box-shadow: 0 46px 92px rgba(0, 0, 0, 0.55), 0 6px 18px rgba(0, 0, 0, 0.35);
+}
+
+html[data-theme="dark"] .jf-deck__card:not(.is-front)::before {
+  background: rgba(0, 0, 0, 0.42);
 }
 
 html[data-theme="dark"] .jf-spotlight__status {
@@ -1048,14 +1122,8 @@ html[data-theme="dark"] .jf-spotlight__meta span:hover {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .jf-spotlight__slide {
+  .jf-deck__card {
     transition: none;
-    transform: none;
-  }
-
-  .jf-spotlight,
-  .jf-spotlight:hover {
-    transform: none;
   }
 }
 
@@ -1106,7 +1174,7 @@ html[data-theme="dark"] .jf-spotlight__meta span:hover {
   -webkit-text-fill-color: transparent;
 }
 
-/* The tilt makes .jf-spotlight a stacking context, so the halo and the
+/* The tilt makes .jf-deck__stack a stacking context, so the halo and the
    floating chips live on a wrapper that stays flat. */
 .jf-hero__card {
   position: relative;
@@ -1182,7 +1250,7 @@ html[data-theme="dark"] .jf-spotlight__meta span:hover {
   transition: opacity 320ms ease;
 }
 
-.jf-spotlight:hover .jf-spotlight__glare {
+.jf-deck:hover .jf-deck__card.is-front .jf-spotlight__glare {
   opacity: 1;
 }
 
@@ -1193,7 +1261,7 @@ html[data-theme="dark"] .jf-spotlight__meta span:hover {
 }
 
 .jf-spotlight__dot.is-active {
-  background: rgba(28, 166, 160, 0.2);
+  background: rgba(255, 255, 255, 0.18);
 }
 
 .jf-spotlight__dot.is-active::after {
@@ -1295,18 +1363,14 @@ html[data-theme="dark"] .jf-spotlight__meta span:hover {
     animation: none;
   }
 
-  .jf-spotlight {
-    /* Tilt follows the pointer; the hover lift uses `translate` so the two
-       properties never overwrite each other. */
-    transform: perspective(1200px) rotateX(calc(var(--jf-py) * -3.2deg)) rotateY(calc(var(--jf-px) * 4.2deg));
-    transition:
-      translate 420ms var(--jf-ease-out),
-      transform 520ms var(--jf-ease-out),
-      box-shadow 420ms var(--jf-ease-out);
+  .jf-deck__stack {
+    /* The whole deck tilts as one object; the hover lift uses `translate` so
+       the two properties never overwrite each other. */
+    transform: perspective(1400px) rotateX(calc(var(--jf-py) * -3deg)) rotateY(calc(var(--jf-px) * 4deg));
+    transition: transform 520ms var(--jf-ease-out), translate 420ms var(--jf-ease-out);
   }
 
-  .jf-spotlight:hover {
-    transform: perspective(1200px) rotateX(calc(var(--jf-py) * -3.2deg)) rotateY(calc(var(--jf-px) * 4.2deg));
+  .jf-deck:hover .jf-deck__stack {
     translate: 0 -6px;
   }
 
@@ -1323,8 +1387,8 @@ html[data-theme="dark"] .jf-spotlight__meta span:hover {
     animation: jf-dot-progress 6s linear both;
   }
 
-  .jf-spotlight:hover .jf-spotlight__dot.is-active::after,
-  .jf-spotlight:focus-within .jf-spotlight__dot.is-active::after {
+  .jf-deck:hover .jf-spotlight__dot.is-active::after,
+  .jf-deck:focus-within .jf-spotlight__dot.is-active::after {
     animation-play-state: paused;
   }
 }
@@ -3263,7 +3327,7 @@ html[data-theme="dark"] .jf-theme-toggle__moon {
   text-shadow: 0 0 9px rgba(244, 193, 80, 0.45);
 }
 
-html[data-theme="dark"] .jf-spotlight,
+html[data-theme="dark"] .jf-deck__card,
 html[data-theme="dark"] .jf-search__panel,
 html[data-theme="dark"] .jf-job-card,
 html[data-theme="dark"] .jf-detail,
@@ -3491,12 +3555,12 @@ html[data-theme="dark"] .jf-dialog__note {
 
 @media (prefers-reduced-motion: no-preference) {
   .jf-hero__copy,
-  .jf-spotlight,
+  .jf-deck,
   .jf-search__panel {
     animation: jf-enter-up 620ms var(--jf-ease-out) both;
   }
 
-  .jf-spotlight {
+  .jf-deck {
     animation-delay: 90ms;
     animation-fill-mode: backwards;
   }
@@ -3718,14 +3782,24 @@ html[data-theme="dark"] .jf-dialog__note {
     font-size: 1.4rem;
   }
 
-  .jf-spotlight {
+  .jf-deck__card {
     padding: 24px;
     border-radius: 24px;
   }
 
-  .jf-spotlight::after {
+  .jf-deck__card::after {
     right: 22px;
     left: 22px;
+  }
+
+  /* No room to fan on a phone: show the front card only. */
+  .jf-deck__stack {
+    padding: 0;
+  }
+
+  .jf-deck__card:not(.is-front) {
+    opacity: 0;
+    transform: none;
   }
 
   .jf-search {

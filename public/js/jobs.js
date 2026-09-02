@@ -749,45 +749,96 @@ document.addEventListener('DOMContentLoaded', () => {
     filterJobs();
 });
 
-/* Hero spotlight slideshow (top 3 roles) */
+/* Hero spotlight deck: the featured roles are a stack of cards. Advancing
+   flies the front card off to the right and promotes the one behind it; going
+   back flies the incoming card in from the same place. */
 document.addEventListener('DOMContentLoaded', () => {
-    const spotlight = document.querySelector('[data-spotlight]');
+    const deck = document.querySelector('[data-spotlight]');
 
-    if (!spotlight) {
+    if (!deck) {
         return;
     }
 
-    const slides = Array.from(spotlight.querySelectorAll('[data-spotlight-slide]'));
-    const dots = Array.from(spotlight.querySelectorAll('[data-spotlight-dot]'));
-    const controls = spotlight.querySelector('.jf-spotlight__controls');
+    const cards = Array.from(deck.querySelectorAll('[data-spotlight-slide]'));
+    const dots = Array.from(deck.querySelectorAll('[data-spotlight-dot]'));
+    const controls = deck.querySelector('.jf-spotlight__controls');
 
-    if (slides.length < 2) {
+    if (cards.length < 2) {
         controls?.remove();
         return;
     }
 
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const positions = ['is-front', 'is-second', 'is-third'];
+    // Keep in step with the dot countdown in jobs.css and the fly-out duration.
     const interval = 6000;
-    let current = slides.findIndex((slide) => slide.classList.contains('is-active'));
+    const flight = 560;
+    let current = 0;
     let timer;
+    let animating = false;
 
-    if (current < 0) {
-        current = 0;
-    }
+    const render = () => {
+        cards.forEach((card, index) => {
+            const depth = (index - current + cards.length) % cards.length;
+            const isFront = depth === 0;
 
-    const showSlide = (index) => {
-        current = (index + slides.length) % slides.length;
+            card.classList.remove(...positions, 'is-back');
+            card.classList.add(positions[depth] || 'is-back');
+            card.toggleAttribute('aria-hidden', !isFront);
 
-        slides.forEach((slide, position) => {
-            const isActive = position === current;
-            slide.classList.toggle('is-active', isActive);
-            slide.toggleAttribute('aria-hidden', !isActive);
+            // Only the card on top should be reachable by keyboard.
+            card.querySelectorAll('a, button').forEach((control) => {
+                control.tabIndex = isFront ? 0 : -1;
+            });
         });
 
-        dots.forEach((dot, position) => {
-            const isActive = position === current;
+        dots.forEach((dot, index) => {
+            const isActive = index === current;
             dot.classList.toggle('is-active', isActive);
             dot.setAttribute('aria-selected', isActive ? 'true' : 'false');
+        });
+    };
+
+    /* Drop a class, skip a frame, then drop the next one, so the browser paints
+       the parked position before the transition to the new one starts. */
+    const settle = (card) => {
+        card.classList.add('is-instant');
+        card.classList.remove('is-leaving');
+
+        window.requestAnimationFrame(() => {
+            window.requestAnimationFrame(() => {
+                card.classList.remove('is-instant');
+                animating = false;
+            });
+        });
+    };
+
+    const flyOut = () => {
+        const leaving = cards[current];
+
+        animating = true;
+        leaving.classList.add('is-leaving');
+        current = (current + 1) % cards.length;
+        render();
+
+        window.setTimeout(() => settle(leaving), flight);
+    };
+
+    const flyIn = (index) => {
+        const incoming = cards[index];
+
+        animating = true;
+        current = index;
+        // Park the incoming card off-stage, then let it transition into front.
+        incoming.classList.add('is-instant', 'is-leaving');
+        render();
+
+        window.requestAnimationFrame(() => {
+            window.requestAnimationFrame(() => {
+                incoming.classList.remove('is-instant');
+                incoming.classList.remove('is-leaving');
+                window.setTimeout(() => { animating = false; }, flight);
+            });
         });
     };
 
@@ -800,23 +851,41 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        timer = window.setInterval(() => showSlide(current + 1), interval);
+        timer = window.setInterval(() => flyOut(), interval);
     };
 
-    const goTo = (index) => {
-        showSlide(index);
+    const goTo = (index, viaNext) => {
+        if (animating) {
+            return;
+        }
+
+        const target = (index + cards.length) % cards.length;
+
+        if (target === current) {
+            return;
+        }
+
+        if (prefersReducedMotion) {
+            current = target;
+            render();
+        } else if (viaNext) {
+            flyOut();
+        } else {
+            flyIn(target);
+        }
+
         startAutoplay();
     };
 
-    spotlight.querySelector('[data-spotlight-prev]')?.addEventListener('click', () => goTo(current - 1));
-    spotlight.querySelector('[data-spotlight-next]')?.addEventListener('click', () => goTo(current + 1));
-    dots.forEach((dot, position) => dot.addEventListener('click', () => goTo(position)));
+    deck.querySelector('[data-spotlight-prev]')?.addEventListener('click', () => goTo(current - 1, false));
+    deck.querySelector('[data-spotlight-next]')?.addEventListener('click', () => goTo(current + 1, true));
+    dots.forEach((dot, index) => dot.addEventListener('click', () => goTo(index, false)));
 
-    spotlight.addEventListener('mouseenter', stopAutoplay);
-    spotlight.addEventListener('mouseleave', startAutoplay);
-    spotlight.addEventListener('focusin', stopAutoplay);
-    spotlight.addEventListener('focusout', (event) => {
-        if (!spotlight.contains(event.relatedTarget)) {
+    deck.addEventListener('mouseenter', stopAutoplay);
+    deck.addEventListener('mouseleave', startAutoplay);
+    deck.addEventListener('focusin', stopAutoplay);
+    deck.addEventListener('focusout', (event) => {
+        if (!deck.contains(event.relatedTarget)) {
             startAutoplay();
         }
     });
@@ -829,7 +898,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    showSlide(current);
+    render();
     startAutoplay();
 });
 
@@ -842,7 +911,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-    const spotlight = hero.querySelector('.jf-spotlight');
+    const stack = hero.querySelector('.jf-deck__stack');
     let pending = null;
 
     /* One rAF per frame, whatever the pointer does in between. */
@@ -866,10 +935,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 hero.style.setProperty('--jf-px', ((event.clientX - bounds.left) / bounds.width * 2 - 1).toFixed(3));
                 hero.style.setProperty('--jf-py', ((event.clientY - bounds.top) / bounds.height * 2 - 1).toFixed(3));
 
-                if (spotlight) {
-                    const card = spotlight.getBoundingClientRect();
-                    spotlight.style.setProperty('--jf-cx', `${((event.clientX - card.left) / card.width * 100).toFixed(2)}%`);
-                    spotlight.style.setProperty('--jf-cy', `${((event.clientY - card.top) / card.height * 100).toFixed(2)}%`);
+                if (stack) {
+                    // The glare reads these off the stack; custom properties
+                    // inherit down to whichever card is currently in front.
+                    const card = stack.getBoundingClientRect();
+                    stack.style.setProperty('--jf-cx', `${((event.clientX - card.left) / card.width * 100).toFixed(2)}%`);
+                    stack.style.setProperty('--jf-cy', `${((event.clientY - card.top) / card.height * 100).toFixed(2)}%`);
                 }
             });
         }, { passive: true });
