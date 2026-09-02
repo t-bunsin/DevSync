@@ -11,11 +11,13 @@
     <section class="jf-hero" aria-labelledby="hero-title">
         <div class="jf-hero__glow jf-hero__glow--one" aria-hidden="true"></div>
         <div class="jf-hero__glow jf-hero__glow--two" aria-hidden="true"></div>
+        <div class="jf-hero__glow jf-hero__glow--three" aria-hidden="true"></div>
 
         <div class="jf-shell jf-hero__inner">
             <div class="jf-hero__copy">
                 <span class="jf-hero__eyebrow">
-                    <i class="fas fa-sparkles" aria-hidden="true"></i>
+                    {{-- A live pulse rather than an icon: the board is always moving. --}}
+                    <span class="jf-hero__eyebrow-dot" aria-hidden="true"></span>
                     Cambodia’s career marketplace
                 </span>
                 <h1 id="hero-title">Find work that moves <span>you forward.</span></h1>
