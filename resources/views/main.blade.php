@@ -12,6 +12,7 @@
         <div class="jf-hero__glow jf-hero__glow--one" aria-hidden="true"></div>
         <div class="jf-hero__glow jf-hero__glow--two" aria-hidden="true"></div>
         <div class="jf-hero__glow jf-hero__glow--three" aria-hidden="true"></div>
+        <div class="jf-hero__beam" aria-hidden="true"></div>
 
         <div class="jf-shell jf-hero__inner">
             <div class="jf-hero__copy">
@@ -20,7 +21,13 @@
                     <span class="jf-hero__eyebrow-dot" aria-hidden="true"></span>
                     Cambodia’s career marketplace
                 </span>
-                <h1 id="hero-title">Find work that moves <span>you forward.</span></h1>
+                <h1 id="hero-title">
+                    <span class="jf-hero__word">Find</span>
+                    <span class="jf-hero__word">work</span>
+                    <span class="jf-hero__word">that</span>
+                    <span class="jf-hero__word">moves</span>
+                    <span class="jf-hero__accent">you forward.</span>
+                </h1>
                 <p>Explore verified opportunities from trusted teams in Cambodia and remote-first companies across Southeast Asia.</p>
 
                 <div class="jf-hero__actions">
@@ -35,93 +42,103 @@
                 </div>
 
                 <dl class="jf-hero__metrics" aria-label="Platform statistics">
-                    <div><dt>1,200+</dt><dd>Active roles</dd></div>
-                    <div><dt>320+</dt><dd>Hiring teams</dd></div>
-                    <div><dt>3 days</dt><dd>Avg. response</dd></div>
+                    <div><dt data-count-up>1,200+</dt><dd>Active roles</dd></div>
+                    <div><dt data-count-up>320+</dt><dd>Hiring teams</dd></div>
+                    <div><dt data-count-up>3 days</dt><dd>Avg. response</dd></div>
                 </dl>
             </div>
 
-            <aside class="jf-spotlight" aria-label="Featured opportunities" aria-roledescription="carousel" data-spotlight>
-                <div class="jf-spotlight__topline">
-                    <span><i class="fas fa-bolt" aria-hidden="true"></i> Featured this week</span>
-                    <span class="jf-spotlight__status">Actively hiring</span>
-                </div>
+            <div class="jf-hero__card">
+                <span class="jf-hero__chip jf-hero__chip--verified" aria-hidden="true">
+                    <i class="fas fa-circle-check"></i> Verified employers
+                </span>
+                <span class="jf-hero__chip jf-hero__chip--fresh" aria-hidden="true">
+                    <i class="fas fa-bolt"></i> {{ count($spotlightJobs) }} roles in the spotlight
+                </span>
 
-                <div class="jf-spotlight__slides">
-                    @foreach ($spotlightJobs as $index => $spotlightJob)
-                        <article
-                            class="jf-spotlight__slide{{ $index === 0 ? ' is-active' : '' }}"
-                            data-spotlight-slide
-                            role="group"
-                            aria-roledescription="slide"
-                            aria-label="{{ $index + 1 }} of {{ count($spotlightJobs) }}"
-                            @unless ($index === 0) aria-hidden="true" @endunless
-                        >
-                            <div class="jf-spotlight__company">
-                                {{-- An uploaded company logo wins; otherwise the keyword artwork. --}}
-                                <div @class([
-                                    'jf-logo',
-                                    'jf-logo--' . $spotlightJob['logo'],
-                                    'jf-logo--photo' => ! empty($spotlightJob['company_logo_url']),
-                                ])>
-                                    @if (! empty($spotlightJob['company_logo_url']))
-                                        <img src="{{ $spotlightJob['company_logo_url'] }}" alt="">
-                                    @elseif ($spotlightJob['logo'] === 'aba')
-                                        <span>ABA</span><small>BANK</small>
-                                    @elseif ($spotlightJob['logo'] === 'tech')
-                                        <i class="fas fa-wifi" aria-hidden="true"></i>
-                                    @else
-                                        <span>D</span>
-                                    @endif
-                                </div>
-                                <div>
-                                    <span class="jf-spotlight__company-name">
-                                        {{ $spotlightJob['company'] }}
-                                        @if (! empty($spotlightJob['company_verified']))
-                                            <x-verified-badge :show-label="false" :size="14" label="Verified employer" />
-                                        @endif
-                                    </span>
-                                    <strong>{{ $spotlightJob['title'] }}</strong>
-                                </div>
-                            </div>
+                <aside class="jf-spotlight" aria-label="Featured opportunities" aria-roledescription="carousel" data-spotlight>
+                    <span class="jf-spotlight__glare" aria-hidden="true"></span>
+                    <div class="jf-spotlight__topline">
+                        <span><i class="fas fa-bolt" aria-hidden="true"></i> Featured this week</span>
+                        <span class="jf-spotlight__status">Actively hiring</span>
+                    </div>
 
-                            <div class="jf-spotlight__meta">
-                                <span><i class="fas fa-location-dot" aria-hidden="true"></i> {{ $spotlightJob['mode'] }}</span>
-                                <span><i class="fas fa-clock" aria-hidden="true"></i> {{ $spotlightJob['type'] }}</span>
-                                <span><i class="fas fa-code" aria-hidden="true"></i> {{ $spotlightJob['department'] }}</span>
-                            </div>
-
-                            <div class="jf-spotlight__footer">
-                                <div><small>Salary range</small><strong>{{ $spotlightJob['short_salary'] }}</strong></div>
-                                <a href="#jobs" data-view-job="{{ $spotlightJob['id'] }}">View role <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
-                            </div>
-                        </article>
-                    @endforeach
-                </div>
-
-                <div class="jf-spotlight__controls">
-                    <button class="jf-spotlight__arrow" type="button" data-spotlight-prev aria-label="Previous featured role">
-                        <i class="fas fa-arrow-left" aria-hidden="true"></i>
-                    </button>
-
-                    <div class="jf-spotlight__dots" role="tablist" aria-label="Choose a featured role">
+                    <div class="jf-spotlight__slides">
                         @foreach ($spotlightJobs as $index => $spotlightJob)
-                            <button
-                                class="jf-spotlight__dot{{ $index === 0 ? ' is-active' : '' }}"
-                                type="button"
-                                role="tab"
-                                data-spotlight-dot="{{ $index }}"
-                                aria-selected="{{ $index === 0 ? 'true' : 'false' }}"
-                                aria-label="{{ $spotlightJob['title'] }} at {{ $spotlightJob['company'] }}"
-                            ></button>
+                            <article
+                                class="jf-spotlight__slide{{ $index === 0 ? ' is-active' : '' }}"
+                                data-spotlight-slide
+                                role="group"
+                                aria-roledescription="slide"
+                                aria-label="{{ $index + 1 }} of {{ count($spotlightJobs) }}"
+                                @unless ($index === 0) aria-hidden="true" @endunless
+                            >
+                                <div class="jf-spotlight__company">
+                                    {{-- An uploaded company logo wins; otherwise the keyword artwork. --}}
+                                    <div @class([
+                                        'jf-logo',
+                                        'jf-logo--' . $spotlightJob['logo'],
+                                        'jf-logo--photo' => ! empty($spotlightJob['company_logo_url']),
+                                    ])>
+                                        @if (! empty($spotlightJob['company_logo_url']))
+                                            <img src="{{ $spotlightJob['company_logo_url'] }}" alt="">
+                                        @elseif ($spotlightJob['logo'] === 'aba')
+                                            <span>ABA</span><small>BANK</small>
+                                        @elseif ($spotlightJob['logo'] === 'tech')
+                                            <i class="fas fa-wifi" aria-hidden="true"></i>
+                                        @else
+                                            <span>D</span>
+                                        @endif
+                                    </div>
+                                    <div>
+                                        <span class="jf-spotlight__company-name">
+                                            {{ $spotlightJob['company'] }}
+                                            @if (! empty($spotlightJob['company_verified']))
+                                                <x-verified-badge :show-label="false" :size="14" label="Verified employer" />
+                                            @endif
+                                        </span>
+                                        <strong>{{ $spotlightJob['title'] }}</strong>
+                                    </div>
+                                </div>
+
+                                <div class="jf-spotlight__meta">
+                                    <span><i class="fas fa-location-dot" aria-hidden="true"></i> {{ $spotlightJob['mode'] }}</span>
+                                    <span><i class="fas fa-clock" aria-hidden="true"></i> {{ $spotlightJob['type'] }}</span>
+                                    <span><i class="fas fa-code" aria-hidden="true"></i> {{ $spotlightJob['department'] }}</span>
+                                </div>
+
+                                <div class="jf-spotlight__footer">
+                                    <div><small>Salary range</small><strong>{{ $spotlightJob['short_salary'] }}</strong></div>
+                                    <a href="#jobs" data-view-job="{{ $spotlightJob['id'] }}">View role <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                                </div>
+                            </article>
                         @endforeach
                     </div>
 
-                    <button class="jf-spotlight__arrow" type="button" data-spotlight-next aria-label="Next featured role">
-                        <i class="fas fa-arrow-right" aria-hidden="true"></i>
-                    </button>
-                </div>
-            </aside>
+                    <div class="jf-spotlight__controls">
+                        <button class="jf-spotlight__arrow" type="button" data-spotlight-prev aria-label="Previous featured role">
+                            <i class="fas fa-arrow-left" aria-hidden="true"></i>
+                        </button>
+
+                        <div class="jf-spotlight__dots" role="tablist" aria-label="Choose a featured role">
+                            @foreach ($spotlightJobs as $index => $spotlightJob)
+                                <button
+                                    class="jf-spotlight__dot{{ $index === 0 ? ' is-active' : '' }}"
+                                    type="button"
+                                    role="tab"
+                                    data-spotlight-dot="{{ $index }}"
+                                    aria-selected="{{ $index === 0 ? 'true' : 'false' }}"
+                                    aria-label="{{ $spotlightJob['title'] }} at {{ $spotlightJob['company'] }}"
+                                ></button>
+                            @endforeach
+                        </div>
+
+                        <button class="jf-spotlight__arrow" type="button" data-spotlight-next aria-label="Next featured role">
+                            <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </aside>
+            </div>
         </div>
     </section>
 

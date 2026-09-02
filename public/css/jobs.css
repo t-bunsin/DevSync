@@ -579,14 +579,6 @@ body.jf-body::selection {
   text-wrap: balance;
 }
 
-.jf-hero__copy h1 span {
-  background: linear-gradient(96deg, #8fe9e2 0%, #a9f0d8 46%, #f3bd65 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
-}
-
 .jf-hero__copy > p {
   max-width: 52ch;
   margin: 0;
@@ -729,17 +721,6 @@ body.jf-body::selection {
     0 58px 108px rgba(0, 14, 22, 0.48),
     0 8px 22px rgba(0, 14, 22, 0.2),
     inset 0 1px 0 #fff;
-}
-
-/* Teal halo bleeding out from under the card. */
-.jf-spotlight::before {
-  content: "";
-  position: absolute;
-  inset: -26px -20px -30px;
-  z-index: -1;
-  border-radius: 46px;
-  background: radial-gradient(58% 58% at 50% 4%, rgba(28, 166, 160, 0.4), transparent 72%);
-  filter: blur(26px);
 }
 
 .jf-spotlight::after {
@@ -1075,6 +1056,291 @@ html[data-theme="dark"] .jf-spotlight__meta span:hover {
   .jf-spotlight,
   .jf-spotlight:hover {
     transform: none;
+  }
+}
+
+/* Hero motion
+   Pointer parallax, staggered entrance, and the carousel progress ring.
+   Every animation lives behind prefers-reduced-motion: no-preference, so the
+   static composition above is what a reduced-motion visitor gets. */
+.jf-hero {
+  --jf-px: 0;
+  --jf-py: 0;
+}
+
+/* A slow beam of light raking across the backdrop. */
+.jf-hero__beam {
+  position: absolute;
+  top: -40%;
+  left: -30%;
+  z-index: -2;
+  width: 46%;
+  height: 190%;
+  pointer-events: none;
+  opacity: 0;
+  transform: rotate(14deg);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(131, 222, 216, 0.07) 42%,
+    rgba(184, 243, 74, 0.05) 58%,
+    transparent
+  );
+  filter: blur(28px);
+}
+
+/* fstyle.css paints every .jf-hero__copy span with the old brand purple; the
+   word spans need the headline colour back. */
+.jf-hero__copy h1 .jf-hero__word {
+  display: inline-block;
+  color: #fff;
+}
+
+.jf-hero__copy h1 .jf-hero__accent {
+  background: linear-gradient(96deg, #8fe9e2 0%, #a9f0d8 34%, #f3bd65 62%, #8fe9e2 100%);
+  background-size: 260% 100%;
+  background-position: 50% 50%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+/* The tilt makes .jf-spotlight a stacking context, so the halo and the
+   floating chips live on a wrapper that stays flat. */
+.jf-hero__card {
+  position: relative;
+}
+
+.jf-hero__card::before {
+  content: "";
+  position: absolute;
+  inset: -26px -20px -30px;
+  z-index: -1;
+  border-radius: 46px;
+  background: radial-gradient(58% 58% at 50% 4%, rgba(28, 166, 160, 0.4), transparent 72%);
+  filter: blur(26px);
+}
+
+/* Floating proof chips that orbit the spotlight card. */
+.jf-hero__chip {
+  position: absolute;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 15px;
+  color: #eafaf8;
+  white-space: nowrap;
+  background: rgba(9, 39, 52, 0.72);
+  border: 1px solid rgba(159, 231, 226, 0.26);
+  border-radius: 999px;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 18px 38px rgba(2, 14, 21, 0.42);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.jf-hero__chip i {
+  font-size: 0.78rem;
+}
+
+.jf-hero__chip--verified {
+  top: 30px;
+  right: calc(100% - 34px);
+}
+
+.jf-hero__chip--verified i {
+  color: #8fe9e2;
+}
+
+.jf-hero__chip--fresh {
+  right: calc(100% - 18px);
+  bottom: 52px;
+}
+
+.jf-hero__chip--fresh i {
+  color: #f3bd65;
+}
+
+/* Light that follows the cursor across the card face. */
+.jf-spotlight__glare {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  border-radius: inherit;
+  opacity: 0;
+  mix-blend-mode: soft-light;
+  background: radial-gradient(
+    280px circle at var(--jf-cx, 50%) var(--jf-cy, 0%),
+    rgba(255, 255, 255, 0.85),
+    transparent 62%
+  );
+  transition: opacity 320ms ease;
+}
+
+.jf-spotlight:hover .jf-spotlight__glare {
+  opacity: 1;
+}
+
+/* The active dot doubles as the autoplay countdown (6s, matching jobs.js). */
+.jf-spotlight__dot {
+  position: relative;
+  overflow: hidden;
+}
+
+.jf-spotlight__dot.is-active {
+  background: rgba(28, 166, 160, 0.2);
+}
+
+.jf-spotlight__dot.is-active::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  border-radius: inherit;
+  transform-origin: left center;
+  transform: scaleX(1);
+  background: linear-gradient(90deg, var(--jf-teal), var(--jf-gold));
+}
+
+.jf-hero__metrics dt {
+  font-variant-numeric: tabular-nums;
+}
+
+@keyframes jf-hero-beam {
+  0% { opacity: 0; transform: translateX(0) rotate(14deg); }
+  12%, 68% { opacity: 1; }
+  100% { opacity: 0; transform: translateX(340%) rotate(14deg); }
+}
+
+@keyframes jf-word-in {
+  from { opacity: 0; transform: translateY(0.36em); filter: blur(9px); }
+  to { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+
+@keyframes jf-soft-in {
+  from { opacity: 0; filter: blur(7px); }
+  to { opacity: 1; filter: blur(0); }
+}
+
+@keyframes jf-gradient-flow {
+  from { background-position: 0% 50%; }
+  to { background-position: 200% 50%; }
+}
+
+@keyframes jf-cta-breathe {
+  0%, 100% { box-shadow: 0 16px 34px rgba(243, 189, 101, 0.26), 0 0 0 0 rgba(243, 189, 101, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.55); }
+  50% { box-shadow: 0 18px 40px rgba(243, 189, 101, 0.34), 0 0 0 12px rgba(243, 189, 101, 0), inset 0 1px 0 rgba(255, 255, 255, 0.55); }
+}
+
+@keyframes jf-chip-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-11px); }
+}
+
+@keyframes jf-dot-progress {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .jf-hero__beam {
+    animation: jf-hero-beam 13s ease-in-out 2s infinite;
+  }
+
+  /* Parallax rides on `translate` so it composes with the drift `transform`. */
+  .jf-hero__glow--one { translate: calc(var(--jf-px) * 30px) calc(var(--jf-py) * 22px); }
+  .jf-hero__glow--two { translate: calc(var(--jf-px) * -22px) calc(var(--jf-py) * -16px); }
+  .jf-hero__glow--three { translate: calc(var(--jf-px) * 18px) calc(var(--jf-py) * 24px); }
+
+  .jf-hero__glow {
+    transition: translate 620ms var(--jf-ease-out);
+  }
+
+  .jf-hero__copy > * {
+    opacity: 0;
+    animation: jf-soft-in 620ms var(--jf-ease-out) both;
+  }
+
+  .jf-hero__copy > :nth-child(1) { animation-delay: 60ms; }
+  .jf-hero__copy > :nth-child(2) { animation: none; opacity: 1; }
+  .jf-hero__copy > :nth-child(3) { animation-delay: 520ms; }
+  .jf-hero__copy > :nth-child(4) { animation-delay: 620ms; }
+  .jf-hero__copy > :nth-child(5) { animation-delay: 720ms; }
+
+  .jf-hero__word {
+    animation: jf-word-in 720ms var(--jf-ease-out) both;
+  }
+
+  .jf-hero__word:nth-child(1) { animation-delay: 130ms; }
+  .jf-hero__word:nth-child(2) { animation-delay: 205ms; }
+  .jf-hero__word:nth-child(3) { animation-delay: 280ms; }
+  .jf-hero__word:nth-child(4) { animation-delay: 355ms; }
+
+  .jf-hero__copy h1 .jf-hero__accent {
+    animation:
+      jf-soft-in 760ms var(--jf-ease-out) 430ms both,
+      jf-gradient-flow 9s linear 1200ms infinite;
+  }
+
+  .jf-btn--accent {
+    animation: jf-cta-breathe 3.6s ease-in-out 1.4s infinite;
+  }
+
+  .jf-btn--accent:hover {
+    animation: none;
+  }
+
+  .jf-spotlight {
+    /* Tilt follows the pointer; the hover lift uses `translate` so the two
+       properties never overwrite each other. */
+    transform: perspective(1200px) rotateX(calc(var(--jf-py) * -3.2deg)) rotateY(calc(var(--jf-px) * 4.2deg));
+    transition:
+      translate 420ms var(--jf-ease-out),
+      transform 520ms var(--jf-ease-out),
+      box-shadow 420ms var(--jf-ease-out);
+  }
+
+  .jf-spotlight:hover {
+    transform: perspective(1200px) rotateX(calc(var(--jf-py) * -3.2deg)) rotateY(calc(var(--jf-px) * 4.2deg));
+    translate: 0 -6px;
+  }
+
+  .jf-hero__chip {
+    animation: jf-chip-float 7s ease-in-out infinite;
+  }
+
+  .jf-hero__chip--fresh {
+    animation-duration: 8.4s;
+    animation-delay: -2.6s;
+  }
+
+  .jf-spotlight__dot.is-active::after {
+    animation: jf-dot-progress 6s linear both;
+  }
+
+  .jf-spotlight:hover .jf-spotlight__dot.is-active::after,
+  .jf-spotlight:focus-within .jf-spotlight__dot.is-active::after {
+    animation-play-state: paused;
+  }
+}
+
+html[data-theme="dark"] .jf-spotlight__glare {
+  mix-blend-mode: overlay;
+  background: radial-gradient(
+    300px circle at var(--jf-cx, 50%) var(--jf-cy, 0%),
+    rgba(131, 222, 216, 0.32),
+    transparent 64%
+  );
+}
+
+@media (max-width: 1279px) {
+  .jf-hero__chip {
+    display: none;
   }
 }
 

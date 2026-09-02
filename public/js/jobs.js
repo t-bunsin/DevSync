@@ -832,3 +832,106 @@ document.addEventListener('DOMContentLoaded', () => {
     showSlide(current);
     startAutoplay();
 });
+
+/* Hero motion: pointer parallax, the cursor glare on the spotlight card, and
+   the metric count-up. All of it is opt-out under prefers-reduced-motion. */
+document.addEventListener('DOMContentLoaded', () => {
+    const hero = document.querySelector('.jf-hero');
+
+    if (!hero || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        return;
+    }
+
+    const spotlight = hero.querySelector('.jf-spotlight');
+    let pending = null;
+
+    /* One rAF per frame, whatever the pointer does in between. */
+    const schedule = (apply) => {
+        if (pending) {
+            window.cancelAnimationFrame(pending);
+        }
+
+        pending = window.requestAnimationFrame(() => {
+            pending = null;
+            apply();
+        });
+    };
+
+    if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+        hero.addEventListener('pointermove', (event) => {
+            const bounds = hero.getBoundingClientRect();
+
+            schedule(() => {
+                // -1 .. 1 from the centre of the hero.
+                hero.style.setProperty('--jf-px', ((event.clientX - bounds.left) / bounds.width * 2 - 1).toFixed(3));
+                hero.style.setProperty('--jf-py', ((event.clientY - bounds.top) / bounds.height * 2 - 1).toFixed(3));
+
+                if (spotlight) {
+                    const card = spotlight.getBoundingClientRect();
+                    spotlight.style.setProperty('--jf-cx', `${((event.clientX - card.left) / card.width * 100).toFixed(2)}%`);
+                    spotlight.style.setProperty('--jf-cy', `${((event.clientY - card.top) / card.height * 100).toFixed(2)}%`);
+                }
+            });
+        }, { passive: true });
+
+        hero.addEventListener('pointerleave', () => {
+            schedule(() => {
+                hero.style.setProperty('--jf-px', '0');
+                hero.style.setProperty('--jf-py', '0');
+            });
+        });
+    }
+
+    /* Metrics count up once, the first time they scroll into view. */
+    const counters = Array.from(hero.querySelectorAll('[data-count-up]'));
+
+    if (counters.length === 0 || typeof IntersectionObserver === 'undefined') {
+        return;
+    }
+
+    const countUp = (element) => {
+        const label = element.textContent.trim();
+        const match = label.match(/^([\d,.]+)(.*)$/);
+
+        if (!match) {
+            return;
+        }
+
+        const target = Number(match[1].replace(/,/g, ''));
+        const suffix = match[2];
+
+        if (!Number.isFinite(target)) {
+            return;
+        }
+
+        const duration = 1400;
+        const started = performance.now();
+
+        const step = (now) => {
+            const progress = Math.min((now - started) / duration, 1);
+            // Ease-out cubic, so the number lands softly instead of stopping dead.
+            const value = Math.round(target * (1 - Math.pow(1 - progress, 3)));
+
+            element.textContent = value.toLocaleString('en-US') + suffix;
+
+            if (progress < 1) {
+                window.requestAnimationFrame(step);
+            } else {
+                element.textContent = label;
+            }
+        };
+
+        window.requestAnimationFrame(step);
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                observer.unobserve(entry.target);
+                countUp(entry.target);
+            }
+        });
+    }, { threshold: 0.6 });
+
+    counters.forEach((counter) => observer.observe(counter));
+});
