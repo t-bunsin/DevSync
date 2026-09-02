@@ -151,6 +151,9 @@ body.nav-fixed {
 .kh-admin-brand__mark {
   position: relative;
   overflow: hidden;
+  /* An icon tile is a square. It never pays for a tight row — anything that
+     has to give is given up by the text beside it. */
+  flex-shrink: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1212,131 +1215,198 @@ html[lang="kh"] .kh-panel__kicker {
   stroke: none;
 }
 
+/* The template pins .topnav .navbar-brand to a fixed width, and from the lg
+   breakpoint up narrows it to 12rem — a value that predates this lockup. The
+   mark, divider, wordmark and tagline together need more than that, and
+   flexbox pays the shortfall out of whichever child will shrink: the mark,
+   squashing a 34px square tile to 28px wide. Given room here, and a floor
+   rather than a fixed width so a longer translated tagline cannot bring it
+   back. Left alone below lg, where the template already allows 15rem and the
+   bar is too tight to give the brand any more. */
+@media (min-width: 992px) {
+  .topnav .navbar-brand {
+    width: auto;
+    min-width: 15rem;
+  }
+}
+
 /* Metrics */
 .kh-metrics {
   display: grid;
-  grid-template-columns: repeat(4, minmax(190px, 1fr));
+  grid-template-columns: repeat(4, minmax(200px, 1fr));
   gap: 14px;
   margin-top: 18px;
 }
 
+/* Plain white on the canvas, one hairline, no shadow and no tint. Colour is
+   spent on a single accent dot marking where each series ends — everything
+   else is ink, muted and rule, so four cards read as one quiet row. */
 .kh-metric {
-  position: relative;
-  min-height: 180px;
-  overflow: hidden;
-  padding: 18px;
-  background: #fff;
+  display: grid;
+  grid-template-rows: auto auto auto;
+  padding: 17px 18px 16px;
+  background: var(--kh-surface);
   border: 1px solid var(--kh-line);
-  border-radius: var(--kh-radius-lg);
-  box-shadow: 0 10px 30px rgba(16, 42, 67, 0.055);
-  transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
+  border-radius: 14px;
+  transition: border-color 180ms ease, transform 180ms ease;
 }
 
 .kh-metric:hover {
-  transform: translateY(-3px);
-  border-color: #bdd4d2;
-  box-shadow: var(--kh-shadow);
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--kh-teal) 40%, var(--kh-line));
 }
 
 .kh-metric__top {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 10px;
 }
 
-.kh-metric__icon {
+/* Icon inline with the name, at label weight — it identifies the metric, it
+   is not a badge, so it does not get a tile of its own. */
+.kh-metric__label {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  width: 39px;
-  height: 39px;
-  color: var(--tone, var(--kh-teal));
-  background: color-mix(in srgb, var(--tone, var(--kh-teal)) 11%, white);
-  border-radius: 12px;
-}
-
-.kh-metric__icon svg {
-  width: 17px;
-  height: 17px;
-}
-
-.kh-trend {
-  display: inline-flex;
-  align-items: center;
-  gap: 3px;
-  padding: 5px 7px;
-  color: #16835e;
-  background: #e8f5ef;
-  border-radius: 999px;
-  font-size: 0.58rem;
-  font-weight: 700;
-}
-
-.kh-trend svg {
-  width: 11px;
-  height: 11px;
-}
-
-/* The badge used to be green in every case because the delta was hardcoded to
-   a rise. Real figures fall too, so the tone follows the sign. */
-.kh-trend--down {
-  color: #b3261e;
-  background: #fdecea;
-}
-
-.kh-trend--flat {
-  color: var(--kh-muted);
-  background: color-mix(in srgb, var(--kh-muted) 12%, transparent);
-}
-
-.kh-metric__body {
-  position: relative;
-  z-index: 2;
-  display: grid;
-  margin-top: 19px;
-}
-
-.kh-metric__body > span {
-  color: var(--kh-muted);
-  font-size: 0.75rem;
+  gap: 9px;
+  min-width: 0;
+  color: var(--kh-ink);
+  font-size: 0.79rem;
   font-weight: 600;
 }
 
-.kh-metric__body strong {
-  margin-top: 2px;
-  color: var(--kh-ink);
-  font-size: 1.85rem;
-  line-height: 1.1;
-  letter-spacing: -0.045em;
-}
-
-.kh-metric__body small {
-  margin-top: 5px;
-  color: #6f838c;
-  font-size: 0.67rem;
-}
-
-.kh-sparkline {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  width: 48%;
-  height: 58px;
-  overflow: visible;
-  opacity: 0.65;
-}
-
-.kh-sparkline polyline {
-  stroke: var(--tone, var(--kh-teal));
+.kh-metric__label svg {
+  width: 15px;
+  min-width: 15px;
+  height: 15px;
+  color: #9aabb2;
   stroke-width: 2;
+}
+
+/* Neutral ground in every state; only the figure inside it takes a colour,
+   and only when the metric actually moved. */
+.kh-metric__chip {
+  padding: 3px 8px;
+  color: var(--kh-muted);
+  background: #f1f4f4;
+  border-radius: 7px;
+  font-size: 0.63rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.kh-metric__chip.is-up { color: #12805c; }
+.kh-metric__chip.is-down { color: #c0392b; }
+
+.kh-metric__body {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-top: 12px;
+}
+
+.kh-metric__body strong {
+  color: var(--kh-ink);
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.045em;
+  font-variant-numeric: tabular-nums;
+}
+
+.kh-metric__trend {
+  position: relative;
+  display: block;
+  width: 118px;
+  min-width: 74px;
+  height: 34px;
+}
+
+.kh-metric__trend svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.kh-metric__trend path {
+  fill: none;
+  stroke: #c3cdcd;
+  stroke-width: 1.6;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
 
-.kh-metric--teal { --tone: var(--kh-teal); }
-.kh-metric--blue { --tone: var(--kh-blue); }
-.kh-metric--gold { --tone: var(--kh-gold); }
-.kh-metric--violet { --tone: var(--kh-violet); }
+/* Eight empty weeks get a plain rule, not a curve: it holds the card's shape
+   and says "nothing moved" without drawing a measurement that was never made. */
+.kh-metric__trend.is-flat::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 0;
+  left: 0;
+  height: 1px;
+  background: #dfe6e6;
+}
+
+.kh-metric__dot {
+  position: absolute;
+  right: 0;
+  width: 5px;
+  height: 5px;
+  margin-top: -2.5px;
+  background: var(--kh-teal);
+  border-radius: 50%;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--kh-teal) 14%, transparent);
+}
+
+.kh-metric__note {
+  margin-top: 7px;
+  color: var(--kh-muted);
+  font-size: 0.71rem;
+  line-height: 1.5;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* The curve draws itself in. 260 comfortably exceeds the longest path the
+     box can hold, so every card finishes rather than stopping part-drawn. */
+  .kh-metric__trend path {
+    stroke-dasharray: 260;
+    animation: kh-trend-draw 900ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: 160ms;
+  }
+
+  .kh-metric__dot {
+    animation: kh-dot-in 300ms ease both;
+    animation-delay: 900ms;
+  }
+}
+
+@keyframes kh-trend-draw {
+  from { stroke-dashoffset: 260; }
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes kh-dot-in {
+  from { opacity: 0; transform: scale(0.4); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* The template pins .topnav .navbar-brand to a fixed width, and from the lg
+   breakpoint up narrows it to 12rem — a value that predates this lockup. The
+   mark, divider, wordmark and tagline together need more than that, and
+   flexbox pays the shortfall out of whichever child will shrink: the mark,
+   squashing a 34px square tile to 28px wide. Given room here, and a floor
+   rather than a fixed width so a longer translated tagline cannot bring it
+   back. Left alone below lg, where the template already allows 15rem and the
+   bar is too tight to give the brand any more. */
+@media (min-width: 992px) {
+  .topnav .navbar-brand {
+    width: auto;
+    min-width: 15rem;
+  }
+}
 
 /* Shared panels */
 .kh-dash__main-grid {
@@ -1541,15 +1611,22 @@ html[lang="kh"] .kh-panel__kicker {
   padding: 22px;
 }
 
+/* A plain icon rather than a filled tile: the panel has one action and it
+   does not need a button's worth of weight to be found. */
 .kh-pipeline .kh-panel__head > a {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 33px;
-  height: 33px;
+  width: 28px;
+  height: 28px;
+  color: #9aabb2;
+  border-radius: 8px;
+  transition: color 160ms ease, background 160ms ease;
+}
+
+.kh-pipeline .kh-panel__head > a:hover {
   color: var(--kh-ocean);
-  background: #e9f3f2;
-  border-radius: 10px;
+  background: #eef4f3;
 }
 
 .kh-pipeline .kh-panel__head > a svg {
@@ -1557,25 +1634,31 @@ html[lang="kh"] .kh-panel__kicker {
   height: 14px;
 }
 
+/* The panel carries the funnel and nothing else: no cards inside a card, no
+   tinted blocks, no banner. Colour is spent only where it encodes something —
+   the four stage bars and the one word that reports the pipeline's state. */
 .kh-pipeline__total {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   justify-content: space-between;
   gap: 12px;
-  margin: 25px 0 20px;
-  padding: 15px;
-  background: #f3f7f6;
-  border-radius: 13px;
+  margin: 22px 0 4px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--kh-line);
 }
 
 .kh-pipeline__total > div {
   display: grid;
+  gap: 2px;
 }
 
 .kh-pipeline__total strong {
   color: var(--kh-ink);
-  font-size: 1.5rem;
-  letter-spacing: -0.04em;
+  font-size: 1.7rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.045em;
+  font-variant-numeric: tabular-nums;
 }
 
 .kh-pipeline__total span {
@@ -1583,56 +1666,85 @@ html[lang="kh"] .kh-panel__kicker {
   font-size: 0.68rem;
 }
 
-.kh-status-dot {
+.kh-pipeline__state {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  padding: 6px 8px;
-  color: var(--kh-success) !important;
-  background: #e6f4ed;
-  border-radius: 999px;
+  gap: 6px;
+  color: var(--kh-success);
+  font-size: 0.66rem;
   font-weight: 700;
+  white-space: nowrap;
 }
 
-.kh-status-dot::before {
+.kh-pipeline__state::before {
   content: "";
   width: 6px;
   height: 6px;
-  background: var(--kh-success);
+  background: currentcolor;
   border-radius: 50%;
-  box-shadow: 0 0 0 4px rgba(22, 131, 94, 0.1);
+}
+
+/* The dot used to be green no matter what the pipeline looked like. It turns
+   amber the moment something is genuinely past the review window. */
+.kh-pipeline__state.is-warn {
+  color: #b8801f;
 }
 
 .kh-pipeline__stages {
   display: grid;
-  gap: 16px;
+  gap: 4px;
+  padding: 18px 0 2px;
 }
 
 .kh-stage {
   --stage: var(--kh-teal);
+  padding: 9px 0;
 }
 
 .kh-stage--blue { --stage: var(--kh-blue); }
 .kh-stage--gold { --stage: var(--kh-gold); }
 .kh-stage--violet { --stage: var(--kh-violet); }
 
-.kh-stage > div:first-child {
+.kh-stage__head {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   justify-content: space-between;
-  margin-bottom: 7px;
-  color: var(--kh-muted);
-  font-size: 0.7rem;
+  gap: 10px;
+  margin-bottom: 9px;
 }
 
-.kh-stage strong {
+.kh-stage__head > span {
   color: var(--kh-ink);
+  font-size: 0.74rem;
+  font-weight: 600;
+}
+
+.kh-stage__figures {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.kh-stage__figures strong {
+  color: var(--kh-ink);
+  font-size: 0.86rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.kh-stage__figures em {
+  color: var(--kh-muted);
+  font-size: 0.66rem;
+  font-weight: 600;
+  font-style: normal;
+  font-variant-numeric: tabular-nums;
 }
 
 .kh-stage__track {
-  height: 8px;
+  height: 4px;
   overflow: hidden;
-  background: #edf2f1;
+  background: #eef2f2;
   border-radius: 999px;
 }
 
@@ -1646,25 +1758,54 @@ html[lang="kh"] .kh-panel__kicker {
   animation: kh-grow 850ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-.kh-pipeline__footer {
-  display: flex;
-  align-items: flex-start;
-  gap: 9px;
-  margin-top: 22px;
-  padding: 12px;
-  color: #8b6b38;
-  background: #fff8e9;
-  border: 1px solid #f3e2bc;
-  border-radius: 11px;
-  font-size: 0.65rem;
-  line-height: 1.5;
+/* The share of the stage above that continued here — a real conversion rate,
+   set quietly enough that the stage names stay the thing being read. */
+.kh-stage__step {
+  margin: 0;
+  color: #9aabb2;
+  font-size: 0.62rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
 }
 
-.kh-pipeline__footer svg {
-  width: 14px;
-  min-width: 14px;
-  height: 14px;
-  color: var(--kh-gold);
+.kh-pipeline__empty {
+  margin: 22px 0 4px;
+  color: var(--kh-muted);
+  font-size: 0.72rem;
+  line-height: 1.6;
+}
+
+.kh-pipeline__footer {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: 18px 0 0;
+  padding-top: 16px;
+  color: #8b6b38;
+  border-top: 1px solid var(--kh-line);
+  font-size: 0.66rem;
+  line-height: 1.55;
+}
+
+.kh-pipeline__footer::before {
+  content: "";
+  width: 6px;
+  min-width: 6px;
+  height: 6px;
+  background: var(--kh-gold);
+  border-radius: 50%;
+  transform: translateY(-1px);
+}
+
+/* All-clear state: the footer used to only ever report a backlog, because the
+   backlog was hardcoded. Now that it can be genuinely empty, it says so
+   quietly rather than wearing the same alarm colour. */
+.kh-pipeline__footer.is-ok {
+  color: var(--kh-muted);
+}
+
+.kh-pipeline__footer.is-ok::before {
+  background: var(--kh-success);
 }
 
 /* Lower panels */
@@ -2073,6 +2214,7 @@ html[lang="kh"] .kh-panel__kicker {
     width: 32px;
     height: 32px;
   }
+
 
   .kh-dash {
     padding-right: 13px;

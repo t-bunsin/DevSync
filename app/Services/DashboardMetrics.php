@@ -40,11 +40,11 @@ class DashboardMetrics
      */
     private const APPLIED_AT = 'COALESCE(applied_at, created_at)';
 
-    /** Sparkline geometry, matching the viewBox="0 0 116 44" in home.blade.php. */
+    /** Card trend geometry, matching the viewBox="0 0 120 36" in home.blade.php. */
     private const SPARK_X_START = 2;
-    private const SPARK_X_STEP = 16;
-    private const SPARK_Y_TOP = 5;
-    private const SPARK_Y_BOTTOM = 38;
+    private const SPARK_X_STEP = 16.57;
+    private const SPARK_Y_TOP = 6;
+    private const SPARK_Y_BOTTOM = 30;
 
     /** Hero spark geometry, matching the viewBox="0 0 240 46" in home.blade.php. */
     private const PULSE_DAYS = 14;
@@ -53,8 +53,11 @@ class DashboardMetrics
     private const PULSE_Y_TOP = 5;
     private const PULSE_Y_BOTTOM = 41;
 
-    /** How long an untouched application may sit before it counts as overdue. */
-    private const REVIEW_SLA_HOURS = 48;
+    /** How long an untouched application may sit before it counts as overdue.
+     *  Public: the pipeline panel's footer quotes this figure directly rather
+     *  than keeping its own copy that could drift from the one actually used
+     *  to compute the overdue count. */
+    public const REVIEW_SLA_HOURS = 48;
 
     /** The window every hero figure except "today" is measured over. */
     private const PULSE_WINDOW_DAYS = 30;
@@ -67,7 +70,7 @@ class DashboardMetrics
     }
 
     /**
-     * @return array<string, array{value: int, delta: float|null, points: string}>
+     * @return array<string, array{value: int, delta: float|null, trend: array|null}>
      */
     public function cards(): array
     {
@@ -88,7 +91,10 @@ class DashboardMetrics
     }
 
     /**
-     * @return array{value: int, delta: float|null, points: string}
+     * @return array{
+     *     value: int, delta: float|null,
+     *     trend: array{line: string, dot_y: float}|null
+     * }
      */
     private function countCard(Builder $query, string $dateExpr, int $total): array
     {
@@ -101,17 +107,83 @@ class DashboardMetrics
             $this->now->subDays(self::DELTA_DAYS),
         );
 
+        $buckets = $this->weeklyBuckets($daily);
+
         return [
             'value' => $total,
             'delta' => $this->percentChange($current, $previous),
-            'points' => $this->polyline(
-                $this->weeklyBuckets($daily),
-                self::SPARK_X_START,
-                self::SPARK_X_STEP,
-                self::SPARK_Y_TOP,
-                self::SPARK_Y_BOTTOM,
-            ),
+            // Eight empty weeks have no curve in them. Drawn, they become a
+            // dead straight line that reads as a measurement rather than as
+            // the absence of one; the card draws a plain rule instead.
+            'trend' => array_sum($buckets) === 0 ? null : $this->smoothTrend($buckets),
         ];
+    }
+
+    /**
+     * The weekly buckets as a rounded curve rather than a run of straight
+     * segments, plus the height of the last point so the view can mark where
+     * the series ends.
+     *
+     * Catmull-Rom through every bucket, converted to the cubic beziers SVG
+     * actually draws. The curve passes through each measured value — it is a
+     * smoother reading of the same numbers, not a smoothed-out version of them.
+     *
+     * @param  list<int>  $values
+     * @return array{line: string, dot_y: float}
+     */
+    private function smoothTrend(array $values): array
+    {
+        $min = min($values);
+        $max = max($values);
+        $span = $max - $min;
+        $middle = (self::SPARK_Y_TOP + self::SPARK_Y_BOTTOM) / 2;
+
+        $pts = [];
+
+        foreach (array_values($values) as $index => $value) {
+            $pts[] = [
+                self::SPARK_X_START + ($index * self::SPARK_X_STEP),
+                $span == 0
+                    ? $middle
+                    : self::SPARK_Y_BOTTOM - (($value - $min) / $span) * (self::SPARK_Y_BOTTOM - self::SPARK_Y_TOP),
+            ];
+        }
+
+        $last = count($pts) - 1;
+        $line = 'M' . $this->pair($pts[0]);
+
+        for ($i = 0; $i < $last; $i++) {
+            $p0 = $pts[max($i - 1, 0)];
+            $p1 = $pts[$i];
+            $p2 = $pts[$i + 1];
+            $p3 = $pts[min($i + 2, $last)];
+
+            // A sixth of the neighbouring span is the standard Catmull-Rom
+            // tension; y is clamped to the box because the curve can otherwise
+            // overshoot a sharp step and draw outside the viewBox.
+            $c1 = [$p1[0] + ($p2[0] - $p0[0]) / 6, $this->clampY($p1[1] + ($p2[1] - $p0[1]) / 6)];
+            $c2 = [$p2[0] - ($p3[0] - $p1[0]) / 6, $this->clampY($p2[1] - ($p3[1] - $p1[1]) / 6)];
+
+            $line .= 'C' . $this->pair($c1) . ' ' . $this->pair($c2) . ' ' . $this->pair($p2);
+        }
+
+        return [
+            'line' => $line,
+            'dot_y' => round($pts[$last][1], 1),
+        ];
+    }
+
+    private function clampY(float $y): float
+    {
+        return max(self::SPARK_Y_TOP, min(self::SPARK_Y_BOTTOM, $y));
+    }
+
+    /**
+     * @param  array{0: float, 1: float}  $point
+     */
+    private function pair(array $point): string
+    {
+        return round($point[0], 1) . ',' . round($point[1], 1);
     }
 
     /**
@@ -268,6 +340,77 @@ class DashboardMetrics
                 self::PULSE_Y_TOP,
                 self::PULSE_Y_BOTTOM,
             ),
+        ];
+    }
+
+    /**
+     * The four-stage hiring funnel the pipeline panel draws, and the figures
+     * around it — how many candidates are still in motion, and how many are
+     * overdue for a first look.
+     *
+     * Read off each application's *current* status, not a stage-by-stage
+     * log — the schema keeps one status per row, not a history of every
+     * stage a row passed through. A candidate who was shortlisted and later
+     * rejected shows up as rejected everywhere, including the screening
+     * stage they did clear. What this can honestly report is where every
+     * application sits today, not the path each one took to get there.
+     *
+     * "Interview" reads shortlisted-or-hired and "Hired" reads hired,
+     * because the pipeline has no separate offer-extended state — hired is
+     * the closest real status to what a funnel chart normally calls "Offer".
+     *
+     * @return array{
+     *     stages: array<string, array{value: int, percentage: int, conversion: int|null}>,
+     *     total: int, active: int, overdue: int
+     * }
+     */
+    public function funnel(): array
+    {
+        $counts = JobApplication::query()
+            ->selectRaw('status, COUNT(*) as total')
+            ->groupBy('status')
+            ->toBase()
+            ->pluck('total', 'status');
+
+        $total = (int) $counts->sum();
+        $new = (int) ($counts[JobApplication::STATUS_NEW] ?? 0);
+        $reviewing = (int) ($counts[JobApplication::STATUS_REVIEWING] ?? 0);
+        $shortlisted = (int) ($counts[JobApplication::STATUS_SHORTLISTED] ?? 0);
+        $hired = (int) ($counts[JobApplication::STATUS_HIRED] ?? 0);
+
+        // Cumulative from the top: each figure is "reached at least this
+        // stage", not "currently sitting in it" — the usual reading of a
+        // funnel chart, and why the numbers only ever shrink going down.
+        $values = [
+            'new' => $total,
+            'screening' => $total - $new,
+            'interview' => $shortlisted + $hired,
+            'hired' => $hired,
+        ];
+
+        $stages = [];
+        $previous = null;
+
+        foreach ($values as $key => $value) {
+            $stages[$key] = [
+                'value' => $value,
+                'percentage' => $total === 0 ? 0 : (int) round($value / $total * 100),
+                // Share of the stage just above that made it this far. Null
+                // for the top stage, and whenever the stage above is empty —
+                // there is no share of nothing to report.
+                'conversion' => ($previous === null || $previous === 0)
+                    ? null
+                    : (int) round($value / $previous * 100),
+            ];
+            $previous = $value;
+        }
+
+        return [
+            'stages' => $stages,
+            'total' => $total,
+            // Still moving: not yet decided either way.
+            'active' => $new + $reviewing + $shortlisted,
+            'overdue' => $this->overdueCount(),
         ];
     }
 

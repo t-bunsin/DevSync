@@ -261,10 +261,12 @@ html[data-admin-theme="dark"] .kh-admin-footer__links a:hover {
 /* Dashboard */
 html[data-admin-theme="dark"] .kh-dash__intro h1,
 html[data-admin-theme="dark"] .kh-metric__body strong,
+html[data-admin-theme="dark"] .kh-metric__label,
 html[data-admin-theme="dark"] .kh-panel__head h2,
 html[data-admin-theme="dark"] .kh-performance__summary strong,
 html[data-admin-theme="dark"] .kh-pipeline__total strong,
-html[data-admin-theme="dark"] .kh-stage strong,
+html[data-admin-theme="dark"] .kh-stage__head > span,
+html[data-admin-theme="dark"] .kh-stage__figures strong,
 html[data-admin-theme="dark"] .kh-activity__item strong,
 html[data-admin-theme="dark"] .kh-focus__list strong,
 html[data-admin-theme="dark"] .kh-actions__grid strong {
@@ -273,10 +275,9 @@ html[data-admin-theme="dark"] .kh-actions__grid strong {
 
 html[data-admin-theme="dark"] .kh-dash__breadcrumb,
 html[data-admin-theme="dark"] .kh-dash__intro p,
-html[data-admin-theme="dark"] .kh-metric__body > span,
 html[data-admin-theme="dark"] .kh-performance__summary span,
 html[data-admin-theme="dark"] .kh-panel__head p,
-html[data-admin-theme="dark"] .kh-stage > div:first-child {
+html[data-admin-theme="dark"] .kh-stage__figures em {
   color: #9db2ba;
 }
 
@@ -299,15 +300,45 @@ html[data-admin-theme="dark"] .kh-metric:hover {
   box-shadow: 0 20px 46px rgba(0, 0, 0, 0.34);
 }
 
-html[data-admin-theme="dark"] .kh-metric__icon,
 html[data-admin-theme="dark"] .kh-activity__icon {
   background: color-mix(in srgb, var(--tone, var(--activity, #1ca6a0)) 18%, #0e1b21);
 }
 
-html[data-admin-theme="dark"] .kh-trend,
-html[data-admin-theme="dark"] .kh-status-dot {
+html[data-admin-theme="dark"] .kh-metric__label svg {
+  color: #7c9099;
+}
+
+html[data-admin-theme="dark"] .kh-metric__chip {
+  color: #9db2ba;
+  background: #16262d;
+}
+
+html[data-admin-theme="dark"] .kh-metric__chip.is-up { color: #71dfb5; }
+html[data-admin-theme="dark"] .kh-metric__chip.is-down { color: #f0918a; }
+
+html[data-admin-theme="dark"] .kh-metric__trend path {
+  stroke: #3d545c;
+}
+
+html[data-admin-theme="dark"] .kh-metric__trend.is-flat::before {
+  background: #26383f;
+}
+
+html[data-admin-theme="dark"] .kh-trend {
   color: #71dfb5 !important;
   background: #102920;
+}
+
+html[data-admin-theme="dark"] .kh-pipeline__state {
+  color: #71dfb5;
+}
+
+html[data-admin-theme="dark"] .kh-pipeline__state.is-warn {
+  color: #e6c98f;
+}
+
+html[data-admin-theme="dark"] .kh-stage__step {
+  color: #7c9099;
 }
 
 html[data-admin-theme="dark"] .kh-range {
@@ -330,14 +361,13 @@ html[data-admin-theme="dark"] .kh-chart__grid line {
 
 html[data-admin-theme="dark"] .kh-chart__scale,
 html[data-admin-theme="dark"] .kh-chart__labels,
-html[data-admin-theme="dark"] .kh-metric__body small,
+html[data-admin-theme="dark"] .kh-metric__note,
 html[data-admin-theme="dark"] .kh-activity__item span,
 html[data-admin-theme="dark"] .kh-focus__list small,
 html[data-admin-theme="dark"] .kh-actions__grid small {
   color: #8299a2;
 }
 
-html[data-admin-theme="dark"] .kh-pipeline__total,
 html[data-admin-theme="dark"] .kh-focus__list > a,
 html[data-admin-theme="dark"] .kh-actions__grid a {
   color: #dce8e9;
@@ -349,10 +379,18 @@ html[data-admin-theme="dark"] .kh-stage__track {
   background: #1a2c33;
 }
 
+html[data-admin-theme="dark"] .kh-pipeline__total {
+  border-bottom-color: #24353c;
+}
+
 html[data-admin-theme="dark"] .kh-pipeline__footer {
   color: #e6c98f;
-  background: #292114;
-  border-color: #554326;
+  border-top-color: #24353c;
+}
+
+html[data-admin-theme="dark"] .kh-pipeline__footer.is-ok,
+html[data-admin-theme="dark"] .kh-pipeline__empty {
+  color: #9db2ba;
 }
 
 html[data-admin-theme="dark"] .kh-activity__item {

@@ -29,20 +29,50 @@
 
             return $card + [
                 'label' => __('ui.dashboard.stats.' . $card['lang']),
-                'note' => __('ui.dashboard.stats.' . $card['lang'] . '_note'),
+                // The line under the figure reports the card's actual state
+                // rather than always describing the metric: nothing counted
+                // yet, or nothing to compare against, are both worth saying.
+                'note' => match (true) {
+                    $data['value'] === 0 => __('ui.dashboard.stats.' . $card['lang'] . '_empty'),
+                    $delta === null => __('ui.dashboard.stats.no_baseline'),
+                    default => __('ui.dashboard.stats.' . $card['lang'] . '_note'),
+                },
                 'value' => number_format($data['value']),
                 'delta' => $delta,
-                'delta_label' => $delta === null ? null : sprintf('%+.1f%%', $delta),
-                'points' => $data['points'],
+                // A signed zero ("+0.0%") reads as a rise of nothing, and a
+                // dash says "unchanged" without spending four characters on it.
+                'delta_label' => match (true) {
+                    $delta === null => __('ui.dashboard.stats.new_badge'),
+                    (float) $delta === 0.0 => '—',
+                    default => sprintf('%+.1f%%', $delta),
+                },
+                'delta_title' => match (true) {
+                    $delta === null => __('ui.dashboard.stats.new_title'),
+                    (float) $delta === 0.0 => __('ui.dashboard.stats.flat_title'),
+                    default => null,
+                },
+                'trend' => $data['trend'],
             ];
         })->all();
 
-        $pipeline = [
-            ['label' => __('ui.dashboard.funnel.new_applications'), 'value' => 342, 'percentage' => 100, 'tone' => 'teal'],
-            ['label' => __('ui.dashboard.funnel.screening'), 'value' => 186, 'percentage' => 72, 'tone' => 'blue'],
-            ['label' => __('ui.dashboard.funnel.interview'), 'value' => 74, 'percentage' => 46, 'tone' => 'gold'],
-            ['label' => __('ui.dashboard.funnel.offer'), 'value' => 21, 'percentage' => 24, 'tone' => 'violet'],
-        ];
+        // Counts, percentages and conversion all come from
+        // DashboardMetrics::funnel(), which reads real application statuses.
+        // Only the label, order and tone are presentation and live here.
+        $pipeline = collect([
+            ['key' => 'new', 'lang' => 'new_applications', 'tone' => 'teal'],
+            ['key' => 'screening', 'lang' => 'screening', 'tone' => 'blue'],
+            ['key' => 'interview', 'lang' => 'interview', 'tone' => 'gold'],
+            ['key' => 'hired', 'lang' => 'offer', 'tone' => 'violet'],
+        ])->map(function (array $stage) use ($funnel) {
+            $data = $funnel['stages'][$stage['key']];
+
+            return $stage + [
+                'label' => __('ui.dashboard.funnel.' . $stage['lang']),
+                'value' => number_format($data['value']),
+                'percentage' => $data['percentage'],
+                'conversion' => $data['conversion'],
+            ];
+        })->all();
 
         $activities = [
             ['icon' => 'award', 'tone' => 'teal', 'title' => __('ui.dashboard.activity.verification'), 'meta' => __('ui.dashboard.activity.verification_meta'), 'href' => route('companies')],
@@ -189,26 +219,37 @@
 
         <section class="kh-metrics" aria-label="{{ __('ui.bo.applications.metrics_aria') }}">
             @foreach ($stats as $stat)
-                <article class="kh-metric kh-metric--{{ $stat['tone'] }}">
+                <article class="kh-metric">
                     <div class="kh-metric__top">
-                        <span class="kh-metric__icon"><i data-feather="{{ $stat['icon'] }}"></i></span>
-                        {{-- Hidden when the previous period was empty: there is no
-                             percentage change from nothing, and an invented one
-                             would read as real movement. --}}
-                        @if ($stat['delta'] !== null)
-                            <span @class(['kh-trend', 'kh-trend--down' => $stat['delta'] < 0, 'kh-trend--flat' => $stat['delta'] == 0])>
-                                <i data-feather="{{ $stat['delta'] < 0 ? 'arrow-down-right' : ($stat['delta'] == 0 ? 'minus' : 'arrow-up-right') }}"></i>{{ $stat['delta_label'] }}
-                            </span>
-                        @endif
+                        <span class="kh-metric__label">
+                            <i data-feather="{{ $stat['icon'] }}"></i>{{ $stat['label'] }}
+                        </span>
+                        <span @class([
+                            'kh-metric__chip',
+                            'is-up' => $stat['delta'] !== null && $stat['delta'] > 0,
+                            'is-down' => $stat['delta'] !== null && $stat['delta'] < 0,
+                        ]) @if ($stat['delta_title']) title="{{ $stat['delta_title'] }}" @endif>{{ $stat['delta_label'] }}</span>
                     </div>
+
                     <div class="kh-metric__body">
-                        <span>{{ $stat['label'] }}</span>
                         <strong>{{ $stat['value'] }}</strong>
-                        <small>{{ $stat['note'] }}</small>
+
+                        {{-- Eight weeks of arrivals, beside the figure rather than
+                             under it: the number and its shape read as one line. --}}
+                        <span @class(['kh-metric__trend', 'is-flat' => $stat['trend'] === null])
+                              role="img" aria-label="{{ $stat['label'] }} {{ __('ui.dashboard.stats.trend_aria') }}">
+                            @if ($stat['trend'] !== null)
+                                <svg viewBox="0 0 120 36" preserveAspectRatio="none" focusable="false">
+                                    <path d="{{ $stat['trend']['line'] }}" vector-effect="non-scaling-stroke"></path>
+                                </svg>
+                                {{-- Marks where the series ends. Outside the stretched
+                                     SVG so it stays a circle rather than an ellipse. --}}
+                                <span class="kh-metric__dot" style="top: {{ round($stat['trend']['dot_y'] / 36 * 100, 2) }}%"></span>
+                            @endif
+                        </span>
                     </div>
-                    <svg class="kh-sparkline" viewBox="0 0 116 44" role="img" aria-label="{{ $stat['label'] }} {{ __('ui.dashboard.stats.trend_aria') }}">
-                        <polyline points="{{ $stat['points'] }}" fill="none" vector-effect="non-scaling-stroke"></polyline>
-                    </svg>
+
+                    <small class="kh-metric__note">{{ $stat['note'] }}</small>
                 </article>
             @endforeach
         </section>
@@ -266,16 +307,52 @@
                     <a href="{{ route('resumes.index') }}" aria-label="{{ __('ui.bo.applications.view_all_candidates') }}"><i data-feather="arrow-up-right"></i></a>
                 </header>
 
-                <div class="kh-pipeline__total"><div><strong>623</strong><span>{{ __('ui.dashboard.active_candidates') }}</span></div><span class="kh-status-dot">{{ __('ui.dashboard.priority.on_track') }}</span></div>
-                <div class="kh-pipeline__stages">
-                    @foreach ($pipeline as $stage)
-                        <div class="kh-stage kh-stage--{{ $stage['tone'] }}">
-                            <div><span>{{ $stage['label'] }}</span><strong>{{ $stage['value'] }}</strong></div>
-                            <div class="kh-stage__track"><span style="--progress: {{ $stage['percentage'] }}%"></span></div>
-                        </div>
-                    @endforeach
+                <div class="kh-pipeline__total">
+                    <div>
+                        <strong>{{ number_format($funnel['active']) }}</strong>
+                        <span>{{ __('ui.dashboard.active_candidates') }}</span>
+                    </div>
+                    {{-- Green when nothing has gone past the review SLA, amber the
+                         moment something has. It used to say "On track" no matter
+                         what the pipeline actually looked like. --}}
+                    <span @class(['kh-pipeline__state', 'is-warn' => $funnel['overdue'] > 0])>
+                        {{ $funnel['overdue'] > 0 ? __('ui.dashboard.priority.needs_attention') : __('ui.dashboard.priority.on_track') }}
+                    </span>
                 </div>
-                <div class="kh-pipeline__footer"><i data-feather="info"></i><span><strong>{{ __('ui.dashboard.pipeline_waiting_lead') }}</strong> {{ __('ui.dashboard.pipeline_waiting_rest') }}</span></div>
+
+                @if ($funnel['total'] === 0)
+                    <p class="kh-pipeline__empty">{{ __('ui.dashboard.pipeline_empty') }}</p>
+                @else
+                    <div class="kh-pipeline__stages">
+                        @foreach ($pipeline as $stage)
+                            {{-- The share of the stage above that made it this far —
+                                 skipped for the top stage (nothing above it) and
+                                 whenever that share is null (the stage above was
+                                 empty, so there is no share of nothing to report). --}}
+                            @if (! $loop->first && $stage['conversion'] !== null)
+                                <p class="kh-stage__step">{{ __('ui.dashboard.funnel.conversion', ['percent' => $stage['conversion']]) }}</p>
+                            @endif
+                            <div class="kh-stage kh-stage--{{ $stage['tone'] }}">
+                                <div class="kh-stage__head">
+                                    <span>{{ $stage['label'] }}</span>
+                                    <span class="kh-stage__figures"><strong>{{ $stage['value'] }}</strong><em>{{ $stage['percentage'] }}%</em></span>
+                                </div>
+                                <div class="kh-stage__track"><span style="--progress: {{ $stage['percentage'] }}%"></span></div>
+                            </div>
+                        @endforeach
+                    </div>
+
+                    {{-- A line of text, not a banner: it is a footnote on the panel
+                         above it, and only earns colour on the word that carries
+                         the state. --}}
+                    <p @class(['kh-pipeline__footer', 'is-ok' => $funnel['overdue'] === 0])>
+                        @if ($funnel['overdue'] > 0)
+                            {{ trans_choice('ui.dashboard.pipeline_waiting', $funnel['overdue'], ['count' => number_format($funnel['overdue']), 'hours' => \App\Services\DashboardMetrics::REVIEW_SLA_HOURS]) }}
+                        @else
+                            {{ __('ui.dashboard.pipeline_current') }}
+                        @endif
+                    </p>
+                @endif
             </aside>
         </div>
 

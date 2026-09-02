@@ -213,8 +213,13 @@ return [
         'days' => ['mon' => 'Mon', 'tue' => 'Tue', 'wed' => 'Wed', 'thu' => 'Thu', 'fri' => 'Fri', 'sat' => 'Sat', 'sun' => 'Sun'],
         'pipeline_where' => 'Where candidates are right now.',
         'active_candidates' => 'active candidates',
-        'pipeline_waiting_lead' => '12 candidates',
-        'pipeline_waiting_rest' => 'have been waiting for review longer than 48 hours.',
+        // :count and :hours are read from real data (the overdue count and
+        // DashboardMetrics::REVIEW_SLA_HOURS) rather than baked into the
+        // string, so the copy cannot drift from the number it describes.
+        // Read with trans_choice(), Laravel's own singular|plural form.
+        'pipeline_waiting' => ':count candidate has been waiting for review longer than :hours hours.|:count candidates have been waiting for review longer than :hours hours.',
+        'pipeline_current' => 'Nothing is waiting past review time. The pipeline is current.',
+        'pipeline_empty' => 'No applications yet. Once candidates start applying, this funnel will track how they move through your pipeline.',
         'view_all' => 'View all',
         'roles' => [
             'engineer_note' => '42 awaiting screening',
@@ -233,14 +238,25 @@ return [
         ],
         'stats' => [
             'active_users' => 'Active users',
-            'active_users_note' => 'from last month',
+            'active_users_note' => 'Registered accounts',
             'open_roles' => 'Open roles',
-            'open_roles_note' => 'published job posts',
+            'open_roles_note' => 'Published job posts',
             'applications' => 'Applications',
-            'applications_note' => 'candidate submissions',
+            'applications_note' => 'Candidate submissions',
             'resumes' => 'Resumes',
-            'resumes_note' => 'candidate profiles',
+            'resumes_note' => 'Candidate profiles',
+            // Shown in place of the descriptive note when the card has nothing
+            // to describe yet, so the line under the figure always says
+            // something true about the state the card is actually in.
+            'active_users_empty' => 'No accounts yet',
+            'open_roles_empty' => 'No published roles yet',
+            'applications_empty' => 'No submissions yet',
+            'resumes_empty' => 'No profiles yet',
+            'no_baseline' => 'No prior month to compare',
             'trend_aria' => 'trend over the last 8 weeks',
+            'new_badge' => 'New',
+            'new_title' => 'No earlier period to compare against yet.',
+            'flat_title' => 'Unchanged against the previous month.',
         ],
         'chart' => [
             'title' => 'Application activity',
@@ -258,7 +274,11 @@ return [
             'new_applications' => 'New applications',
             'screening' => 'Screening',
             'interview' => 'Interview',
-            'offer' => 'Offer',
+            // The pipeline has no separate "offer extended" status to read —
+            // hired is the closest real state, so the label says what the
+            // number actually is rather than a stage this app doesn't track.
+            'offer' => 'Hired',
+            'conversion' => ':percent% moved forward',
         ],
         'activity' => [
             'title' => 'Recent activity',
