@@ -6,164 +6,294 @@
 /* ------------------------------------------------------------------ *
  * Directory hero
  *
- * Same dark band as the landing hero (see .jf-hero in jobs.css) so the two
- * entry points to the site read as one place. It is dark in both themes, so
- * nothing in here is themed.
+ * A dark navy field on the left for the copy, opening into a mint curve
+ * on the right that carries the art. Dark in both themes, so nothing in
+ * here is themed.
  * ------------------------------------------------------------------ */
 
 .jf-cdir-hero {
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  padding: clamp(44px, 6vw, 76px) 0 clamp(58px, 7vw, 86px);
+  padding: clamp(38px, 4.6vw, 62px) 0 clamp(66px, 7vw, 96px);
   color: #fff;
-  background:
-    radial-gradient(118% 92% at 84% -14%, rgba(28, 166, 160, 0.34), transparent 62%),
-    radial-gradient(92% 74% at 4% 112%, rgba(243, 189, 101, 0.16), transparent 62%),
-    linear-gradient(152deg, #071e2b 0%, #0a2c3d 44%, #0e4d5c 100%);
+  background: radial-gradient(120% 130% at 6% 8%, #123a5e 0%, #0d2a47 42%, #0a2039 100%);
 }
 
-/* The blueprint grid, faded out before it reaches the right-hand edge. */
-.jf-cdir-hero::before {
-  content: "";
+/* The mint shape bleeding off the top-right corner. Overlapping radials on
+   an organic border-radius rather than an SVG, so it restretches at any width. */
+.jf-cdir-hero__curve {
   position: absolute;
-  inset: 0;
+  top: -38%;
+  right: -14%;
   z-index: -2;
-  opacity: 0.5;
-  background-image:
-    linear-gradient(rgba(131, 222, 216, 0.08) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(131, 222, 216, 0.08) 1px, transparent 1px);
-  background-size: 58px 58px;
-  mask-image: radial-gradient(74% 82% at 18% 34%, #000 0%, transparent 78%);
-  -webkit-mask-image: radial-gradient(74% 82% at 18% 34%, #000 0%, transparent 78%);
-}
-
-.jf-cdir-hero__glow {
-  position: absolute;
-  z-index: -2;
-  border-radius: 50%;
-  filter: blur(90px);
+  width: 58%;
+  height: 186%;
   pointer-events: none;
+  border-radius: 46% 54% 42% 58% / 52% 44% 56% 48%;
+  background:
+    radial-gradient(78% 72% at 62% 34%, rgba(126, 232, 192, 0.92), transparent 68%),
+    radial-gradient(88% 84% at 30% 66%, rgba(46, 176, 168, 0.72), transparent 72%),
+    linear-gradient(140deg, #63dcc0 0%, #2aa8a4 52%, #14607f 100%);
 }
 
-.jf-cdir-hero__glow--one {
-  top: -34%;
-  right: -6%;
-  width: 44vw;
-  height: 44vw;
-  max-width: 560px;
-  max-height: 560px;
-  background: rgba(28, 166, 160, 0.3);
-}
-
-.jf-cdir-hero__glow--two {
-  bottom: -46%;
-  left: 6%;
-  width: 34vw;
-  height: 34vw;
-  max-width: 420px;
-  max-height: 420px;
-  background: rgba(243, 189, 101, 0.14);
+/* The lighter blue sweep that runs under the orb into the bottom edge. */
+.jf-cdir-hero__sweep {
+  position: absolute;
+  right: -10%;
+  bottom: -72%;
+  z-index: -2;
+  width: 58%;
+  height: 122%;
+  pointer-events: none;
+  border-radius: 50% 50% 44% 56% / 60% 58% 42% 40%;
+  background: linear-gradient(120deg, rgba(23, 92, 158, 0.85), rgba(19, 62, 116, 0.5));
 }
 
 .jf-cdir-hero__inner {
   position: relative;
   z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.82fr);
+  align-items: center;
+  gap: 30px;
 }
+
+.jf-cdir-hero__copy {
+  min-width: 0;
+}
+
+/* ---- Eyebrow ---- */
 
 .jf-cdir-hero__eyebrow {
   display: inline-flex;
   align-items: center;
-  gap: 9px;
-  padding: 6px 14px 6px 11px;
-  color: #b6f0ec;
-  font-size: 0.64rem;
+  gap: 12px;
+  padding: 7px 22px 7px 7px;
+  color: #eaf6f4;
+  font-size: 0.72rem;
   font-weight: 800;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.13em;
   text-transform: uppercase;
-  background: rgba(131, 222, 216, 0.1);
-  border: 1px solid rgba(131, 222, 216, 0.22);
+  background: rgba(10, 38, 62, 0.62);
+  border: 1px solid rgba(126, 232, 192, 0.24);
   border-radius: 999px;
 }
 
-.jf-cdir-hero__dot {
-  width: 7px;
-  height: 7px;
-  background: #6fe3da;
+.jf-cdir-hero__eyebrow-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  color: #7ee8c0;
+  font-size: 0.82rem;
+  background: rgba(126, 232, 192, 0.16);
   border-radius: 50%;
-  box-shadow: 0 0 0 0 rgba(111, 227, 218, 0.55);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .jf-cdir-hero__dot {
-    animation: jf-cdir-pulse 2.4s ease-out infinite;
-  }
-}
-
-@keyframes jf-cdir-pulse {
-  70% {
-    box-shadow: 0 0 0 9px rgba(111, 227, 218, 0);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(111, 227, 218, 0);
-  }
-}
+/* ---- Headline ---- */
 
 .jf-cdir-hero__inner h1 {
-  margin: 16px 0 10px;
+  margin: 20px 0 14px;
   color: #fff;
-  font-size: clamp(2.1rem, 4.6vw, 3.5rem);
+  font-size: clamp(2.2rem, 4.8vw, 3.75rem);
   font-weight: 700;
   letter-spacing: -0.055em;
-  line-height: 1.03;
+  line-height: 1.04;
 }
 
 .jf-cdir-hero__accent {
-  background: linear-gradient(96deg, #8fe9e2 0%, #a9f0d8 34%, #f3bd65 62%, #8fe9e2 100%);
+  position: relative;
+  display: inline-block;
+  /* currentColor drives the underline stroke; the gradient paints only the
+     glyphs, so the two need separate colour channels. */
+  color: #b8f0c8;
+  background: linear-gradient(96deg, #6fe3da 0%, #9beccd 42%, #f3d78a 78%, #f6e3a6 100%);
   -webkit-background-clip: text;
   background-clip: text;
-  color: transparent;
   -webkit-text-fill-color: transparent;
 }
 
-.jf-cdir-hero__inner p {
-  max-width: 56ch;
-  margin: 0;
-  color: rgba(226, 242, 244, 0.76);
-  font-size: 0.92rem;
-  line-height: 1.65;
+.jf-cdir-hero__underline {
+  position: absolute;
+  right: 0;
+  bottom: -0.14em;
+  left: 0;
+  width: 100%;
+  height: 0.16em;
+  overflow: visible;
+  opacity: 0.85;
 }
+
+.jf-cdir-hero__inner p {
+  max-width: 52ch;
+  margin: 0;
+  color: rgba(219, 236, 240, 0.8);
+  font-size: 0.95rem;
+  line-height: 1.66;
+}
+
+/* ---- Stat cards ---- */
 
 .jf-cdir-hero__stats {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-  margin: 26px 0 0;
+  gap: 12px;
+  margin: 30px 0 0;
 }
 
-.jf-cdir-hero__stats > div {
+.jf-cdir-stat {
   display: flex;
-  align-items: baseline;
-  gap: 9px;
-  padding: 11px 18px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(131, 222, 216, 0.18);
-  backdrop-filter: blur(6px);
+  align-items: center;
+  gap: 13px;
+  padding: 13px 22px 13px 14px;
+  background: rgba(9, 32, 54, 0.55);
+  border: 1px solid rgba(126, 232, 192, 0.16);
+  border-radius: 16px;
+  backdrop-filter: blur(8px);
+}
+
+.jf-cdir-stat__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  color: #fff;
+  font-size: 0.88rem;
+  border-radius: 12px;
+}
+
+.jf-cdir-stat__icon--teal {
+  background: linear-gradient(140deg, #23b39a, #0f8f8a);
+}
+
+.jf-cdir-stat__icon--blue {
+  background: linear-gradient(140deg, #3b82f6, #1d5fd8);
+}
+
+.jf-cdir-stat__icon--violet {
+  background: linear-gradient(140deg, #8b5cf6, #6335e0);
+}
+
+.jf-cdir-stat__text {
+  display: block;
 }
 
 .jf-cdir-hero__stats dt {
-  color: #8fe9e2;
-  font-size: 1.24rem;
+  color: #fff;
+  font-size: 1.32rem;
   font-weight: 700;
   letter-spacing: -0.04em;
+  line-height: 1.1;
 }
 
 .jf-cdir-hero__stats dd {
-  margin: 0;
-  color: rgba(226, 242, 244, 0.72);
-  font-size: 0.72rem;
+  margin: 1px 0 0;
+  color: rgba(219, 236, 240, 0.74);
+  font-size: 0.76rem;
   font-weight: 500;
-  letter-spacing: 0.02em;
+}
+
+/* ---- Right-hand composition ---- */
+
+.jf-cdir-hero__art {
+  position: relative;
+  min-height: 300px;
+  align-self: stretch;
+}
+
+/* Holds the optional cut-out photo (public/img/companies-hero.png). Without
+   one it stays a soft mint disc, so the composition still reads as finished. */
+.jf-cdir-hero__orb {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: block;
+  width: min(290px, 84%);
+  aspect-ratio: 1;
+  transform: translate(-40%, -50%);
+  border-radius: 48% 52% 44% 56% / 54% 46% 54% 46%;
+  background:
+    radial-gradient(72% 72% at 40% 30%, rgba(255, 255, 255, 0.42), transparent 62%),
+    linear-gradient(150deg, rgba(154, 240, 216, 0.9), rgba(58, 186, 176, 0.72));
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.24);
+}
+
+/* The photo sits on the orb's baseline and is allowed to overflow it, the
+   way a cut-out subject does in the reference. */
+.jf-cdir-hero__orb--photo {
+  overflow: visible;
+}
+
+.jf-cdir-hero__orb img {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 118%;
+  transform: translateX(-50%);
+  object-fit: contain;
+}
+
+.jf-cdir-hero__arc {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.jf-cdir-hero__badge {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 54px;
+  height: 54px;
+  color: #fff;
+  font-size: 1.05rem;
+  border-radius: 16px;
+  box-shadow: 0 14px 30px rgba(6, 26, 44, 0.34);
+}
+
+.jf-cdir-hero__badge--one {
+  top: 46%;
+  left: 2%;
+  background: linear-gradient(140deg, #23b39a, #0f7f86);
+}
+
+.jf-cdir-hero__badge--two {
+  top: 6%;
+  right: 20%;
+  background: linear-gradient(140deg, #2f8fd8, #1c63b8);
+}
+
+.jf-cdir-hero__badge--three {
+  top: 34%;
+  right: 0;
+  background: linear-gradient(140deg, #3b82f6, #2358c8);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .jf-cdir-hero__badge {
+    animation: jf-cdir-float 6s ease-in-out infinite;
+  }
+
+  .jf-cdir-hero__badge--two {
+    animation-delay: -2s;
+  }
+
+  .jf-cdir-hero__badge--three {
+    animation-delay: -4s;
+  }
+}
+
+@keyframes jf-cdir-float {
+  50% {
+    transform: translateY(-9px);
+  }
 }
 
 /* ------------------------------------------------------------------ *
@@ -180,11 +310,12 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 10px;
-  padding: 14px;
+  gap: 12px;
+  padding: 16px;
   background: var(--jf-paper);
   border: 1px solid var(--jf-line);
-  box-shadow: 0 18px 44px rgba(7, 30, 43, 0.16);
+  border-radius: 20px;
+  box-shadow: 0 22px 50px rgba(7, 30, 43, 0.2);
 }
 
 .jf-cdir-field {
@@ -201,11 +332,12 @@
   position: relative;
   display: flex;
   align-items: center;
-  gap: 9px;
-  height: 44px;
-  padding: 0 13px;
+  gap: 11px;
+  height: 54px;
+  padding: 0 18px;
   background: var(--jf-canvas);
   border: 1px solid var(--jf-line);
+  border-radius: 13px;
   transition: border-color 200ms ease, box-shadow 200ms ease;
 }
 
@@ -254,25 +386,29 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  height: 44px;
-  padding: 0 20px;
-  font-size: 0.8rem;
+  gap: 9px;
+  height: 54px;
+  padding: 0 32px;
+  font-size: 0.86rem;
   font-weight: 600;
   letter-spacing: -0.01em;
   text-decoration: none;
   border: 1px solid transparent;
+  border-radius: 13px;
   cursor: pointer;
-  transition: background 200ms ease, color 200ms ease, border-color 200ms ease;
+  transition: background 200ms ease, color 200ms ease, border-color 200ms ease,
+    box-shadow 200ms ease;
 }
 
 .jf-cdir-submit {
   color: #fff;
-  background: var(--jf-teal-dark);
+  background: linear-gradient(120deg, #0f7f86 0%, #17997f 52%, #2fae7a 100%);
+  box-shadow: 0 10px 24px rgba(15, 127, 134, 0.28);
 }
 
 .jf-cdir-submit:hover {
-  background: var(--jf-navy);
+  background: linear-gradient(120deg, #0b6a72 0%, #128a72 52%, #279d6c 100%);
+  box-shadow: 0 12px 28px rgba(15, 127, 134, 0.34);
 }
 
 .jf-cdir-clear {
@@ -1338,6 +1474,32 @@
   }
 }
 
+/* Below this the art has no room to sit beside the copy without squeezing
+   the headline, so the hero drops to a single column and the composition
+   goes with it — it is decoration, and nothing is lost. */
+@media (max-width: 940px) {
+  .jf-cdir-hero__inner {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .jf-cdir-hero__art {
+    display: none;
+  }
+
+  /* Pushed mostly off the right edge and faded, so the copy keeps a dark
+     field to sit on once it spans the full width. */
+  .jf-cdir-hero__curve {
+    top: -46%;
+    right: -50%;
+    width: 96%;
+    opacity: 0.42;
+  }
+
+  .jf-cdir-hero__sweep {
+    opacity: 0.6;
+  }
+}
+
 @media (max-width: 720px) {
   .jf-cdir-filters__form {
     flex-direction: column;
@@ -1460,7 +1622,6 @@ html[data-theme="dark"] .jf-cprofile-item__list li::before {
   background: #6fd0cb;
 }
 
-html[data-theme="dark"] .jf-cdir-submit,
 html[data-theme="dark"] .jf-crole__apply,
 html[data-theme="dark"] .jf-cdir-empty a,
 html[data-theme="dark"] .jf-cprofile-hero__actions .jf-btn--primary,
@@ -1470,13 +1631,25 @@ html[data-theme="dark"] .jf-cdir__pagination .page-item.active .page-link {
   border-color: #6fd0cb;
 }
 
-html[data-theme="dark"] .jf-cdir-submit:hover,
 html[data-theme="dark"] .jf-crole__apply:hover,
 html[data-theme="dark"] .jf-cdir-empty a:hover,
 html[data-theme="dark"] .jf-cprofile-hero__actions .jf-btn--primary:hover {
   color: #04191b;
   background: #8ee0db;
   border-color: #8ee0db;
+}
+
+/* The Search button keeps its gradient in dark rather than flattening to the
+   flat mint the other buttons use — it is the one action on the card. */
+html[data-theme="dark"] .jf-cdir-submit {
+  color: #04191b;
+  background: linear-gradient(120deg, #23b39a 0%, #46c9a2 52%, #6fdca6 100%);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4);
+}
+
+html[data-theme="dark"] .jf-cdir-submit:hover {
+  color: #04191b;
+  background: linear-gradient(120deg, #2cc4a9 0%, #55d6ae 52%, #82e7b4 100%);
 }
 
 html[data-theme="dark"] .jf-cprofile-hero__actions .jf-btn--ghost:hover {

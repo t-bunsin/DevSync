@@ -9,37 +9,90 @@
 @endpush
 
 @section('content')
+    @php
+        // Optional. Drop a cut-out team photo (transparent PNG or WebP) at this
+        // path and it fills the orb; without one the orb stays a clean gradient
+        // and the composition still reads as finished.
+        $heroPhoto = collect(['img/companies-hero.png', 'img/companies-hero.webp'])
+            ->first(fn (string $path) => file_exists(public_path($path)));
+
+        $heroStats = [
+            ['icon' => 'fa-users', 'tone' => 'teal', 'value' => $totalCompanies, 'label' => Str::plural('Employer', $totalCompanies)],
+            ['icon' => 'fa-briefcase', 'tone' => 'blue', 'value' => $totalOpenRoles, 'label' => 'Open ' . Str::plural('role', $totalOpenRoles)],
+            ['icon' => 'fa-industry', 'tone' => 'violet', 'value' => count($industries), 'label' => Str::plural('Industry', count($industries))],
+        ];
+    @endphp
+
     <section class="jf-cdir-hero" aria-labelledby="companies-title">
-        <span class="jf-cdir-hero__glow jf-cdir-hero__glow--one" aria-hidden="true"></span>
-        <span class="jf-cdir-hero__glow jf-cdir-hero__glow--two" aria-hidden="true"></span>
+        <span class="jf-cdir-hero__curve" aria-hidden="true"></span>
+        <span class="jf-cdir-hero__sweep" aria-hidden="true"></span>
 
         <div class="jf-shell jf-cdir-hero__inner">
-            <span class="jf-cdir-hero__eyebrow">
-                {{-- A live pulse rather than an icon, matching the landing hero. --}}
-                <span class="jf-cdir-hero__dot" aria-hidden="true"></span>
-                Employer directory
-            </span>
+            <div class="jf-cdir-hero__copy">
+                <span class="jf-cdir-hero__eyebrow">
+                    <span class="jf-cdir-hero__eyebrow-icon" aria-hidden="true">
+                        <i class="fas fa-user-group"></i>
+                    </span>
+                    Employer directory
+                </span>
 
-            <h1 id="companies-title">
-                Companies <span class="jf-cdir-hero__accent">hiring now</span>
-            </h1>
+                <h1 id="companies-title">
+                    Companies
+                    <span class="jf-cdir-hero__accent">
+                        hiring now
+                        {{-- Hand-drawn underline, so it swings under the descender
+                             of "g" instead of clipping it the way text-decoration does. --}}
+                        <svg class="jf-cdir-hero__underline" viewBox="0 0 220 12" preserveAspectRatio="none"
+                            aria-hidden="true" focusable="false">
+                            <path d="M3 8.4C48 3.2 122 1.9 217 5.6" fill="none" stroke="currentColor"
+                                stroke-width="3.2" stroke-linecap="round" />
+                        </svg>
+                    </span>
+                </h1>
 
-            <p>Read who a team is before you apply to them — every employer here has been approved by ZIN-WORKS.</p>
+                <p>Read who a team is before you apply to them — every employer here has been approved by ZIN-WORKS.</p>
 
-            <dl class="jf-cdir-hero__stats" aria-label="Directory at a glance">
-                <div>
-                    <dt>{{ $totalCompanies }}</dt>
-                    <dd>{{ Str::plural('Employer', $totalCompanies) }}</dd>
-                </div>
-                <div>
-                    <dt>{{ $totalOpenRoles }}</dt>
-                    <dd>Open {{ Str::plural('role', $totalOpenRoles) }}</dd>
-                </div>
-                <div>
-                    <dt>{{ count($industries) }}</dt>
-                    <dd>{{ Str::plural('Industry', count($industries)) }}</dd>
-                </div>
-            </dl>
+                <dl class="jf-cdir-hero__stats" aria-label="Directory at a glance">
+                    @foreach ($heroStats as $stat)
+                        <div class="jf-cdir-stat">
+                            <span class="jf-cdir-stat__icon jf-cdir-stat__icon--{{ $stat['tone'] }}" aria-hidden="true">
+                                <i class="fas {{ $stat['icon'] }}"></i>
+                            </span>
+                            <span class="jf-cdir-stat__text">
+                                <dt>{{ $stat['value'] }}</dt>
+                                <dd>{{ $stat['label'] }}</dd>
+                            </span>
+                        </div>
+                    @endforeach
+                </dl>
+            </div>
+
+            {{-- Decoration only, so the whole composition is hidden from assistive
+                 tech and dropped altogether on narrow screens. --}}
+            <div class="jf-cdir-hero__art" aria-hidden="true">
+                <span @class(['jf-cdir-hero__orb', 'jf-cdir-hero__orb--photo' => $heroPhoto])>
+                    @if ($heroPhoto)
+                        <img src="{{ asset($heroPhoto) }}?v={{ filemtime(public_path($heroPhoto)) }}" alt="">
+                    @endif
+                </span>
+
+                <svg class="jf-cdir-hero__arc" viewBox="0 0 320 300" fill="none" focusable="false">
+                    <path d="M28 214C6 132 62 34 168 22c74-8 128 34 140 96" stroke="rgba(150, 240, 220, 0.34)"
+                        stroke-width="1.4" stroke-dasharray="5 7" />
+                    <circle cx="28" cy="214" r="6" fill="#5fe3c2" />
+                    <circle cx="303" cy="140" r="5" fill="rgba(150, 240, 220, 0.6)" />
+                </svg>
+
+                <span class="jf-cdir-hero__badge jf-cdir-hero__badge--one">
+                    <i class="fas fa-user-group"></i>
+                </span>
+                <span class="jf-cdir-hero__badge jf-cdir-hero__badge--two">
+                    <i class="fas fa-briefcase"></i>
+                </span>
+                <span class="jf-cdir-hero__badge jf-cdir-hero__badge--three">
+                    <i class="fas fa-arrow-trend-up"></i>
+                </span>
+            </div>
         </div>
     </section>
 

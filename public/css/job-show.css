@@ -135,10 +135,12 @@
   max-width: 780px;
   margin: 20px 0 12px;
   color: #fff;
-  font-size: clamp(2.55rem, 6vw, 5rem);
+  /* Sized for a real job title, not a two-word one: "Senior Officer (Lead),
+     Native Mobile Development" ran to four lines at the old display size. */
+  font-size: clamp(1.7rem, 3.1vw, 2.5rem);
   font-weight: 600;
-  letter-spacing: -0.06em;
-  line-height: 0.98;
+  letter-spacing: -0.04em;
+  line-height: 1.12;
 }
 
 .jf-job-page__summary {
@@ -737,7 +739,7 @@ html[data-theme="dark"] .jf-job-page__back-link:hover {
   }
 
   .jf-job-page__hero h1 {
-    font-size: clamp(2.35rem, 12vw, 3.6rem);
+    font-size: clamp(1.5rem, 6vw, 2rem);
   }
 
   .jf-job-page__meta {
