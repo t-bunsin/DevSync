@@ -577,23 +577,39 @@
 .jf-ccard__chips {
   display: flex;
   flex-wrap: wrap;
-  gap: 7px;
-  margin-top: 12px;
+  gap: 6px;
+  margin-top: 14px;
 }
 
 .jf-ccard__chips span {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 5px 10px;
-  color: var(--jf-ink-soft);
+  gap: 7px;
+  padding: 4px 12px 4px 4px;
+  color: var(--jf-ink);
   font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  line-height: 1.6;
   background: var(--jf-canvas);
   border: 1px solid var(--jf-line);
+  border-radius: 999px;
 }
 
+/* Leading icon sits in its own disc so the chip reads as a labelled token
+   rather than a run of grey text. */
 .jf-ccard__chips i {
-  font-size: 0.62rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 20px;
+  height: 20px;
+  color: var(--jf-teal-dark);
+  font-size: 0.6rem;
+  background: var(--jf-paper);
+  border-radius: 50%;
+  box-shadow: 0 1px 2px rgba(23, 43, 77, 0.07);
 }
 
 .jf-ccard__address {
@@ -1582,6 +1598,12 @@ html[data-theme="dark"] .jf-cprofile-item__icon,
 html[data-theme="dark"] .jf-cdir-empty__icon {
   color: #6fd0cb;
   background: rgba(111, 208, 203, 0.14);
+}
+
+html[data-theme="dark"] .jf-ccard__chips i {
+  color: #6fd0cb;
+  background: rgba(111, 208, 203, 0.14);
+  box-shadow: none;
 }
 
 html[data-theme="dark"] .jf-cprofile-item__icon--ocean {

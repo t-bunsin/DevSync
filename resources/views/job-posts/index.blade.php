@@ -186,10 +186,16 @@
                                             <span class="kh-bo__name">
                                                 <a class="kh-bo__name-link" href="{{ route('job-posts.show', $post) }}">{{ $post->title }}</a>
                                                 @if ($post->featured)
-                                                    <span class="kh-bo__status kh-bo__status--verified">{{ __('ui.bo.job_posts.featured') }}</span>
+                                                    <span class="kh-bo__flag kh-bo__flag--featured" title="{{ __('ui.bo.job_posts.featured') }}">
+                                                        <i class="fas fa-star" aria-hidden="true"></i>
+                                                        <span class="visually-hidden">{{ __('ui.bo.job_posts.featured') }}</span>
+                                                    </span>
                                                 @endif
                                                 @if ($post->highlighted)
-                                                    <span class="kh-bo__status kh-bo__status--pending">{{ __('ui.bo.job_posts.spotlight') }}</span>
+                                                    <span class="kh-bo__flag kh-bo__flag--spotlight" title="{{ __('ui.bo.job_posts.spotlight') }}">
+                                                        <i class="fas fa-bolt" aria-hidden="true"></i>
+                                                        <span class="visually-hidden">{{ __('ui.bo.job_posts.spotlight') }}</span>
+                                                    </span>
                                                 @endif
                                             </span>
                                             <span class="kh-bo__ref">

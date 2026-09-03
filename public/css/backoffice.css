@@ -551,6 +551,41 @@ html[data-admin-theme="dark"] .kh-bo__search select {
   background: color-mix(in srgb, var(--bo-danger) 12%, transparent);
 }
 
+/* Placement flags
+   ------------------------------------------------------------------
+   Featured and Spotlight are properties of a post, not workflow states, so
+   they read as icons rather than status pills — the row title stays on one
+   line and the two are told apart at a glance by shape and colour. */
+.kh-bo__flag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 7px;
+  font-size: 0.68rem;
+  line-height: 1;
+  cursor: help;
+}
+
+.kh-bo__flag--featured {
+  color: var(--bo-blue);
+  background: color-mix(in srgb, var(--bo-blue) 13%, transparent);
+}
+
+.kh-bo__flag--spotlight {
+  color: var(--bo-amber);
+  background: color-mix(in srgb, var(--bo-amber) 15%, transparent);
+}
+
+.kh-bo__table--dense .kh-bo__flag {
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  font-size: 0.63rem;
+}
+
 .kh-bo__expiry-flag {
   display: inline-block;
   margin-top: 3px;
