@@ -24,7 +24,8 @@
                     <i class="fas fa-briefcase" aria-hidden="true"></i>
                     <span>{{ __('ui.nav.jobs') }}</span>
                 </a>
-                <a href="{{ url('/') }}#companies">
+                <a class="{{ request()->routeIs('companies.index') || request()->routeIs('companies.profile') ? 'is-active' : '' }}"
+                    href="{{ route('companies.index') }}">
                     <i class="fas fa-building" aria-hidden="true"></i>
                     <span>{{ __('ui.nav.companies') }}</span>
                 </a>

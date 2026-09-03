@@ -31,7 +31,7 @@
             <div>
                 <strong>{{ __('ui.footer.explore') }}</strong>
                 <a href="{{ route('jobs.index') }}">{{ __('ui.footer.browse_jobs') }}</a>
-                <a href="{{ url('/') }}#companies">{{ __('ui.nav.companies') }}</a>
+                <a href="{{ route('companies.index') }}">{{ __('ui.nav.companies') }}</a>
                 <a href="{{ url('/') }}#pricing">{{ __('ui.footer.pricing') }}</a>
             </div>
 

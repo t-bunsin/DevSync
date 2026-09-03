@@ -341,23 +341,6 @@
             </div>
         </div>
     </section>
-
-    <div data-jobs-explorer>
-        <section class="jf-trusted" id="companies" aria-labelledby="companies-title">
-            <div class="jf-shell jf-trusted__inner">
-                <p id="companies-title">Opportunities from teams shaping Cambodia</p>
-                <div class="jf-trusted__logos" aria-label="Featured employers">
-                    <span><b>ABA</b> Bank</span>
-                    <span><i class="fas fa-signal" aria-hidden="true"></i> Smart</span>
-                    <span><i class="fas fa-circle-nodes" aria-hidden="true"></i> Wing</span>
-                    <span><i class="fas fa-building" aria-hidden="true"></i> Chip Mong</span>
-                    <span><i class="fas fa-shield-heart" aria-hidden="true"></i> AIA</span>
-                </div>
-            </div>
-        </section>
-
-        
-    </div>
 @endsection
 
 @push('scripts')

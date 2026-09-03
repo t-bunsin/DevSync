@@ -1,0 +1,1485 @@
+/* Public employer directory (/companies) and company profile (/companies/{slug}).
+   Everything here is built on the jobs.css tokens, which flip under
+   html[data-theme="dark"] — so only the hard-coded surfaces below need a
+   dark override of their own. */
+
+/* ------------------------------------------------------------------ *
+ * Directory hero
+ *
+ * Same dark band as the landing hero (see .jf-hero in jobs.css) so the two
+ * entry points to the site read as one place. It is dark in both themes, so
+ * nothing in here is themed.
+ * ------------------------------------------------------------------ */
+
+.jf-cdir-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: clamp(44px, 6vw, 76px) 0 clamp(58px, 7vw, 86px);
+  color: #fff;
+  background:
+    radial-gradient(118% 92% at 84% -14%, rgba(28, 166, 160, 0.34), transparent 62%),
+    radial-gradient(92% 74% at 4% 112%, rgba(243, 189, 101, 0.16), transparent 62%),
+    linear-gradient(152deg, #071e2b 0%, #0a2c3d 44%, #0e4d5c 100%);
+}
+
+/* The blueprint grid, faded out before it reaches the right-hand edge. */
+.jf-cdir-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  opacity: 0.5;
+  background-image:
+    linear-gradient(rgba(131, 222, 216, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(131, 222, 216, 0.08) 1px, transparent 1px);
+  background-size: 58px 58px;
+  mask-image: radial-gradient(74% 82% at 18% 34%, #000 0%, transparent 78%);
+  -webkit-mask-image: radial-gradient(74% 82% at 18% 34%, #000 0%, transparent 78%);
+}
+
+.jf-cdir-hero__glow {
+  position: absolute;
+  z-index: -2;
+  border-radius: 50%;
+  filter: blur(90px);
+  pointer-events: none;
+}
+
+.jf-cdir-hero__glow--one {
+  top: -34%;
+  right: -6%;
+  width: 44vw;
+  height: 44vw;
+  max-width: 560px;
+  max-height: 560px;
+  background: rgba(28, 166, 160, 0.3);
+}
+
+.jf-cdir-hero__glow--two {
+  bottom: -46%;
+  left: 6%;
+  width: 34vw;
+  height: 34vw;
+  max-width: 420px;
+  max-height: 420px;
+  background: rgba(243, 189, 101, 0.14);
+}
+
+.jf-cdir-hero__inner {
+  position: relative;
+  z-index: 1;
+}
+
+.jf-cdir-hero__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 6px 14px 6px 11px;
+  color: #b6f0ec;
+  font-size: 0.64rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  background: rgba(131, 222, 216, 0.1);
+  border: 1px solid rgba(131, 222, 216, 0.22);
+  border-radius: 999px;
+}
+
+.jf-cdir-hero__dot {
+  width: 7px;
+  height: 7px;
+  background: #6fe3da;
+  border-radius: 50%;
+  box-shadow: 0 0 0 0 rgba(111, 227, 218, 0.55);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .jf-cdir-hero__dot {
+    animation: jf-cdir-pulse 2.4s ease-out infinite;
+  }
+}
+
+@keyframes jf-cdir-pulse {
+  70% {
+    box-shadow: 0 0 0 9px rgba(111, 227, 218, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(111, 227, 218, 0);
+  }
+}
+
+.jf-cdir-hero__inner h1 {
+  margin: 16px 0 10px;
+  color: #fff;
+  font-size: clamp(2.1rem, 4.6vw, 3.5rem);
+  font-weight: 700;
+  letter-spacing: -0.055em;
+  line-height: 1.03;
+}
+
+.jf-cdir-hero__accent {
+  background: linear-gradient(96deg, #8fe9e2 0%, #a9f0d8 34%, #f3bd65 62%, #8fe9e2 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+.jf-cdir-hero__inner p {
+  max-width: 56ch;
+  margin: 0;
+  color: rgba(226, 242, 244, 0.76);
+  font-size: 0.92rem;
+  line-height: 1.65;
+}
+
+.jf-cdir-hero__stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 26px 0 0;
+}
+
+.jf-cdir-hero__stats > div {
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+  padding: 11px 18px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(131, 222, 216, 0.18);
+  backdrop-filter: blur(6px);
+}
+
+.jf-cdir-hero__stats dt {
+  color: #8fe9e2;
+  font-size: 1.24rem;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+}
+
+.jf-cdir-hero__stats dd {
+  margin: 0;
+  color: rgba(226, 242, 244, 0.72);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+/* ------------------------------------------------------------------ *
+ * Filter card — floats over the hero's bottom edge
+ * ------------------------------------------------------------------ */
+
+.jf-cdir-filters {
+  position: relative;
+  z-index: 2;
+  margin-top: clamp(-40px, -3.5vw, -28px);
+}
+
+.jf-cdir-filters__form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  padding: 14px;
+  background: var(--jf-paper);
+  border: 1px solid var(--jf-line);
+  box-shadow: 0 18px 44px rgba(7, 30, 43, 0.16);
+}
+
+.jf-cdir-field {
+  flex: 1 1 200px;
+  min-width: 0;
+  margin: 0;
+}
+
+.jf-cdir-field--wide {
+  flex: 2 1 320px;
+}
+
+.jf-cdir-control {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  height: 44px;
+  padding: 0 13px;
+  background: var(--jf-canvas);
+  border: 1px solid var(--jf-line);
+  transition: border-color 200ms ease, box-shadow 200ms ease;
+}
+
+.jf-cdir-control:focus-within {
+  border-color: var(--jf-teal);
+  box-shadow: 0 0 0 3px rgba(28, 166, 160, 0.16);
+}
+
+.jf-cdir-control > i {
+  flex-shrink: 0;
+  color: var(--jf-ink-soft);
+  font-size: 0.78rem;
+}
+
+.jf-cdir-control input,
+.jf-cdir-control select {
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  color: var(--jf-ink);
+  font: inherit;
+  font-size: 0.82rem;
+  background: transparent;
+  border: 0;
+  outline: none;
+  appearance: none;
+}
+
+.jf-cdir-control input::placeholder {
+  color: var(--jf-ink-soft);
+}
+
+.jf-cdir-control--select {
+  padding-right: 32px;
+}
+
+.jf-cdir-chevron {
+  position: absolute;
+  right: 13px;
+  pointer-events: none;
+  font-size: 0.66rem;
+}
+
+.jf-cdir-submit,
+.jf-cdir-clear {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background 200ms ease, color 200ms ease, border-color 200ms ease;
+}
+
+.jf-cdir-submit {
+  color: #fff;
+  background: var(--jf-teal-dark);
+}
+
+.jf-cdir-submit:hover {
+  background: var(--jf-navy);
+}
+
+.jf-cdir-clear {
+  color: var(--jf-ink-soft);
+  background: transparent;
+  border-color: var(--jf-line);
+}
+
+.jf-cdir-clear:hover {
+  color: var(--jf-ink);
+  border-color: var(--jf-line-dark);
+}
+
+.jf-cdir-submit:focus-visible,
+.jf-cdir-clear:focus-visible {
+  outline: 3px solid rgba(28, 166, 160, 0.28);
+  outline-offset: 3px;
+}
+
+/* ------------------------------------------------------------------ *
+ * Directory grid
+ * ------------------------------------------------------------------ */
+
+.jf-cdir {
+  padding: clamp(26px, 3.5vw, 44px) 0 clamp(44px, 6vw, 76px);
+}
+
+.jf-cdir__heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.jf-cdir__heading p {
+  max-width: 62ch;
+  margin: 6px 0 0;
+  color: var(--jf-ink-soft);
+  font-size: 0.8rem;
+  line-height: 1.55;
+}
+
+.jf-cdir__count {
+  color: var(--jf-ink-soft);
+  font-size: 0.76rem;
+}
+
+.jf-cdir__count strong {
+  color: var(--jf-ink);
+}
+
+.jf-cdir__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 20px;
+}
+
+/* ------------------------------------------------------------------ *
+ * Company card
+ * ------------------------------------------------------------------ */
+
+.jf-ccard {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--jf-paper);
+  border: 1px solid var(--jf-line);
+  border-radius: 20px;
+  box-shadow: 0 1px 2px rgba(23, 43, 77, 0.04), 0 12px 30px rgba(23, 43, 77, 0.06);
+  transition: transform 320ms cubic-bezier(0.2, 0.8, 0.2, 1), border-color 320ms ease,
+    box-shadow 320ms ease;
+}
+
+.jf-ccard:hover {
+  transform: translateY(-3px);
+  border-color: var(--jf-line-dark);
+  box-shadow: 0 2px 4px rgba(23, 43, 77, 0.05), 0 20px 44px rgba(23, 43, 77, 0.1);
+}
+
+.jf-ccard__cover {
+  height: 78px;
+  background: linear-gradient(120deg, var(--jf-ocean), var(--jf-teal));
+}
+
+.jf-ccard__cover--photo {
+  background-position: center;
+  background-size: cover;
+}
+
+.jf-ccard__body {
+  position: relative;
+  flex: 1;
+  padding: 0 20px 18px;
+}
+
+.jf-ccard__logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  margin-top: -28px;
+  overflow: hidden;
+  color: var(--jf-teal-dark);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  background: var(--jf-paper);
+  border: 1px solid var(--jf-line);
+  border-radius: 14px;
+  box-shadow: 0 6px 16px rgba(11, 38, 56, 0.08);
+}
+
+.jf-ccard__logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 6px;
+}
+
+.jf-ccard__name {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 13px 0 0;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.3;
+}
+
+.jf-ccard__name a {
+  color: var(--jf-ink);
+  text-decoration: none;
+}
+
+.jf-ccard__name a:hover {
+  color: var(--jf-teal-dark);
+}
+
+/* Stretches the title link over the card body, so the whole block is
+   clickable without nesting the footer link inside a second anchor. */
+.jf-ccard__name a::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+.jf-ccard__industry {
+  margin: 6px 0 0;
+  color: var(--jf-teal-dark);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.jf-ccard__blurb {
+  margin: 10px 0 0;
+  color: var(--jf-ink-soft);
+  font-size: 0.78rem;
+  line-height: 1.6;
+}
+
+.jf-ccard__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 12px;
+}
+
+.jf-ccard__chips span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  color: var(--jf-ink-soft);
+  font-size: 0.68rem;
+  background: var(--jf-canvas);
+  border: 1px solid var(--jf-line);
+}
+
+.jf-ccard__chips i {
+  font-size: 0.62rem;
+}
+
+.jf-ccard__address {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 12px 0 0;
+  color: var(--jf-ink-soft);
+  font-size: 0.74rem;
+  line-height: 1.5;
+}
+
+.jf-ccard__address i {
+  margin-top: 3px;
+  font-size: 0.68rem;
+}
+
+.jf-ccard__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 13px 20px;
+  border-top: 1px solid var(--jf-line);
+}
+
+.jf-ccard__roles {
+  color: var(--jf-ink-soft);
+  font-size: 0.74rem;
+}
+
+.jf-ccard__roles strong {
+  color: var(--jf-ink);
+  font-weight: 700;
+}
+
+.jf-ccard__roles.is-hiring strong {
+  color: var(--jf-teal-dark);
+}
+
+.jf-ccard__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--jf-ink);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.jf-ccard__link i {
+  font-size: 0.62rem;
+  transition: transform 200ms ease;
+}
+
+.jf-ccard:hover .jf-ccard__link i {
+  transform: translateX(3px);
+}
+
+/* ------------------------------------------------------------------ *
+ * Empty state + pagination
+ * ------------------------------------------------------------------ */
+
+.jf-cdir-empty {
+  padding: clamp(38px, 6vw, 68px) 24px;
+  text-align: center;
+  background: var(--jf-paper);
+  border: 1px solid var(--jf-line);
+  border-radius: 20px;
+}
+
+.jf-cdir-empty__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  color: var(--jf-teal-dark);
+  background: rgba(28, 166, 160, 0.12);
+  border-radius: 16px;
+  font-size: 1.05rem;
+}
+
+.jf-cdir-empty h2 {
+  margin: 16px 0 6px;
+  color: var(--jf-ink);
+  font-size: 1.12rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.jf-cdir-empty p {
+  margin: 0 auto 16px;
+  max-width: 46ch;
+  color: var(--jf-ink-soft);
+  font-size: 0.82rem;
+  line-height: 1.6;
+}
+
+.jf-cdir-empty a {
+  display: inline-flex;
+  align-items: center;
+  height: 42px;
+  padding: 0 20px;
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-decoration: none;
+  background: var(--jf-teal-dark);
+}
+
+.jf-cdir-empty a:hover {
+  background: var(--jf-navy);
+}
+
+.jf-cdir__pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 28px;
+}
+
+.jf-cdir__pagination .pagination {
+  margin: 0;
+  gap: 6px;
+}
+
+.jf-cdir__pagination .page-link {
+  color: var(--jf-ink);
+  font-size: 0.78rem;
+  background: var(--jf-paper);
+  border: 1px solid var(--jf-line);
+  border-radius: 0;
+}
+
+.jf-cdir__pagination .page-item.active .page-link {
+  color: #fff;
+  background: var(--jf-teal-dark);
+  border-color: var(--jf-teal-dark);
+}
+
+.jf-cdir__pagination .page-item.disabled .page-link {
+  color: var(--jf-ink-soft);
+  background: var(--jf-canvas);
+  opacity: 0.65;
+}
+
+/* ------------------------------------------------------------------ *
+ * Profile: breadcrumb + hero
+ * ------------------------------------------------------------------ */
+
+.jf-cprofile-crumbs {
+  padding: 13px 0;
+  background: var(--jf-paper);
+  border-bottom: 1px solid var(--jf-line);
+}
+
+.jf-cprofile-crumbs .jf-shell {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--jf-ink-soft);
+  font-size: 0.75rem;
+}
+
+.jf-cprofile-crumbs a {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--jf-ink-soft);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.jf-cprofile-crumbs a:hover {
+  color: var(--jf-teal-dark);
+}
+
+.jf-cprofile-crumbs a i {
+  font-size: 0.62rem;
+}
+
+.jf-cprofile-crumbs [aria-current] {
+  color: var(--jf-ink);
+  font-weight: 600;
+}
+
+.jf-cprofile-hero {
+  background: var(--jf-paper);
+  border-bottom: 1px solid var(--jf-line);
+}
+
+.jf-cprofile-hero__cover {
+  height: clamp(130px, 20vw, 210px);
+  background: linear-gradient(120deg, var(--jf-navy), var(--jf-ocean) 55%, var(--jf-teal));
+}
+
+.jf-cprofile-hero__cover--photo {
+  background-position: center;
+  background-size: cover;
+}
+
+.jf-cprofile-hero__bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 18px;
+  padding-bottom: 22px;
+}
+
+.jf-cprofile-hero__logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: clamp(76px, 9vw, 96px);
+  height: clamp(76px, 9vw, 96px);
+  margin-top: clamp(-46px, -4vw, -34px);
+  overflow: hidden;
+  color: var(--jf-teal-dark);
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  background: var(--jf-paper);
+  border: 1px solid var(--jf-line);
+  border-radius: 20px;
+  box-shadow: 0 12px 30px rgba(11, 38, 56, 0.12);
+}
+
+.jf-cprofile-hero__logo img {
+  width: 100%;
+  height: 100%;
+  padding: 9px;
+  object-fit: contain;
+}
+
+.jf-cprofile-hero__identity {
+  flex: 1 1 340px;
+  min-width: 0;
+}
+
+.jf-cprofile-hero__identity h1 {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0;
+  color: var(--jf-ink);
+  font-size: clamp(1.5rem, 3vw, 2.15rem);
+  font-weight: 700;
+  letter-spacing: -0.045em;
+  line-height: 1.12;
+}
+
+.jf-cprofile-hero__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  margin-top: 10px;
+}
+
+.jf-cprofile-hero__meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--jf-ink-soft);
+  font-size: 0.78rem;
+}
+
+.jf-cprofile-hero__meta i {
+  font-size: 0.7rem;
+  color: var(--jf-teal-dark);
+}
+
+.jf-cprofile-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.jf-cprofile-hero__actions .jf-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  text-decoration: none;
+}
+
+.jf-cprofile-hero__actions .jf-btn--primary {
+  color: #fff;
+  background: var(--jf-teal-dark);
+  border: 1px solid var(--jf-teal-dark);
+}
+
+.jf-cprofile-hero__actions .jf-btn--primary:hover {
+  background: var(--jf-navy);
+  border-color: var(--jf-navy);
+}
+
+.jf-cprofile-hero__actions .jf-btn--ghost {
+  color: var(--jf-ink);
+  background: transparent;
+  border: 1px solid var(--jf-line-dark);
+}
+
+.jf-cprofile-hero__actions .jf-btn--ghost:hover {
+  color: var(--jf-teal-dark);
+  border-color: var(--jf-teal);
+}
+
+.jf-cprofile-hero__quiet {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 48px;
+  padding: 0 18px;
+  color: var(--jf-ink-soft);
+  font-size: 0.78rem;
+  background: var(--jf-canvas);
+  border: 1px solid var(--jf-line);
+}
+
+/* ------------------------------------------------------------------ *
+ * Profile: layout
+ * ------------------------------------------------------------------ */
+
+.jf-cprofile-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  align-items: start;
+  gap: 26px;
+  padding: clamp(24px, 3.5vw, 40px) 0 clamp(44px, 6vw, 76px);
+}
+
+.jf-cprofile-main {
+  min-width: 0;
+}
+
+.jf-cprofile-card {
+  padding: clamp(20px, 2.5vw, 28px);
+  background: var(--jf-paper);
+  border: 1px solid var(--jf-line);
+  border-radius: 20px;
+}
+
+.jf-cprofile-card + .jf-cprofile-item {
+  margin-top: 8px;
+}
+
+.jf-cprofile-card h2 {
+  margin: 0 0 12px;
+  color: var(--jf-ink);
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.jf-cprofile-card--muted p {
+  margin: 0;
+  color: var(--jf-ink-soft);
+  font-size: 0.85rem;
+  line-height: 1.7;
+}
+
+.jf-cprofile-prose p {
+  margin: 0 0 12px;
+  color: var(--jf-ink-soft);
+  font-size: 0.88rem;
+  line-height: 1.75;
+}
+
+.jf-cprofile-prose p:last-child {
+  margin-bottom: 0;
+}
+
+/* ------------------------------------------------------------------ *
+ * Profile: employer-authored sections
+ * (same look as the Company tab on a job page — see job-show.css)
+ * ------------------------------------------------------------------ */
+
+.jf-cprofile-item {
+  padding: 0 clamp(20px, 2.5vw, 28px);
+  background: var(--jf-paper);
+  border: 1px solid var(--jf-line);
+  border-radius: 20px;
+  margin-top: 12px;
+}
+
+.jf-cprofile-item__summary {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 18px 0;
+  cursor: pointer;
+  list-style: none;
+}
+
+/* Hide the native disclosure marker in both engines. */
+.jf-cprofile-item__summary::-webkit-details-marker {
+  display: none;
+}
+
+.jf-cprofile-item__summary::marker {
+  content: "";
+}
+
+.jf-cprofile-item__summary:focus-visible {
+  outline: 3px solid rgba(28, 166, 160, 0.3);
+  outline-offset: 3px;
+}
+
+.jf-cprofile-item__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  color: var(--jf-teal-dark);
+  background: rgba(28, 166, 160, 0.12);
+  border-radius: 10px;
+  font-size: 0.8rem;
+  transition: color 200ms ease, background 200ms ease;
+}
+
+/* `tone` comes from Company::profileSections(), so the four headings read
+   with a rhythm rather than as four identical chips. */
+.jf-cprofile-item__icon--ocean {
+  color: var(--jf-ocean);
+  background: rgba(15, 95, 115, 0.12);
+}
+
+.jf-cprofile-item__icon--gold {
+  color: #9a6a12;
+  background: rgba(243, 189, 101, 0.22);
+}
+
+.jf-cprofile-item__icon--navy {
+  color: var(--jf-navy);
+  background: rgba(11, 38, 56, 0.1);
+}
+
+.jf-cprofile-item[open] .jf-cprofile-item__icon {
+  color: #fff;
+  background: var(--jf-teal-dark);
+}
+
+.jf-cprofile-item[open] .jf-cprofile-item__icon--ocean {
+  background: var(--jf-ocean);
+}
+
+.jf-cprofile-item[open] .jf-cprofile-item__icon--gold {
+  background: #9a6a12;
+}
+
+.jf-cprofile-item[open] .jf-cprofile-item__icon--navy {
+  background: var(--jf-navy);
+}
+
+.jf-cprofile-item__title {
+  flex: 1;
+  color: var(--jf-ink);
+  font-size: 0.98rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.jf-cprofile-item__chevron {
+  flex-shrink: 0;
+  color: var(--jf-ink-soft);
+  font-size: 0.72rem;
+  transition: transform 220ms ease;
+}
+
+.jf-cprofile-item[open] .jf-cprofile-item__chevron {
+  transform: rotate(180deg);
+}
+
+.jf-cprofile-item__body {
+  padding: 0 0 20px 47px;
+}
+
+.jf-cprofile-item__body p {
+  margin: 0 0 12px;
+  color: var(--jf-ink-soft);
+  font-size: 0.88rem;
+  line-height: 1.75;
+}
+
+.jf-cprofile-item__body p:last-child {
+  margin-bottom: 0;
+}
+
+.jf-cprofile-item__list {
+  margin: 0 0 12px;
+  padding: 0;
+  list-style: none;
+}
+
+.jf-cprofile-item__list:last-child {
+  margin-bottom: 0;
+}
+
+.jf-cprofile-item__list li {
+  position: relative;
+  margin: 0 0 8px;
+  padding-left: 18px;
+  color: var(--jf-ink-soft);
+  font-size: 0.88rem;
+  line-height: 1.6;
+}
+
+.jf-cprofile-item__list li::before {
+  content: "";
+  position: absolute;
+  top: 0.6em;
+  left: 2px;
+  width: 5px;
+  height: 5px;
+  background: var(--jf-teal-dark);
+  border-radius: 50%;
+}
+
+/* ------------------------------------------------------------------ *
+ * Profile: open roles
+ * ------------------------------------------------------------------ */
+
+.jf-cprofile-jobs {
+  margin-top: 26px;
+  scroll-margin-top: 100px;
+}
+
+.jf-cprofile-jobs__heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.jf-cprofile-jobs__heading h2 {
+  margin: 0;
+  color: var(--jf-ink);
+  font-size: 1.14rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.jf-cprofile-jobs__heading span {
+  color: var(--jf-ink-soft);
+  font-size: 0.75rem;
+}
+
+.jf-cprofile-jobs__empty {
+  margin: 0;
+  padding: 26px;
+  color: var(--jf-ink-soft);
+  font-size: 0.84rem;
+  line-height: 1.65;
+  background: var(--jf-paper);
+  border: 1px dashed var(--jf-line-dark);
+  border-radius: 20px;
+}
+
+.jf-crole {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 17px 20px;
+  margin-bottom: 10px;
+  background: var(--jf-paper);
+  border: 1px solid var(--jf-line);
+  border-radius: 18px;
+  transition: border-color 240ms ease, box-shadow 240ms ease, transform 240ms ease;
+}
+
+.jf-crole:hover {
+  transform: translateY(-2px);
+  border-color: var(--jf-line-dark);
+  box-shadow: 0 14px 32px rgba(23, 43, 77, 0.08);
+}
+
+.jf-crole.is-featured {
+  border-left: 3px solid var(--jf-gold);
+}
+
+.jf-crole__main {
+  flex: 1 1 260px;
+  min-width: 0;
+}
+
+.jf-crole__main h3 {
+  margin: 0;
+  font-size: 0.98rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+
+.jf-crole__main h3 a {
+  color: var(--jf-ink);
+  text-decoration: none;
+}
+
+.jf-crole__main h3 a:hover {
+  color: var(--jf-teal-dark);
+}
+
+.jf-crole__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  margin-top: 8px;
+}
+
+.jf-crole__meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--jf-ink-soft);
+  font-size: 0.73rem;
+}
+
+.jf-crole__meta i {
+  font-size: 0.66rem;
+}
+
+.jf-crole__side {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.jf-crole__salary {
+  margin: 0;
+  color: var(--jf-ink);
+  font-size: 0.84rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.jf-crole__apply {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 17px;
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-decoration: none;
+  background: var(--jf-teal-dark);
+  transition: background 200ms ease;
+}
+
+.jf-crole__apply:hover {
+  color: #fff;
+  background: var(--jf-navy);
+}
+
+.jf-crole__apply i {
+  font-size: 0.62rem;
+}
+
+/* ------------------------------------------------------------------ *
+ * Profile: sidebar
+ * ------------------------------------------------------------------ */
+
+.jf-cprofile-side {
+  position: sticky;
+  top: 92px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+}
+
+.jf-cprofile-panel {
+  padding: 20px;
+  background: var(--jf-paper);
+  border: 1px solid var(--jf-line);
+  border-radius: 20px;
+}
+
+.jf-cprofile-panel h2 {
+  margin: 0 0 14px;
+  color: var(--jf-ink);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.jf-cprofile-facts {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+}
+
+.jf-cprofile-facts dt {
+  color: var(--jf-ink-soft);
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+
+.jf-cprofile-facts dd {
+  margin: 3px 0 0;
+  color: var(--jf-ink);
+  font-size: 0.83rem;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.jf-cprofile-contact {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.jf-cprofile-contact li {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  color: var(--jf-ink-soft);
+  font-size: 0.8rem;
+  line-height: 1.55;
+}
+
+.jf-cprofile-contact i {
+  margin-top: 3px;
+  flex-shrink: 0;
+  color: var(--jf-teal-dark);
+  font-size: 0.72rem;
+}
+
+.jf-cprofile-contact a {
+  color: var(--jf-ink);
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+.jf-cprofile-contact a:hover {
+  color: var(--jf-teal-dark);
+}
+
+.jf-cprofile-social {
+  display: grid;
+  gap: 8px;
+}
+
+.jf-cprofile-social a {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 10px 12px;
+  color: var(--jf-ink);
+  text-decoration: none;
+  background: var(--jf-canvas);
+  border: 1px solid var(--jf-line);
+  transition: border-color 200ms ease, background 200ms ease;
+}
+
+.jf-cprofile-social a:hover {
+  background: var(--jf-paper);
+  border-color: var(--jf-teal);
+}
+
+.jf-cprofile-social a > i:first-child {
+  flex-shrink: 0;
+  width: 20px;
+  color: var(--jf-teal-dark);
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.jf-cprofile-social span {
+  flex: 1;
+  min-width: 0;
+}
+
+.jf-cprofile-social strong {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.jf-cprofile-social small {
+  display: block;
+  color: var(--jf-ink-soft);
+  font-size: 0.68rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.jf-cprofile-social a > i:last-child {
+  flex-shrink: 0;
+  color: var(--jf-ink-soft);
+  font-size: 0.62rem;
+}
+
+.jf-cprofile-related {
+  display: grid;
+  gap: 8px;
+}
+
+.jf-cprofile-related a {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 9px;
+  color: var(--jf-ink);
+  text-decoration: none;
+  border: 1px solid transparent;
+  transition: border-color 200ms ease, background 200ms ease;
+}
+
+.jf-cprofile-related a:hover {
+  background: var(--jf-canvas);
+  border-color: var(--jf-line);
+}
+
+.jf-cprofile-related__logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  overflow: hidden;
+  color: var(--jf-teal-dark);
+  font-size: 0.72rem;
+  font-weight: 700;
+  background: var(--jf-canvas);
+  border: 1px solid var(--jf-line);
+  border-radius: 11px;
+}
+
+.jf-cprofile-related__logo img {
+  width: 100%;
+  height: 100%;
+  padding: 4px;
+  object-fit: contain;
+}
+
+.jf-cprofile-related__text {
+  min-width: 0;
+}
+
+.jf-cprofile-related__text strong {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.jf-cprofile-related__text small {
+  display: block;
+  color: var(--jf-ink-soft);
+  font-size: 0.69rem;
+}
+
+/* ------------------------------------------------------------------ *
+ * Responsive
+ * ------------------------------------------------------------------ */
+
+@media (max-width: 1080px) {
+  .jf-cprofile-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .jf-cprofile-side {
+    position: static;
+  }
+}
+
+@media (max-width: 720px) {
+  .jf-cdir-filters__form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .jf-cdir-field,
+  .jf-cdir-field--wide {
+    flex: 1 1 auto;
+  }
+
+  .jf-cdir__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .jf-cprofile-hero__bar {
+    align-items: flex-start;
+  }
+
+  .jf-cprofile-hero__actions {
+    width: 100%;
+  }
+
+  .jf-cprofile-hero__actions .jf-btn,
+  .jf-cprofile-hero__quiet {
+    flex: 1 1 auto;
+    justify-content: center;
+  }
+
+  .jf-cprofile-item__body {
+    padding-left: 0;
+  }
+
+  .jf-crole__side {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ * Dark theme — only what the tokens above do not already cover
+ * ------------------------------------------------------------------ */
+
+html[data-theme="dark"] .jf-cdir-filters__form {
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.36);
+}
+
+html[data-theme="dark"] .jf-ccard,
+html[data-theme="dark"] .jf-crole {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 14px 34px rgba(0, 0, 0, 0.22);
+}
+
+html[data-theme="dark"] .jf-ccard:hover {
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.34), 0 22px 48px rgba(0, 0, 0, 0.3);
+}
+
+html[data-theme="dark"] .jf-crole:hover {
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.3);
+}
+
+html[data-theme="dark"] .jf-ccard__logo,
+html[data-theme="dark"] .jf-cprofile-hero__logo {
+  color: #6fd0cb;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.34);
+}
+
+html[data-theme="dark"] .jf-ccard__industry,
+html[data-theme="dark"] .jf-ccard__roles.is-hiring strong,
+html[data-theme="dark"] .jf-ccard__name a:hover,
+html[data-theme="dark"] .jf-crole__main h3 a:hover,
+html[data-theme="dark"] .jf-cprofile-crumbs a:hover,
+html[data-theme="dark"] .jf-cprofile-hero__meta i,
+html[data-theme="dark"] .jf-cprofile-contact i,
+html[data-theme="dark"] .jf-cprofile-social a > i:first-child,
+html[data-theme="dark"] .jf-cprofile-related__logo {
+  color: #6fd0cb;
+}
+
+html[data-theme="dark"] .jf-cprofile-item__icon,
+html[data-theme="dark"] .jf-cdir-empty__icon {
+  color: #6fd0cb;
+  background: rgba(111, 208, 203, 0.14);
+}
+
+html[data-theme="dark"] .jf-cprofile-item__icon--ocean {
+  color: #7cc6dd;
+  background: rgba(124, 198, 221, 0.14);
+}
+
+html[data-theme="dark"] .jf-cprofile-item__icon--gold {
+  color: #f3bd65;
+  background: rgba(243, 189, 101, 0.16);
+}
+
+html[data-theme="dark"] .jf-cprofile-item__icon--navy {
+  color: #9fb8c4;
+  background: rgba(159, 184, 196, 0.14);
+}
+
+html[data-theme="dark"] .jf-cprofile-item[open] .jf-cprofile-item__icon,
+html[data-theme="dark"] .jf-cprofile-item[open] .jf-cprofile-item__icon--ocean,
+html[data-theme="dark"] .jf-cprofile-item[open] .jf-cprofile-item__icon--gold,
+html[data-theme="dark"] .jf-cprofile-item[open] .jf-cprofile-item__icon--navy {
+  color: #071015;
+}
+
+html[data-theme="dark"] .jf-cprofile-item[open] .jf-cprofile-item__icon {
+  background: #6fd0cb;
+}
+
+html[data-theme="dark"] .jf-cprofile-item[open] .jf-cprofile-item__icon--ocean {
+  background: #7cc6dd;
+}
+
+html[data-theme="dark"] .jf-cprofile-item[open] .jf-cprofile-item__icon--navy {
+  background: #9fb8c4;
+}
+
+html[data-theme="dark"] .jf-cprofile-item__list li::before {
+  background: #6fd0cb;
+}
+
+html[data-theme="dark"] .jf-cdir-submit,
+html[data-theme="dark"] .jf-crole__apply,
+html[data-theme="dark"] .jf-cdir-empty a,
+html[data-theme="dark"] .jf-cprofile-hero__actions .jf-btn--primary,
+html[data-theme="dark"] .jf-cdir__pagination .page-item.active .page-link {
+  color: #04191b;
+  background: #6fd0cb;
+  border-color: #6fd0cb;
+}
+
+html[data-theme="dark"] .jf-cdir-submit:hover,
+html[data-theme="dark"] .jf-crole__apply:hover,
+html[data-theme="dark"] .jf-cdir-empty a:hover,
+html[data-theme="dark"] .jf-cprofile-hero__actions .jf-btn--primary:hover {
+  color: #04191b;
+  background: #8ee0db;
+  border-color: #8ee0db;
+}
+
+html[data-theme="dark"] .jf-cprofile-hero__actions .jf-btn--ghost:hover {
+  color: #6fd0cb;
+  border-color: #6fd0cb;
+}

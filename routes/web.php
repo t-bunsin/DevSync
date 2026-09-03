@@ -6,6 +6,7 @@ use App\Http\Controllers\AboutController;
 use App\Http\Controllers\BillingController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CompaniesController;
+use App\Http\Controllers\CompanyDirectoryController;
 use App\Http\Controllers\ComplianceController;
 use App\Http\Controllers\ComponentController;
 use App\Http\Controllers\ContactController;
@@ -195,6 +196,16 @@ Route::prefix('admin')->group(function () {
         });
     });
 });
+
+/*
+ | The public employer directory. Named companies.index / companies.profile
+ | rather than companies / companies.show, which the signed-in register under
+ | /admin already owns — same nouns, different audience.
+ */
+Route::get('/companies', [CompanyDirectoryController::class, 'index'])->name('companies.index');
+Route::get('/companies/{company}', [CompanyDirectoryController::class, 'show'])
+    ->where('company', '[a-z0-9-]+')
+    ->name('companies.profile');
 
 Route::get('/about', [AboutController::class, 'index'])->name('about');
 
