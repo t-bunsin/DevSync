@@ -412,5 +412,5 @@
 @endsection
 
 @push('scripts')
-    <script src="{{ asset('js/job-show.js') }}"></script>
+    <script src="{{ asset('js/job-show.js') }}?v={{ filemtime(public_path('js/job-show.js')) }}"></script>
 @endpush

@@ -50,6 +50,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const jobsSection = explorer.querySelector('#jobs');
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const animationTimers = new WeakMap();
+    // Set when an application goes through, so closing the dialog can
+    // refresh the stale page behind it. Cleared each time it reopens.
+    let applicationSent = false;
 
     const detailFields = {
         badge: explorer.querySelector('#detail-badge'),
@@ -557,6 +560,7 @@ document.addEventListener('DOMContentLoaded', () => {
         applyForm.action = (applyForm.dataset.applyTemplate || '').replace(':job', encodeURIComponent(job.id));
         applyForm.hidden = false;
         applySuccess.hidden = true;
+        applicationSent = false;
 
         if (applyError) {
             applyError.hidden = true;
@@ -686,6 +690,17 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     if (hasApplyDialog) {
+        // The page behind the dialog still shows this role as un-applied — the
+        // apply button, the card state, the application count. Rather than
+        // patching each one, reload once the user is done reading the
+        // confirmation. Bound to the dialog's own close event so it covers the
+        // X button, a click on the backdrop and the Escape key alike.
+        applyDialog.addEventListener('close', () => {
+            if (applicationSent) {
+                window.location.reload();
+            }
+        });
+
         closeDialogButton.addEventListener('click', () => applyDialog.close());
         applyDialog.addEventListener('click', (event) => {
             const bounds = applyDialog.getBoundingClientRect();
@@ -725,6 +740,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 applyForm.hidden = true;
                 applySuccess.hidden = false;
+                applicationSent = true;
             } catch (error) {
                 if (applyError) {
                     applyError.textContent = error.message;

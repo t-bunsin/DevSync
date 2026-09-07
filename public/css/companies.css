@@ -15,7 +15,7 @@
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  padding: clamp(38px, 4.6vw, 62px) 0 clamp(66px, 7vw, 96px);
+  padding: clamp(14px, 1.6vw, 20px) 0 clamp(28px, 2.8vw, 38px);
   color: #fff;
   background: radial-gradient(120% 130% at 6% 8%, #123a5e 0%, #0d2a47 42%, #0a2039 100%);
 }
@@ -56,7 +56,7 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 0.82fr);
   align-items: center;
-  gap: 30px;
+  gap: 28px;
 }
 
 .jf-cdir-hero__copy {
@@ -68,10 +68,10 @@
 .jf-cdir-hero__eyebrow {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
-  padding: 7px 22px 7px 7px;
+  gap: 8px;
+  padding: 4px 14px 4px 4px;
   color: #eaf6f4;
-  font-size: 0.72rem;
+  font-size: 0.6rem;
   font-weight: 800;
   letter-spacing: 0.13em;
   text-transform: uppercase;
@@ -84,10 +84,10 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  width: 20px;
+  height: 20px;
   color: #7ee8c0;
-  font-size: 0.82rem;
+  font-size: 0.6rem;
   background: rgba(126, 232, 192, 0.16);
   border-radius: 50%;
 }
@@ -95,9 +95,9 @@
 /* ---- Headline ---- */
 
 .jf-cdir-hero__inner h1 {
-  margin: 20px 0 14px;
+  margin: 10px 0 8px;
   color: #fff;
-  font-size: clamp(2.2rem, 4.8vw, 3.75rem);
+  font-size: clamp(1.3rem, 2.1vw, 1.7rem);
   font-weight: 700;
   letter-spacing: -0.055em;
   line-height: 1.04;
@@ -130,8 +130,8 @@
   max-width: 52ch;
   margin: 0;
   color: rgba(219, 236, 240, 0.8);
-  font-size: 0.95rem;
-  line-height: 1.66;
+  font-size: 0.8rem;
+  line-height: 1.5;
 }
 
 /* ---- Stat cards ---- */
@@ -139,15 +139,15 @@
 .jf-cdir-hero__stats {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
-  margin: 30px 0 0;
+  gap: 9px;
+  margin: 14px 0 0;
 }
 
 .jf-cdir-stat {
   display: flex;
   align-items: center;
-  gap: 13px;
-  padding: 13px 22px 13px 14px;
+  gap: 9px;
+  padding: 6px 12px 6px 7px;
   background: rgba(9, 32, 54, 0.55);
   border: 1px solid rgba(126, 232, 192, 0.16);
   border-radius: 16px;
@@ -158,12 +158,12 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 24px;
+  height: 24px;
   flex-shrink: 0;
   color: #fff;
-  font-size: 0.88rem;
-  border-radius: 12px;
+  font-size: 0.64rem;
+  border-radius: 8px;
 }
 
 .jf-cdir-stat__icon--teal {
@@ -184,7 +184,7 @@
 
 .jf-cdir-hero__stats dt {
   color: #fff;
-  font-size: 1.32rem;
+  font-size: 0.92rem;
   font-weight: 700;
   letter-spacing: -0.04em;
   line-height: 1.1;
@@ -193,7 +193,7 @@
 .jf-cdir-hero__stats dd {
   margin: 1px 0 0;
   color: rgba(219, 236, 240, 0.74);
-  font-size: 0.76rem;
+  font-size: 0.66rem;
   font-weight: 500;
 }
 
@@ -201,7 +201,7 @@
 
 .jf-cdir-hero__art {
   position: relative;
-  min-height: 300px;
+  min-height: 128px;
   align-self: stretch;
 }
 
@@ -212,7 +212,7 @@
   top: 50%;
   left: 50%;
   display: block;
-  width: min(290px, 84%);
+  width: min(148px, 70%);
   aspect-ratio: 1;
   transform: translate(-40%, -50%);
   border-radius: 48% 52% 44% 56% / 54% 46% 54% 46%;
@@ -250,11 +250,11 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 54px;
-  height: 54px;
+  width: 32px;
+  height: 32px;
   color: #fff;
-  font-size: 1.05rem;
-  border-radius: 16px;
+  font-size: 0.68rem;
+  border-radius: 10px;
   box-shadow: 0 14px 30px rgba(6, 26, 44, 0.34);
 }
 
@@ -303,7 +303,7 @@
 .jf-cdir-filters {
   position: relative;
   z-index: 2;
-  margin-top: clamp(-40px, -3.5vw, -28px);
+  margin-top: clamp(-20px, -1.5vw, -14px);
 }
 
 .jf-cdir-filters__form {
@@ -433,7 +433,7 @@
  * ------------------------------------------------------------------ */
 
 .jf-cdir {
-  padding: clamp(26px, 3.5vw, 44px) 0 clamp(44px, 6vw, 76px);
+  padding: clamp(18px, 2vw, 24px) 0 clamp(44px, 5vw, 64px);
 }
 
 .jf-cdir__heading {

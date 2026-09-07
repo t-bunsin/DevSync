@@ -46,6 +46,9 @@
         const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         let animationTimer;
         let savedJobs = new Set();
+        // Set when an application goes through, so closing the dialog can
+        // refresh the stale page behind it. Cleared each time it reopens.
+        let applicationSent = false;
 
         try {
             savedJobs = new Set(JSON.parse(localStorage.getItem('khworks:saved-jobs') || '[]'));
@@ -199,6 +202,7 @@
 
             applyForm.hidden = false;
             applySuccess.hidden = true;
+            applicationSent = false;
 
             if (applyError) {
                 applyError.hidden = true;
@@ -214,6 +218,17 @@
         if (applyButton?.hasAttribute('data-job-page-auto-open')) {
             openApplyDialog();
         }
+        // The page behind the dialog still shows this role as un-applied — the
+        // apply button, the application count. Rather than patching each one,
+        // reload once the user is done reading the confirmation. Bound to the
+        // dialog's own close event so it covers the X button, a click on the
+        // backdrop and the Escape key alike.
+        applyDialog?.addEventListener('close', () => {
+            if (applicationSent) {
+                window.location.reload();
+            }
+        });
+
         document.querySelector('[data-job-page-close]')?.addEventListener('click', () => applyDialog.close());
         applyDialog?.addEventListener('click', (event) => {
             const bounds = applyDialog.getBoundingClientRect();
@@ -255,6 +270,7 @@
 
                 applyForm.hidden = true;
                 applySuccess.hidden = false;
+                applicationSent = true;
             } catch (error) {
                 if (applyError) {
                     applyError.textContent = error.message;
