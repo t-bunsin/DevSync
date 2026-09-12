@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'chat_url' => env('CHAT_URL', 'https://t.me/khworks'),
+    'chat_url' => env('CHAT_URL', 'https://t.me/bunsin_toeng'),
 
     /*
     |--------------------------------------------------------------------------

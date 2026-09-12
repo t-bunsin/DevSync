@@ -1,530 +1,690 @@
-/* Contact page — builds on the tokens and base styles in jobs.css */
+/*
+ * Contact page (/contact).
+ *
+ * A split panel: the details on a dark half, the form on a light half, then
+ * the map as a closing band with the office riding on it. The form controls
+ * and the pill button are the employer directory's (companies.css), so the
+ * inputs here match the ones on /companies.
+ *
+ * Built on the jobs.css tokens, which flip under html[data-theme="dark"], so
+ * only hard-coded surfaces need a dark override. The dark half is dark in
+ * both themes, the way the directory hero is.
+ */
 
-/* Hero */
-.jf-contact-hero {
-  position: relative;
+/* ------------------------------------------------------------------ *
+ * The split
+ * ------------------------------------------------------------------ */
+
+.jf-ctc {
+  padding: clamp(20px, 2.6vw, 34px) 0 clamp(30px, 3.4vw, 44px);
+  background: linear-gradient(180deg, #f6f8fd 0%, var(--jf-canvas) 60%);
+}
+
+/* Two halves of one object: the radius and shadow belong to the pair, so the
+   panels square off the edge they share. */
+.jf-ctc__split {
+  display: grid;
+  grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+  align-items: stretch;
   overflow: hidden;
-  padding: 58px 0 92px;
-  color: #fff;
-  background:
-    linear-gradient(118deg, rgba(8, 34, 50, 0.98), rgba(13, 82, 97, 0.96)),
-    var(--jf-navy);
+  border-radius: 28px;
+  box-shadow: 0 1px 2px rgba(23, 43, 77, 0.05), 0 26px 60px rgba(23, 43, 77, 0.11);
 }
 
-.jf-contact-hero__glow {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(4px);
-  opacity: 0.5;
-  pointer-events: none;
-}
+/* ---- Dark half ---- */
 
-.jf-contact-hero__glow--one {
-  top: -180px;
-  right: -120px;
-  width: 460px;
-  height: 460px;
-  background: radial-gradient(circle, rgba(28, 166, 160, 0.42), transparent 68%);
-}
-
-.jf-contact-hero__glow--two {
-  bottom: -240px;
-  left: -140px;
-  width: 420px;
-  height: 420px;
-  background: radial-gradient(circle, rgba(243, 189, 101, 0.24), transparent 66%);
-}
-
-.jf-contact-hero__inner {
+.jf-ctc-aside {
   position: relative;
-  z-index: 1;
-  max-width: 720px;
-}
-
-.jf-contact-hero__eyebrow {
-  display: inline-block;
-  padding: 8px 15px;
-  color: #9fe3de;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  border-radius: 999px;
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-}
-
-.jf-contact-hero h1 {
-  margin: 18px 0 0;
-  font-size: clamp(2.1rem, 4.6vw, 3.4rem);
-  font-weight: 700;
-  line-height: 1.05;
-  letter-spacing: -0.055em;
-}
-
-.jf-contact-hero h1 span {
-  color: #8ad9d3;
-}
-
-.jf-contact-hero > .jf-shell > p {
-  max-width: 560px;
-  margin: 16px 0 0;
-  color: rgba(238, 248, 248, 0.78);
-  font-size: 0.98rem;
-  line-height: 1.65;
-}
-
-.jf-contact-hero__chips {
+  isolation: isolate;
   display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin: 26px 0 0;
-  padding: 0;
-  list-style: none;
+  flex-direction: column;
+  overflow: hidden;
+  padding: clamp(26px, 3vw, 38px);
+  color: #fff;
+  background: radial-gradient(120% 130% at 8% 6%, #123a5e 0%, #0d2a47 44%, #0a2039 100%);
 }
 
-.jf-contact-hero__chips li {
+/* The directory hero's mint shape, sized for a panel this tall and blurred:
+   at full sharpness its edge reads as a circle drawn on the panel rather
+   than light falling across it. */
+.jf-ctc-aside__curve {
+  position: absolute;
+  top: -34%;
+  right: -46%;
+  z-index: -2;
+  width: 94%;
+  height: 74%;
+  pointer-events: none;
+  border-radius: 46% 54% 42% 58% / 52% 44% 56% 48%;
+  filter: blur(34px);
+  background:
+    radial-gradient(78% 72% at 62% 34%, rgba(126, 232, 192, 0.46), transparent 70%),
+    linear-gradient(140deg, rgba(99, 220, 192, 0.36) 0%, rgba(42, 168, 164, 0.26) 54%, transparent 100%);
+}
+
+.jf-ctc-aside__glow {
+  position: absolute;
+  bottom: -18%;
+  left: -24%;
+  z-index: -2;
+  width: 70%;
+  aspect-ratio: 1;
+  pointer-events: none;
+  border-radius: 50%;
+  filter: blur(60px);
+  background: radial-gradient(circle, rgba(43, 122, 200, 0.4), transparent 68%);
+}
+
+.jf-ctc-aside__eyebrow {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 9px 14px;
-  color: rgba(238, 248, 248, 0.9);
+  gap: 9px;
+  padding: 6px 15px 6px 12px;
+  color: #eaf6f4;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
   background: rgba(255, 255, 255, 0.07);
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(126, 232, 192, 0.26);
   border-radius: 999px;
-  font-size: 0.76rem;
-  font-weight: 600;
 }
 
-.jf-contact-hero__chips i {
-  color: #f3bd65;
-  font-size: 0.72rem;
+/* A live pulse, as in the landing hero's eyebrow. */
+.jf-ctc-aside__eyebrow-dot {
+  position: relative;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #7ee8c0;
+  box-shadow: 0 0 10px rgba(126, 232, 192, 0.9);
 }
 
-/* Body grid — the panel lifts into the hero */
-.jf-contact {
-  padding: 0 0 72px;
+.jf-ctc-aside__top h1 {
+  margin: 16px 0 0;
+  color: #fff;
+  font-size: clamp(1.5rem, 2.6vw, 2.05rem);
+  font-weight: 700;
+  letter-spacing: -0.05em;
+  line-height: 1.06;
+  text-wrap: balance;
 }
 
-.jf-contact__grid {
-  display: grid;
-  grid-template-columns: minmax(300px, 0.86fr) minmax(420px, 1.14fr);
-  gap: 22px;
-  margin-top: -54px;
+.jf-ctc-aside__top h1 em {
+  font-style: normal;
+  background: linear-gradient(96deg, #6fe3da 0%, #9beccd 46%, #f3d78a 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-/* Contact channels */
-.jf-contact__aside {
-  display: grid;
-  align-content: start;
-  gap: 18px;
-  padding: 26px 24px 24px;
-  background: var(--jf-paper);
-  border: 1px solid var(--jf-line);
-  border-radius: var(--jf-radius-xl);
-  box-shadow: var(--jf-shadow-md);
+.jf-ctc-aside__top p {
+  max-width: 46ch;
+  margin: 12px 0 0;
+  color: rgba(219, 236, 240, 0.78);
+  font-size: 0.84rem;
+  line-height: 1.6;
 }
 
-.jf-contact__aside-title {
-  margin: 0;
-  font-size: 1.16rem;
-  letter-spacing: -0.035em;
-}
+/* ---- Channel rows on the dark half ---- */
 
-.jf-contact__channels {
-  display: grid;
-  gap: 6px;
-  margin: 0;
+.jf-ctc-channels {
+  margin: clamp(22px, 2.4vw, 30px) 0 0;
   padding: 0;
   list-style: none;
 }
 
-.jf-channel {
+.jf-ctc-channel + .jf-ctc-channel {
+  margin-top: 7px;
+}
+
+/* Where there is somewhere to go the whole row is the link. */
+.jf-ctc-channel__face {
   display: flex;
+  align-items: center;
   gap: 14px;
-  padding: 14px 12px;
-  border-radius: var(--jf-radius-md);
-  transition: background 180ms ease;
+  padding: 12px 14px;
+  color: inherit;
+  text-decoration: none;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(126, 232, 192, 0.12);
+  border-radius: 16px;
+  transition: background 200ms ease, border-color 200ms ease, transform 200ms ease;
 }
 
-.jf-channel:hover {
-  background: #f4f8f7;
+a.jf-ctc-channel__face:hover {
+  transform: translateX(3px);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(126, 232, 192, 0.3);
 }
 
-.jf-channel__icon {
+a.jf-ctc-channel__face:focus-visible {
+  outline: 3px solid rgba(126, 232, 192, 0.45);
+  outline-offset: 2px;
+}
+
+.jf-ctc-channel__icon {
   display: inline-flex;
+  flex-shrink: 0;
   align-items: center;
   justify-content: center;
   width: 40px;
   height: 40px;
-  flex-shrink: 0;
-  color: var(--jf-teal-dark);
-  background: rgba(28, 166, 160, 0.1);
+  color: #fff;
+  font-size: 0.86rem;
+  background: linear-gradient(145deg, var(--jf-from), var(--jf-to));
   border-radius: 13px;
-  font-size: 0.9rem;
+  box-shadow: 0 10px 20px rgba(4, 18, 30, 0.4);
 }
 
-.jf-channel__body {
-  display: grid;
-  gap: 3px;
+.jf-ctc-channel__text {
+  min-width: 0;
+  flex: 1;
 }
 
-.jf-channel__label {
-  color: var(--jf-ink-soft);
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.09em;
+.jf-ctc-channel__label {
+  display: block;
+  color: #7ee8c0;
+  font-size: 0.58rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
 }
 
-.jf-channel__value {
-  margin: 0;
-  color: var(--jf-ink);
-  font-size: 0.9rem;
-  font-weight: 600;
-  line-height: 1.5;
-}
-
-.jf-channel__action {
-  justify-self: start;
-  margin-top: 3px;
-  color: var(--jf-ocean);
-  font-size: 0.76rem;
-  font-weight: 700;
-  text-decoration: none;
-}
-
-.jf-channel__action i {
-  margin-left: 5px;
-  font-size: 0.66rem;
-  transition: transform 180ms ease;
-}
-
-.jf-channel__action:hover {
-  color: var(--jf-teal-dark);
-}
-
-.jf-channel__action:hover i {
-  transform: translateX(3px);
-}
-
-/* Map */
-.jf-contact__map {
-  position: relative;
-  margin: 0;
-  overflow: hidden;
-  background: #e8eeed;
-  border: 1px solid var(--jf-line);
-  border-radius: var(--jf-radius-lg);
-}
-
-.jf-contact__map iframe {
+.jf-ctc-channel__value {
   display: block;
-  width: 100%;
-  height: 230px;
-  border: 0;
-  filter: saturate(0.92);
+  margin-top: 3px;
+  color: #fff;
+  font-size: 0.82rem;
+  font-weight: 600;
+  line-height: 1.4;
+  overflow-wrap: break-word;
 }
 
-.jf-contact__map figcaption {
+.jf-ctc-channel__go {
+  flex-shrink: 0;
+  color: rgba(219, 236, 240, 0.55);
+  font-size: 0.66rem;
+  transition: transform 200ms ease, color 200ms ease;
+}
+
+a.jf-ctc-channel__face:hover .jf-ctc-channel__go {
+  color: #7ee8c0;
+  transform: translateX(2px);
+}
+
+/* The four accents, shared with the icon chips. */
+.jf-ctc-channel--blue {
+  --jf-from: #4c7ef3;
+  --jf-to: #2a4fd0;
+}
+
+.jf-ctc-channel--green {
+  --jf-from: #2cc07f;
+  --jf-to: #0f9a63;
+}
+
+.jf-ctc-channel--purple {
+  --jf-from: #9059f0;
+  --jf-to: #6c2fd6;
+}
+
+.jf-ctc-channel--amber {
+  --jf-from: #f7b23f;
+  --jf-to: #e0901c;
+}
+
+/* ---- Telegram row, pinned to the foot of the dark half ---- */
+
+.jf-ctc-aside__telegram {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 14px;
-  padding: 12px 16px;
-  background: var(--jf-paper);
-  border-top: 1px solid var(--jf-line);
-  font-size: 0.78rem;
-  font-weight: 700;
-}
-
-.jf-contact__map figcaption > span {
-  color: var(--jf-ink);
-}
-
-.jf-contact__map figcaption i {
-  margin-right: 6px;
-  color: var(--jf-teal-dark);
-}
-
-.jf-contact__map figcaption a {
-  color: var(--jf-ocean);
+  gap: 13px;
+  margin-top: clamp(18px, 2vw, 26px);
+  padding: 13px 15px;
+  color: #fff;
   text-decoration: none;
-  white-space: nowrap;
+  background: linear-gradient(120deg, rgba(41, 160, 224, 0.22), rgba(41, 160, 224, 0.08));
+  border: 1px solid rgba(126, 232, 192, 0.16);
+  border-radius: 16px;
+  transition: background 200ms ease, border-color 200ms ease;
 }
 
-.jf-contact__map figcaption a i {
-  margin: 0 0 0 6px;
+.jf-ctc-aside__telegram:hover {
+  color: #fff;
+  background: linear-gradient(120deg, rgba(41, 160, 224, 0.34), rgba(41, 160, 224, 0.14));
+  border-color: rgba(126, 232, 192, 0.34);
+}
+
+.jf-ctc-aside__telegram > i:first-child {
+  flex-shrink: 0;
+  color: #7fd4f7;
+  font-size: 1.5rem;
+}
+
+.jf-ctc-aside__telegram span {
+  flex: 1;
+  min-width: 0;
+  color: rgba(219, 236, 240, 0.82);
+  font-size: 0.76rem;
+}
+
+.jf-ctc-aside__telegram strong {
+  display: block;
+  color: #fff;
+  font-size: 0.84rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.jf-ctc-aside__telegram > i:last-child {
+  flex-shrink: 0;
+  color: rgba(219, 236, 240, 0.55);
   font-size: 0.68rem;
 }
 
-.jf-contact__map figcaption a:hover {
-  color: var(--jf-teal-dark);
-}
+/* ---- Light half ---- */
 
-/* Form panel */
-.jf-contact__panel {
-  padding: 30px 30px 32px;
+.jf-ctc-panel {
+  padding: clamp(24px, 3vw, 38px);
   background: var(--jf-paper);
-  border: 1px solid var(--jf-line);
-  border-radius: var(--jf-radius-xl);
-  box-shadow: var(--jf-shadow-lg);
 }
 
-.jf-contact__panel-head {
+.jf-ctc-panel__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 14px;
   margin-bottom: 22px;
 }
 
-.jf-contact__panel-head h2 {
-  margin: 8px 0 6px;
-  font-size: clamp(1.5rem, 2.6vw, 1.95rem);
-  letter-spacing: -0.045em;
-}
-
-.jf-contact__panel-head p {
-  margin: 0;
-  color: var(--jf-ink-soft);
-  font-size: 0.88rem;
-}
-
-.jf-contact__alert {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  margin-bottom: 20px;
-  padding: 14px 16px;
-  border-radius: var(--jf-radius-md);
-  font-size: 0.85rem;
-}
-
-.jf-contact__alert div {
-  display: grid;
-  gap: 2px;
-}
-
-.jf-contact__alert i {
-  margin-top: 2px;
-}
-
-.jf-contact__alert--success {
-  color: #0f6b4f;
-  background: #e6f5ef;
-  border: 1px solid rgba(19, 138, 98, 0.24);
-}
-
-.jf-contact__alert--error {
-  color: #9a3131;
-  background: #fdecec;
-  border: 1px solid rgba(154, 49, 49, 0.22);
-}
-
-.jf-contact__form {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-}
-
-.jf-field {
-  display: grid;
-  gap: 7px;
-}
-
-.jf-field--wide {
-  grid-column: 1 / -1;
-}
-
-.jf-field label {
+.jf-ctc-panel__head h2 {
+  margin: 8px 0 0;
   color: var(--jf-ink);
-  font-size: 0.78rem;
+  font-size: clamp(1.15rem, 1.9vw, 1.45rem);
   font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
 }
 
-.jf-field input,
-.jf-field textarea,
-.jf-field select {
-  width: 100%;
-  padding: 13px 15px;
-  color: var(--jf-ink);
-  background: #f7faf9;
-  border: 1px solid var(--jf-line);
-  border-radius: 14px;
-  font: inherit;
-  font-size: 0.88rem;
-  transition: border-color 180ms ease, background 180ms ease, box-shadow 180ms ease;
+.jf-ctc-promises {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  text-align: right;
 }
 
-.jf-field textarea {
-  min-height: 148px;
-  resize: vertical;
-}
-
-.jf-field input::placeholder,
-.jf-field textarea::placeholder {
-  color: #93a8ae;
-}
-
-.jf-field input:focus,
-.jf-field textarea:focus,
-.jf-field select:focus {
-  outline: none;
-  background: var(--jf-paper);
-  border-color: rgba(28, 166, 160, 0.55);
-  box-shadow: 0 0 0 4px rgba(28, 166, 160, 0.13);
-}
-
-.jf-field input[aria-invalid="true"],
-.jf-field textarea[aria-invalid="true"] {
-  border-color: rgba(154, 49, 49, 0.5);
-  background: #fdf6f6;
-}
-
-.jf-field__select {
-  position: relative;
-}
-
-.jf-field__select select {
-  appearance: none;
-  padding-right: 40px;
-  cursor: pointer;
-}
-
-.jf-field__select i {
-  position: absolute;
-  top: 50%;
-  right: 15px;
+.jf-ctc-promises li {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
   color: var(--jf-ink-soft);
   font-size: 0.72rem;
-  transform: translateY(-50%);
-  pointer-events: none;
-}
-
-.jf-field__error {
-  color: #9a3131;
-  font-size: 0.74rem;
   font-weight: 600;
 }
 
-.jf-contact__form-footer {
+.jf-ctc-promises li + li {
+  margin-top: 5px;
+}
+
+.jf-ctc-promises i {
+  color: var(--jf-teal-dark);
+  font-size: 0.68rem;
+}
+
+/* ------------------------------------------------------------------ *
+ * Form
+ * ------------------------------------------------------------------ */
+
+.jf-ctc-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.jf-ctc-field {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.jf-ctc-field--wide {
+  grid-column: 1 / -1;
+}
+
+.jf-ctc-field label,
+.jf-ctc-field legend {
+  display: block;
+  margin-bottom: 7px;
+  padding: 0;
+  color: var(--jf-ink);
+  font-size: 0.76rem;
+  font-weight: 650;
+}
+
+.jf-ctc-field__error {
+  display: block;
+  margin-top: 6px;
+  color: #c2453d;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+/* The directory's control, given a textarea's height instead of an input's. */
+.jf-cdir-control--area {
+  height: auto;
+  align-items: flex-start;
+  padding: 14px 16px;
+}
+
+.jf-cdir-control textarea {
+  width: 100%;
+  min-width: 0;
+  min-height: 124px;
+  color: var(--jf-ink);
+  font: inherit;
+  font-size: 0.82rem;
+  line-height: 1.6;
+  background: transparent;
+  border: 0;
+  outline: none;
+  resize: vertical;
+}
+
+.jf-cdir-control textarea::placeholder {
+  color: var(--jf-ink-soft);
+}
+
+/* A field the server rejected, marked on the control rather than the input, so
+   the whole box carries it. */
+.jf-cdir-control:has([aria-invalid="true"]) {
+  border-color: #d98079;
+  background: rgba(194, 69, 61, 0.04);
+}
+
+/* ---- Footer row ---- */
+
+.jf-ctc-form__footer {
   grid-column: 1 / -1;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 18px;
-  margin-top: 4px;
+  gap: 14px;
 }
 
-.jf-contact__form-footer p {
+.jf-ctc-form__footer p {
   margin: 0;
   color: var(--jf-ink-soft);
-  font-size: 0.8rem;
+  font-size: 0.72rem;
 }
 
-.jf-contact__form-footer a {
-  color: var(--jf-ocean);
+/* ---- Alerts ---- */
+
+.jf-ctc-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 18px;
+  padding: 14px 16px;
+  border: 1px solid transparent;
+  border-radius: 14px;
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.jf-ctc-alert i {
+  margin-top: 2px;
+  font-size: 0.9rem;
+}
+
+.jf-ctc-alert strong {
+  display: block;
+  font-size: 0.84rem;
   font-weight: 700;
-  text-decoration: none;
 }
 
-.jf-contact__form-footer a:hover {
+.jf-ctc-alert--success {
+  color: #0d5c46;
+  background: rgba(19, 138, 98, 0.09);
+  border-color: rgba(19, 138, 98, 0.28);
+}
+
+.jf-ctc-alert--success i {
+  color: var(--jf-success);
+}
+
+.jf-ctc-alert--error {
+  color: #8f2f28;
+  background: rgba(194, 69, 61, 0.08);
+  border-color: rgba(194, 69, 61, 0.26);
+}
+
+.jf-ctc-alert--error i {
+  color: #c2453d;
+}
+
+/* ------------------------------------------------------------------ *
+ * Find us — map beside the office details
+ * ------------------------------------------------------------------ */
+
+.jf-ctc-find {
+  padding: 0 0 clamp(38px, 4.4vw, 58px);
+  background: var(--jf-canvas);
+}
+
+.jf-ctc-find__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.12fr) minmax(0, 1fr);
+  align-items: stretch;
+  gap: 20px;
+}
+
+/* Capped at 680px: past roughly 700 the Google embed stops painting tiles
+   across the whole frame and leaves it grey. */
+.jf-ctc-find__map {
+  max-width: 680px;
+  height: clamp(280px, 26vw, 340px);
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid var(--jf-line);
+  border-radius: 22px;
+  box-shadow: 0 1px 2px rgba(23, 43, 77, 0.04), 0 14px 34px rgba(23, 43, 77, 0.07);
+}
+
+.jf-ctc-find__map iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  /* The embed ships a light map in both themes; this keeps it from glaring
+     out of a dark page without inverting the labels. */
+  filter: saturate(0.92);
+}
+
+.jf-ctc-office {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: clamp(20px, 2.4vw, 28px);
+  background: var(--jf-paper);
+  border: 1px solid var(--jf-line);
+  border-radius: 22px;
+  box-shadow: 0 1px 2px rgba(23, 43, 77, 0.04), 0 14px 34px rgba(23, 43, 77, 0.07);
+}
+
+.jf-ctc-office__pin {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  margin-bottom: 16px;
+  color: #fff;
+  font-size: 1rem;
+  background: linear-gradient(145deg, #23b39a, #0f7f86);
+  border-radius: 16px;
+  box-shadow: 0 12px 24px rgba(15, 127, 134, 0.3);
+}
+
+.jf-ctc-office h2 {
+  margin: 8px 0 0;
+  color: var(--jf-ink);
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.035em;
+}
+
+.jf-ctc-office p {
+  margin: 7px 0 0;
+  color: var(--jf-ink-soft);
+  font-size: 0.82rem;
+  line-height: 1.55;
+}
+
+.jf-ctc-office__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 13px;
+}
+
+.jf-ctc-office__meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 13px;
+  color: var(--jf-ink);
+  font-size: 0.73rem;
+  font-weight: 600;
+  background: var(--jf-canvas);
+  border: 1px solid var(--jf-line);
+  border-radius: 999px;
+}
+
+.jf-ctc-office__meta i {
   color: var(--jf-teal-dark);
+  font-size: 0.68rem;
 }
 
-/* Dark theme */
-html[data-theme="dark"] .jf-contact__aside,
-html[data-theme="dark"] .jf-contact__panel,
-html[data-theme="dark"] .jf-contact__map figcaption {
-  color: var(--jf-ink);
+/* Sits against the foot of the card, so it lines up with the map's bottom
+   edge however tall the address runs. */
+.jf-ctc-office__cta {
+  margin-top: auto;
+}
+
+.jf-ctc-office__meta + .jf-ctc-office__cta {
+  margin-top: 20px;
+}
+
+/* ------------------------------------------------------------------ *
+ * Dark theme — only the surfaces set literally above
+ * ------------------------------------------------------------------ */
+
+html[data-theme="dark"] .jf-ctc {
+  background: linear-gradient(180deg, #0c1a20 0%, #071015 60%);
+}
+
+html[data-theme="dark"] .jf-ctc-panel {
+  background: #14242b;
+}
+
+html[data-theme="dark"] .jf-ctc-office {
+  background: #14242b;
+  border-color: #263940;
+}
+
+html[data-theme="dark"] .jf-ctc-office__meta span {
   background: #0e1b21;
+  border-color: #2c414a;
+}
+
+html[data-theme="dark"] .jf-ctc-find__map {
   border-color: #263940;
 }
 
-html[data-theme="dark"] .jf-contact__map {
-  background: #0b161b;
-  border-color: #263940;
+html[data-theme="dark"] .jf-ctc-find__map iframe {
+  filter: saturate(0.82) brightness(0.92);
 }
 
-html[data-theme="dark"] .jf-contact__map iframe {
-  filter: saturate(0.75) brightness(0.86);
+html[data-theme="dark"] .jf-ctc-alert--success {
+  color: #8ee0bf;
+  background: rgba(19, 138, 98, 0.16);
+  border-color: rgba(19, 138, 98, 0.42);
 }
 
-html[data-theme="dark"] .jf-channel:hover {
-  background: #14242b;
+html[data-theme="dark"] .jf-ctc-alert--error {
+  color: #f0a49d;
+  background: rgba(194, 69, 61, 0.16);
+  border-color: rgba(194, 69, 61, 0.42);
 }
 
-html[data-theme="dark"] .jf-channel__icon {
-  color: #83ded8;
-  background: rgba(28, 166, 160, 0.16);
+html[data-theme="dark"] .jf-ctc-field__error {
+  color: #f0a49d;
 }
 
-html[data-theme="dark"] .jf-field input,
-html[data-theme="dark"] .jf-field textarea,
-html[data-theme="dark"] .jf-field select {
-  color: var(--jf-ink);
-  background: #14242b;
-  border-color: #263940;
+html[data-theme="dark"] .jf-cdir-control:has([aria-invalid="true"]) {
+  border-color: rgba(194, 69, 61, 0.55);
+  background: rgba(194, 69, 61, 0.1);
 }
 
-html[data-theme="dark"] .jf-field input::placeholder,
-html[data-theme="dark"] .jf-field textarea::placeholder {
-  color: #94abb3;
-}
+/* ------------------------------------------------------------------ *
+ * Responsive
+ * ------------------------------------------------------------------ */
 
-html[data-theme="dark"] .jf-field input:focus,
-html[data-theme="dark"] .jf-field textarea:focus,
-html[data-theme="dark"] .jf-field select:focus {
-  background: #0b161b;
-}
-
-html[data-theme="dark"] .jf-contact__alert--success {
-  color: #8fe3c3;
-  background: rgba(19, 138, 98, 0.14);
-  border-color: rgba(19, 138, 98, 0.36);
-}
-
-html[data-theme="dark"] .jf-contact__alert--error {
-  color: #f4a9a9;
-  background: rgba(154, 49, 49, 0.16);
-  border-color: rgba(154, 49, 49, 0.38);
-}
-
-/* Responsive */
-@media (max-width: 1000px) {
-  .jf-contact__grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 760px) {
-  .jf-contact-hero {
-    padding: 40px 0 80px;
-  }
-
-  .jf-contact__panel {
-    padding: 24px 20px 26px;
-  }
-
-  .jf-contact__form {
+@media (max-width: 980px) {
+  /* The halves stack; the shared edge moves from vertical to horizontal. */
+  .jf-ctc__split {
     grid-template-columns: 1fr;
   }
 
-  .jf-contact__form-footer {
+  .jf-ctc-aside__curve {
+    top: -40%;
+    right: -20%;
+    width: 62%;
+    height: 120%;
+  }
+
+  .jf-ctc-panel__head {
     align-items: flex-start;
-    flex-direction: column;
-    gap: 12px;
   }
 
-  .jf-contact__form-footer .jf-btn {
+  .jf-ctc-promises,
+  .jf-ctc-promises li {
+    justify-content: flex-start;
+    text-align: left;
+  }
+
+  /* Stacked, the map keeps its cap and centres over the card below it. */
+  .jf-ctc-find__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .jf-ctc-find__map {
+    margin-inline: auto;
     width: 100%;
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .jf-contact__aside,
-  .jf-contact__panel {
-    animation: jf-enter-up 620ms var(--jf-ease-out) both;
+@media (max-width: 700px) {
+  .jf-ctc-form {
+    grid-template-columns: 1fr;
   }
 
-  .jf-contact__panel {
-    animation-delay: 90ms;
+  .jf-ctc-form__footer .jf-cdir-submit {
+    width: 100%;
+  }
+
+  .jf-ctc-office__cta {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  a.jf-ctc-channel__face:hover {
+    transform: none;
   }
 }
