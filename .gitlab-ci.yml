@@ -1,0 +1,139 @@
+# ---------------------------------------------------------------------------
+# ZIN-WORKS — GitLab CI/CD
+#
+# Stages: quality -> test -> build
+#
+# Two things worth knowing before editing this file:
+#
+#   1. The Feature suite is allowed to fail on purpose. Six migrations issue
+#      raw MySQL/PostgreSQL SQL (ALTER TABLE ... ADD CONSTRAINT, CREATE VIEW),
+#      while phpunit.xml points the suite at sqlite :memory: — so migrate:fresh
+#      cannot run and every database-backed test errors. That is a pre-existing
+#      mismatch, not something this pipeline introduced. See test:feature below.
+#
+#   2. The pipeline stops at a published image. build:image pushes to this
+#      project's Container Registry; pull and run it yourself. There is no
+#      deploy job by design — add one when there is a target to deploy to.
+#
+#   3. No asset build job. webpack.mix.js compiles resources/js/app.js and
+#      resources/sass/app.scss, but the shipped CSS/JS under public/ is committed
+#      and the Dockerfile never runs npm — so a build step here would produce
+#      artifacts nothing consumes. Add one if the project moves to Vite.
+# ---------------------------------------------------------------------------
+
+stages:
+  - quality
+  - test
+  - build
+
+variables:
+  # Keep composer's cache inside the project so GitLab's cache can carry it.
+  COMPOSER_CACHE_DIR: "$CI_PROJECT_DIR/.composer-cache"
+  COMPOSER_ALLOW_SUPERUSER: "1"
+  DOCKER_DRIVER: overlay2
+  GIT_DEPTH: "20"
+
+# --- Shared PHP setup ------------------------------------------------------
+# The same extension set the project's Dockerfile installs, so CI and the
+# runtime image agree on what is available.
+.php:
+  image: php:8.2-cli
+  interruptible: true
+  cache:
+    key:
+      files:
+        - composer.lock
+    paths:
+      - .composer-cache/
+      - vendor/
+  before_script:
+    - apt-get update -yqq && apt-get install -yqq --no-install-recommends
+      git unzip libzip-dev libpng-dev libjpeg62-turbo-dev libfreetype6-dev
+    - docker-php-ext-configure gd --with-freetype --with-jpeg
+    - docker-php-ext-install -j$(nproc) pdo_mysql zip exif pcntl bcmath gd > /dev/null
+    - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+    - composer install --prefer-dist --no-interaction --no-progress --no-ansi
+    # phpunit.xml supplies the test env, but artisan commands still want a key.
+    - cp -n .env.example .env || true
+    - php artisan key:generate --ansi
+    - php artisan config:clear
+
+# --- Quality ---------------------------------------------------------------
+
+lint:php:
+  extends: .php
+  stage: quality
+  script:
+    - composer validate --strict --no-check-all
+    # Syntax-check every first-party PHP file, vendor excluded.
+    - find app bootstrap config database routes tests -name '*.php' -print0
+      | xargs -0 -n1 -P4 php -l > /dev/null
+    - echo "PHP syntax OK across app, bootstrap, config, database, routes, tests"
+
+lint:blade:
+  extends: .php
+  stage: quality
+  script:
+    # Compiles every Blade template without rendering it, which catches syntax
+    # errors the PHP linter cannot see (unclosed @if, bad directives).
+    - php artisan view:cache
+    - echo "All Blade templates compiled"
+  after_script:
+    - php artisan view:clear || true
+
+# --- Test ------------------------------------------------------------------
+
+test:unit:
+  extends: .php
+  stage: test
+  script:
+    - php artisan config:clear
+    - mkdir -p reports
+    - vendor/bin/phpunit --testsuite Unit --no-coverage --colors=never --log-junit reports/unit.xml
+  artifacts:
+    when: always
+    reports:
+      junit: reports/unit.xml
+    paths:
+      - reports/
+    expire_in: 1 week
+
+# Runs so the breakage stays visible, but does not block the pipeline.
+# To make this a required job, the migrations need to run on sqlite — either
+# guard the raw DB::statement calls with a driver check, or point the suite at
+# MySQL (which also means relaxing the sqlite guard in tests/CreatesApplication).
+test:feature:
+  extends: .php
+  stage: test
+  allow_failure: true
+  script:
+    - php artisan config:clear
+    - vendor/bin/phpunit --testsuite Feature --no-coverage --colors=never
+
+# --- Build -----------------------------------------------------------------
+
+build:image:
+  stage: build
+  image: docker:27
+  services:
+    - docker:27-dind
+  interruptible: true
+  variables:
+    DOCKER_TLS_CERTDIR: "/certs"
+  before_script:
+    # CI_REGISTRY_* are provided by GitLab; the job token needs no PAT.
+    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
+  script:
+    - docker build
+      --cache-from "$CI_REGISTRY_IMAGE:latest"
+      --build-arg BUILDKIT_INLINE_CACHE=1
+      --tag "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA"
+      --tag "$CI_REGISTRY_IMAGE:latest"
+      .
+    - docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA"
+    - docker push "$CI_REGISTRY_IMAGE:latest"
+  rules:
+    # Build images from the default branch and tags only; branches and MRs stop
+    # at the test stage.
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+    - if: '$CI_COMMIT_TAG'
