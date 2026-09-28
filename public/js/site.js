@@ -107,8 +107,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Matches the header's collapse breakpoint in jobs.css: above it the nav
+    // sits on the island itself, so a panel left open has nothing to close.
     window.addEventListener('resize', () => {
-        if (window.innerWidth > 960) {
+        if (window.innerWidth > 680) {
             setMenuOpen(false);
         }
     });

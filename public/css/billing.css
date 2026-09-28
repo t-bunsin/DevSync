@@ -87,29 +87,29 @@
 }
 
 /* Plan cards
-   ------------------------------------------------------------------ */
+   ------------------------------------------------------------------
+   Redesigned around a tinted "band" at the head of each card, so the
+   tier's identity colour reads immediately from across the room instead
+   of living in a 34px icon chip. The body below stays neutral so price
+   and features — the things that actually differ — keep the contrast. */
 .kh-bill__grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  align-items: stretch;
-  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(264px, 1fr));
+  align-items: start;
+  gap: 20px;
 }
 
-/* Each tier keeps its identity colour (the same one the checkout page uses)
-   but spends it in small places only — a 34px icon, the ticks, and the
-   featured button. At full strength across the icon, five filled discs, the
-   note and the button, three cards side by side read as three moods. */
 .kh-bill__plan {
   --kh-plan-accent: var(--kh-ocean);
 
   position: relative;
   display: flex;
   flex-direction: column;
-  padding: 22px 22px 20px;
   background: var(--kh-surface);
   border: 1px solid var(--kh-line);
-  border-radius: 16px;
+  border-radius: 20px;
   box-shadow: 0 4px 16px color-mix(in srgb, var(--kh-navy) 5%, transparent);
+  overflow: hidden;
   transition: border-color 200ms ease, box-shadow 200ms ease, transform 200ms ease;
 }
 
@@ -123,20 +123,22 @@
 
 .kh-bill__plan:hover {
   border-color: color-mix(in srgb, var(--kh-plan-accent) 40%, var(--kh-line));
-  box-shadow: 0 10px 26px color-mix(in srgb, var(--kh-navy) 10%, transparent);
-  transform: translateY(-2px);
+  box-shadow: 0 12px 28px color-mix(in srgb, var(--kh-navy) 10%, transparent);
+  transform: translateY(-3px);
 }
 
-/* The featured tier is marked by a ring and its solid button. The mint wash
-   underneath them was a third signal saying the same thing. */
+/* The featured tier steps forward on its own footing — a taller ring, a
+   deeper shadow and a touch of extra headroom — rather than a CSS
+   transform: scale(), which used to clip its shadow against its
+   neighbours on hover. */
 .kh-bill__plan--featured {
   border: 1.5px solid var(--kh-plan-accent);
-  box-shadow: 0 8px 26px color-mix(in srgb, var(--kh-plan-accent) 16%, transparent);
+  box-shadow: 0 14px 34px color-mix(in srgb, var(--kh-plan-accent) 20%, transparent);
 }
 
 .kh-bill__plan--featured:hover {
   border-color: var(--kh-plan-accent);
-  box-shadow: 0 12px 32px color-mix(in srgb, var(--kh-plan-accent) 24%, transparent);
+  box-shadow: 0 18px 40px color-mix(in srgb, var(--kh-plan-accent) 28%, transparent);
 }
 
 .kh-bill__plan--current {
@@ -147,17 +149,17 @@
 
 .kh-bill__plan-badge {
   position: absolute;
-  top: 0;
-  right: 18px;
+  top: 14px;
+  right: 14px;
+  z-index: 1;
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  transform: translateY(-50%);
   padding: 5px 11px;
   color: #fff;
   background: var(--kh-plan-accent);
   border-radius: 999px;
-  box-shadow: none;
+  box-shadow: 0 4px 10px color-mix(in srgb, var(--kh-plan-accent) 40%, transparent);
   font-size: 0.64rem;
   font-weight: 700;
   letter-spacing: 0.04em;
@@ -169,10 +171,20 @@
   font-size: 0.62rem;
 }
 
-.kh-bill__plan-head {
+/* Tinted head band — the plan's colour, spent generously in one place
+   instead of thinly across five. The icon sits in a white/surface disc so
+   it still pops off its own wash. */
+.kh-bill__plan-band {
   display: flex;
   align-items: center;
-  gap: 11px;
+  gap: 13px;
+  padding: 22px 22px 18px;
+  background: linear-gradient(
+    165deg,
+    color-mix(in srgb, var(--kh-plan-accent) 16%, var(--kh-surface)),
+    color-mix(in srgb, var(--kh-plan-accent) 3%, var(--kh-surface))
+  );
+  border-bottom: 1px solid color-mix(in srgb, var(--kh-plan-accent) 16%, var(--kh-line));
 }
 
 .kh-bill__plan-icon {
@@ -180,39 +192,49 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  width: 34px;
-  height: 34px;
+  width: 42px;
+  height: 42px;
   color: var(--kh-plan-accent);
-  background: color-mix(in srgb, var(--kh-plan-accent) 11%, transparent);
-  border-radius: 10px;
-  font-size: 0.82rem;
+  background: var(--kh-surface);
+  border-radius: 13px;
+  box-shadow: 0 3px 10px color-mix(in srgb, var(--kh-plan-accent) 22%, transparent);
+  font-size: 0.95rem;
 }
 
 .kh-bill__plan-name {
   margin: 0;
   color: var(--kh-ink);
-  font-size: 1.06rem;
-  font-weight: 700;
+  font-size: 1.1rem;
+  font-weight: 800;
   letter-spacing: -0.025em;
   line-height: 1.2;
 }
 
 .kh-bill__plan-tagline {
-  margin: 1px 0 0;
+  margin: 2px 0 0;
   color: var(--kh-muted);
   font-size: 0.74rem;
+}
+
+/* Everything below the band shares one neutral surface and one padding
+   rhythm, so the band alone carries the colour. */
+.kh-bill__plan-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: 20px 22px 22px;
 }
 
 .kh-bill__plan-price {
   display: flex;
   align-items: baseline;
   gap: 6px;
-  margin: 16px 0 0;
+  margin: 0;
   color: var(--kh-ink);
 }
 
 .kh-bill__plan-amount {
-  font-size: 1.95rem;
+  font-size: 2.1rem;
   font-weight: 800;
   letter-spacing: -0.045em;
   line-height: 1;
@@ -233,15 +255,20 @@
 }
 
 .kh-bill__plan-note {
-  margin: 6px 0 0;
-  color: var(--kh-muted);
-  font-size: 0.72rem;
+  display: inline-flex;
+  align-self: flex-start;
+  margin: 10px 0 0;
+  padding: 3px 9px;
+  background: color-mix(in srgb, var(--kh-plan-accent) 10%, transparent);
+  border-radius: 999px;
+  color: var(--kh-plan-accent);
+  font-size: 0.7rem;
   font-weight: 700;
 }
 
 .kh-bill__plan-included {
-  margin: 16px 0 0;
-  padding-top: 14px;
+  margin: 18px 0 0;
+  padding-top: 16px;
   border-top: 1px solid var(--kh-line);
   color: var(--kh-muted);
   font-size: 0.64rem;
@@ -256,7 +283,7 @@
 
 .kh-bill__plan-features {
   flex: 1;
-  margin: 10px 0 18px;
+  margin: 12px 0 20px;
   padding: 0;
   list-style: none;
 }
@@ -264,10 +291,10 @@
 .kh-bill__plan-features li {
   display: flex;
   align-items: flex-start;
-  gap: 9px;
-  padding: 4px 0;
+  gap: 10px;
+  padding: 5px 0;
   color: var(--kh-ink);
-  font-size: 0.82rem;
+  font-size: 0.83rem;
   line-height: 1.5;
 }
 
@@ -275,18 +302,20 @@
   font-weight: 700;
 }
 
-/* A bare tick in the tier's colour. Five filled discs down each card put a
-   column of solid colour next to every line of text; the glyph alone marks
-   the same list and lets the labels lead. */
+/* A filled disc rather than a bare glyph — the same tick the checkout
+   page uses, so the two screens read as one system. */
 .kh-bill__plan-tick {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  width: 14px;
-  margin-top: 3px;
-  color: var(--kh-plan-accent);
-  font-size: 0.66rem;
+  width: 18px;
+  height: 18px;
+  margin-top: 1px;
+  color: #fff;
+  background: var(--kh-plan-accent);
+  border-radius: 50%;
+  font-size: 0.58rem;
 }
 
 /* Only the featured card's button is filled. The other two are quiet
@@ -299,12 +328,12 @@
   gap: 8px;
   width: 100%;
   margin-top: auto;
-  padding: 10px 16px;
+  padding: 11px 16px;
   color: var(--kh-ink);
   background: transparent;
   border: 1px solid var(--kh-line);
-  border-radius: 10px;
-  font-size: 0.82rem;
+  border-radius: 11px;
+  font-size: 0.83rem;
   font-weight: 700;
   letter-spacing: -0.01em;
   text-align: center;
@@ -338,7 +367,7 @@
   color: #fff;
   background: var(--kh-plan-accent);
   border-color: transparent;
-  box-shadow: none;
+  box-shadow: 0 8px 18px color-mix(in srgb, var(--kh-plan-accent) 32%, transparent);
 }
 
 .kh-bill__plan--featured .kh-bill__plan-select:hover {
@@ -361,26 +390,31 @@
   color: var(--kh-ocean);
 }
 
-/* The featured tier only steps forward where there is room for three
-   columns; stacked, every card sits on the same plane. */
+/* The featured tier gets a little extra headroom on desktop so it reads as
+   the one meant to catch your eye first, without the clipped-shadow
+   problem a transform: scale() used to cause on hover. */
 @media (min-width: 1040px) {
   .kh-bill__plan--featured {
-    transform: scale(1.02);
+    margin-top: -10px;
     z-index: 1;
   }
 
-  .kh-bill__plan--featured:hover {
-    transform: scale(1.02) translateY(-2px);
+  .kh-bill__plan--featured .kh-bill__plan-body {
+    padding-bottom: 30px;
   }
 }
 
 @media (max-width: 600px) {
-  .kh-bill__plan {
-    padding: 20px 18px 18px;
+  .kh-bill__plan-band {
+    padding: 20px 18px 16px;
+  }
+
+  .kh-bill__plan-body {
+    padding: 18px 18px 20px;
   }
 
   .kh-bill__plan-amount {
-    font-size: 1.8rem;
+    font-size: 1.85rem;
   }
 }
 
@@ -397,11 +431,19 @@
   }
 }
 
-/* Dark back office: same shapes, tuned so the mint featured wash and the
-   white cards do not blow out against the near-black canvas. */
+/* Dark back office: same shapes, tuned so the tinted band and the surface
+   cards do not blow out against the near-black canvas. */
 html[data-admin-theme="dark"] .kh-bill__plan {
   background: color-mix(in srgb, var(--kh-ink) 4%, var(--kh-surface));
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.32);
+}
+
+html[data-admin-theme="dark"] .kh-bill__plan-band {
+  background: linear-gradient(
+    165deg,
+    color-mix(in srgb, var(--kh-plan-accent) 22%, var(--kh-surface)),
+    color-mix(in srgb, var(--kh-plan-accent) 5%, var(--kh-surface))
+  );
 }
 
 html[data-admin-theme="dark"] .kh-bill__plan--featured {

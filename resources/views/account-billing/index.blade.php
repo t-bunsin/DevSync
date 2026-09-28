@@ -113,7 +113,7 @@
                             </span>
                         @endif
 
-                        <div class="kh-bill__plan-head">
+                        <div class="kh-bill__plan-band">
                             <span class="kh-bill__plan-icon" aria-hidden="true">
                                 <i class="fas {{ $plan['icon'] }}"></i>
                             </span>
@@ -123,34 +123,36 @@
                             </div>
                         </div>
 
-                        <p class="kh-bill__plan-price">
-                            <span class="kh-bill__plan-amount" data-amount
-                                data-monthly="{{ $plan['amounts']['monthly']['price'] }}"
-                                data-annual="{{ $plan['amounts']['annual']['price'] }}">{{ $plan['amounts']['monthly']['price'] }}</span>
-                            <span class="kh-bill__plan-cycle">{{ __('ui.bo.billing.per_month') }}</span>
-                        </p>
+                        <div class="kh-bill__plan-body">
+                            <p class="kh-bill__plan-price">
+                                <span class="kh-bill__plan-amount" data-amount
+                                    data-monthly="{{ $plan['amounts']['monthly']['price'] }}"
+                                    data-annual="{{ $plan['amounts']['annual']['price'] }}">{{ $plan['amounts']['monthly']['price'] }}</span>
+                                <span class="kh-bill__plan-cycle">{{ __('ui.bo.billing.per_month') }}</span>
+                            </p>
 
-                        <p class="kh-bill__plan-blurb">{{ __('ui.bo.billing.plan.blurbs.' . $plan['id']) }}</p>
+                            <p class="kh-bill__plan-blurb">{{ __('ui.bo.billing.plan.blurbs.' . $plan['id']) }}</p>
 
-                        <p class="kh-bill__plan-note" data-amount data-monthly="{{ $plan['amounts']['monthly']['note'] }}"
-                            data-annual="{{ $plan['amounts']['annual']['note'] }}">{{ $plan['amounts']['monthly']['note'] }}</p>
+                            <span class="kh-bill__plan-note" data-amount data-monthly="{{ $plan['amounts']['monthly']['note'] }}"
+                                data-annual="{{ $plan['amounts']['annual']['note'] }}">{{ $plan['amounts']['monthly']['note'] }}</span>
 
-                        <p class="kh-bill__plan-included">{{ __('ui.bo.billing.included') }}</p>
+                            <p class="kh-bill__plan-included">{{ __('ui.bo.billing.included') }}</p>
 
-                        <ul class="kh-bill__plan-features">
-                            @foreach ($plan['features'] as $feature)
-                                <li @class(['is-highlight' => $feature['highlight']])>
-                                    <span class="kh-bill__plan-tick" aria-hidden="true"><i class="fas fa-check"></i></span>
-                                    <span>{{ __('ui.bo.billing.plan.features.' . $feature['label']) }}</span>
-                                </li>
-                            @endforeach
-                        </ul>
+                            <ul class="kh-bill__plan-features">
+                                @foreach ($plan['features'] as $feature)
+                                    <li @class(['is-highlight' => $feature['highlight']])>
+                                        <span class="kh-bill__plan-tick" aria-hidden="true"><i class="fas fa-check"></i></span>
+                                        <span>{{ __('ui.bo.billing.plan.features.' . $feature['label']) }}</span>
+                                    </li>
+                                @endforeach
+                            </ul>
 
-                        <a class="kh-bill__plan-select" data-plan-select
-                            href="{{ route('account-billing.checkout', ['plan_id' => $plan['id'], 'billing_period' => 'monthly']) }}">
-                            {{ $isCurrent ? __('ui.bo.billing.change_period') : __('ui.bo.billing.select_plan', ['plan' => __('ui.bo.billing.plan.names.' . $plan['id'])]) }}
-                            <i class="fas fa-arrow-right" aria-hidden="true"></i>
-                        </a>
+                            <a class="kh-bill__plan-select" data-plan-select
+                                href="{{ route('account-billing.checkout', ['plan_id' => $plan['id'], 'billing_period' => 'monthly']) }}">
+                                {{ $isCurrent ? __('ui.bo.billing.change_period') : __('ui.bo.billing.select_plan', ['plan' => __('ui.bo.billing.plan.names.' . $plan['id'])]) }}
+                                <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                            </a>
+                        </div>
                     </article>
                 @endforeach
             </div>
