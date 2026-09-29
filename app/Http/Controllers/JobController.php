@@ -300,7 +300,7 @@ class JobController extends Controller
     }
 
     /**
-     * The three roles shown in the hero slideshow: featured first, then the
+     * The roles hung on the landing hero's rack: featured first, then the
      * most recently posted.
      */
     private function spotlightJobs(Collection $jobs): array
@@ -310,7 +310,7 @@ class JobController extends Controller
                 fn (array $a, array $b) => (int) $b['featured'] <=> (int) $a['featured'],
                 fn (array $a, array $b) => $a['posted_days'] <=> $b['posted_days'],
             ])
-            ->take(3)
+            ->take(4)
             ->values()
             ->all();
     }

@@ -5,10 +5,17 @@
 @push('styles')
     <link rel="stylesheet" href="{{ asset('css/jobs.css') }}?v={{ filemtime(public_path('css/jobs.css')) }}">
     <link rel="stylesheet" href="{{ asset('css/pricing.css') }}?v={{ filemtime(public_path('css/pricing.css')) }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&display=swap">
+    <link rel="stylesheet" href="{{ asset('css/role-rack.css') }}?v={{ filemtime(public_path('css/role-rack.css')) }}">
+    <link rel="stylesheet" href="{{ asset('css/hero-paths.css') }}?v={{ filemtime(public_path('css/hero-paths.css')) }}">
+    <link rel="stylesheet" href="{{ asset('css/hero-seeker.css') }}?v={{ filemtime(public_path('css/hero-seeker.css')) }}">
+    <link rel="preload" as="image" href="{{ asset('img/hero-job-seeker.png') }}">
 @endpush
 
 @section('content')
-    <section class="jf-hero" aria-labelledby="hero-title">
+    <section class="jf-hero jf-hero--rack" aria-labelledby="hero-title">
         <div class="jf-hero__glow jf-hero__glow--one" aria-hidden="true"></div>
         <div class="jf-hero__glow jf-hero__glow--two" aria-hidden="true"></div>
         <div class="jf-hero__glow jf-hero__glow--three" aria-hidden="true"></div>
@@ -28,16 +35,41 @@
                     <span class="jf-hero__word">moves</span>
                     <span class="jf-hero__accent">you forward.</span>
                 </h1>
-                <p>Explore verified opportunities from trusted teams in Cambodia and remote-first companies across Southeast Asia.</p>
 
-                <div class="jf-hero__actions">
-                    <a class="jf-btn jf-btn--accent" href="#jobs">
-                        Explore jobs
-                        <i class="fas fa-arrow-down" aria-hidden="true"></i>
+                {{-- Two paths, one per audience. Each tile loops a small scene of
+                     what happens next: a search landing on a match, or a post
+                     being written, stamped and sent. --}}
+                <div class="jf-hero__actions jf-paths">
+                    <a class="jf-path jf-path--seek" href="#jobs">
+                        <span class="jf-path__scene" aria-hidden="true">
+                            <span class="jf-seek__row jf-seek__row--1"><i></i><b></b></span>
+                            <span class="jf-seek__row jf-seek__row--2"><i></i><b></b></span>
+                            <span class="jf-seek__row jf-seek__row--3"><i></i><b></b></span>
+                            <span class="jf-seek__lens"></span>
+                            <span class="jf-seek__match"><i class="fas fa-check"></i></span>
+                        </span>
+                        <span class="jf-path__text">
+                            <small>I’m looking for a job</small>
+                            <strong>Explore jobs</strong>
+                        </span>
+                        <span class="jf-path__go" aria-hidden="true"><i class="fas fa-arrow-down"></i></span>
                     </a>
-                    <a class="jf-btn jf-btn--hero-ghost" href="{{ route('register') }}">
-                        <i class="fas fa-plus" aria-hidden="true"></i>
-                        Post a job
+
+                    <a class="jf-path jf-path--post" href="{{ route('register') }}">
+                        <span class="jf-path__scene" aria-hidden="true">
+                            <span class="jf-post__doc">
+                                <span class="jf-post__line jf-post__line--1"></span>
+                                <span class="jf-post__line jf-post__line--2"></span>
+                                <span class="jf-post__line jf-post__line--3"></span>
+                                <span class="jf-post__stamp"><i class="fas fa-check"></i></span>
+                            </span>
+                            <span class="jf-post__plane"><i class="fas fa-paper-plane"></i></span>
+                        </span>
+                        <span class="jf-path__text">
+                            <small>I’m hiring</small>
+                            <strong>Post a job</strong>
+                        </span>
+                        <span class="jf-path__go" aria-hidden="true"><i class="fas fa-arrow-right"></i></span>
                     </a>
                 </div>
 
@@ -48,103 +80,30 @@
                 </dl>
             </div>
 
-            <div class="jf-hero__card">
-                <span class="jf-hero__chip jf-hero__chip--verified" aria-hidden="true">
-                    <i class="fas fa-circle-check"></i> Verified employers
-                </span>
-                <span class="jf-hero__chip jf-hero__chip--fresh" aria-hidden="true">
-                    <i class="fas fa-bolt"></i> {{ count($spotlightJobs) }} roles in the spotlight
-                </span>
+            <div class="jf-hero__stage">
+                {{-- The roles hang off a rail here; role-rack.js swings them. --}}
+                @include('partials.role-rack')
 
-                <aside class="jf-deck" aria-label="Featured opportunities" aria-roledescription="carousel" data-spotlight>
-                <div class="jf-deck__stack">
-                    @foreach ($spotlightJobs as $index => $spotlightJob)
-                        @php
-                            // Only the top three sit in the visible fan; anything
-                            // beyond that waits behind them until it cycles up.
-                            $deckPosition = ['is-front', 'is-second', 'is-third'][$index] ?? 'is-back';
-                        @endphp
+                {{-- A candidate who made it, sitting under the rack, her JOB sign
+                     pointing at the intro line beside her. The ring and sparkles
+                     sit over the PASS stamp in the artwork, so their positions
+                     are percentages of the image. --}}
+                <div class="jf-hero__stage-foot">
+                    <figure class="jf-seeker" aria-hidden="true">
+                        <img src="{{ asset('img/hero-job-seeker.png') }}" alt="" width="504" height="507" loading="eager" decoding="async">
+                        <span class="jf-seeker__ping"></span>
+                        <span class="jf-seeker__spark jf-seeker__spark--1">✦</span>
+                        <span class="jf-seeker__spark jf-seeker__spark--2">✦</span>
+                        <span class="jf-seeker__spark jf-seeker__spark--3">✦</span>
+                        <span class="jf-seeker__bubble">
+                            <span class="jf-seeker__say jf-seeker__say--1"><i class="fas fa-trophy"></i> Got the job!</span>
+                            <span class="jf-seeker__say jf-seeker__say--2"><i class="fas fa-circle-check"></i> Test passed</span>
+                            <span class="jf-seeker__say jf-seeker__say--3"><i class="fas fa-arrow-left"></i> Your turn</span>
+                        </span>
+                    </figure>
 
-                        <article
-                            class="jf-deck__card {{ $deckPosition }}"
-                            data-spotlight-slide
-                            role="group"
-                            aria-roledescription="slide"
-                            aria-label="{{ $index + 1 }} of {{ count($spotlightJobs) }}"
-                            @unless ($index === 0) aria-hidden="true" @endunless
-                        >
-                            <span class="jf-spotlight__glare" aria-hidden="true"></span>
-
-                            <div class="jf-spotlight__topline">
-                                <span><i class="fas fa-bolt" aria-hidden="true"></i> Featured this week</span>
-                                <span class="jf-spotlight__status">Actively hiring</span>
-                            </div>
-
-                            <div class="jf-spotlight__company">
-                                {{-- An uploaded company logo wins; otherwise the keyword artwork. --}}
-                                <div @class([
-                                    'jf-logo',
-                                    'jf-logo--' . $spotlightJob['logo'],
-                                    'jf-logo--photo' => ! empty($spotlightJob['company_logo_url']),
-                                ])>
-                                    @if (! empty($spotlightJob['company_logo_url']))
-                                        <img src="{{ $spotlightJob['company_logo_url'] }}" alt="">
-                                    @elseif ($spotlightJob['logo'] === 'aba')
-                                        <span>ABA</span><small>BANK</small>
-                                    @elseif ($spotlightJob['logo'] === 'tech')
-                                        <i class="fas fa-wifi" aria-hidden="true"></i>
-                                    @else
-                                        <span>D</span>
-                                    @endif
-                                </div>
-                                <div>
-                                    <span class="jf-spotlight__company-name">
-                                        {{ $spotlightJob['company'] }}
-                                        @if (! empty($spotlightJob['company_verified']))
-                                            <x-verified-badge :show-label="false" :size="14" label="Verified employer" />
-                                        @endif
-                                    </span>
-                                    <strong>{{ $spotlightJob['title'] }}</strong>
-                                </div>
-                            </div>
-
-                            <div class="jf-spotlight__meta">
-                                <span><i class="fas fa-location-dot" aria-hidden="true"></i> {{ $spotlightJob['mode'] }}</span>
-                                <span><i class="fas fa-clock" aria-hidden="true"></i> {{ $spotlightJob['type'] }}</span>
-                                <span><i class="fas fa-code" aria-hidden="true"></i> {{ $spotlightJob['department'] }}</span>
-                            </div>
-
-                            <div class="jf-spotlight__footer">
-                                <div><small>Salary range</small><strong>{{ $spotlightJob['short_salary'] }}</strong></div>
-                                <a href="#jobs" data-view-job="{{ $spotlightJob['id'] }}">View role <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
-                            </div>
-                        </article>
-                    @endforeach
+                    <p class="jf-hero__lede">Explore verified opportunities from trusted teams in Cambodia and remote-first companies across Southeast Asia.</p>
                 </div>
-
-                <div class="jf-spotlight__controls">
-                    <button class="jf-spotlight__arrow" type="button" data-spotlight-prev aria-label="Previous featured role">
-                        <i class="fas fa-arrow-left" aria-hidden="true"></i>
-                    </button>
-
-                    <div class="jf-spotlight__dots" role="tablist" aria-label="Choose a featured role">
-                        @foreach ($spotlightJobs as $index => $spotlightJob)
-                            <button
-                                class="jf-spotlight__dot{{ $index === 0 ? ' is-active' : '' }}"
-                                type="button"
-                                role="tab"
-                                data-spotlight-dot="{{ $index }}"
-                                aria-selected="{{ $index === 0 ? 'true' : 'false' }}"
-                                aria-label="{{ $spotlightJob['title'] }} at {{ $spotlightJob['company'] }}"
-                            ></button>
-                        @endforeach
-                    </div>
-
-                    <button class="jf-spotlight__arrow" type="button" data-spotlight-next aria-label="Next featured role">
-                        <i class="fas fa-arrow-right" aria-hidden="true"></i>
-                    </button>
-                </div>
-            </aside>
             </div>
         </div>
     </section>
@@ -168,6 +127,7 @@
             </div>
         </div>
     </section>
+
 
     @php
         $howItWorks = [
@@ -346,4 +306,5 @@
 @push('scripts')
     <script src="{{ asset('js/jobs.js') }}?v={{ filemtime(public_path('js/jobs.js')) }}"></script>
     <script src="{{ asset('js/pricing.js') }}?v={{ filemtime(public_path('js/pricing.js')) }}"></script>
+    <script src="{{ asset('js/role-rack.js') }}?v={{ filemtime(public_path('js/role-rack.js')) }}"></script>
 @endpush

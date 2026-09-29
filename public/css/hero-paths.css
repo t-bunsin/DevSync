@@ -1,0 +1,399 @@
+/* Hero paths: the two calls to action as tiles, one per audience. Each tile
+   loops a small scene in its 64px square:
+     seek  a lens scans three job rows, settles on one, and a match pops
+     post  a post types itself out, is stamped, and flies off as a plane
+   The scenes are pure CSS and rest on a sensible still frame under
+   prefers-reduced-motion. */
+.jf-paths {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 296px));
+  gap: 16px;
+  margin-top: 40px;
+}
+
+/* fstyle.css paints every span in the hero copy with the brand blue; the tile
+   parts take their colour from the tile instead. */
+.jf-path span {
+  color: inherit;
+}
+
+.jf-path {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr) 34px;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 14px 12px 12px;
+  border-radius: 24px;
+  text-decoration: none;
+  /* Hover lifts with `translate`, not `transform`, which the entrance
+     animation holds on to after it finishes. */
+  transition:
+    translate 320ms var(--jf-ease-spring, ease),
+    box-shadow 320ms ease,
+    background 240ms ease,
+    border-color 240ms ease;
+}
+
+.jf-path:hover {
+  translate: 0 -3px;
+}
+
+.jf-path:focus-visible {
+  outline: 3px solid #9fe7e2;
+  outline-offset: 3px;
+}
+
+/* Light sweeping across the tile on hover. */
+.jf-path::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -130%;
+  z-index: -1;
+  width: 55%;
+  transform: skewX(-22deg);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  transition: left 700ms var(--jf-ease-out, ease);
+}
+
+.jf-path:hover::after {
+  left: 160%;
+}
+
+.jf-path--seek {
+  color: #08222f;
+  background: linear-gradient(135deg, #ffdb9b, #f3bd65 52%, #e2a244);
+  box-shadow: 0 16px 34px rgba(243, 189, 101, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.55);
+}
+
+.jf-path--seek:hover {
+  color: #08222f;
+  box-shadow: 0 24px 46px rgba(243, 189, 101, 0.38), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+.jf-path--post {
+  color: #eaf7f6;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.jf-path--post::after {
+  background: linear-gradient(90deg, transparent, rgba(159, 231, 226, 0.22), transparent);
+}
+
+.jf-path--post:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(159, 231, 226, 0.5);
+  box-shadow: 0 18px 34px rgba(0, 0, 0, 0.28);
+}
+
+.jf-path__scene {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  overflow: hidden;
+  border-radius: 16px;
+  transition: transform 420ms var(--jf-ease-spring, ease);
+}
+
+.jf-path:hover .jf-path__scene {
+  transform: scale(1.06) rotate(-3deg);
+}
+
+.jf-path--seek .jf-path__scene {
+  background: rgba(8, 34, 47, 0.1);
+  box-shadow: inset 0 0 0 1px rgba(8, 34, 47, 0.08);
+}
+
+.jf-path--post .jf-path__scene {
+  background: rgba(159, 231, 226, 0.12);
+  box-shadow: inset 0 0 0 1px rgba(159, 231, 226, 0.16);
+}
+
+.jf-path__text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.jf-path__text small {
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+  text-transform: uppercase;
+  opacity: 0.72;
+}
+
+.jf-path__text strong {
+  font-size: 1.12rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.jf-path__go {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  font-size: 0.8rem;
+}
+
+.jf-path--seek .jf-path__go {
+  color: #ffdb9b;
+  background: #08222f;
+}
+
+.jf-path--post .jf-path__go {
+  color: #9fe7e2;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* ---------- Seek scene: the lens scans the list and finds a match ---------- */
+.jf-seek__row {
+  position: absolute;
+  left: 9px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  width: 46px;
+  height: 11px;
+  padding: 0 4px;
+  border-radius: 4px;
+  background: rgba(8, 34, 47, 0.12);
+}
+
+.jf-seek__row--1 { top: 11px; }
+.jf-seek__row--2 { top: 27px; }
+.jf-seek__row--3 { top: 43px; }
+
+.jf-seek__row i {
+  flex: 0 0 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(8, 34, 47, 0.45);
+}
+
+.jf-seek__row b {
+  flex: 1;
+  height: 3px;
+  border-radius: 2px;
+  background: rgba(8, 34, 47, 0.3);
+}
+
+.jf-seek__row--3 b { flex: 0 0 60%; }
+
+.jf-seek__lens {
+  position: absolute;
+  top: 6px;
+  left: 4px;
+  width: 21px;
+  height: 21px;
+  border: 2.5px solid #08222f;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.jf-seek__lens::after {
+  /* The handle. */
+  content: "";
+  position: absolute;
+  right: -7px;
+  bottom: -4px;
+  width: 8px;
+  height: 3px;
+  border-radius: 2px;
+  background: #08222f;
+  transform: rotate(45deg);
+}
+
+.jf-seek__match {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  display: grid;
+  place-items: center;
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 0.5rem;
+  background: #0e7d6f;
+  box-shadow: 0 3px 8px rgba(14, 125, 111, 0.45);
+  transform: scale(0);
+}
+
+/* ---------- Post scene: write, stamp, send ---------- */
+.jf-post__doc {
+  position: absolute;
+  top: 10px;
+  left: 13px;
+  width: 34px;
+  height: 43px;
+  border-radius: 6px;
+  background: #f4fbfa;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
+}
+
+.jf-post__line {
+  position: absolute;
+  left: 6px;
+  width: 0;
+  height: 3px;
+  border-radius: 2px;
+  background: #0e4d5c;
+}
+
+.jf-post__line--1 { top: 8px; --jf-line-w: 20px; background: #1ca6a0; }
+.jf-post__line--2 { top: 16px; --jf-line-w: 22px; }
+.jf-post__line--3 { top: 24px; --jf-line-w: 13px; }
+
+.jf-post__stamp {
+  position: absolute;
+  right: -6px;
+  bottom: -5px;
+  display: grid;
+  place-items: center;
+  width: 19px;
+  height: 19px;
+  border-radius: 50%;
+  color: #08222f;
+  font-size: 0.52rem;
+  background: #f3bd65;
+  box-shadow: 0 3px 8px rgba(243, 189, 101, 0.5);
+  opacity: 0;
+}
+
+.jf-post__plane {
+  position: absolute;
+  top: 24px;
+  left: 22px;
+  color: #9fe7e2;
+  font-size: 0.95rem;
+  opacity: 0;
+  filter: drop-shadow(0 0 6px rgba(159, 231, 226, 0.6));
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* The tiles arrive after the headline, one after the other. */
+  .jf-path {
+    animation: jf-path-in 720ms var(--jf-ease-out, ease) both;
+  }
+
+  .jf-path--seek { animation-delay: 640ms; }
+  .jf-path--post { animation-delay: 760ms; }
+
+  .jf-seek__lens { animation: jf-seek-lens 4.2s var(--jf-ease-out, ease) 1.2s infinite both; }
+  .jf-seek__row--2 { animation: jf-seek-hit 4.2s ease 1.2s infinite both; }
+  .jf-seek__match { animation: jf-seek-match 4.2s var(--jf-ease-spring, ease) 1.2s infinite both; }
+
+  .jf-post__doc { animation: jf-post-doc 4.4s ease 1.6s infinite both; }
+  .jf-post__line { animation: 4.4s ease 1.6s infinite both; }
+  .jf-post__line--1 { animation-name: jf-post-line-1; }
+  .jf-post__line--2 { animation-name: jf-post-line-2; }
+  .jf-post__line--3 { animation-name: jf-post-line-3; }
+  .jf-post__stamp { animation: jf-post-stamp 4.4s ease 1.6s infinite both; }
+  .jf-post__plane { animation: jf-post-plane 4.4s var(--jf-ease-out, ease) 1.6s infinite both; }
+
+  .jf-path--seek:hover .jf-path__go i { animation: jf-go-down 900ms ease-in-out infinite; }
+  .jf-path--post:hover .jf-path__go i { animation: jf-go-right 900ms ease-in-out infinite; }
+}
+
+/* Still frames for reduced motion: the match found, the post written. */
+@media (prefers-reduced-motion: reduce) {
+  .jf-seek__lens { transform: translate(10px, 16px); }
+  .jf-seek__row--2 { background: #08222f; }
+  .jf-seek__match { transform: scale(1); }
+  .jf-post__line { width: var(--jf-line-w); }
+  .jf-post__stamp { opacity: 1; }
+}
+
+@keyframes jf-path-in {
+  from { opacity: 0; transform: translateY(18px) scale(0.96); }
+  to { opacity: 1; transform: none; }
+}
+
+/* Row 1, then row 3, then settle on row 2 with a little "found it" pulse. */
+@keyframes jf-seek-lens {
+  0%, 16% { transform: translate(0, 0); }
+  32%, 46% { transform: translate(22px, 32px); }
+  62% { transform: translate(10px, 16px); }
+  68% { transform: translate(10px, 16px) scale(1.18); }
+  74%, 92% { transform: translate(10px, 16px) scale(1); }
+  100% { transform: translate(0, 0); }
+}
+
+@keyframes jf-seek-hit {
+  0%, 64%, 97%, 100% { background: rgba(8, 34, 47, 0.12); }
+  70%, 92% { background: #08222f; }
+}
+
+@keyframes jf-seek-match {
+  0%, 68% { transform: scale(0); }
+  76% { transform: scale(1.25); }
+  80%, 92% { transform: scale(1); }
+  98%, 100% { transform: scale(0); }
+}
+
+@keyframes jf-post-doc {
+  0% { opacity: 0; transform: translateY(8px); }
+  6% { opacity: 1; transform: none; }
+  /* The stamp lands: a small thud. */
+  46% { transform: none; }
+  48% { transform: translateY(2px) rotate(-2deg); }
+  52%, 62% { transform: none; }
+  /* Folded away and sent. */
+  74%, 100% { opacity: 0; transform: translate(14px, -18px) scale(0.3) rotate(12deg); }
+}
+
+@keyframes jf-post-line-1 {
+  0%, 6% { width: 0; }
+  16%, 100% { width: var(--jf-line-w); }
+}
+
+@keyframes jf-post-line-2 {
+  0%, 16% { width: 0; }
+  27%, 100% { width: var(--jf-line-w); }
+}
+
+@keyframes jf-post-line-3 {
+  0%, 27% { width: 0; }
+  36%, 100% { width: var(--jf-line-w); }
+}
+
+@keyframes jf-post-stamp {
+  0%, 38% { opacity: 0; transform: scale(2.4) rotate(-30deg); }
+  46% { opacity: 1; transform: scale(0.88) rotate(0deg); }
+  50%, 100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes jf-post-plane {
+  0%, 64% { opacity: 0; transform: translate(-4px, 4px) scale(0.5); }
+  70% { opacity: 1; transform: translate(0, 0) scale(1); }
+  90%, 100% { opacity: 0; transform: translate(36px, -30px) scale(0.8) rotate(-12deg); }
+}
+
+@keyframes jf-go-down {
+  0%, 100% { transform: translateY(-2px); }
+  50% { transform: translateY(3px); }
+}
+
+@keyframes jf-go-right {
+  0%, 100% { transform: translateX(-2px); }
+  50% { transform: translateX(3px); }
+}
+
+@media (max-width: 760px) {
+  .jf-paths {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

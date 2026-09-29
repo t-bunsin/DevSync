@@ -1,0 +1,487 @@
+/* Role rack: category cards hung from a rail in the landing hero. role-rack.js
+   drives the swing by writing --jf-rack-angle on each .jf-rack__swing; without
+   it the cards simply hang at their resting tilt. */
+.jf-rack {
+  --rack-rail-hi: #e3eeee;
+  --rack-rail: #9fb4b7;
+  --rack-rail-lo: #4d6468;
+  --rack-string: rgba(226, 242, 241, 0.75);
+  --rack-hole: #0b2a38;
+  --rack-ink: #111416;
+  --rack-slate: #5d5e59;
+  --rack-sky: #bfcadf;
+  --rack-accent: #b64b41;
+  --rack-accent-deep: #9c3d34;
+  --rack-gap: 8px;
+
+  position: relative;
+  container-type: inline-size;
+  /* Borrow some of the page gutter on wide screens so four cards fit. */
+  margin-right: calc(-1 * clamp(0px, (100vw - 1180px) / 2 - 40px, 88px));
+  padding-top: 18px;
+}
+
+.jf-rack__rail {
+  position: absolute;
+  top: 0;
+  left: -3%;
+  right: 0;
+  height: 10px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--rack-rail-hi) 0%, var(--rack-rail) 45%, var(--rack-rail-lo) 100%);
+  box-shadow: 0 10px 18px rgba(0, 0, 0, 0.35);
+  transform: translateY(calc(var(--jf-rack-jiggle, 0) * 1px));
+}
+
+/* Wall brackets at either end of the rail. */
+.jf-rack__rail::before,
+.jf-rack__rail::after {
+  content: "";
+  position: absolute;
+  top: -8px;
+  width: 8px;
+  height: 26px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, var(--rack-rail-lo), var(--rack-rail-hi) 50%, var(--rack-rail-lo));
+}
+
+.jf-rack__rail::before { left: 14px; }
+.jf-rack__rail::after { right: 14px; }
+
+.jf-rack__list {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  margin: 0;
+  padding: 0 0 20px;
+  list-style: none;
+}
+
+.jf-rack__item {
+  --card-w: clamp(136px, calc((100cqw + 3 * var(--rack-gap)) / 4), 180px);
+
+  position: relative;
+  flex: 0 0 auto;
+}
+
+/* Neighbours tuck slightly behind each other, like hangers bunched on a rail. */
+.jf-rack__item + .jf-rack__item {
+  margin-left: calc(-1 * var(--rack-gap));
+}
+
+.jf-rack__item:hover,
+.jf-rack__item:focus-within {
+  z-index: 2;
+}
+
+/* Opening sequence, played once when the page loads. It only arms once the
+   script is running, so a visitor without it never sees an empty rack.
+     1. the rail draws in from the left      (200ms)
+     2. each string lowers from the rail     (700ms + 140ms per card)
+     3. each card hooks on and springs down  (950ms + 140ms per card)
+     4. corner badges pop, then the hint     (1450ms+, 2100ms)
+   role-rack.js kicks each card's swing to land with step 3, so keep
+   INTRO_CARD_START / INTRO_STAGGER there in step with these delays. */
+
+/* Hidden until the sequence starts. */
+.jf-rack.is-armed:not(.is-in) .jf-rack__rail {
+  clip-path: inset(-30px 100% -30px -30px);
+}
+
+.jf-rack.is-armed:not(.is-in) .jf-rack__string {
+  transform: scaleY(0);
+}
+
+.jf-rack.is-armed:not(.is-in) .jf-rack__card {
+  opacity: 0;
+  transform: translateY(-70px) scale(0.82);
+}
+
+.jf-rack.is-armed:not(.is-in) .jf-rack__badge {
+  transform: scale(0);
+}
+
+.jf-rack.is-armed:not(.is-in) .jf-rack__hint {
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+/* The staggered entrance timing. It applies only from .is-in: attached to the
+   armed state it would start a delayed fade *toward* hidden, which .is-in then
+   cancels, and nothing would animate. Dropped again at .is-settled so hover
+   answers at once rather than after the entrance delay. */
+.jf-rack.is-in:not(.is-settled) .jf-rack__rail {
+  clip-path: inset(-30px -30px -30px -30px);
+  transition: clip-path 850ms cubic-bezier(0.65, 0, 0.35, 1) 200ms;
+}
+
+.jf-rack.is-in:not(.is-settled) .jf-rack__string {
+  transform-origin: 50% 0;
+  transition: transform 420ms cubic-bezier(0.33, 1, 0.68, 1);
+  transition-delay: calc(700ms + var(--jf-rack-i) * 140ms);
+}
+
+.jf-rack.is-in:not(.is-settled) .jf-rack__card {
+  transition:
+    opacity 260ms ease,
+    transform 900ms cubic-bezier(0.34, 1.7, 0.5, 1);
+  transition-delay: calc(950ms + var(--jf-rack-i) * 140ms);
+}
+
+.jf-rack.is-in:not(.is-settled) .jf-rack__badge {
+  transition: transform 420ms var(--jf-ease-spring, ease);
+  transition-delay: calc(1450ms + var(--jf-rack-i) * 140ms);
+}
+
+.jf-rack.is-in:not(.is-settled) .jf-rack__hint {
+  transition: opacity 500ms ease 2100ms, transform 500ms ease 2100ms;
+}
+
+.jf-rack__swing {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform-origin: 50% 0;
+  transform: rotate(var(--jf-rack-angle, var(--jf-rack-tilt, 0deg)));
+  will-change: transform;
+}
+
+.jf-rack__string {
+  width: 3px;
+  height: var(--jf-rack-drop, 48px);
+  margin-top: -8px;
+  border-radius: 2px;
+  background: var(--rack-string);
+}
+
+/* Cards: everything inside scales off --card-w, in hundredths of the card. */
+.jf-rack__card {
+  --u: calc(var(--card-w) / 100);
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: var(--card-w);
+  min-height: calc(142 * var(--u));
+  padding: calc(14 * var(--u)) calc(11.5 * var(--u)) calc(12 * var(--u));
+  border-radius: calc(12 * var(--u));
+  color: #fff;
+  text-decoration: none;
+  background: var(--rack-ink);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 28px 44px -20px rgba(0, 0, 0, 0.7);
+  transition: box-shadow 260ms ease, transform 320ms var(--jf-ease-spring, ease);
+}
+
+.jf-rack__card::before {
+  /* The hole the string threads through. */
+  content: "";
+  position: absolute;
+  top: calc(5 * var(--u));
+  left: 50%;
+  width: calc(5.5 * var(--u));
+  height: calc(5.5 * var(--u));
+  border-radius: 50%;
+  background: var(--rack-hole);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.4);
+  transform: translateX(-50%);
+}
+
+.jf-rack__card:hover,
+.jf-rack__card:focus-visible {
+  color: #fff;
+  transform: translateY(8px) scale(1.04);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 40px 56px -20px rgba(0, 0, 0, 0.75);
+}
+
+.jf-rack__card:focus-visible {
+  outline: 3px solid #f3bd65;
+  outline-offset: 4px;
+}
+
+.jf-rack__card--slate {
+  background: var(--rack-slate);
+}
+
+.jf-rack__card--sky,
+.jf-rack__card--sky:hover,
+.jf-rack__card--sky:focus-visible {
+  color: #111;
+  background: var(--rack-sky);
+}
+
+/* The "see everything" hanger: an outline tag rather than a solid one. */
+.jf-rack__card--more {
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: inset 0 0 0 1.5px rgba(226, 242, 241, 0.35);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.jf-rack__card--more:hover,
+.jf-rack__card--more:focus-visible {
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: inset 0 0 0 1.5px rgba(159, 231, 226, 0.6), 0 30px 44px -20px rgba(0, 0, 0, 0.6);
+}
+
+.jf-rack__card--more::before {
+  box-shadow: inset 0 0 0 1.5px rgba(226, 242, 241, 0.35);
+  background: transparent;
+}
+
+.jf-rack__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: calc(4 * var(--u));
+  margin-bottom: calc(14 * var(--u));
+}
+
+/* Company mark: the uploaded logo on a white tile, else its initial. */
+.jf-rack__logo {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: calc(24 * var(--u));
+  height: calc(24 * var(--u));
+  overflow: hidden;
+  border-radius: 50%;
+  color: #fff;
+  font-size: calc(11 * var(--u));
+  font-weight: 800;
+  background: var(--rack-accent);
+  transition: transform 420ms var(--jf-ease-spring, ease);
+}
+
+.jf-rack__logo--photo {
+  border-radius: calc(7 * var(--u));
+  background: #fff;
+}
+
+.jf-rack__logo--photo img {
+  width: 82%;
+  height: 82%;
+  object-fit: contain;
+}
+
+.jf-rack__logo--plus {
+  font-size: calc(9 * var(--u));
+}
+
+.jf-rack__card:hover .jf-rack__logo {
+  transform: rotate(-10deg) scale(1.08);
+}
+
+.jf-rack__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+  padding: calc(1.6 * var(--u)) calc(4.2 * var(--u));
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  font-size: calc(6.2 * var(--u));
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  opacity: 0.7;
+}
+
+.jf-rack__badge--hot {
+  color: #08222f;
+  background: #f3bd65;
+  border-color: transparent;
+  opacity: 1;
+}
+
+.jf-rack__company {
+  display: flex;
+  align-items: center;
+  gap: 0.35em;
+  margin-top: auto;
+  overflow: hidden;
+  font-size: calc(7 * var(--u));
+  font-weight: 600;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  opacity: 0.72;
+}
+
+.jf-rack__company i {
+  color: #5fd3c9;
+  font-size: 0.9em;
+}
+
+.jf-rack__card--sky .jf-rack__company i {
+  color: #0e7d6f;
+}
+
+.jf-rack__title {
+  display: -webkit-box;
+  margin-top: calc(2.5 * var(--u));
+  overflow: hidden;
+  font-family: "Anton", "Metropolis", sans-serif;
+  font-size: calc(13.5 * var(--u));
+  line-height: 1.02;
+  text-transform: uppercase;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow-wrap: anywhere;
+}
+
+.jf-rack__meta {
+  margin-top: calc(3 * var(--u));
+  font-size: calc(6.8 * var(--u));
+  white-space: nowrap;
+  opacity: 0.8;
+}
+
+.jf-rack__salary {
+  margin-top: calc(1.5 * var(--u));
+  font-size: calc(7.4 * var(--u));
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.jf-rack__cta {
+  display: inline-flex;
+  align-self: flex-start;
+  align-items: center;
+  gap: 0;
+  margin-top: calc(7 * var(--u));
+  padding: calc(3.6 * var(--u)) calc(9 * var(--u));
+  border-radius: 999px;
+  font-size: calc(7 * var(--u));
+  font-weight: 800;
+  transition: gap 260ms var(--jf-ease-out, ease), background 200ms ease;
+}
+
+.jf-rack__cta i {
+  width: 0;
+  overflow: hidden;
+  font-size: 0.85em;
+  opacity: 0;
+  transition: width 260ms var(--jf-ease-out, ease), opacity 200ms ease;
+}
+
+.jf-rack__card:hover .jf-rack__cta,
+.jf-rack__card:focus-visible .jf-rack__cta {
+  gap: 0.5em;
+}
+
+.jf-rack__card:hover .jf-rack__cta i,
+.jf-rack__card:focus-visible .jf-rack__cta i {
+  width: 0.85em;
+  opacity: 1;
+}
+
+.jf-rack__cta--light {
+  color: #111;
+  background: #fff;
+}
+
+.jf-rack__cta--dark {
+  color: #fff;
+  background: #151515;
+}
+
+.jf-rack__cta--accent {
+  color: #fff;
+  background: var(--rack-accent);
+}
+
+.jf-rack__card:hover .jf-rack__cta--accent {
+  background: var(--rack-accent-deep);
+}
+
+/* Already applied: the tick stays put and hover has nothing to reveal. */
+.jf-rack__cta--done,
+.jf-rack__card:hover .jf-rack__cta--done {
+  gap: 0.45em;
+}
+
+.jf-rack__cta--done i,
+.jf-rack__card:hover .jf-rack__cta--done i {
+  width: auto;
+  opacity: 1;
+}
+
+.jf-rack__hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 24px 0 0;
+  color: rgba(226, 242, 241, 0.55);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.jf-rack__hint i {
+  animation: jf-rack-hint 2.4s ease-in-out infinite;
+}
+
+@keyframes jf-rack-hint {
+  0%, 100% { transform: translateX(-6px) rotate(-8deg); }
+  50% { transform: translateX(6px) rotate(8deg); }
+}
+
+@media (hover: none) {
+  .jf-rack__hint {
+    display: none;
+  }
+}
+
+/* The hero stacks from here down: the rack sits under the copy, centred. */
+@media (max-width: 1100px) {
+  .jf-hero--rack .jf-hero__inner {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 56px;
+  }
+
+  .jf-rack {
+    width: min(640px, 100%);
+    margin-inline: auto;
+  }
+}
+
+/* Too narrow for four cards: the rack scrolls sideways under a fixed rail. */
+@media (max-width: 600px) {
+  .jf-rack__list {
+    justify-content: flex-start;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+    /* Room for a swung card's corners so the scroller does not clip them. */
+    padding: 0 12px 28px;
+  }
+
+  .jf-rack__list::-webkit-scrollbar {
+    display: none;
+  }
+
+  .jf-rack__item {
+    --card-w: 150px;
+    scroll-snap-align: center;
+  }
+
+  .jf-rack__item + .jf-rack__item {
+    margin-left: 4px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .jf-rack__item,
+  .jf-rack__card,
+  .jf-rack__logo {
+    transition: none;
+  }
+
+  .jf-rack__hint i {
+    animation: none;
+  }
+}
