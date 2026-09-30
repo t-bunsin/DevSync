@@ -40,23 +40,30 @@
             </nav>
 
             <div class="jf-header__actions">
-                {{-- The bar shows the locale's code; the menu spells both out. --}}
+                {{-- The bar shows the current flag and code; the menu spells both
+                     languages out, each beside its flag. --}}
+                <link rel="stylesheet" href="{{ asset('css/language-switcher.css') }}?v={{ filemtime(public_path('css/language-switcher.css')) }}">
                 <div class="jf-language">
                     <button class="jf-language__toggle" type="button" aria-label="{{ __('ui.language.switch') }}">
-                        <i class="fas fa-globe"></i>
-                        <span>{{ strtoupper($currentLocale) }}</span>
-                        <i class="fas fa-angle-down"></i>
+                        <span class="jf-language__badge">
+                            @include('partials.flag', ['code' => $currentLocale])
+                        </span>
+                        <span class="jf-language__current">{{ strtoupper($currentLocale) }}</span>
+                        <i class="fas fa-angle-down" aria-hidden="true"></i>
                     </button>
 
                     <div class="jf-language__menu">
-                        <a class="jf-language__option{{ $currentLocale === 'en' ? ' is-active' : '' }}" href="{{ route('language.switch', 'en') }}">
-                            <span>{{ __('ui.language.english') }}</span>
-                            <small>EN</small>
-                        </a>
-                        <a class="jf-language__option{{ $currentLocale === 'kh' ? ' is-active' : '' }}" href="{{ route('language.switch', 'kh') }}">
-                            <span>{{ __('ui.language.khmer') }}</span>
-                            <small>KH</small>
-                        </a>
+                        @foreach (['en' => 'english', 'kh' => 'khmer'] as $code => $name)
+                            <a class="jf-language__option{{ $currentLocale === $code ? ' is-active' : '' }}"
+                                href="{{ route('language.switch', $code) }}"
+                                @if ($currentLocale === $code) aria-current="true" @endif>
+                                <span class="jf-language__flag">
+                                    @include('partials.flag', ['code' => $code])
+                                </span>
+                                <span class="jf-language__name" lang="{{ $code === 'kh' ? 'km' : 'en' }}">{{ __('ui.language.' . $name) }}</span>
+                                <span class="jf-language__check" aria-hidden="true"><i class="fas fa-check"></i></span>
+                            </a>
+                        @endforeach
                     </div>
                 </div>
 

@@ -107,7 +107,7 @@
                 <a class="kh-admin-lang dropdown-toggle" id="languageDropdown" href="#" role="button"
                     data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
                     aria-label="{{ __('ui.language.switch') }}">
-                    <span class="kh-admin-lang__globe" aria-hidden="true"><i data-feather="globe"></i></span>
+                    <span class="kh-admin-lang__globe" aria-hidden="true">@include('partials.flag', ['code' => $currentLocale === 'kh' ? 'kh' : 'en'])</span>
                     <span class="kh-admin-lang__label">
                         {{ $currentLocale === 'kh' ? __('ui.language.kh') : __('ui.language.en') }}
                     </span>
@@ -116,11 +116,11 @@
                 <div class="dropdown-menu dropdown-menu-end kh-admin-lang__menu animated--fade-in-up"
                     aria-labelledby="languageDropdown">
                     <span class="kh-admin-lang__menu-title">{{ __('ui.language.switch') }}</span>
-                    {{-- The two-letter chips are decorative: the language name that
-                         follows is what a screen reader should announce. --}}
+                    {{-- The flags are decorative: the language name that follows is
+                         what a screen reader should announce. --}}
                     <a class="dropdown-item kh-admin-lang__option{{ $currentLocale === 'en' ? ' is-active' : '' }}"
                         href="{{ route('language.switch', 'en') }}">
-                        <span class="kh-admin-lang__code" aria-hidden="true">EN</span>
+                        <span class="kh-admin-lang__code" aria-hidden="true">@include('partials.flag', ['code' => 'en'])</span>
                         <span class="kh-admin-lang__name">{{ __('ui.language.english') }}</span>
                         @if ($currentLocale === 'en')
                             <i class="fas fa-check" aria-hidden="true"></i>
@@ -128,7 +128,7 @@
                     </a>
                     <a class="dropdown-item kh-admin-lang__option{{ $currentLocale === 'kh' ? ' is-active' : '' }}"
                         href="{{ route('language.switch', 'kh') }}">
-                        <span class="kh-admin-lang__code" aria-hidden="true">KH</span>
+                        <span class="kh-admin-lang__code" aria-hidden="true">@include('partials.flag', ['code' => 'kh'])</span>
                         <span class="kh-admin-lang__name">{{ __('ui.language.khmer') }}</span>
                         @if ($currentLocale === 'kh')
                             <i class="fas fa-check" aria-hidden="true"></i>

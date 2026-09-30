@@ -372,6 +372,33 @@ body.nav-fixed {
   border-color: transparent;
 }
 
+/* The puck and the chips are filled edge to edge by the locale's flag. */
+.kh-admin-lang__globe,
+.kh-admin-lang__code {
+  overflow: hidden;
+  padding: 0;
+  background: none;
+}
+
+.kh-admin-lang__globe .kh-flag,
+.kh-admin-lang__code .kh-flag {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.kh-admin-lang__code {
+  width: 30px;
+  height: 21px;
+  border-radius: 5px;
+}
+
+.kh-admin-lang__option.is-active .kh-admin-lang__code {
+  background: none;
+  border-color: var(--kh-teal);
+  box-shadow: 0 0 0 1px var(--kh-teal);
+}
+
 /* Narrow screens keep the globe and the caret; the label is the first thing
    that can go, since the open menu names both languages anyway. */
 @media (max-width: 575.98px) {
