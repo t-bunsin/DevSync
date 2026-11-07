@@ -129,6 +129,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     observer.observe(rack);
 
+    /* In the hero slideshow (hero-slides.js), the rack slides back in when its
+       slide is shown again; the cards trail behind that sideways move. */
+    rack.closest('[data-slide]')?.addEventListener('jf:slide-shown', (event) => {
+        if (!introPlayed) {
+            return;
+        }
+
+        const direction = event.detail?.direction ?? 1;
+
+        cards.forEach((card, index) => {
+            window.setTimeout(() => knock(card, -direction * (70 + index * 12)), 120 + index * 60);
+        });
+    });
+
     /* A cursor sweeping across the cards knocks each one it crosses, in the
        direction it was travelling and harder the faster it went. */
     let pointerX = null;

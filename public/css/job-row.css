@@ -1,0 +1,450 @@
+/* Job rows: the /jobs board's list beside the preview panel.
+
+   Each job is three short lines in one rounded panel, so a screen holds many
+   more of them than it did cards. The title's button is stretched over the
+   whole row and previews the role (jobs.js); save and the link to the full
+   page sit above it on the right. The previewed row gets a tint and a teal
+   bar down its left edge. From 960px down, where jobs.js opens the preview
+   between the rows, the panel dissolves into separate slim cards.
+
+   Colours come from the jobs.css tokens, so the dark theme carries over;
+   only the hardcoded accents need their own dark rules. */
+
+/* ---------- Board columns ---------- */
+/* Rows need more width than the old cards to keep their three lines whole,
+   so the list column takes a bigger share; the panel stays the wider one. */
+.jf-board__grid.jf-board__grid--rows {
+  grid-template-columns: minmax(380px, 0.92fr) minmax(0, 1.4fr);
+}
+
+@media (max-width: 1100px) {
+  .jf-board__grid.jf-board__grid--rows {
+    grid-template-columns: minmax(340px, 0.9fr) minmax(0, 1.2fr);
+  }
+}
+
+@media (max-width: 960px) {
+  .jf-board__grid.jf-board__grid--rows {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ---------- The list panel ---------- */
+.jf-results__list.jf-results__list--rows {
+  gap: 4px;
+  padding: 8px;
+  border: 1px solid var(--jf-line);
+  border-radius: 24px;
+  background: var(--jf-paper);
+  box-shadow: var(--jf-shadow-md);
+}
+
+/* Nothing to list (every row filtered out): no empty frame. */
+.jf-results__list--rows:not(:has(> :not([hidden]))) {
+  display: none;
+}
+
+/* ---------- A row ---------- */
+.jf-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 12px 14px 16px;
+  border-radius: 16px;
+  transition: background 200ms ease;
+}
+
+/* The board filters with the hidden attribute, which display: grid would
+   otherwise override. */
+.jf-row[hidden] {
+  display: none;
+}
+
+/* Hairline between rows, dropped next to a lit row so its tint reads as
+   one clean shape. */
+.jf-row:not(:first-child)::after {
+  content: "";
+  position: absolute;
+  top: -2.5px;
+  right: 16px;
+  left: 72px;
+  height: 1px;
+  background: var(--jf-line);
+  transition: opacity 200ms ease;
+}
+
+.jf-row:is(:hover, .is-active)::after,
+.jf-row:is(:hover, .is-active) + .jf-row::after {
+  opacity: 0;
+}
+
+.jf-row:hover {
+  background: var(--jf-quiet);
+}
+
+/* The previewed row: tinted, with a bar down its left edge. */
+.jf-row.is-active {
+  background: rgba(28, 166, 160, 0.09);
+}
+
+.jf-row::before {
+  content: "";
+  position: absolute;
+  top: 14px;
+  bottom: 14px;
+  left: 0;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: var(--jf-teal);
+  transform: scaleY(0);
+  transition: transform 260ms var(--jf-ease-out, ease);
+}
+
+.jf-row.is-active::before {
+  transform: scaleY(1);
+}
+
+.jf-row:has(.jf-row__link:focus-visible) {
+  outline: 2px solid var(--jf-teal);
+  outline-offset: -2px;
+}
+
+/* ---------- Logo ---------- */
+.jf-row__logo.jf-logo {
+  width: 42px;
+  min-width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  font-size: 0.95rem;
+}
+
+.jf-row__logo.jf-logo--photo {
+  padding: 5px;
+  box-shadow: inset 0 0 0 1px var(--jf-line);
+}
+
+.jf-row__logo.jf-logo--aba span {
+  font-size: 0.72rem;
+}
+
+.jf-row__logo.jf-logo--aba small {
+  font-size: 0.38rem;
+}
+
+/* ---------- Text ---------- */
+.jf-row__main {
+  min-width: 0;
+}
+
+.jf-row__title {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+  margin: 0;
+  font-size: 0.98rem;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  line-height: 1.3;
+}
+
+.jf-row__link {
+  min-width: 0;
+  overflow: hidden;
+  padding: 0;
+  border: 0;
+  color: var(--jf-ink);
+  background: none;
+  font: inherit;
+  letter-spacing: inherit;
+  text-align: left;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  outline: none;
+  transition: color 200ms ease;
+}
+
+/* Stretched over the row. Its containing block is the row, outside the
+   button's overflow, so the ellipsis clipping never clips it. */
+.jf-row__link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+}
+
+.jf-row:hover .jf-row__link,
+.jf-row.is-active .jf-row__link {
+  color: var(--jf-teal-dark);
+}
+
+.jf-row__hot {
+  display: inline-grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  color: #8a5a12;
+  font-size: 0.6rem;
+  background: #fdefd3;
+}
+
+.jf-row__new {
+  flex: 0 0 auto;
+  padding: 2px 7px;
+  border-radius: 999px;
+  color: var(--jf-teal-dark);
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  background: rgba(28, 166, 160, 0.12);
+}
+
+.jf-row__company {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  margin: 2px 0 0;
+  color: var(--jf-ink-soft);
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+.jf-row__name,
+.jf-row__place {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.jf-row__name {
+  flex: 0 1 auto;
+  color: var(--jf-ink);
+  font-weight: 600;
+}
+
+.jf-row__company .kh-verified {
+  flex: 0 0 auto;
+}
+
+.jf-row__place {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.jf-row__place::before {
+  content: "·";
+  margin: 0 6px 0 2px;
+}
+
+.jf-row__meta {
+  margin: 6px 0 0;
+  overflow: hidden;
+  color: var(--jf-ink-soft);
+  font-size: 0.76rem;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.jf-row__meta > span + span::before {
+  content: "·";
+  margin: 0 7px;
+  color: var(--jf-line-dark);
+}
+
+.jf-row__pay strong {
+  color: var(--jf-ink);
+  font-weight: 800;
+}
+
+.jf-row__pay small {
+  font-size: inherit;
+}
+
+/* ---------- Side controls ---------- */
+.jf-row__side {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.jf-row .jf-bookmark,
+.jf-row__open {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  min-width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 1px solid var(--jf-line);
+  border-radius: 50%;
+  color: var(--jf-ink-soft);
+  background: var(--jf-paper);
+  font-size: 0.76rem;
+  text-decoration: none;
+  transform: none;
+  transition: color 200ms ease, background 200ms ease, border-color 200ms ease, transform 320ms var(--jf-ease-spring, ease);
+}
+
+.jf-row .jf-bookmark:hover,
+.jf-row__open:hover {
+  color: var(--jf-teal-dark);
+  background: var(--jf-paper);
+  border-color: var(--jf-teal);
+  transform: scale(1.08);
+}
+
+.jf-row .jf-bookmark.is-saved {
+  color: #fff;
+  background: var(--jf-ocean);
+  border-color: var(--jf-ocean);
+}
+
+.jf-row__open:focus-visible {
+  outline: 3px solid rgba(28, 166, 160, 0.35);
+  outline-offset: 2px;
+}
+
+/* ---------- Dark theme ---------- */
+html[data-theme="dark"] .jf-row.is-active {
+  background: rgba(131, 222, 216, 0.08);
+}
+
+html[data-theme="dark"] .jf-row::before {
+  background: #83ded8;
+}
+
+html[data-theme="dark"] .jf-row:hover .jf-row__link,
+html[data-theme="dark"] .jf-row.is-active .jf-row__link,
+html[data-theme="dark"] .jf-row__new {
+  color: #83ded8;
+}
+
+html[data-theme="dark"] .jf-row__new {
+  background: rgba(131, 222, 216, 0.12);
+}
+
+html[data-theme="dark"] .jf-row__hot {
+  color: var(--jf-gold);
+  background: rgba(243, 189, 101, 0.14);
+}
+
+html[data-theme="dark"] .jf-row .jf-bookmark,
+html[data-theme="dark"] .jf-row__open {
+  color: #9db2ba;
+  background: transparent;
+  border-color: var(--jf-line-dark);
+}
+
+html[data-theme="dark"] .jf-row .jf-bookmark:hover,
+html[data-theme="dark"] .jf-row__open:hover {
+  color: #83ded8;
+  background: transparent;
+  border-color: #83ded8;
+}
+
+html[data-theme="dark"] .jf-row .jf-bookmark.is-saved {
+  color: #061014;
+  background: #83ded8;
+  border-color: #83ded8;
+}
+
+/* ---------- Motion ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  .jf-results__list--rows {
+    animation: jf-rows-in 560ms var(--jf-ease-out, ease) 120ms both;
+  }
+
+  /* jobs.js replays this on the visible rows after a filter or sort. */
+  .jf-row.is-entering {
+    animation: jf-row-refresh 340ms var(--jf-ease-out, ease) both;
+  }
+}
+
+@keyframes jf-rows-in {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes jf-row-refresh {
+  from { opacity: 0.3; transform: translateX(-8px); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .jf-row .jf-bookmark:hover,
+  .jf-row__open:hover {
+    transform: none;
+  }
+}
+
+/* ---------- Narrow: separate slim cards ---------- */
+/* jobs.js opens the preview between the rows here, so the shared panel
+   gives way to one card per row and the preview sits between them. */
+@media (max-width: 960px) {
+  .jf-results__list.jf-results__list--rows {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+  }
+
+  .jf-row {
+    border: 1px solid var(--jf-line);
+    background: var(--jf-paper);
+  }
+
+  .jf-row:hover {
+    background: var(--jf-paper);
+  }
+
+  .jf-row.is-active {
+    border-color: rgba(28, 166, 160, 0.4);
+    background:
+      linear-gradient(rgba(28, 166, 160, 0.08), rgba(28, 166, 160, 0.08)),
+      var(--jf-paper);
+  }
+
+  html[data-theme="dark"] .jf-row.is-active {
+    border-color: rgba(131, 222, 216, 0.35);
+    background:
+      linear-gradient(rgba(131, 222, 216, 0.08), rgba(131, 222, 216, 0.08)),
+      var(--jf-paper);
+  }
+
+  .jf-row:not(:first-child)::after {
+    display: none;
+  }
+}
+
+/* Phones: pay and job type keep the third line; the work mode is in the
+   preview. */
+@media (max-width: 600px) {
+  .jf-row__mode {
+    display: none;
+  }
+}
+
+@media (max-width: 420px) {
+  .jf-row {
+    gap: 12px;
+    padding: 12px 10px 12px 14px;
+  }
+
+  .jf-row__logo.jf-logo {
+    width: 38px;
+    min-width: 38px;
+    height: 38px;
+  }
+}

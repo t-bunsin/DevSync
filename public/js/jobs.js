@@ -20,7 +20,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const jobsById = Object.fromEntries(jobs.map((job) => [job.id, job]));
     const list = explorer.querySelector('#job-card-list');
-    const cards = Array.from(explorer.querySelectorAll('.jf-job-card'));
+    // The job tiles (jobs/partials/job-tile.blade.php in interactive mode).
+    const cards = Array.from(explorer.querySelectorAll('[data-job-card]'));
     const previewButtons = Array.from(explorer.querySelectorAll('[data-preview-job]'));
     const boardGrid = explorer.querySelector('.jf-board__grid');
     const detail = explorer.querySelector('.jf-detail');

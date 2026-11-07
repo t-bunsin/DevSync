@@ -1,0 +1,291 @@
+/* Job tile: the job card on the landing page's grid. (The /jobs board lists
+   the same jobs as rows: job-row.css.)
+
+   One card, one target: the title's link to the job page is stretched over
+   the whole tile. Hover lifts it, draws a gradient ring round its edge and
+   turns the corner arrow from "up and out" to "go".
+
+   Colours come from the jobs.css tokens, so the dark theme carries over;
+   only the hardcoded accents need their own dark rules. */
+
+.jf-tile {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  border: 1px solid var(--jf-line);
+  border-radius: 24px;
+  background: var(--jf-paper);
+  transition:
+    transform 360ms var(--jf-ease-out, ease),
+    box-shadow 360ms var(--jf-ease-out, ease),
+    border-color 240ms ease,
+    background 240ms ease;
+}
+
+/* The ring: a gradient border masked down to its 1.5px edge. */
+.jf-tile::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  z-index: -1;
+  padding: 1.5px;
+  border-radius: inherit;
+  background: linear-gradient(135deg, var(--jf-teal), #9fe7e2 45%, var(--jf-gold));
+  opacity: 0;
+  transition: opacity 260ms ease;
+  pointer-events: none;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+}
+
+.jf-tile.is-featured {
+  background:
+    radial-gradient(120% 70% at 100% 0%, rgba(243, 189, 101, 0.16), transparent 55%),
+    var(--jf-paper);
+}
+
+/* Lit by hover or keyboard focus. Inside :is() so a browser without :has()
+   still gets the hover. */
+.jf-tile:is(:hover, :has(:focus-visible)) {
+  border-color: transparent;
+  box-shadow: 0 28px 52px -20px rgba(11, 38, 56, 0.3);
+  transform: translateY(-6px);
+}
+
+.jf-tile:is(:hover, :has(:focus-visible))::before {
+  opacity: 1;
+}
+
+.jf-tile:has(.jf-tile__link:focus-visible) {
+  outline: 3px solid rgba(28, 166, 160, 0.45);
+  outline-offset: 4px;
+}
+
+/* ---------- Head: who is hiring ---------- */
+.jf-tile__head {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+}
+
+.jf-tile__logo.jf-logo {
+  width: 46px;
+  min-width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  font-size: 1.05rem;
+}
+
+.jf-tile__logo.jf-logo--photo {
+  padding: 6px;
+  box-shadow: inset 0 0 0 1px var(--jf-line);
+}
+
+.jf-tile__company {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin: 0;
+  color: var(--jf-ink);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.jf-tile__company > span:first-child {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.jf-tile__place {
+  margin: 2px 0 0;
+  overflow: hidden;
+  color: var(--jf-ink-soft);
+  font-size: 0.78rem;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.jf-tile__tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  color: var(--jf-ink-soft);
+  font-size: 0.68rem;
+  font-weight: 700;
+  white-space: nowrap;
+  background: var(--jf-quiet);
+}
+
+.jf-tile__tag--hot {
+  color: #8a5a12;
+  background: #fdefd3;
+}
+
+/* ---------- Body: the role ---------- */
+.jf-tile__title {
+  margin: 22px 0 0;
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+}
+
+.jf-tile__link {
+  color: var(--jf-ink);
+  text-decoration: none;
+  outline: none;
+  transition: color 200ms ease;
+}
+
+.jf-tile__link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+}
+
+.jf-tile:is(:hover, :has(:focus-visible)) .jf-tile__link {
+  color: var(--jf-teal-dark);
+}
+
+.jf-tile__summary {
+  display: -webkit-box;
+  margin: 8px 0 0;
+  overflow: hidden;
+  color: var(--jf-ink-soft);
+  font-size: 0.87rem;
+  line-height: 1.55;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.jf-tile__facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 18px 0 22px;
+  padding: 0;
+  list-style: none;
+}
+
+.jf-tile__facts li {
+  padding: 5px 11px;
+  border-radius: 999px;
+  color: var(--jf-ink);
+  font-size: 0.74rem;
+  font-weight: 600;
+  background: var(--jf-quiet);
+}
+
+/* ---------- Foot: pay and the way in ---------- */
+.jf-tile__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: auto;
+  padding-top: 18px;
+  border-top: 1px dashed var(--jf-line-dark);
+}
+
+.jf-tile__pay {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 0;
+}
+
+.jf-tile__pay strong {
+  color: var(--jf-ink);
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.jf-tile__pay span {
+  color: var(--jf-ink-soft);
+  font-size: 0.78rem;
+}
+
+.jf-tile__go {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border: 1px solid var(--jf-line-dark);
+  border-radius: 50%;
+  color: var(--jf-ink);
+  font-size: 0.85rem;
+  transition: color 240ms ease, background 240ms ease, border-color 240ms ease;
+}
+
+.jf-tile__go i {
+  transform: rotate(-45deg);
+  transition: transform 360ms var(--jf-ease-spring, ease);
+}
+
+.jf-tile:is(:hover, :has(:focus-visible)) .jf-tile__go {
+  color: #fff;
+  border-color: var(--jf-teal-dark);
+  background: var(--jf-teal-dark);
+}
+
+.jf-tile:is(:hover, :has(:focus-visible)) .jf-tile__go i {
+  transform: none;
+}
+
+/* ---------- Dark theme ---------- */
+html[data-theme="dark"] .jf-tile:is(:hover, :has(:focus-visible)) {
+  box-shadow: 0 28px 52px -20px rgba(0, 0, 0, 0.6);
+}
+
+html[data-theme="dark"] .jf-tile__tag--hot {
+  color: var(--jf-gold);
+  background: rgba(243, 189, 101, 0.14);
+}
+
+html[data-theme="dark"] .jf-tile:is(:hover, :has(:focus-visible)) .jf-tile__link {
+  color: #83ded8;
+}
+
+html[data-theme="dark"] .jf-tile:is(:hover, :has(:focus-visible)) .jf-tile__go {
+  color: #061014;
+  border-color: #83ded8;
+  background: #83ded8;
+}
+
+/* ---------- Motion ---------- */
+/* Tiles rise in as they scroll into view, where the browser can tie an
+   animation to scrolling. `translate` rather than `transform`, so the hover
+   lift still works once the entrance has filled. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .jf-tile {
+      animation: jf-tile-in linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 60%;
+    }
+  }
+}
+
+@keyframes jf-tile-in {
+  from { opacity: 0; translate: 0 40px; }
+  to { opacity: 1; translate: 0 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .jf-tile,
+  .jf-tile:is(:hover, :has(:focus-visible)) {
+    transform: none;
+  }
+}

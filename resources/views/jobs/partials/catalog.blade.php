@@ -1,6 +1,4 @@
 @php
-    // Must use the block form here. This file has another block further down,
-    // and Blade's block matcher swallows the single-line form into it.
     $showHeading = $showHeading ?? true;
 
     // Interactive is the explorer: a column of cards driving the detail panel
@@ -33,154 +31,22 @@
                             <option value="featured">Featured first</option>
                         </select>
                     </label>
+                @else
+                    {{-- The plain grid is a preview of the board; this is the way in. --}}
+                    <a class="jf-results__all" href="{{ route('jobs.index') }}">
+                        View all jobs <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                    </a>
                 @endif
             </div>
         </div>
 
-        <div @class(['jf-board__grid', 'jf-board__grid--cards' => ! $interactive])>
+        <div @class(['jf-board__grid', 'jf-board__grid--cards' => ! $interactive, 'jf-board__grid--rows' => $interactive])>
             <div class="jf-results">
-                <div id="job-card-list" class="jf-results__list">
+                <div id="job-card-list" @class(['jf-results__list', 'jf-results__list--rows' => $interactive])>
                     @foreach ($jobs as $job)
-                        @php
-                            $searchIndex = array_merge([
-                                $job['title'], $job['company'], $job['location'], $job['department'],
-                                $job['type'], $job['mode'], $job['experience'], $job['summary'],
-                            ], $job['badges']);
-
-                            foreach ($job['tabs'] as $tab) {
-                                $searchIndex[] = $tab['body'];
-                                $searchIndex = array_merge($searchIndex, $tab['list']);
-                            }
-
-                            [$salaryAmount, $salaryUnit] = array_pad(
-                                array_map('trim', explode('/', $job['short_salary'], 2)), 2, null
-                            );
-                            $salaryUnit = $salaryUnit ? '/' . $salaryUnit : null;
-
-                            // Badges always arrive as type, then work mode, with the
-                            // experience appended last, so the icons follow position.
-                            $chipIcons = ['fa-briefcase', 'fa-building', 'fa-calendar-days'];
-                            $chips = array_merge($job['badges'], [$job['experience']]);
-
-                            $rateLabel = match (true) {
-                                str_contains((string) $salaryUnit, 'hour') => 'Hourly rate',
-                                str_contains((string) $salaryUnit, 'year') => 'Annual salary',
-                                str_contains((string) $salaryUnit, 'month') => 'Monthly salary',
-                                default => 'Compensation',
-                            };
-                        @endphp
-                        <article
-                            class="jf-job-card{{ $job['featured'] ? ' is-featured' : '' }}{{ $interactive && $job['highlighted'] ? ' is-active' : '' }}"
-                            data-job-id="{{ $job['id'] }}"
-                            data-title="{{ strtolower($job['title']) }}"
-                            data-company="{{ strtolower($job['company']) }}"
-                            data-location="{{ strtolower($job['location']) }}"
-                            data-type="{{ strtolower($job['type']) }}"
-                            data-department="{{ strtolower($job['department']) }}"
-                            data-mode="{{ strtolower($job['mode']) }}"
-                            data-experience="{{ strtolower($job['experience']) }}"
-                            data-posted-days="{{ $job['posted_days'] }}"
-                            data-featured="{{ $job['featured'] ? 1 : 0 }}"
-                            data-salary-rank="{{ preg_replace('/[^0-9]/', '', $job['salary']) }}"
-                            data-search="{{ strtolower(implode(' ', $searchIndex)) }}"
-                        >
-                            <div class="jf-job-card__topline">
-                                <div @class([
-                                    'jf-logo',
-                                    'jf-logo--' . $job['logo'],
-                                    'jf-logo--photo' => ! empty($job['company_logo_url']),
-                                ])>
-                                    @if (! empty($job['company_logo_url']))
-                                        <img src="{{ $job['company_logo_url'] }}" alt="">
-                                    @elseif ($job['logo'] === 'aba')
-                                        <span>ABA</span><small>BANK</small>
-                                    @elseif ($job['logo'] === 'tech')
-                                        <i class="fas fa-wifi" aria-hidden="true"></i>
-                                    @else
-                                        <span>D</span>
-                                    @endif
-                                </div>
-
-                                <div class="jf-job-card__identity">
-                                    <p class="jf-job-card__company">
-                                        {{ $job['company'] }}
-                                        @if (! empty($job['company_verified']))
-                                            <x-verified-badge :show-label="false" :size="14" label="Verified employer" />
-                                        @endif
-                                    </p>
-                                    <p class="jf-job-card__location">
-                                        <i class="fas fa-location-dot" aria-hidden="true"></i>
-                                        {{ $job['location'] }}
-                                    </p>
-                                </div>
-
-                                @if ($interactive)
-                                    <div class="jf-job-card__status">
-                                        <button class="jf-bookmark" type="button" data-job-id="{{ $job['id'] }}"
-                                            aria-label="Save {{ $job['title'] }}" aria-pressed="false">
-                                            <i class="far fa-bookmark" aria-hidden="true"></i>
-                                        </button>
-                                    </div>
-                                @endif
-                            </div>
-
-                            <div class="jf-job-card__chips">
-                                @foreach ($chips as $index => $chip)
-                                    <span>
-                                        <i class="fas {{ $chipIcons[$index % count($chipIcons)] }}" aria-hidden="true"></i>
-                                        {{ $chip }}
-                                    </span>
-                                @endforeach
-                            </div>
-
-                            <div class="jf-job-card__content">
-                                <h3>
-                                    @if ($interactive)
-                                        <button class="jf-job-card__preview" type="button"
-                                            data-preview-job="{{ $job['id'] }}"
-                                            aria-controls="detail-panel-content"
-                                            aria-pressed="{{ $job['highlighted'] ? 'true' : 'false' }}">
-                                            {{ $job['title'] }}
-                                        </button>
-                                    @else
-                                        {{-- No panel to preview into, so the title is the job page. --}}
-                                        <a class="jf-job-card__preview" href="{{ route('jobs.show', $job['id']) }}">
-                                            {{ $job['title'] }}
-                                        </a>
-                                    @endif
-                                </h3>
-                                <p class="jf-job-card__summary">{{ $job['summary'] }}</p>
-                            </div>
-
-                            <div class="jf-job-card__footer">
-                                <div class="jf-job-card__rate">
-                                    <div>
-                                        <small>{{ $rateLabel }}</small>
-                                        <p class="jf-job-card__salary">
-                                            <strong>{{ $salaryAmount }}</strong>@if ($salaryUnit)<span>{{ $salaryUnit }}</span>@endif
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div class="jf-job-card__actions">
-                                    @if ($job['featured'])
-                                        <span class="jf-badge">
-                                            <i class="fas fa-star" aria-hidden="true"></i>
-                                            Featured
-                                        </span>
-                                    @endif
-                                    {{-- A plain link, not a scripted button: the gate route sends
-                                         guests to register and members straight to the form, so the
-                                         card still applies even where the explorer script is absent. --}}
-                                    <a class="jf-job-card__apply" href="{{ route('jobs.apply', $job['id']) }}"
-                                        aria-label="Apply for {{ $job['title'] }} at {{ $job['company'] }}">
-                                        <i class="fas fa-briefcase" aria-hidden="true"></i>
-                                        <span>Apply now</span>
-                                        <i class="fas fa-chevron-right" aria-hidden="true"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </article>
+                        {{-- The board lists slim rows that preview into the panel;
+                             the landing grid shows cards that link to the job page. --}}
+                        @include($interactive ? 'jobs.partials.job-row' : 'jobs.partials.job-tile', ['job' => $job])
                     @endforeach
                 </div>
 

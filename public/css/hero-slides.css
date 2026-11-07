@@ -1,0 +1,1036 @@
+/* Hero slides: the landing hero as a two-slide carousel, one slide per
+   audience (job seekers, employers). hero-slides.js moves .is-active between
+   the slides; every slide sits in the same grid cell, so the hero is as tall
+   as its tallest slide and nothing below it shifts when the slides change.
+
+   Each slide's own entrance (the words, tiles, metrics, scenes) is the same
+   CSS the first slide always had. A hidden slide drops every animation, so
+   all of them start from the top again the moment it is shown. */
+
+.jf-hero--slides {
+  padding-top: 36px;
+}
+
+/* ---------- Switcher bar ---------- */
+.jf-slides__bar {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 44px;
+}
+
+.jf-slides__bar[hidden] {
+  display: none;
+}
+
+.jf-slides__tabs {
+  display: inline-flex;
+  gap: 4px;
+  padding: 5px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 12px 30px rgba(3, 17, 25, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.jf-slides__tab {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 18px 12px;
+  border: 0;
+  border-radius: 999px;
+  color: rgba(226, 242, 241, 0.72);
+  background: transparent;
+  font-size: 0.78rem;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color 240ms ease, background 320ms ease, box-shadow 320ms ease;
+}
+
+.jf-slides__tab:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.jf-slides__tab[aria-selected="true"] {
+  color: #08222f;
+  background: linear-gradient(135deg, #ffdb9b, #f3bd65 52%, #e2a244);
+  box-shadow: 0 10px 24px rgba(243, 189, 101, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.55);
+}
+
+.jf-slides__tab:focus-visible,
+.jf-slides__btn:focus-visible {
+  outline: 3px solid #9fe7e2;
+  outline-offset: 3px;
+}
+
+.jf-slides__tab i {
+  font-size: 0.72rem;
+}
+
+/* Time left on the current slide, drawn along the bottom of its tab. */
+.jf-slides__progress {
+  position: absolute;
+  right: 18px;
+  bottom: 5px;
+  left: 18px;
+  height: 2px;
+  overflow: hidden;
+  border-radius: 2px;
+  background: rgba(8, 34, 47, 0.16);
+  opacity: 0;
+  transition: opacity 240ms ease;
+}
+
+.jf-slides__progress span {
+  display: block;
+  height: 100%;
+  background: #08222f;
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+}
+
+.jf-hero--slides.is-autoplay .jf-slides__tab[aria-selected="true"] .jf-slides__progress {
+  opacity: 1;
+}
+
+.jf-hero--slides.is-autoplay .jf-slides__tab[aria-selected="true"] .jf-slides__progress span {
+  animation: jf-slide-progress var(--jf-slide-time, 10s) linear forwards;
+}
+
+.jf-hero--slides.is-paused .jf-slides__tab[aria-selected="true"] .jf-slides__progress span {
+  animation-play-state: paused;
+}
+
+.jf-slides__controls {
+  display: flex;
+  gap: 8px;
+}
+
+.jf-slides__btn {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 50%;
+  color: #c3f1ed;
+  background: rgba(255, 255, 255, 0.06);
+  font-size: 0.8rem;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: color 200ms ease, background 200ms ease, border-color 200ms ease, transform 320ms var(--jf-ease-spring, ease);
+}
+
+.jf-slides__btn:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(159, 231, 226, 0.5);
+  transform: translateY(-2px);
+}
+
+.jf-slides__btn[hidden] {
+  display: none;
+}
+
+/* ---------- Slide frame ---------- */
+.jf-slides {
+  display: grid;
+}
+
+.jf-slide {
+  grid-area: 1 / 1;
+  min-width: 0;
+}
+
+.jf-slide:not(.is-active):not(.is-leaving) {
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.jf-slide:not(.is-active):not(.is-leaving) * {
+  animation: none !important;
+}
+
+.jf-slide.is-leaving {
+  pointer-events: none;
+}
+
+/* Side by side, the employer slide is the shorter one; it sits centred in
+   the height the seeker slide sets rather than leaving a gap underneath. */
+@media (min-width: 1101px) {
+  .jf-slide--hire {
+    align-self: center;
+  }
+}
+
+/* A warmer light over the backdrop while the employer slide is up. */
+.jf-hero__tint {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  opacity: 0;
+  background:
+    radial-gradient(70% 80% at 90% 6%, rgba(243, 189, 101, 0.2), transparent 62%),
+    radial-gradient(56% 64% at 4% 104%, rgba(240, 123, 99, 0.14), transparent 62%);
+  transition: opacity 1.2s ease;
+}
+
+.jf-hero--slides[data-active-slide="hire"] .jf-hero__tint {
+  opacity: 1;
+}
+
+/* ---------- Employer slide copy ---------- */
+/* The page keeps one h1 (the first slide), so this headline is an h2 dressed
+   exactly like it. */
+.jf-hero__copy .jf-hero__title {
+  max-width: 11ch;
+  margin: 26px 0 22px;
+  color: #fff;
+  font-size: clamp(3.3rem, 5.6vw, 5.6rem);
+  font-weight: 600;
+  line-height: 0.94;
+  letter-spacing: -0.06em;
+  text-wrap: balance;
+}
+
+.jf-hero__copy .jf-hero__title .jf-hero__word {
+  display: inline-block;
+  color: #fff;
+}
+
+.jf-hero__copy .jf-hero__title .jf-hero__accent {
+  background: linear-gradient(96deg, #ffdb9b 0%, #f3bd65 30%, #f07b63 58%, #ffdb9b 100%);
+  background-size: 260% 100%;
+  background-position: 50% 50%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+/* The employer slide's live dot is gold, to match its headline. */
+.jf-slide--hire .jf-hero__copy .jf-hero__eyebrow-dot {
+  background: #f3bd65;
+  box-shadow: 0 0 12px rgba(243, 189, 101, 0.85);
+}
+
+.jf-slide--hire .jf-hero__copy .jf-hero__eyebrow-dot::after {
+  border-color: rgba(243, 189, 101, 0.6);
+}
+
+/* ---------- Employer stage: a post goes live, applicants flow to hired ----------
+   The still styles below are the story's happy ending (post live, Dara
+   hired), which is what reduced motion shows; the loop animations further
+   down start each piece from the beginning instead. */
+.jf-slide--hire .jf-hero__stage {
+  gap: 52px;
+}
+
+.jf-hire {
+  position: relative;
+  /* Borrow some page gutter on wide screens, like the rack on slide one. */
+  margin-right: calc(-1 * clamp(0px, (100vw - 1180px) / 2 - 40px, 88px));
+  padding-top: 10px;
+}
+
+/* The job post: a dark tag pinned over the board, like the rack cards. */
+.jf-hire__post {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-areas:
+    "logo company cta"
+    "logo title cta"
+    "logo meta cta";
+  align-items: center;
+  column-gap: 14px;
+  width: min(86%, 440px);
+  margin-left: 5%;
+  padding: 18px 18px 16px;
+  border-radius: 18px;
+  color: #fff;
+  background: #111416;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 30px 46px -18px rgba(0, 0, 0, 0.75);
+  rotate: -2.5deg;
+  transform-origin: 50% 0;
+}
+
+.jf-hire__pin {
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  width: 16px;
+  height: 16px;
+  margin-left: -8px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #ff9f8a, #b64b41 60%, #7d2b24);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+.jf-hire__post-top {
+  display: contents;
+}
+
+.jf-hire__post-logo {
+  grid-area: logo;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  color: #fff;
+  font-size: 1.05rem;
+  background: #b64b41;
+}
+
+/* Draft / Live share one spot on the top edge and swap once published. */
+.jf-hire__post-state {
+  position: absolute;
+  top: -11px;
+  right: 18px;
+  display: grid;
+}
+
+.jf-hire__post-draft,
+.jf-hire__post-live {
+  grid-area: 1 / 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 4px 11px;
+  border-radius: 999px;
+  font-size: 0.64rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.jf-hire__post-draft {
+  color: rgba(255, 255, 255, 0.8);
+  background: #3a3f42;
+  opacity: 0;
+}
+
+.jf-hire__post-live {
+  color: #08222f;
+  background: #f3bd65;
+  box-shadow: 0 6px 14px rgba(243, 189, 101, 0.4);
+}
+
+.jf-hire__post-company {
+  grid-area: company;
+  font-size: 0.72rem;
+  font-weight: 600;
+  opacity: 0.7;
+}
+
+/* Role titles roll past one at a time, like a departures board. */
+.jf-hire__post-roll {
+  grid-area: title;
+  display: block;
+  height: 1.08em;
+  margin: 2px 0 3px;
+  overflow: hidden;
+  font-family: "Anton", "Metropolis", sans-serif;
+  font-size: 1.6rem;
+  line-height: 1.08;
+  text-transform: uppercase;
+}
+
+.jf-hire__post-reel {
+  display: block;
+}
+
+.jf-hire__post-title {
+  display: block;
+  height: 1.08em;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.jf-hire__post-meta {
+  grid-area: meta;
+  font-size: 0.72rem;
+  opacity: 0.75;
+}
+
+.jf-hire__post-cta {
+  grid-area: cta;
+  display: grid;
+}
+
+.jf-hire__post-publish,
+.jf-hire__post-done {
+  grid-area: 1 / 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 0.74rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.jf-hire__post-publish {
+  color: #111;
+  background: #fff;
+  opacity: 0;
+}
+
+.jf-hire__post-done {
+  color: #fff;
+  background: #0e7d6f;
+}
+
+/* The board the post feeds: three lanes under a glass panel. */
+.jf-hire__board {
+  position: relative;
+  margin-top: -26px;
+  padding: 44px 18px 22px;
+  border-radius: 26px;
+  background: linear-gradient(150deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.04));
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 30px 60px rgba(3, 16, 24, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.14);
+}
+
+.jf-hire__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  color: rgba(226, 242, 241, 0.7);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.jf-hire__live {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.jf-hire__live i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #b8f34a;
+  box-shadow: 0 0 10px rgba(184, 243, 74, 0.85);
+}
+
+.jf-hire__views {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  letter-spacing: 0.04em;
+  text-transform: none;
+}
+
+.jf-hire__lanes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.jf-hire__lane {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  min-height: 196px;
+  padding: 10px 10px 0;
+  border-radius: 16px;
+  background: rgba(4, 18, 27, 0.32);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+
+.jf-hire__lane--hired {
+  background: linear-gradient(180deg, rgba(243, 189, 101, 0.14), rgba(4, 18, 27, 0.32));
+  box-shadow: inset 0 0 0 1px rgba(243, 189, 101, 0.22);
+}
+
+.jf-hire__lane-name {
+  color: rgba(226, 242, 241, 0.62);
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.jf-hire__lane-count {
+  position: relative;
+  padding: 1px 7px;
+  border-radius: 999px;
+  color: #c3f1ed;
+  font-size: 0.64rem;
+  font-weight: 800;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.jf-hire__lane--hired .jf-hire__lane-count {
+  color: #f3bd65;
+}
+
+/* "+1" floats off the Applied count as a new applicant lands. */
+.jf-hire__lane-count b {
+  position: absolute;
+  top: -4px;
+  right: -6px;
+  color: #b8f34a;
+  font-size: 0.7rem;
+  opacity: 0;
+}
+
+/* Chips are laid on a field spanning the three lanes, below their headers.
+   The field is a size container, so a chip can work out where any lane is
+   from its width alone. */
+.jf-hire__field {
+  position: absolute;
+  right: 18px;
+  bottom: 22px;
+  left: 18px;
+  height: 152px;
+  container-type: inline-size;
+}
+
+.jf-hire__field > * {
+  --col: calc((100cqw - 20px) / 3);
+  --step: calc(var(--col) + 10px);
+}
+
+.jf-hire__chip,
+.jf-hire__slot {
+  position: absolute;
+  top: calc(var(--row, 0) * 48px + 4px);
+  left: calc(var(--lane, 0) * var(--step) + 6px);
+  width: calc(var(--col) - 12px);
+  height: 40px;
+  border-radius: 12px;
+}
+
+.jf-hire__chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 8px;
+  color: #eaf7f6;
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1), 0 8px 18px rgba(0, 0, 0, 0.2);
+}
+
+.jf-hire__chip--stay { --lane: 0; --row: 0; }
+.jf-hire__chip--hire { --lane: 0; --row: 1; z-index: 1; }
+.jf-hire__chip--new { --lane: 0; --row: 2; }
+.jf-hire__chip--short { --lane: 1; --row: 1; }
+
+.jf-hire__slot {
+  --lane: 2;
+  --row: 0;
+  display: grid;
+  place-items: center;
+  color: rgba(243, 189, 101, 0.7);
+  font-size: 0.62rem;
+  font-weight: 700;
+  border: 1.5px dashed rgba(243, 189, 101, 0.45);
+  opacity: 0;
+}
+
+.jf-hire__avatar {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 0.72rem;
+  font-style: normal;
+  font-weight: 800;
+}
+
+.jf-hire__avatar--teal { background: #0e7d6f; }
+.jf-hire__avatar--gold { color: #08222f; background: #f3bd65; }
+.jf-hire__avatar--coral { background: #b64b41; }
+.jf-hire__avatar--sky { color: #08222f; background: #bfcadf; }
+
+.jf-hire__who {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.15;
+}
+
+.jf-hire__who b,
+.jf-hire__who small {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.jf-hire__who b {
+  font-size: 0.74rem;
+}
+
+.jf-hire__who small {
+  font-size: 0.6rem;
+  opacity: 0.7;
+}
+
+/* The hired chip's settled look: gold, with a tick on its corner. */
+.jf-hire__chip--hire {
+  color: #08222f;
+  background: linear-gradient(135deg, #ffdb9b, #f3bd65);
+  transform: translate(calc(2 * var(--step)), -48px);
+}
+
+.jf-hire__chip--hire .jf-hire__avatar {
+  color: #f3bd65;
+  background: #08222f;
+}
+
+.jf-hire__tick {
+  position: absolute;
+  top: -7px;
+  right: -7px;
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 0.5rem;
+  background: #0e7d6f;
+  box-shadow: 0 3px 8px rgba(14, 125, 111, 0.5);
+}
+
+/* Confetti over the Hired slot when the offer lands. */
+.jf-hire__burst {
+  position: absolute;
+  top: 24px;
+  left: calc(2 * var(--step) + var(--col) / 2);
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.jf-hire__burst i {
+  position: absolute;
+  top: -3px;
+  left: -3px;
+  width: 6px;
+  height: 6px;
+  border-radius: 2px;
+  background: #f3bd65;
+  opacity: 0;
+}
+
+.jf-hire__burst i:nth-child(3n + 2) { background: #9fe7e2; }
+.jf-hire__burst i:nth-child(3n) { background: #f07b63; border-radius: 50%; }
+
+/* Notifications that pop over the bottom edge of the board. */
+.jf-hire__toast {
+  position: absolute;
+  right: 22px;
+  bottom: -24px;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 16px 9px 9px;
+  border-radius: 16px;
+  color: #08222f;
+  background: #f4fbfa;
+  box-shadow: 0 18px 34px rgba(0, 0, 0, 0.35);
+  opacity: 0;
+}
+
+.jf-hire__toast > span:last-child {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.jf-hire__toast b {
+  font-size: 0.78rem;
+}
+
+.jf-hire__toast small {
+  color: #4b6670;
+  font-size: 0.66rem;
+}
+
+.jf-hire__toast-icon {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 11px;
+  color: #fff;
+  font-size: 0.8rem;
+  background: #0e7d6f;
+}
+
+.jf-hire__toast--hired .jf-hire__toast-icon {
+  color: #08222f;
+  background: #f3bd65;
+}
+
+/* ---------- Motion ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  /* Slide change: the outgoing slide slides away, the new one slides in
+     from the side it was asked for (--jf-slide-dir, set by the script). */
+  .jf-slide.is-leaving {
+    animation: jf-slide-out 520ms var(--jf-ease-out, ease) both;
+  }
+
+  .jf-slide.is-entering {
+    animation: jf-slide-in 760ms var(--jf-ease-out, ease) both;
+  }
+
+  .jf-slide.is-entering .jf-hero__stage {
+    animation: jf-stage-in 1000ms var(--jf-ease-out, ease) 80ms both;
+  }
+
+  .jf-hero__copy .jf-hero__title .jf-hero__accent {
+    animation:
+      jf-soft-in 760ms var(--jf-ease-out, ease) 430ms both,
+      jf-gradient-flow 9s linear 1200ms infinite;
+  }
+
+  /* Intro, once per showing: board rises, the post drops onto its pin and
+     sways, then gets published. */
+  .jf-hire__board {
+    animation: jf-hire-rise 820ms var(--jf-ease-out, ease) 260ms both;
+  }
+
+  .jf-hire__post {
+    animation:
+      jf-hire-drop 1000ms cubic-bezier(0.34, 1.7, 0.5, 1) 520ms both,
+      jf-hire-sway 5.5s ease-in-out 1.6s infinite;
+  }
+
+  .jf-hire__post-draft { animation: jf-hire-draft 700ms ease 1.35s both; }
+  .jf-hire__post-live { animation: jf-hire-live 600ms var(--jf-ease-spring, ease) 1.5s both; }
+  .jf-hire__post-publish { animation: jf-hire-press 700ms ease 1.1s both; }
+  .jf-hire__post-done { animation: jf-hire-live 600ms var(--jf-ease-spring, ease) 1.5s both; }
+
+  .jf-hire__post-reel { animation: jf-hire-reel 9s var(--jf-ease-out, ease) 2.4s infinite; }
+
+  .jf-hire__live i { animation: jf-hero-ping-dot 1.8s ease-in-out infinite; }
+
+  /* The pipeline loop: a new applicant lands, the top match is shortlisted
+     and then hired, the board clears and it all starts again. */
+  .jf-hire__chip--hire { animation: jf-hire-move 8s ease-in-out 1.8s infinite both; }
+  .jf-hire__chip--hire .jf-hire__avatar { animation: jf-hire-avatar 8s ease 1.8s infinite both; }
+  .jf-hire__tick { animation: jf-hire-tick 8s var(--jf-ease-spring, ease) 1.8s infinite both; }
+  .jf-hire__chip--new { animation: jf-hire-new 8s var(--jf-ease-out, ease) 1.8s infinite both; }
+  .jf-hire__slot { animation: jf-hire-slot 8s ease 1.8s infinite both; }
+  .jf-hire__lane-count b { animation: jf-hire-plus 8s ease-out 1.8s infinite both; }
+  .jf-hire__burst i { animation: jf-hire-burst 8s var(--jf-ease-out, ease) 1.8s infinite both; }
+  .jf-hire__toast--applied { animation: jf-hire-toast-applied 8s var(--jf-ease-out, ease) 1.8s infinite both; }
+  .jf-hire__toast--hired { animation: jf-hire-toast-hired 8s var(--jf-ease-out, ease) 1.8s infinite both; }
+}
+
+@keyframes jf-slide-progress {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+@keyframes jf-slide-out {
+  to { opacity: 0; transform: translateX(calc(var(--jf-slide-dir, 1) * -56px)); }
+}
+
+@keyframes jf-slide-in {
+  from { opacity: 0; transform: translateX(calc(var(--jf-slide-dir, 1) * 56px)); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes jf-stage-in {
+  from { opacity: 0; transform: translateX(calc(var(--jf-slide-dir, 1) * 48px)) scale(0.96); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes jf-hire-rise {
+  from { opacity: 0; transform: translateY(34px) scale(0.96); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes jf-hire-drop {
+  from { opacity: 0; transform: translateY(-70px) rotate(-10deg) scale(0.9); }
+  30% { opacity: 1; }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes jf-hire-sway {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(1.4deg); }
+}
+
+@keyframes jf-hire-press {
+  0% { opacity: 1; transform: none; }
+  30% { opacity: 1; transform: scale(0.86); }
+  45% { opacity: 1; transform: scale(1); }
+  70%, 100% { opacity: 0; transform: scale(0.8); }
+}
+
+@keyframes jf-hire-draft {
+  0% { opacity: 1; transform: none; }
+  100% { opacity: 0; transform: translateY(-8px) scale(0.8); }
+}
+
+@keyframes jf-hire-live {
+  from { opacity: 0; transform: scale(0.4); }
+  to { opacity: 1; transform: none; }
+}
+
+/* Three titles, each up for a third of the loop; the fourth line is the
+   first title again, so the snap back to the top is invisible. */
+@keyframes jf-hire-reel {
+  0%, 28% { transform: translateY(0); }
+  33%, 61% { transform: translateY(-1.08em); }
+  66%, 94% { transform: translateY(-2.16em); }
+  99.9% { transform: translateY(-3.24em); }
+  100% { transform: translateY(0); }
+}
+
+@keyframes jf-hero-ping-dot {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(184, 243, 74, 0.6); }
+  60% { box-shadow: 0 0 0 7px rgba(184, 243, 74, 0); }
+}
+
+/* Applied (lane 0, row 1) -> Shortlist (lane 1, row 0) -> Hired (lane 2,
+   row 0), lifting a little while it is carried across. */
+@keyframes jf-hire-move {
+  0%, 24% {
+    opacity: 1;
+    color: #eaf7f6;
+    background: rgba(255, 255, 255, 0.1);
+    transform: none;
+  }
+  30% { transform: translate(calc(var(--step) * 0.5), -30px) scale(1.06); }
+  36%, 48% {
+    color: #eaf7f6;
+    background: rgba(255, 255, 255, 0.16);
+    transform: translate(var(--step), -48px);
+  }
+  54% { transform: translate(calc(var(--step) * 1.5), -54px) scale(1.06); }
+  60%, 88% {
+    opacity: 1;
+    color: #08222f;
+    background: linear-gradient(135deg, #ffdb9b, #f3bd65);
+    transform: translate(calc(var(--step) * 2), -48px);
+  }
+  93% {
+    opacity: 0;
+    color: #08222f;
+    background: linear-gradient(135deg, #ffdb9b, #f3bd65);
+    transform: translate(calc(var(--step) * 2), -48px) scale(0.9);
+  }
+  94% {
+    opacity: 0;
+    color: #eaf7f6;
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(6px);
+  }
+  100% {
+    opacity: 1;
+    color: #eaf7f6;
+    background: rgba(255, 255, 255, 0.1);
+    transform: none;
+  }
+}
+
+@keyframes jf-hire-avatar {
+  0%, 58%, 94%, 100% { color: #08222f; background: #f3bd65; }
+  60%, 92% { color: #f3bd65; background: #08222f; }
+}
+
+@keyframes jf-hire-tick {
+  0%, 59% { transform: scale(0); }
+  64% { transform: scale(1.3); }
+  68%, 88% { transform: scale(1); }
+  92%, 100% { transform: scale(0); }
+}
+
+@keyframes jf-hire-new {
+  0%, 6% { opacity: 0; transform: translateY(-34px) scale(0.9); }
+  12% { opacity: 1; transform: translateY(3px); }
+  15%, 88% { opacity: 1; transform: none; }
+  93%, 100% { opacity: 0; transform: none; }
+}
+
+@keyframes jf-hire-slot {
+  0%, 54% { opacity: 1; }
+  60%, 92% { opacity: 0; }
+  98%, 100% { opacity: 1; }
+}
+
+@keyframes jf-hire-plus {
+  0%, 9% { opacity: 0; transform: translateY(4px); }
+  13% { opacity: 1; transform: none; }
+  24%, 100% { opacity: 0; transform: translateY(-14px); }
+}
+
+@keyframes jf-hire-burst {
+  0%, 59% { opacity: 0; transform: rotate(calc(var(--jf-burst-i) * 45deg)) translateY(0) scale(0.4); }
+  61% { opacity: 1; transform: rotate(calc(var(--jf-burst-i) * 45deg)) translateY(-10px) scale(1); }
+  72%, 100% { opacity: 0; transform: rotate(calc(var(--jf-burst-i) * 45deg + 30deg)) translateY(-40px) scale(0.6); }
+}
+
+@keyframes jf-hire-toast-applied {
+  0%, 9% { opacity: 0; transform: translateY(16px) scale(0.94); }
+  13%, 34% { opacity: 1; transform: none; }
+  38%, 100% { opacity: 0; transform: translateY(-10px) scale(0.96); }
+}
+
+@keyframes jf-hire-toast-hired {
+  0%, 61% { opacity: 0; transform: translateY(16px) scale(0.94); }
+  65%, 86% { opacity: 1; transform: none; }
+  90%, 100% { opacity: 0; transform: translateY(-10px) scale(0.96); }
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1100px) {
+  .jf-hero--slides {
+    padding-top: 32px;
+  }
+
+  .jf-hire {
+    width: min(600px, 100%);
+    margin-inline: auto;
+  }
+}
+
+@media (max-width: 960px) {
+  .jf-hero__copy .jf-hero__title {
+    font-size: clamp(2.9rem, 7vw, 4.5rem);
+  }
+}
+
+@media (max-width: 760px) {
+  .jf-hero__copy .jf-hero__title {
+    font-size: clamp(2.9rem, 14vw, 4.2rem);
+  }
+
+  .jf-slides__bar {
+    margin-bottom: 32px;
+  }
+
+  .jf-slides__tabs {
+    flex: 1;
+  }
+
+  .jf-slides__tab {
+    flex: 1;
+    justify-content: center;
+    padding-inline: 10px;
+  }
+}
+
+@media (max-width: 600px) {
+  .jf-hero--slides {
+    padding-top: 24px;
+  }
+
+  .jf-hire__post {
+    width: 100%;
+    margin-left: 0;
+    padding: 16px 14px 14px;
+    column-gap: 10px;
+  }
+
+  .jf-hire__post-logo {
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+  }
+
+  .jf-hire__post-roll {
+    font-size: 1.3rem;
+  }
+
+  .jf-hire__board {
+    padding: 40px 12px 20px;
+  }
+
+  .jf-hire__field {
+    right: 12px;
+    left: 12px;
+  }
+
+  .jf-hire__lanes {
+    gap: 6px;
+  }
+
+  .jf-hire__lane {
+    padding: 9px 6px 0;
+  }
+
+  .jf-hire__lane-name {
+    font-size: 0.54rem;
+    letter-spacing: 0.06em;
+  }
+
+  .jf-hire__field > * {
+    --col: calc((100cqw - 12px) / 3);
+    --step: calc(var(--col) + 6px);
+  }
+
+  .jf-hire__chip,
+  .jf-hire__slot {
+    left: calc(var(--lane, 0) * var(--step) + 4px);
+    width: calc(var(--col) - 8px);
+  }
+
+  .jf-hire__chip {
+    gap: 6px;
+    padding: 0 6px;
+  }
+
+  .jf-hire__avatar {
+    width: 22px;
+    height: 22px;
+    font-size: 0.64rem;
+  }
+
+  .jf-hire__who small {
+    display: none;
+  }
+
+  .jf-hire__slot {
+    font-size: 0.54rem;
+    text-align: center;
+  }
+
+  .jf-hire__toast {
+    right: 50%;
+    translate: 50% 0;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 420px) {
+  .jf-slides__tab i {
+    display: none;
+  }
+}

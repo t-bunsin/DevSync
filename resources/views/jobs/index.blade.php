@@ -6,6 +6,7 @@
 @push('styles')
     <link rel="stylesheet" href="{{ asset('css/jobs.css') }}?v={{ filemtime(public_path('css/jobs.css')) }}">
     <link rel="stylesheet" href="{{ asset('css/job-directory.css') }}?v={{ filemtime(public_path('css/job-directory.css')) }}">
+    <link rel="stylesheet" href="{{ asset('css/job-row.css') }}?v={{ filemtime(public_path('css/job-row.css')) }}">
 @endpush
 
 @section('content')
