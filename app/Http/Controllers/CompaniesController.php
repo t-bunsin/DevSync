@@ -229,7 +229,7 @@ class CompaniesController extends Controller
 
         return $request->validate($statusRule + [
             'name' => 'required|string|max:255',
-            'registration_no' => 'nullable|string|max:120',
+            'registration_no' => 'required|string|max:120',
             'employer_type' => ['nullable', Rule::in(Company::employerTypes())],
             'industry' => ['nullable', Rule::in(Company::industries())],
             'employee_count' => ['nullable', Rule::in(Company::employeeRanges())],

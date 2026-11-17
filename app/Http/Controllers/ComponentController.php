@@ -40,6 +40,8 @@ class ComponentController extends Controller
         'job-types' => 'Job type',
     ];
 
+    private const PER_PAGE = 5;
+
     public function __construct()
     {
         $this->middleware(['auth', 'admin']);
@@ -53,8 +55,10 @@ class ComponentController extends Controller
             ->with('creator')
             ->when($request->query('q'), fn ($q) => $q->where('name', 'like', '%' . $request->query('q') . '%'))
             ->orderBy('name')
-            ->get();
+            ->paginate(self::PER_PAGE)
+            ->withQueryString();
 
+        // Usage counts for just the rows on this page.
         $counts = JobPost::query()
             ->whereIn(self::COLUMNS[$type], $records->pluck('name'))
             ->select(self::COLUMNS[$type], DB::raw('count(*) as total'))
@@ -69,7 +73,9 @@ class ComponentController extends Controller
             'records' => $records,
             'total' => $model::count(),
             'activeCount' => $model::where('is_active', true)->count(),
-            'jobPostsTotal' => $counts->sum(),
+            // Across every record of this type, not just the current page,
+            // so the summary tile doesn't change as you page through.
+            'jobPostsTotal' => JobPost::whereIn(self::COLUMNS[$type], $model::query()->select('name'))->count(),
             'searchTerm' => $request->query('q'),
         ]);
     }

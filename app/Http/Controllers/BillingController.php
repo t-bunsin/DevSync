@@ -49,8 +49,14 @@ class BillingController extends Controller
         $status = $request->query('status');
         $status = in_array($status, Subscription::STATUSES, true) ? $status : null;
         $search = trim((string) $request->query('q'));
+        $user = $request->user();
 
-        $subscriptions = Subscription::query()
+        // An admin sees every account's subscriptions; anyone else only their
+        // own. Every query below — rows, tiles, plan value — starts from this.
+        $scoped = fn () => Subscription::query()
+            ->unless($user->isAdmin(), fn ($query) => $query->where('user_id', $user->id));
+
+        $subscriptions = $scoped()
             // Eager loaded: the table prints a name and email on every row.
             ->with('user')
             ->when($status, fn ($query) => $query->where('status', $status))
@@ -67,7 +73,7 @@ class BillingController extends Controller
         // Counted off the whole table, not the filtered set, so the tiles do
         // not change meaning when a filter is applied — same call shape as
         // ComplianceController::index().
-        $counts = Subscription::query()
+        $counts = $scoped()
             ->selectRaw('status, COUNT(*) as total')
             ->groupBy('status')
             ->pluck('total', 'status');
@@ -77,11 +83,12 @@ class BillingController extends Controller
             'counts' => $counts,
             // Only active plans are money actually being collected; pending and
             // failed rows would overstate it.
-            'activeValue' => Subscription::query()
+            'activeValue' => $scoped()
                 ->where('status', Subscription::STATUS_ACTIVE)
                 ->sum('amount'),
             'activeStatus' => $status,
             'searchTerm' => $search,
+            'seesAll' => $user->isAdmin(),
         ]);
     }
 

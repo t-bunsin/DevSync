@@ -357,9 +357,9 @@
                                             href="{{ url('admin/account-billing') }}">{{ __('ui.admin.nav.billing') }}</a>
                                         <a class="nav-link {{ request()->routeIs('security') ? 'active' : '' }}"
                                             href="{{ route('security') }}">{{ __('ui.admin.nav.security') }}</a>
-                                        {{-- The whole billing register, not the caller's own row.
-                                             Shown to every role by product decision, matching the
-                                             route, which no longer gates on admin either. --}}
+                                        {{-- The billing register: every account's subscriptions for an
+                                             admin, the caller's own for anyone else (scoped in
+                                             BillingController::list()). --}}
                                         <a class="nav-link {{ setActive('admin/account-billing/list') }}"
                                             href="{{ route('account-billing.list') }}">{{ __('ui.admin.nav.billing_list') }}</a>
                                     </nav>

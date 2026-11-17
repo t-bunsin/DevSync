@@ -37,7 +37,7 @@
         <header class="kh-bo__head">
             <div>
                 <h1>{{ __('ui.bo.billing.list_title') }}</h1>
-                <p>{{ __('ui.bo.billing.list_subtitle') }}</p>
+                <p>{{ $seesAll ? __('ui.bo.billing.list_subtitle') : __('ui.bo.billing.list_subtitle_own') }}</p>
             </div>
 
             <a class="kh-bo__btn" href="{{ route('account-billing') }}">

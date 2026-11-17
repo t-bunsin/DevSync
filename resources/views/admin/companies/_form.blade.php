@@ -68,9 +68,9 @@
         </div>
 
         <div class="kh-bo__field">
-            <label class="kh-bo__label" for="registration_no">{{ __('ui.bo.companies.form.registration') }}</label>
+            <label class="kh-bo__label" for="registration_no">{{ __('ui.bo.companies.form.registration') }} <span class="kh-bo__required" aria-hidden="true">*</span></label>
             <input @class(['kh-bo__control', 'is-invalid' => $errors->has('registration_no')])
-                id="registration_no" name="registration_no" type="text" maxlength="120"
+                id="registration_no" name="registration_no" type="text" maxlength="120" required
                 value="{{ old('registration_no', $company->registration_no) }}" placeholder="e.g. KH-CO-2026-0148">
             @error('registration_no') <span class="kh-bo__error">{{ $message }}</span> @enderror
         </div>

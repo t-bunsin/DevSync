@@ -982,6 +982,7 @@ return [
             'applications_shown' => '{0} No applications shown.|{1} :count application shown.|[2,*] :count applications shown.',
             'list_title' => 'Billing list',
             'list_subtitle' => "Every account's subscription, the plan it is on and where its last payment got to.",
+            'list_subtitle_own' => 'Your subscriptions, the plan each is on and where its last payment got to.',
             'my_billing' => 'My billing',
             'summary_label' => 'Billing summary',
             'tile_subscriptions' => 'Subscriptions',

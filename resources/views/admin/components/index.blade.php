@@ -13,8 +13,8 @@
     $item = __('ui.bo.components.types.' . $type . '.one');
     $items = __('ui.bo.components.types.' . $type . '.many');
     $typeTitle = __('ui.bo.components.types.' . $type . '.title');
+    $plural = \Illuminate\Support\Str::plural($label);
 @endphp
-    @php($plural = \Illuminate\Support\Str::plural($label))
 
     <div class="kh-bo">
         <nav class="kh-bo__breadcrumb" aria-label="{{ __('ui.admin.a11y.breadcrumb') }}">
@@ -95,24 +95,33 @@
             </article>
         </section>
 
-        <section class="kh-bo__card">
+        <section class="kh-bo__card kh-bo__card--catalog">
             <div class="kh-bo__card-head">
-                <div>
-                    <h2>{{ $plural }}</h2>
-                    <p>{{ $records->count() }} {{ \Illuminate\Support\Str::plural('entry', $records->count()) }} shown.</p>
+                <div class="kh-cat__title">
+                    <h2>{{ $plural }} <span class="kh-cat__count">{{ number_format($records->total()) }}</span></h2>
+                    <p>
+                        @if ($records->total())
+                            Showing {{ $records->firstItem() }}–{{ $records->lastItem() }} of {{ number_format($records->total()) }} {{ \Illuminate\Support\Str::plural('entry', $records->total()) }}.
+                        @else
+                            No entries found.
+                        @endif
+                    </p>
                 </div>
 
                 <div class="kh-bo__tools">
-                    <form class="kh-bo__search" method="GET" action="{{ route('components.index', $type) }}" role="search">
+                    <form class="kh-cat__search" method="GET" action="{{ route('components.index', $type) }}" role="search">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <circle cx="11" cy="11" r="7" /><path d="M20 20l-3.5-3.5" />
+                        </svg>
                         <input type="search" name="q" value="{{ $searchTerm }}"
                             placeholder="{{ __('ui.bo.components.search', ['items' => $items]) }}" aria-label="{{ __('ui.bo.components.search', ['items' => $items]) }}">
-                        <button class="kh-bo__btn kh-bo__btn--ghost" type="submit">{{ __('ui.bo.search') }}</button>
+                        <button type="submit">{{ __('ui.bo.search') }}</button>
                     </form>
                 </div>
             </div>
 
             <div class="kh-bo__table-wrap">
-                <table class="kh-bo__table">
+                <table class="kh-bo__table kh-cat">
                     <thead>
                         <tr>
                             <th scope="col">{{ __('ui.bo.components.col_name') }}</th>
@@ -125,18 +134,54 @@
                     </thead>
                     <tbody>
                         @forelse ($records as $record)
-                            <tr>
-                                <td>{{ $record->name }}</td>
-                                <td>
-                                    <span class="kh-bo__status kh-bo__status--{{ $record->is_active ? 'verified' : 'rejected' }}">
+                            @php
+                                // A stable colour per name, so each row's tile keeps its hue between visits.
+                                $hue = crc32($record->name) % 360;
+                                $creator = $record->creator?->displayName();
+                                $creatorInitials = $creator
+                                    ? collect(preg_split('/\s+/', trim($creator)))->take(2)->map(fn ($part) => mb_strtoupper(mb_substr($part, 0, 1)))->implode('')
+                                    : '?';
+                            @endphp
+                            <tr class="{{ $record->is_active ? '' : 'is-inactive' }}" style="--hue: {{ $hue }}">
+                                <td data-label="{{ __('ui.bo.components.col_name') }}">
+                                    <div class="kh-cat__identity">
+                                        <span class="kh-cat__monogram" aria-hidden="true">{{ mb_strtoupper(mb_substr($record->name, 0, 1)) }}</span>
+                                        <div>
+                                            <strong class="kh-cat__name">{{ $record->name }}</strong>
+                                            <span class="kh-cat__ref">#{{ str_pad($record->id, 3, '0', STR_PAD_LEFT) }}</span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td data-label="{{ __('ui.bo.components.col_status') }}">
+                                    <span class="kh-cat__status {{ $record->is_active ? 'is-on' : 'is-off' }}">
+                                        <span class="kh-cat__dot" aria-hidden="true"></span>
                                         {{ $record->is_active ? __('ui.bo.components.active') : __('ui.bo.components.inactive') }}
                                     </span>
                                 </td>
-                                <td>{{ $record->usage_count }}</td>
-                                <td>{{ $record->created_at?->format('d M Y') ?? '—' }}</td>
-                                <td>{{ $record->registeredByLabel() }}</td>
+                                <td data-label="{{ __('ui.bo.components.col_job_posts') }}">
+                                    <span class="kh-cat__usage {{ $record->usage_count ? 'is-used' : '' }}">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                            <rect x="3" y="7" width="18" height="13" rx="2" /><path d="M8 7V5a2 2 0 012-2h4a2 2 0 012 2v2" />
+                                        </svg>
+                                        {{ number_format($record->usage_count) }}
+                                    </span>
+                                </td>
+                                <td data-label="{{ __('ui.bo.components.col_registered') }}">
+                                    @if ($record->created_at)
+                                        <span class="kh-cat__date">{{ $record->created_at->format('d M Y') }}</span>
+                                        <span class="kh-cat__ref">{{ $record->created_at->diffForHumans() }}</span>
+                                    @else
+                                        <span class="kh-cat__ref">—</span>
+                                    @endif
+                                </td>
+                                <td data-label="{{ __('ui.bo.components.col_registered_by') }}">
+                                    <div class="kh-cat__person {{ $creator ? '' : 'is-unknown' }}">
+                                        <span class="kh-cat__avatar" aria-hidden="true">{{ $creatorInitials }}</span>
+                                        <span>{{ $record->registeredByLabel() }}</span>
+                                    </div>
+                                </td>
                                 <td>
-                                    <div class="kh-bo__actions">
+                                    <div class="kh-bo__actions kh-cat__actions">
                                         <a class="kh-bo__action" href="{{ route('components.edit', [$type, $record]) }}"
                                             title="{{ __('ui.bo.components.edit_title', ['item' => $item]) }}" aria-label="{{ __('ui.bo.components.edit_aria', ['name' => $record->name]) }}">
                                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -178,6 +223,8 @@
                     </tbody>
                 </table>
             </div>
+
+            @include('partials.kh-bo-pagination', ['paginator' => $records])
         </section>
     </div>
 @endsection

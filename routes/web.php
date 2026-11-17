@@ -85,11 +85,9 @@ Route::prefix('admin')->group(function () {
     Route::post('/account-billing/payway/callback', [BillingController::class, 'paywayCallback'])->name('account-billing.payway.callback');
 
     Route::middleware('auth')->group(function () {
-        // The billing register — every account's subscription in one table.
-        // Open to every signed-in role by product decision, so a job seeker or
-        // employer sees the same rows an admin does, other people's names,
-        // emails, plans and amounts included. Scope it in
-        // BillingController::list() if that ever has to change.
+        // The billing register. Open to every signed-in role, but scoped in
+        // BillingController::list(): an admin sees every account's
+        // subscriptions, anyone else only their own.
         Route::get('/account-billing/list', [BillingController::class, 'list'])->name('account-billing.list');
 
         // Self-service only: the caller's own password and security overview.
