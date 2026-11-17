@@ -1,0 +1,27 @@
+name: Setup PHP
+description: PHP 8.2 with the same extensions the Dockerfile installs, plus composer install and an app key.
+runs:
+  using: composite
+  steps:
+    - uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.2'
+        extensions: pdo_mysql, zip, exif, pcntl, bcmath, gd
+        tools: composer
+        coverage: none
+    - name: Cache composer
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.composer/cache
+          vendor
+        key: composer-${{ hashFiles('composer.lock') }}
+    - name: Install dependencies
+      shell: bash
+      run: composer install --prefer-dist --no-interaction --no-progress --no-ansi
+    - name: Prepare environment
+      shell: bash
+      run: |
+        cp -n .env.example .env || true
+        php artisan key:generate --ansi
+        php artisan config:clear
